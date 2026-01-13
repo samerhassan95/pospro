@@ -6,62 +6,69 @@
 
 @section('main_content')
 
+    <!-- Dashboard Loading Overlay -->
+    <div id="dashboard-loading-overlay" class="dashboard-loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner-large"></div>
+            <h4>{{ __('Loading Dashboard...') }}</h4>
+        </div>
+    </div>
+
     @can('dashboard-read')
     <div class="container-fluid m-h-100">
-        <div class="gpt-dashboard-card counter-grid-6 mb-24">
-            <div class="couter-box">
-                <div class="icons">
-                    <img src="{{ asset('assets/images/dashboard/01.png') }}" alt="">
-                </div>
-                <div class="content-side">
-                    <h5 id="total_businesses">0</h5>
-                    <p>{{ __('Total Shop') }}</p>
-                </div>
-            </div>
-            <div class="couter-box">
-                <div class="icons">
-                    <img src="{{ asset('assets/images/dashboard/02.png') }}" alt="">
-                </div>
-                <div class="content-side">
-                    <h5 id="expired_businesses">0</h5>
-                    <p>{{ __('Expired Businesses') }}</p>
-                </div>
-            </div>
-            <div class="couter-box">
-                <div class="icons">
-                    <img src="{{ asset('assets/images/dashboard/03.png') }}" alt="">
-                </div>
-                <div class="content-side">
-                    <h5 id="plan_subscribes">0</h5>
-                    <p>{{ __('Plan Subscribes') }}</p>
-                </div>
-            </div>
-            <div class="couter-box">
-                <div class="icons">
-                    <img src="{{ asset('assets/images/dashboard/04.png') }}" alt="">
-                </div>
-                <div class="content-side">
-                    <h5 id="business_categories">0</h5>
-                    <p>{{ __('Total Categories') }}</p>
-                </div>
-            </div>
-            <div class="couter-box">
-                <div class="icons">
-                    <img src="{{ asset('assets/images/dashboard/05.png') }}" alt="">
-                </div>
-                <div class="content-side">
-                    <h5 id="total_plans">0</h5>
-                    <p>{{ __('Total Plans') }}</p>
-                </div>
-            </div>
+        <div class="row gpt-dashboard-chart mb-30">
+            <div class="col-12">
+                <div class="business-stat-container">
+                    <div class="business-stat admin-stat-5">
+                        <div class="business-content">
+                            <div class="custom-image-bg color-1">
+                                <img src="{{ asset('assets/images/dashboard/01.svg') }}" alt="">
+                            </div>
+                            <p class="bus-stat-title">{{ __('Total Shop') }}</p>
+                            <h4 class="bus-stat-count" id="total_businesses">0</h4>
+                        </div>
 
+                        <div class="business-content">
+                            <div class="custom-image-bg color-2">
+                                <img src="{{ asset('assets/images/dashboard/02.svg') }}" alt="">
+                            </div>
+                            <p class="bus-stat-title">{{ __('Expired Businesses') }}</p>
+                            <h4 class="bus-stat-count" id="expired_businesses">0</h4>
+                        </div>
+
+                        <div class="business-content">
+                            <div class="custom-image-bg color-3">
+                                <img src="{{ asset('assets/images/dashboard/03.svg') }}" alt="">
+                            </div>
+                            <p class="bus-stat-title">{{ __('Plan Subscribes') }}</p>
+                            <h4 class="bus-stat-count" id="plan_subscribes">0</h4>
+                        </div>
+
+                        <div class="business-content">
+                            <div class="custom-image-bg color-4">
+                                <img src="{{ asset('assets/images/dashboard/04.svg') }}" alt="">
+                            </div>
+                            <p class="bus-stat-title">{{ __('Total Categories') }}</p>
+                            <h4 class="bus-stat-count" id="business_categories">0</h4>
+                        </div>
+
+                        <div class="business-content">
+                            <div class="custom-image-bg color-5">
+                                <img src="{{ asset('assets/images/dashboard/05.svg') }}" alt="">
+                            </div>
+                            <p class="bus-stat-title">{{ __('Total Plans') }}</p>
+                            <h4 class="bus-stat-count" id="total_plans">0</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
-        <div class="row gpt-dashboard-chart">
+        <div class="row mb-30">
             <div class="col-xxl-8 mb-30">
                 <div class="card new-card dashboard-card border-0 p-0 h-100">
-                    <div class="dashboard-chart-header">
+                    <div class="dashboard-chart">
                         <h4>{{ __('Finance Overview') }}</h4>
                         <div class="gpt-up-down-arrow position-relative">
                             <select class="form-control yearly-statistics">
@@ -74,11 +81,11 @@
                         </div>
                     </div>
                     <div class="card-body pt-0">
+                        <div class="income-container">
+                            <div class="income-dot"></div>
+                            <div>{{__('Total Subscription')}}: <span class="income-value"></span></div>
+                        </div>
                         <div class="content">
-                            <div class="income-container">
-                                <div class="income-dot"></div>
-                                <div>{{__('Total Subscription')}}: <span class="income-value"></span></div>
-                            </div>
                             <canvas id="monthly-statistics" class="chart-css"></canvas>
                         </div>
                     </div>
@@ -86,7 +93,7 @@
             </div>
             <div class="col-xxl-4 mb-30">
                 <div class="card new-card sms-report border-0 p-0 h-100">
-                    <div class="dashboard-chart-header">
+                    <div class="dashboard-chart">
                         <h4>{{ __('Subscription Plan') }}</h4>
                         <div class="gpt-up-down-arrow position-relative">
                             <select class="form-control overview-year">

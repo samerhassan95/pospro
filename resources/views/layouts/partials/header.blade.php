@@ -1,17 +1,19 @@
-<header class="main-header-section sticky-top">
-    <div class="header-wrapper">
-        <div class="header-left">
-            <div class="sidebar-opner"><i class="fal fa-bars" aria-hidden="true"></i></div>
-            <a target="_blank" class="text-custom-primary" href="{{ route('home') }}">
-                <i class="fas fa-globe me-1"></i>
-                {{ __('View Website') }}
-            </a>
+<header class="main-header-section sticky-top d-print-none">
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="bg-white d-flex align-items-center">
+            <div class="sidebar-opner menu-opener"><i class="fal fa-bars" aria-hidden="true"></i></div>
+            <a class="pos-logo" href="{{ route('admin.dashboard.index') }}"><img src="{{ asset(get_option('general')['common_header_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo"></a>
         </div>
-        <div class="header-middle"></div>
-        <div class="header-right">
+
+        <div class="header-right d-flex align-items-center">
+            <a target="_blank" class="text-custom-primary view-website" href="{{ route('home') }}">
+                <i class="fas fa-globe me-1"></i>
+                <!-- {{ __('View Website') }} -->
+            </a>
+
             <div class="language-change">
                 <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" alt="" class="flag-icon me-2">
                         {{ languages()[app()->getLocale()]['name'] }}
                     </button>
@@ -30,19 +32,20 @@
                     </ul>
                 </div>
             </div>
+
             @if (auth()->user()->role == 'superadmin')
             <div class="notifications dropdown">
-                <a href="#" class="dropdown-toggleer mt-1 me-3" data-bs-toggle="dropdown">
+                <a href="#" class="dropdown-toggleer mt-1 me-2" data-bs-toggle="dropdown">
                     <i><img src="{{ asset('assets/images/icons/bel.svg') }}" alt=""></i>
-                    <span class="bg-red">{{ auth()->user()->unreadNotifications ->count() }}</span>
+                    <span class="bg-red">{{ auth()->user()->unreadNotifications->count() }}</span>
                 </a>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu notification-container">
                     <div class="notification-header">
                         <p>{{ __('You Have') }} <strong>{{ auth()->user()->unreadNotifications->count() }}</strong> {{ __('new Notifications') }}</p>
                         <a href="{{ route('admin.notifications.mtReadAll') }}" class="text-red">{{ __('Mark all Read') }}</a>
                     </div>
                     <ul>
-                        @foreach (auth()->user()->unreadNotifications  as $notification)
+                        @foreach (auth()->user()->unreadNotifications as $notification)
                         <li>
                             <a href="{{ route('admin.notifications.mtView', $notification->id) }}">
                                 <strong>{{ __($notification->data['message'] ?? '') }}</strong>
@@ -57,22 +60,37 @@
                 </div>
             </div>
             @endif
-            <div class="profile-info dropdown">
-                <a href="#"  data-bs-toggle="dropdown">
-                    <img src="{{ asset(Auth::user()->image ?? 'assets/images/icons/default-user.png') }}" alt="Profile">
-                </a>
-                <ul class="dropdown-menu">
-                    <li> <a href="{{ url('cache-clear') }}"> <i class="far fa-undo"></i> {{ __('Clear cache') }}</a></li>
-                    <li> <a href="{{ route('admin.profiles.index') }}"> <i class="fal fa-user"></i> {{__('My Profile')}}</a></li>
-                    <li>
-                        <a href="javascript:void(0)" class="logoutButton">
-                            <i class="far fa-sign-out"></i> {{ __('Logout') }}
-                            <form action="{{ route('logout') }}" method="post" id="logoutForm">
-                                @csrf
-                            </form>
-                        </a>
-                    </li>
-                </ul>
+
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="profile-info dropdown">
+                    <a href="#" data-bs-toggle="dropdown">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <div class="greet-name">
+                                <h6 class="nav-name">
+                                    {{ auth()->user()->name }}
+                                    @if(auth()->user()->role == 'superadmin')
+                                        <small class="text-muted">({{ __('Super Admin') }})</small>
+                                    @endif
+                                </h6>
+                            </div>
+                            <img src="{{ asset(Auth::user()->image ?? 'assets/images/icons/default-user.png') }}" alt="Profile">
+                        </div>
+                    </a>
+                    <div class="business-profile bg-success">
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url('cache-clear') }}"><i class="far fa-undo"></i> {{ __('Clear cache') }}</a></li>
+                            <li><a href="{{ route('admin.profiles.index') }}"><i class="fal fa-user"></i> {{ __('My Profile') }}</a></li>
+                            <li>
+                                <a href="javascript:void(0)" class="logoutButton">
+                                    <i class="far fa-sign-out"></i> {{ __('Logout') }}
+                                    <form action="{{ route('logout') }}" method="post" id="logoutForm">
+                                        @csrf
+                                    </form>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

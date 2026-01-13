@@ -17,6 +17,95 @@ function currencyFormat(amount, type = "icon", decimals = 2) {
             : code + " " + formattedAmount;
     }
 }
+
+// Calendar Slider for Purchase Due - Week View
+(function() {
+    let currentWeekStart = getWeekStart(new Date());
+    let selectedDate = new Date();
+    
+    function getWeekStart(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Monday as first day
+        return new Date(d.setDate(diff));
+    }
+    
+    function initCalendar() {
+        const slider = document.getElementById('calendar-days-slider');
+        if (!slider) return;
+        
+        renderWeek();
+        updateSelectedDisplay();
+        
+        document.getElementById('cal-prev')?.addEventListener('click', () => {
+            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+            renderWeek();
+        });
+        
+        document.getElementById('cal-next')?.addEventListener('click', () => {
+            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            renderWeek();
+        });
+    }
+    
+    function renderWeek() {
+        const slider = document.getElementById('calendar-days-slider');
+        const monthLabel = document.getElementById('cal-month-label');
+        if (!slider || !monthLabel) return;
+        
+        // Update month label based on week
+        monthLabel.textContent = currentWeekStart.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        let html = '';
+        
+        // Render 7 days starting from currentWeekStart
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(currentWeekStart);
+            date.setDate(currentWeekStart.getDate() + i);
+            
+            const isToday = date.toDateString() === today.toDateString();
+            const isSelected = date.toDateString() === selectedDate.toDateString();
+            
+            let classes = 'cal-day';
+            if (isToday) classes += ' today';
+            if (isSelected && !isToday) classes += ' selected';
+            
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            html += `<button class="${classes}" data-date="${year}-${month}-${day}">${day}</button>`;
+        }
+        
+        slider.innerHTML = html;
+        
+        // Add click handlers
+        slider.querySelectorAll('.cal-day').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const [y, m, d] = this.dataset.date.split('-').map(Number);
+                selectedDate = new Date(y, m - 1, d);
+                renderWeek();
+                updateSelectedDisplay();
+            });
+        });
+    }
+    
+    function updateSelectedDisplay() {
+        const dayEl = document.getElementById('selected-day');
+        const weekdayEl = document.getElementById('selected-weekday');
+        const monthYearEl = document.getElementById('selected-month-year');
+        
+        if (dayEl) dayEl.textContent = selectedDate.getDate().toString().padStart(2, '0');
+        if (weekdayEl) weekdayEl.textContent = selectedDate.toLocaleDateString('en-US', { weekday: 'short' });
+        if (monthYearEl) monthYearEl.textContent = selectedDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }
+    
+    document.addEventListener('DOMContentLoaded', initCalendar);
+})();
+
 // Update design when a single business content exists
 document.addEventListener("DOMContentLoaded", function () {
     // Select the container, ensure it exists
@@ -39,11 +128,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-getDashboardData();
+// Initialize loading state and load dashboard data
+$(document).ready(function() {
+    showBusinessDashboardLoading();
+    
+    // Load all dashboard data
+    Promise.all([
+        getDashboardData(),
+        getYearlyStatistics(),
+        fetchTaskData()
+    ]).finally(() => {
+        // Hide loading overlay after all data is loaded
+        hideBusinessDashboardLoading();
+    });
+});
+
+function showBusinessDashboardLoading() {
+    $('#dashboard-loading-overlay').removeClass('hidden');
+}
+
+function hideBusinessDashboardLoading() {
+    setTimeout(() => {
+        $('#dashboard-loading-overlay').addClass('hidden');
+    }, 500); // Small delay for smooth transition
+}
 
 function getDashboardData() {
     var url = $("#get-dashboard").val();
-    $.ajax({
+    return $.ajax({
         type: "GET",
         url: url,
         dataType: "json",
@@ -69,6 +181,18 @@ function getDashboardData() {
                 res.this_month_total_purchase_return
             );
         },
+        error: function(xhr, status, error) {
+            console.error("Business dashboard data loading failed:", error);
+            // Show error state or fallback values
+            const statElements = [
+                '#total_sales', '#total_purchase', '#total_income', '#total_expense',
+                '#total_customer', '#total_supplier', '#total_sales_return', '#total_purchase_return'
+            ];
+            
+            statElements.forEach(element => {
+                $(element).text('--');
+            });
+        }
     });
 }
 
@@ -211,7 +335,7 @@ function totalEarningExpenseChart(total_loss, total_profit) {
 function getYearlyStatistics(year = new Date().getFullYear()) {
     const url = $("#revenue-statistic").val() + "?year=" + year;
 
-    $.ajax({
+    return $.ajax({
         type: "GET",
         url: url,
         dataType: "json",
@@ -254,7 +378,8 @@ function getYearlyStatistics(year = new Date().getFullYear()) {
             ).textContent = `${currencyFormat(profit_value)}`;
         },
         error: function (err) {
-            console.error("Error fetching data:", err);
+            console.error("Error fetching revenue data:", err);
+            $('.profit-value, .loss-value').text('--');
         },
     });
 }
@@ -277,9 +402,6 @@ function getMonthNameFromIndex(index) {
     ];
     return months[index - 1];
 }
-
-// Initial chart load with the current year data
-getYearlyStatistics();
 
 // Handle year change event
 $(".revenue-year").on("change", function () {
@@ -374,7 +496,8 @@ window.addEventListener("resize", function () {
 
 function fetchTaskData(year = new Date().getFullYear()) {
     const url = $("#get-overall-report").val() + "?year=" + year;
-    $.ajax({
+    
+    return $.ajax({
         url: url,
         method: "GET",
         success: function (response) {
@@ -396,12 +519,11 @@ function fetchTaskData(year = new Date().getFullYear()) {
             );
         },
         error: function (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching overall report data:", error);
+            $('#overall_purchase, #overall_sale, #overall_income, #overall_expense').text('--');
         },
     });
 }
-
-fetchTaskData();
 
 $(".overview-year").on("change", function () {
     const year = $(this).val();

@@ -61,7 +61,7 @@ function fetchUpdatedCart(callback) {
 
 // Update price
 $(document).on("change", ".cart-price", function () {
-    let $row = $(this).closest("tr");
+    let $row = $(this).closest("tr, .cart-item-card");
     let rowId = $row.data("row_id");
     let updateRoute = $row.data("update_route");
     let newPrice = parseFloat($(this).val());
@@ -70,7 +70,7 @@ $(document).on("change", ".cart-price", function () {
         toastr.error("Price can not be negative.");
         return;
     }
-    let currentQty = parseFloat($row.find(".cart-qty").val());
+    let currentQty = parseFloat($row.find(".cart-qty, .cart-item-qty").val());
     let currentDiscount = parseFloat($row.find(".cart-discount").val()) || 0;
 
     updateCart(rowId, currentQty, updateRoute, newPrice, currentDiscount);
@@ -78,11 +78,11 @@ $(document).on("change", ".cart-price", function () {
 
 // Update discount
 $(document).on("change", ".cart-discount", function () {
-    let $row = $(this).closest("tr");
+    let $row = $(this).closest("tr, .cart-item-card");
     let rowId = $row.data("row_id");
     let updateRoute = $row.data("update_route");
 
-    let qty = parseFloat($row.find(".cart-qty").val());
+    let qty = parseFloat($row.find(".cart-qty, .cart-item-qty").val());
     let price = parseFloat($row.find(".cart-price").val());
 
     let discount = parseFloat($(this).val()) || 0;
@@ -103,10 +103,10 @@ $(document).on("change", ".cart-discount", function () {
 // Increase quantity
 $(document).on("click", ".plus-btn", function (e) {
     e.preventDefault();
-    let $row = $(this).closest("tr");
+    let $row = $(this).closest("tr, .cart-item-card");
     let rowId = $row.data("row_id");
     let updateRoute = $row.data("update_route");
-    let $qtyInput = $row.find(".cart-qty");
+    let $qtyInput = $row.find(".cart-qty, .cart-item-qty");
     let currentQty = parseFloat($qtyInput.val());
     let newQty = currentQty + 1;
     $qtyInput.val(newQty);
@@ -125,10 +125,10 @@ $(document).on("click", ".plus-btn", function (e) {
 // Decrease quantity
 $(document).on("click", ".minus-btn", function (e) {
     e.preventDefault();
-    let $row = $(this).closest("tr");
+    let $row = $(this).closest("tr, .cart-item-card");
     let rowId = $row.data("row_id");
     let updateRoute = $row.data("update_route");
-    let $qtyInput = $row.find(".cart-qty");
+    let $qtyInput = $row.find(".cart-qty, .cart-item-qty");
     let currentQty = parseFloat($qtyInput.val());
 
     // Ensure quantity does not go below 1
@@ -151,8 +151,8 @@ $(document).on("click", ".minus-btn", function (e) {
 });
 
 // Cart quantity input field change event
-$(document).on("change", ".cart-qty", function () {
-    let $row = $(this).closest("tr");
+$(document).on("change", ".cart-qty, .cart-item-qty", function () {
+    let $row = $(this).closest("tr, .cart-item-card");
     let rowId = $row.data("row_id");
     let updateRoute = $row.data("update_route");
     let newQty = parseFloat($(this).val());
@@ -173,9 +173,9 @@ $(document).on("change", ".cart-qty", function () {
 });
 
 // Remove item from the cart
-$(document).on("click", ".remove-btn", function (e) {
+$(document).on("click", ".remove-btn, .remove-item-btn", function (e) {
     e.preventDefault();
-    var $row = $(this).closest("tr");
+    var $row = $(this).closest("tr, .cart-item-card");
     var destroyRoute = $row.data("destroy_route");
 
     $.ajax({
@@ -243,9 +243,18 @@ function clearCart(cartType) {
 $(".customer-select").on("change", function () {
     let customerType = $(this).find(":selected").data("type");
     let route = $("#get_stock_prices").val();
+    let customerId = $(this).val();
+
+    // Handle guest phone field visibility
+    if (customerId == "guest") {
+        $(".guest_phone").removeClass("d-none");
+    } else {
+        $(".guest_phone").addClass("d-none");
+        $(".guest_phone input").val("");
+    }
 
     let cartRows = []; // Collect cart stock_id + batch_no if cart is not empty
-    $("#cart-list tr").each(function () {
+    $("#cart-list tr, #cart-list .cart-item-card").each(function () {
         let $row = $(this);
         let stockId = $row.data("stock_id");
         let batchNo = $row.data("batch_no") || null;
@@ -278,7 +287,7 @@ $(".customer-select").on("change", function () {
 
             // Update cart cart list if cart not empty
             if (cartRows.length) {
-                $("#cart-list tr").each(function () {
+                $("#cart-list tr, #cart-list .cart-item-card").each(function () {
                     let $row = $(this);
                     let stockId = $row.data("stock_id");
                     let batchNo = $row.data("batch_no") || "default";
@@ -331,18 +340,21 @@ $(".discount_type").on("change", function () {
 // Function to calculate the total amount
 function calTotalAmount() {
     let subtotal = 0;
+    let itemsCount = 0;
 
-    // Calculate subtotal from cart list using qty * price
-    $("#cart-list tr").each(function () {
-        let qty = getNumericValue($(this).find(".cart-qty").val()) || 0;
+    // Calculate subtotal from cart list using qty * price (supports both tr and card layout)
+    $("#cart-list tr, #cart-list .cart-item-card").each(function () {
+        let qty = getNumericValue($(this).find(".cart-qty, .cart-item-qty").val()) || 0;
         let price = getNumericValue($(this).find(".cart-price").val()) || 0;
         let discountField = $(this).find(".cart-discount");
         let discount = discountField.length ? getNumericValue(discountField.val()) : 0;
         let row_subtotal = qty * (price - discount);
         subtotal += row_subtotal;
+        itemsCount += qty;
     });
 
     $("#sub_total").text(currencyFormat(subtotal));
+    $("#items_count").text(itemsCount);
 
     // VAT
     let vat_rate =
@@ -408,6 +420,17 @@ function calTotalAmount() {
     let due_amount =
         payable_amount > receive_amount ? payable_amount - receive_amount : 0;
     $("#due_amount").val(formattedAmount(due_amount, 2));
+
+    // Update display elements for new layout
+    let discount_display = discount_type == "percent" ? discount_amount : getNumericValue($("#discount_amount").val()) || 0;
+    $("#discount_display").text(currencyFormat(discount_display));
+    $("#vat_display").text(currencyFormat(vat_amount));
+    $("#shipping_display").text(currencyFormat(shipping_charge));
+
+    // Update payable amount hidden input if exists
+    if ($("#payable_amount").is("input")) {
+        $("#payable_amount").val(payable_amount);
+    }
 }
 
 calTotalAmount();
@@ -525,7 +548,7 @@ let scannerInputTimeout;
 const SCANNER_LOCK_TIME = 300; // Time to wait before allowing another scan
 
 // Handle scanner input when Enter key is pressed
-$(".product-filter").on("keydown", ".search-input", function (e) {
+$(".product-filter").on("keydown", ".search-input, .product-search-input", function (e) {
     if (e.key == "Enter") {
         if (isScannerInput) {
             e.preventDefault();
@@ -545,7 +568,7 @@ $(".product-filter").on("submit", function (e) {
 // Trigger input handler on user typing (debounced)
 $(".product-filter").on(
     "input",
-    ".search-input",
+    ".search-input, .product-search-input",
     debounce(function () {
         if (isScannerInput) {
             return; // Skip input events triggered by scanner
@@ -764,10 +787,21 @@ function autoAddItemToCart(id) {
 // ------------------------
 // Click Event Binding
 // ------------------------
-$(document).on("click", ".single-product", function () {
+$(document).on("click", ".single-product, .product-card-new", function (e) {
+    // Prevent double triggering if clicking on add button
+    if ($(e.target).closest('.add-product-btn').length) {
+        return;
+    }
     const customer_id = $(".customer-select").val();
-
     handleAddToCart($(this));
+});
+
+// Handle add product button click
+$(document).on("click", ".add-product-btn", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const $productCard = $(this).closest(".single-product, .product-card-new");
+    handleAddToCart($productCard);
 });
 
 // Handle Add to Cart button click for multiple selections

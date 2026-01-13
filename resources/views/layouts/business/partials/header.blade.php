@@ -1,16 +1,16 @@
 <header class="main-header-section sticky-top d-print-none">
     <div class="d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center">
+        <div class="bg-white d-flex align-items-center">
             <div class="sidebar-opner menu-opener"><i class="fal fa-bars" aria-hidden="true"></i></div>
-            <a target="_blank" class="text-custom-primary view-website" href="{{ route('home') }}">
-                {{ __('View Website') }}
-                <i class="fas fa-chevron-double-right"></i>
-            </a>
-
+  
             <a class="pos-logo" href="javascript:void(0)"><img src="{{ asset(get_option('general')['common_header_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo"></a>
         </div>
 
-        <div class=" d-flex align-items-center">
+        <div class=" header-right d-flex align-items-center">
+                      <a target="_blank" class="text-custom-primary view-website" href="{{ route('home') }}">
+                <!-- {{ __('View Website') }} -->
+<i class="fas fa-globe me-1"></i>            </a>
+
             @if (moduleCheck('MultiBranchAddon') && auth()->user()->active_branch_id)
             @php
                 $branch = auth()->user()->active_branch;
@@ -22,9 +22,9 @@
                 </p>
             </a>
             @endif
-            <div class="language-change">
+            <div class="language-change ">
                 <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    <button class="btn btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}"
                             alt="" class="flag-icon me-2">
@@ -77,7 +77,7 @@
                     <a href="#" data-bs-toggle="dropdown">
                         <div class="d-flex align-items-center justify-content-center gap-2">
                             <div class="greet-name">
-                                <p class="nav-greeting">{{__('Hello')}}🖐</p>
+                                <!-- <p class="nav-greeting">{{__('Hello')}}🖐</p> -->
                                 <h6 class="nav-name">
                                     {{ auth()->user()->role == 'staff' ? (optional(auth()->user()->business)->companyName . ' [' . auth()->user()->name . ']')  : optional(auth()->user()->business)->companyName }}
                                 </h6>

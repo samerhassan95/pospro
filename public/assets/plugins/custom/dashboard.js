@@ -23,9 +23,51 @@ function currencyFormat(amount, type = "icon", decimals = 2) {
 }
 
 $(document).ready(function () {
-    getYearlySubscriptions();
-    bestPlanSubscribes();
+    // Show loading overlay initially
+    showDashboardLoading();
+    
+    // Load all dashboard data
+    Promise.all([
+        getDashboardData(),
+        getYearlySubscriptions(),
+        bestPlanSubscribes()
+    ]).finally(() => {
+        // Hide loading overlay after all data is loaded
+        hideDashboardLoading();
+    });
 });
+
+function showDashboardLoading() {
+    $('#dashboard-loading-overlay').removeClass('hidden');
+}
+
+function hideDashboardLoading() {
+    setTimeout(() => {
+        $('#dashboard-loading-overlay').addClass('hidden');
+    }, 500); // Small delay for smooth transition
+}
+
+function getDashboardData() {
+    var url = $("#get-dashboard").val();
+    return $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        success: function (res) {
+            // Update statistics with actual data
+            $("#total_businesses").text(res.total_businesses);
+            $("#expired_businesses").text(res.expired_businesses);
+            $("#plan_subscribes").text(res.plan_subscribes);
+            $("#business_categories").text(res.business_categories);
+            $("#total_plans").text(res.total_plans);
+        },
+        error: function(xhr, status, error) {
+            console.error("Dashboard data loading failed:", error);
+            // Show error state or fallback values
+            $("#total_businesses, #expired_businesses, #plan_subscribes, #business_categories, #total_plans").text('--');
+        }
+    });
+}
 
 $(".overview-year").on("change", function () {
     let year = $(this).val();
@@ -39,7 +81,8 @@ $(".yearly-statistics").on("change", function () {
 
 function getYearlySubscriptions(year = new Date().getFullYear()) {
     var url = $("#yearly-subscriptions-url").val();
-    $.ajax({
+    
+    return $.ajax({
         type: "GET",
         url: url + "?year=" + year,
         dataType: "json",
@@ -66,6 +109,7 @@ function getYearlySubscriptions(year = new Date().getFullYear()) {
         error: function (xhr, status, error) {
             console.error("AJAX Error:", status, error);
             console.error("Response:", xhr.responseText);
+            $(".income-value").text('--');
         },
     });
 }
@@ -80,7 +124,7 @@ function bestPlanSubscribes(year = new Date().getFullYear()) {
 
     Chart.defaults.datasets.doughnut.cutout = "65%";
     let url = $("#get-plans-overview").val();
-    $.ajax({
+    return $.ajax({
         url: (url += "?year=" + year),
         type: "GET",
         dataType: "json",

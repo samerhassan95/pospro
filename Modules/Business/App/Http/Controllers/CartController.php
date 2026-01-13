@@ -27,7 +27,10 @@ class CartController extends Controller
                 ]);
             }
         }
-        return view('business::sales.cart-list', compact('cart_contents'));
+
+        // Check if request wants new layout
+        $viewName = request()->get('layout') === 'new' ? 'business::sales.cart-list-new' : 'business::sales.cart-list-new';
+        return view($viewName, compact('cart_contents'));
     }
 
     public function store(Request $request)
