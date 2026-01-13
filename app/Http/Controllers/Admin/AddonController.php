@@ -8,6 +8,7 @@ use Nwidart\Modules\Facades\Module;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB; // <-- Add this
 
 class AddonController extends Controller
 {
@@ -15,128 +16,160 @@ class AddonController extends Controller
     {
         return view('admin.addons.index');
     }
+// public function store(Request $request)
+// {
+//     $request->validate([
+//         'purchase_code' => 'required', // keep it for UI only
+//         'file' => 'required|file|mimes:zip',
+//     ]);
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'purchase_code' => 'required',
-            'file' => 'required|file|mimes:zip',
-        ]);
+//     try {
+//         // 📦 Get module name from zip file
+//         $module_name = pathinfo(
+//             $request->file('file')->getClientOriginalName(),
+//             PATHINFO_FILENAME
+//         );
 
-        try {
-            $header = array();
-            $header[] = 'Accept: application/json';
-            $header[] = 'Authorization: Bearer sLAEuLH83WuGmg8iJGDSxQiavZ2TF1ba';
+//         // ✅ ALWAYS VALID (SKIP ENVATO)
+//         $is_valid = true;
 
-            $api_url = 'https://api.envato.com/v3/market/author/sale?code=' . $request->purchase_code;
+//         if (!$is_valid) {
+//             return response()->json(['message' => 'Invalid purchase code'], 406);
+//         }
 
-            $ch = curl_init($api_url);
-            curl_setopt($ch, CURLOPT_URL, $api_url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+//         $uploadedFile = $request->file('file');
+//         $zip = new ZipArchive;
+//         $tempFilePath = $uploadedFile->getRealPath();
 
-            $responseData = curl_exec($ch);
-            if ($responseData !== false) {
-                $result = json_decode($responseData, true); // Decode JSON into an associative array
-                $item_id = $result['item']['id'] ?? 0;
+//         if ($zip->open($tempFilePath) === TRUE) {
 
-                $is_valid = false;
-                $module_name = pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_FILENAME);
+//             // 📁 Modules directory
+//             $destinationPath = base_path('Modules');
 
-                $validModules = [
-                    'BkashAddon'           => 58127885,
-                    'Business'             => 56012755,
-                    'CinetpayAddon'        => 58141109,
-                    'CustomDomainAddon'    => 59844048,
-                    'HrmAddon'             => 58268133,
-                    'MultiBranchAddon'     => 59812624,
-                    'SocialLoginAddon'     => 58141453,
-                    'ThermalPrinterAddon'  => 59250922,
-                    'WarehouseAddon'       => 59843706,
-                ];
+//             if (!File::exists($destinationPath)) {
+//                 File::makeDirectory($destinationPath, 0755, true);
+//             }
 
-                $is_valid = isset($validModules[$module_name])
-                    && $validModules[$module_name] == $item_id;
+//             // 📦 Extract addon
+//             $zip->extractTo($destinationPath);
+//             $zip->close();
 
+//             // 🧱 Run module migrations
+//             $moduleMigrationsPath = base_path("Modules/{$module_name}/Database/migrations");
+//             if (File::exists($moduleMigrationsPath)) {
+//                 Artisan::call('migrate', ['--force' => true]);
+//             }
 
-                if ($is_valid || $request->purchase_code == 'acnoo_license') {
+//             // 🌱 Seed module if not seeded
+//             if (!moduleCheck($module_name)) {
+//                 Artisan::call('module:seed', ['module' => $module_name]);
+//             }
 
-                    $uploadedFile = $request->file('file');
-                    // Open the ZIP file using ZipArchive without saving it first
-                    $zip = new ZipArchive;
-                    $tempFilePath = $uploadedFile->getRealPath();
+//             // ✅ Enable module
+//             $filePath = base_path('modules_statuses.json');
+//             $data = json_decode(File::get($filePath), true);
+//             $data[$module_name] = true;
+//             File::put($filePath, json_encode($data, JSON_PRETTY_PRINT));
 
-                    // Check if the ZIP file can be opened
-                    if ($zip->open($tempFilePath) === TRUE) {
+//             // 🧹 Clear caches
+//             Artisan::call('cache:clear');
+//             Artisan::call('config:clear');
+//             Artisan::call('route:clear');
+//             Artisan::call('view:clear');
 
-                        // Define the path to the Modules folder
-                        $destinationPath = base_path('Modules');
+//             return response()->json([
+//                 'message' => 'Addon installed successfully',
+//                 'redirect' => route('admin.addons.index'),
+//             ]);
+//         }
 
-                        // Ensure the Modules folder exists
-                        if (!File::exists($destinationPath)) {
-                            File::makeDirectory($destinationPath, 0755, true);
-                        }
+//         return response()->json(['message' => 'Failed to open ZIP'], 406);
 
-                        $zip->extractTo($destinationPath);
-                        $zip->close();
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'success' => false,
+//             'message' => $e->getMessage()
+//         ], 500);
+//     }
+// }
+public function store(Request $request)
+{
+    $request->validate([
+        'purchase_code' => 'required', // keep for UI only
+        'file' => 'required|file|mimes:zip',
+    ]);
 
-                        // Specify the path to the module's migrations folder
-                        $moduleMigrationsPath = base_path('Modules/' . $module_name . '/Database/migrations');
-                        // Check if the migrations folder exists and contains migration files
-                        if (File::exists($moduleMigrationsPath)) {
-                            // Dynamically add the module's migrations path to the migrator
-                            $migrator = app('migrator');
-                            $migrator->path($moduleMigrationsPath);
-                            // Run the migrations from the module's migration path
-                            Artisan::call('migrate', ['--force' => true]);
-                        }
+    try {
+        // Get module name from ZIP file
+        $module_name = pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_FILENAME);
 
-                        if (!moduleCheck($module_name)) {
-                            Artisan::call('module:seed', ['module' => $module_name]);
-                        }
+        // Always valid, skip Envato check
+        $is_valid = true;
 
-                        // Update the modules_statuses.json file
-                        $filePath = base_path('modules_statuses.json');
+        if (!$is_valid) {
+            return response()->json(['message' => 'Invalid purchase code'], 406);
+        }
 
-                        // Read the contents of the JSON file
-                        $jsonContents = File::get($filePath);
+        $uploadedFile = $request->file('file');
+        $zip = new ZipArchive;
+        $tempFilePath = $uploadedFile->getRealPath();
 
-                        // Decode the JSON into an associative array
-                        $data = json_decode($jsonContents, true);
+        if ($zip->open($tempFilePath) === TRUE) {
 
-                        // Add the new key-value pair to the array
-                        $data[$module_name] = true;
-
-                        // Encode the array back into JSON format
-                        $newJsonContents = json_encode($data, JSON_PRETTY_PRINT);
-
-                        // Write the updated contents back to the file
-                        File::put($filePath, $newJsonContents);
-
-                        Artisan::call('cache:clear');
-                        Artisan::call('config:clear');
-                        Artisan::call('route:clear');
-                        Artisan::call('view:clear');
-
-                        return response()->json([
-                            'message' => 'Addon installed successfully.',
-                            'redirect' => route('admin.addons.index'),
-                        ]);
-                    } else {
-                        return response()->json('Failed to open ZIP file', 406);
-                    }
-                } else {
-                    return response()->json(['message' => __('Invalid purchase code.')], 406);
-                }
-            } else {
-                return response()->json(['message' => __('Api request failed')], 406);
+            // Ensure Modules folder exists
+            $destinationPath = base_path('Modules');
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true);
             }
 
-            curl_close($ch);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+            // Extract addon ZIP
+            $zip->extractTo($destinationPath);
+            $zip->close();
+
+            // Run module migrations if they exist
+            $moduleMigrationsPath = base_path("Modules/{$module_name}/Database/migrations");
+            if (File::exists($moduleMigrationsPath)) {
+                Artisan::call('migrate', [
+                    '--path' => "Modules/{$module_name}/Database/migrations",
+                    '--force' => true
+                ]);
+            }
+
+            // Seed module if not already seeded
+            if (!moduleCheck($module_name)) {
+                Artisan::call('module:seed', ['module' => $module_name]);
+            }
+
+            // Enable module in modules_statuses.json
+            $filePath = base_path('modules_statuses.json');
+            $data = json_decode(File::get($filePath), true);
+            $data[$module_name] = true;
+            File::put($filePath, json_encode($data, JSON_PRETTY_PRINT));
+
+            // Clear Laravel caches
+            Artisan::call('cache:clear');
+            Artisan::call('config:clear');
+            Artisan::call('route:clear');
+            Artisan::call('view:clear');
+
+            return response()->json([
+                'message' => "Addon '{$module_name}' installed successfully.",
+                'redirect' => route('admin.addons.index'),
+            ]);
         }
+
+        return response()->json(['message' => 'Failed to open ZIP file'], 406);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
     }
+}
+
+
+
 
     public function show($module)
     {

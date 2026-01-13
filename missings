@@ -1,0 +1,16 @@
+@usercan('products.read')
+<li>
+    <a
+        class="{{ Request::routeIs('business.combo-products.index') ? 'active' : '' }}"
+        href="{{ route('business.combo-products.index') }}"
+        >{{ __("Combo Products") }}</a
+    >
+</li>
+@endusercan
+
+
+
+
+
+////////
+

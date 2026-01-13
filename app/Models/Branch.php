@@ -39,12 +39,12 @@ class Branch extends Model
         return $this->hasMany(User::class, 'branch_id');
     }
 
-    public function employees(): ?HasMany
-    {
-        return moduleCheck('MultiBranchAddon')
-            ? $this->hasMany(Employee::class, 'branch_id')
-            : null;
-    }
+    // public function employees(): ?HasMany
+    // {
+    //     return moduleCheck('MultiBranchAddon')
+    //         ? $this->hasMany(Employee::class, 'branch_id')
+    //         : null;
+    // }
 
     public function expiredStocks(): HasMany
     {

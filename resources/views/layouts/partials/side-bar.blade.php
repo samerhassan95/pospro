@@ -1,8 +1,8 @@
 <nav class="side-bar relative">
     <div class="side-bar-logo">
-        <a href="{{ route('admin.dashboard.index') }}" class="logo-link">
-            <img src="{{ asset('assets/images/logo/LOGO.svg') }}" alt="Logo" class="sidebar-logo-img">
-            <span class="sidebar-logo-text">Bytes Pos</span>
+        <a href="{{ route('admin.dashboard.index') }}">
+            <img
+                src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}"alt="Logo">
         </a>
         <button class="close-btn"><i class="fal fa-times"></i></button>
     </div>
