@@ -20,14 +20,14 @@
     --clr-orange: #ff6565;
     --clr-orange-light: rgba(255, 116, 62, 0.12);
     --clr-red: #FF6500;
-    --ff: "Inter", sans-serif;
+    --ff: "Cairo", sans-serif;
 }
 body {
     margin: 0;
     padding: 0 !important;
     color: #404040;
     font-size: 14px;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     line-height: 18px;
     background: #ecf1f9;
 }

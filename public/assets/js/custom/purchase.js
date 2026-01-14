@@ -39,7 +39,7 @@ function fetchUpdatedCart(callback) {
 //increase quantity
 $(document).on("click", ".plus-btn", function (e) {
     e.preventDefault();
-    let $row = $(this).closest("tr");
+    let $row = $(this).closest("tr, .cart-item-card");
     let rowId = $row.data("row_id");
     let updateRoute = $row.data("update_route");
     let $qtyInput = $row.find(".cart-qty");
@@ -53,7 +53,7 @@ $(document).on("click", ".plus-btn", function (e) {
 //decrease quantity
 $(document).on("click", ".minus-btn", function (e) {
     e.preventDefault();
-    let $row = $(this).closest("tr");
+    let $row = $(this).closest("tr, .cart-item-card");
     let rowId = $row.data("row_id");
     let updateRoute = $row.data("update_route");
     let $qtyInput = $row.find(".cart-qty");
@@ -69,7 +69,7 @@ $(document).on("click", ".minus-btn", function (e) {
 
 // Cart quantity input field change event
 $(document).on("change", ".cart-qty", function () {
-    let $row = $(this).closest("tr");
+    let $row = $(this).closest("tr, .cart-item-card");
     let rowId = $row.data("row_id");
     let updateRoute = $row.data("update_route");
     let newQty = parseFloat($(this).val());
@@ -83,7 +83,7 @@ $(document).on("change", ".cart-qty", function () {
 // Remove item from the cart
 $(document).on("click", ".remove-btn", function (e) {
     e.preventDefault();
-    var $row = $(this).closest("tr");
+    var $row = $(this).closest("tr, .cart-item-card");
     var destroyRoute = $row.data("destroy_route");
 
     $.ajax({
@@ -348,13 +348,20 @@ $(".discount_type").on("change", function () {
 // Function to calculate the total amount
 function calTotalAmount() {
     let subtotal = 0;
+    let itemCount = 0;
 
-    // Calculate subtotal from cart list
-    $("#purchase_cart_list tr").each(function () {
-        let cart_subtotal =
-            getNumericValue($(this).find(".cart-subtotal").text()) || 0;
+    // Calculate subtotal from cart list (support both tr and div)
+    $("#purchase_cart_list tr, #purchase_cart_list .cart-item-card").each(function () {
+        let cart_subtotal = getNumericValue($(this).find(".cart-subtotal").text()) || 
+                           parseFloat($(this).find(".cart-subtotal").val()) || 0;
         subtotal += cart_subtotal;
+        itemCount++;
     });
+
+    // Update items count
+    if ($("#items_count").length) {
+        $("#items_count").text(itemCount);
+    }
 
     $("#sub_total").text(currencyFormat(subtotal));
 
@@ -561,7 +568,7 @@ $(document).on("click", ".category-list, .brand-list", function () {
 
 // Update cart
 $(document).on("change", ".batch_no, .expire_date, .price", function () {
-    let $row = $(this).closest("tr");
+    let $row = $(this).closest("tr, .cart-item-card");
     let updateRoute = $row.data("update_route");
 
     // Get values

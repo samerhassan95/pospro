@@ -8,9 +8,16 @@
     <link rel="stylesheet" href="{{ asset('assets/css/choices.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/calculator.css') }}">
     <style>
+        /* Force RTL SVG flip */
+        @if (in_array(app()->getLocale(), ['ar', 'arbh', 'eg-ar', 'fa', 'prs', 'ps', 'ur']))
+        [dir="rtl"] .pos-top-nav a[href*="dashboard"] svg {
+            transform: scaleX(-1) !important;
+        }
+        @endif
+    <style>
         .pos-fullscreen-body { margin: 0; padding: 0; background: #f5f5f5; }
         .pos-fullscreen-wrapper { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
-        .pos-top-header {padding: 12px 24px 0px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .pos-top-header {padding: 12px 24px 0px 24px; display: flex; justify-content: space-between; align-items: center; background:#e6eaf2 !important; }
         .pos-brand { display: flex; align-items: center; gap: 12px; }
         .pos-brand-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0; }
         .pos-brand-subtitle { font-size: 12px; color: #6b7280; margin: 0; }
@@ -23,7 +30,7 @@
         .pos-add-expense-btn { display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: #FF6500; border: none; border-radius: 100px; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; }
         .pos-add-expense-btn:hover { background: #e55a00; color: #fff; }
         .pos-add-expense-btn svg { width: 24px; height: 24px; flex-shrink: 0; }
-        .pos-main-container { display: grid; grid-template-columns: 420px 1fr; gap: 20px; padding: 20px; background: #f5f5f5; }
+        .pos-main-container { display: grid; grid-template-columns: 420px 1fr; gap: 20px; padding: 20px; background: #e6eaf2 !important; }
         @media (max-width: 1200px) { .pos-main-container { grid-template-columns: 380px 1fr; } }
         @media (max-width: 992px) { .pos-main-container { grid-template-columns: 1fr; } }
         .order-sidebar { background: #fff; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; border-right: none; }

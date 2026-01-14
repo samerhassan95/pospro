@@ -2038,5 +2038,6 @@
     "installer_messages.updater.final.title": "Finished",
     "installer_messages.updater.final.finished": "Application's database has been successfully updated.",
     "installer_messages.updater.final.exit": "Click here to exit",
-    "installer_messages.updater.log.success_message": "Laravel Installer successfully UPDATED on "
+    "installer_messages.updater.log.success_message": "Laravel Installer successfully UPDATED on ",
+    "Loading Dashboard...": "Loading Dashboard..."
 }

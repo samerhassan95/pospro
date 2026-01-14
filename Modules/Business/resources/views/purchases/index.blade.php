@@ -14,7 +14,7 @@
                     </div>
                     <div class="table-top-form p-16-0">
                         <div class="d-flex align-items-center gap-3 flex-wrap margin-lr-16">
-                            <form action="{{ route('business.purchases.filter') }}" method="post" class="filter-form" table="#purchases-data">
+                            <form action="{{ route('business.purchases.filter') }}" method="post" class="report-filter-form" table="#purchases-data">
                                 @csrf
                                 <div class="table-top-left d-flex gap-3 flex-wrap">
 
@@ -31,19 +31,20 @@
                                     @if(auth()->user()->accessToMultiBranch())
                                     <div class="table-search position-relative">
                                         <div class="gpt-up-down-arrow position-relative">
-                                            <select name="branch_id" class="form-control">
-                                                <option value="">{{ __('Select Branch') }}</option>
-                                                @foreach ($branches as $branch)
-                                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <span></span>
+                                        <select name="branch_id" class="form-control">
+                                            <option value="">{{ __('Select Branch') }}</option>
+                                            @foreach ($branches as $branch)
+                                                <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <span></span>
                                         </div>
                                     </div>
                                     @endif
 
                                     <div class="table-search position-relative">
-                                        <input type="text" name="search" class="form-control" placeholder="{{ __('Search...') }}">
+                                        <input type="text" name="search" class="form-control"
+                                            placeholder="{{ __('Search...') }}">
                                         <span class="position-absolute">
                                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M14.582 14.582L18.332 18.332" stroke="#4D4D4D" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
@@ -54,13 +55,12 @@
 
                                         <div class="custom-from-to align-items-center date-filters d-none">
                                             <label class="header-label">{{ __('From Date') }}</label>
-                                        <input type="date" name="from_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" class="form-control">
+                                            <input type="date" name="from_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" class="form-control">
                                         </div>
                                         <div class="custom-from-to align-items-center date-filters d-none">
                                             <label class="header-label">{{ __('To Date') }}</label>
-                                        <input type="date" name="to_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" class="form-control">
+                                            <input type="date" name="to_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" class="form-control">
                                         </div>
-
                                         <div class="gpt-up-down-arrow position-relative d-print-none custom-date-filter">
                                             <select name="custom_days" class="form-control custom-days">
                                                 <option value="today">{{__('Today')}}</option>

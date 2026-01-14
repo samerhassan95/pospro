@@ -1,6 +1,25 @@
 [dir="rtl"] body {
     background: #ecf1f9 !important;
 }
+
+/* RTL Sidebar - Force right positioning */
+[dir="rtl"] .side-bar {
+    left: auto !important;
+    right: 0 !important;
+}
+
+/* RTL - Flip ALL SVG elements globally */
+[dir="rtl"] svg {
+    transform: scaleX(-1) !important;
+}
+
+/* RTL - Except for specific icons that shouldn't flip */
+[dir="rtl"] .sidebar-icon svg,
+[dir="rtl"] .custom-image-bg svg,
+[dir="rtl"] .icons svg {
+    transform: scaleX(1) !important;
+}
+
 [dir="rtl"] a,
 [dir="rtl"] button,
 [dir="rtl"] .btn,
@@ -58,11 +77,12 @@
 }
 [dir="rtl"] .section-container {
     padding-right: var(--sidebar-width); /* Use CSS variable for consistency */
-    padding-left: 0;
+    padding-left: 0 !important;
+    transition: padding-right 0.3s ease-in-out;
 }
 
 [dir="rtl"] .section-container.active {
-    padding-left: 0;
+    padding-left: 0 !important;
     padding-right: var(--sidebar-collapsed-width);
 }
 [dir="rtl"] .view-website i {
@@ -129,12 +149,7 @@
     order: 1 !important;
     padding: 0;
 }
-[dir="rtl"] .side-bar {
-    left: unset;
-    right: 0;
-    z-index: 10;
-    width: var(--sidebar-width);
-}
+
 @media (max-width: 1400px) {
     [dir="rtl"] .section-container {
         padding-left: 0 !important;
@@ -143,6 +158,15 @@
 @media (max-width: 1400px) {
     [dir="rtl"] .side-bar {
         width: var(--sidebar-width);
+    }
+}
+/* Desktop RTL sidebar toggle fix */
+@media (min-width: 769px) {
+    [dir="rtl"] .side-bar {
+        transition: right 0.3s ease-in-out;
+    }
+    [dir="rtl"] .side-bar.active {
+        right: calc(-1 * var(--sidebar-width) + var(--sidebar-collapsed-width));
     }
 }
 [dir="rtl"] .side-bar-addon {
@@ -364,6 +388,7 @@
     [dir="rtl"] .side-bar {
         right: -100%;
         left: unset;
+        transition: right 0.3s ease-in-out;
     }
     [dir="rtl"] .side-bar.active {
         right: 0;
@@ -495,4 +520,183 @@
 [dir="rtl"] .gpt-up-down-arrow select {
     direction: rtl;
     text-align: left;
+}
+
+/* RTL Sidebar overlay fix */
+[dir="rtl"] .side-bar .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+/* Only show overlay on mobile when sidebar is open */
+@media (max-width: 768px) {
+    [dir="rtl"] .side-bar:not(.active) .overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+[dir="rtl"] .side-bar.active .overlay {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Hide overlay completely on desktop */
+@media (min-width: 769px) {
+    [dir="rtl"] .side-bar .overlay {
+        display: none !important;
+        pointer-events: none !important;
+    }
+}
+
+/* RTL Calendar arrows - reverse direction */
+[dir="rtl"] #cal-prev i.fa-chevron-left,
+[dir="rtl"] #cal-next i.fa-chevron-right {
+    display: inline-block;
+    transform: scaleX(-1);
+}
+
+/* RTL - Reverse all chevron icons */
+[dir="rtl"] .fa-chevron-left,
+[dir="rtl"] .fa-chevron-right {
+    display: inline-block;
+    transform: scaleX(-1);
+}
+
+[dir="rtl"] .fas.fa-chevron-left,
+[dir="rtl"] .fas.fa-chevron-right {
+    display: inline-block;
+    transform: scaleX(-1);
+}
+
+/* RTL Purchase Due Card */
+[dir="rtl"] .purchase-due-card {
+    text-align: right;
+}
+
+[dir="rtl"] .due-header {
+    direction: rtl;
+}
+
+[dir="rtl"] .calendar-days-header {
+    direction: rtl;
+}
+
+[dir="rtl"] .calendar-days-slider {
+    direction: rtl;
+}
+
+[dir="rtl"] .due-note {
+    text-align: right;
+}
+
+/* RTL - Reverse SVG icons in navigation buttons */
+[dir="rtl"] .pos-nav-btn svg,
+[dir="rtl"] .pos-top-nav svg,
+[dir="rtl"] a[title*="Back"] svg,
+[dir="rtl"] .back-btn svg {
+    transform: scaleX(-1) !important;
+    display: inline-block !important;
+}
+
+[dir="rtl"] .pos-nav-btn,
+[dir="rtl"] .pos-top-nav a {
+    display: inline-flex !important;
+}
+
+/* RTL - Reverse any double chevron or back arrow SVGs */
+[dir="rtl"] svg path[d*="M11.0249"],
+[dir="rtl"] svg path[d*="M18.0249"] {
+    transform: scaleX(-1) !important;
+    transform-origin: center !important;
+}
+
+/* RTL - Force flip on all back/navigation SVGs */
+[dir="rtl"] a[href*="dashboard"] svg,
+[dir="rtl"] .pos-top-nav > a:first-child svg {
+    transform: scaleX(-1) !important;
+}
+
+/* RTL - Specifically target the back button with double chevron */
+[dir="rtl"] .pos-top-nav a[title] svg,
+[dir="rtl"] a[href*="business.dashboard"] svg {
+    transform: scaleX(-1) !important;
+}
+
+/* RTL - Override Bootstrap RTL select styling completely */
+[dir="rtl"] select,
+[dir="rtl"] .form-select,
+[dir="rtl"] select.form-control {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    direction: rtl !important;
+    text-align: right !important;
+    /* Remove Bootstrap RTL arrow */
+    background-image: none !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+}
+
+/* RTL - Hide default select arrow for IE/Edge */
+[dir="rtl"] select::-ms-expand {
+    display: none !important;
+}
+
+/* RTL - Add single arrow on LEFT side only */
+[dir="rtl"] select.form-control,
+[dir="rtl"] select.form-select,
+[dir="rtl"] select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: left 0.75rem center !important;
+    background-size: 16px 12px !important;
+    padding-left: 2.5rem !important;
+    padding-right: 0.75rem !important;
+}
+
+/* RTL - Flip all down arrows and chevron-down */
+[dir="rtl"] .fa-chevron-down,
+[dir="rtl"] .fa-caret-down,
+[dir="rtl"] .fa-angle-down {
+    display: inline-block;
+}
+
+/* RTL - Flip checkmark icons */
+[dir="rtl"] .fa-check,
+[dir="rtl"] .fa-check-circle {
+    display: inline-block;
+}
+
+/* RTL - Extra specific rule for revenue-year and similar selects */
+[dir="rtl"] select.form-control.revenue-year,
+[dir="rtl"] .form-control.revenue-year,
+[dir="rtl"] select.revenue-year {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: left 0.75rem center !important;
+    background-size: 16px 12px !important;
+    padding-left: 2.5rem !important;
+    padding-right: 0.75rem !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+
+/* RTL - Force remove any other background images on form-control selects */
+[dir="rtl"] .gpt-up-down-arrow select.form-control {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: left 0.75rem center !important;
+    background-size: 16px 12px !important;
+    padding-left: 2.5rem !important;
+    padding-right: 0.75rem !important;
 }
