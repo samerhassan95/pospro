@@ -19,7 +19,7 @@
 
 <link rel="stylesheet" href="{{ asset('assets/css/choices.css') }}">
 
-@if (app()->getLocale() == 'ar')
-<link rel="stylesheet" href="{{ asset('assets/css/arabic.css') }}?v={{ time() }}">
+@if (in_array(app()->getLocale(), ['ar', 'arbh', 'eg-ar', 'fa', 'prs', 'ps', 'ur']))
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.rtl.min.css') }}?v={{ time() }}">
+<link rel="stylesheet" href="{{ asset('assets/css/arabic.css') }}?v={{ time() }}">
 @endif

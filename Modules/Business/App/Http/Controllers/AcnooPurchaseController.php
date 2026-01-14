@@ -40,21 +40,22 @@ class AcnooPurchaseController extends Controller
 
     public function index(Request $request)
     {
-        $purchasesWithReturns = PurchaseReturn::where('business_id', auth()->user()->business_id)
+        $business_id = auth()->user()->business_id;
+
+        $purchasesWithReturns = PurchaseReturn::where('business_id', $business_id)
             ->pluck('purchase_id')
             ->toArray();
 
-        $query = Purchase::with('details', 'branch:id,name', 'party', 'details.product', 'details.product.category', 'payment_type:id,name')
-            ->where('business_id', auth()->user()->business_id)
-            ->whereDate('purchaseDate', Carbon::today());
+        $purchasesQuery = Purchase::with('user:id,name', 'party:id,name,email,phone,type', 'payment_type:id,name', 'branch:id,name', 'details')
+            ->where('business_id', $business_id);
 
-        if ($request->today) {
-            $query->whereDate('purchaseDate', Carbon::today());
+        // Default to today if 'today' param is set
+        if ($request->has('today')) {
+            $purchasesQuery->whereDate('purchaseDate', Carbon::today()->format('Y-m-d'));
         }
 
-        $purchases = $query->latest()->paginate(20);
-
-        $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
+        $purchases = $purchasesQuery->latest()->paginate(10);
+        $branches = Branch::withTrashed()->where('business_id', $business_id)->latest()->get();
 
         return view('business::purchases.index', compact('purchases', 'purchasesWithReturns', 'branches'));
     }
@@ -134,7 +135,8 @@ class AcnooPurchaseController extends Controller
     public function productFilter(Request $request)
     {
         $business_id = auth()->user()->business_id;
-        $products = Product::where('business_id', $business_id)
+        $products = Product::with(['stocks', 'unit:id,unitName'])
+            ->where('business_id', $business_id)
             ->when($request->search, function ($query) use ($request) {
                 $query->where(function ($q) use ($request) {
                     $q->where('productName', 'like', '%' . $request->search . '%')
@@ -171,7 +173,7 @@ class AcnooPurchaseController extends Controller
             return response()->json([
                 'total_products' => $total_products,
                 'product_id' => $total_products == 1 ? $products->first()->id : null,
-                'data' => view('business::purchases.product-list', compact('products'))->render(),
+                'data' => view('business::purchases.product-list-new', compact('products'))->render(),
                 'categories' => view('business::purchases.category-list', compact('categories'))->render(),
                 'brands' => view('business::purchases.brand-list', compact('brands'))->render(),
             ]);
@@ -734,7 +736,7 @@ class AcnooPurchaseController extends Controller
     public function showPurchaseCart()
     {
         $cart_contents = Cart::content()->filter(fn($item) => $item->options->type == 'purchase');
-        return view('business::purchases.cart-list', compact('cart_contents'));
+        return view('business::purchases.cart-list-new', compact('cart_contents'));
     }
 
     public function getCartData()

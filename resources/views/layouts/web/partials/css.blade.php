@@ -15,8 +15,8 @@
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
 @if (app()->getLocale() == 'ar')
-<link rel="stylesheet" href="{{ asset('assets/web/css/arabic.css') }}?v={{ time() }}">
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.rtl.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/web/css/arabic.css') }}?v={{ time() }}">
 @endif
 
 @stack('css')

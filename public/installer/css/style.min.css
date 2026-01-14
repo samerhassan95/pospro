@@ -3742,7 +3742,7 @@ svg:not(:root) {
 }
 
 .box .paragraph {
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
     font-size: 20px;

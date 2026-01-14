@@ -176,7 +176,7 @@ class AcnooSaleController extends Controller
                 'total_products' => $total_products,
                 'total_products_count' => $total_products_count,
                 'product_id' => $total_products == 1 ? $products->first()->id : null,
-                'data' => view('business::sales.product-list', compact('products'))->render(),
+                'data' => view('business::sales.product-list-new', compact('products'))->render(),
                 'categories' => view('business::sales.category-list', compact('categories'))->render(),
                 'brands' => view('business::sales.brand-list', compact('brands'))->render(),
             ]);

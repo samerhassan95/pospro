@@ -1,11 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+/* Import Cairo font */
+@import url("../../fonts/cairo/cairo.css");
 
-/* Lufga font fallback - using Poppins as similar alternative */
+/* Lufga font fallback - using Cairo as alternative */
 @font-face {
     font-family: 'Lufga';
-    src: local('Poppins');
+    src: local('Cairo');
     font-weight: 500;
     font-style: normal;
 }
@@ -31,7 +30,7 @@
     --clr-orange: #ff6565;
     --clr-orange-light: rgba(255, 116, 62, 0.12);
     --clr-red: #FF6500;
-    --ff: "Inter", sans-serif;
+    --ff: "Cairo", sans-serif;
 }
 
 .primary {
@@ -51,7 +50,7 @@ html {
 body {
     margin: 0;
     padding: 0 !important;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     font-size: 14px;
     line-height: 25px;
     letter-spacing: 0px;
@@ -200,7 +199,7 @@ label.img-label {
 
 svg {
     /* fill: #000000; */
-    --svg-font-size: 14px;
+    /* --svg-font-size: 14px; */
     width: var(--svg-font-size);
     height: var(--svg-font-size);
     margin-top: -4px;
@@ -397,7 +396,7 @@ svg {
     background: #FAFAFA;
     box-shadow: 0px 3.93px 88.43px 1.97px #00000014;
     transition: all 0.4s ease;
-    font-family: Inter !important;
+    font-family: Cairo !important;
     font-size: 15px !important;
     font-weight: 500 !important;
     line-height: 22px !important;
@@ -625,7 +624,7 @@ svg {
     color: #64748B !important;
 font-weight: 300;
 font-style: Light;
-font-size: 16px;
+font-size: 14px;
     line-height: 20px !important;
     white-space: nowrap !important;
     margin-top: 16px;
@@ -695,6 +694,24 @@ font-size: 16px;
 }
 
 .dashboard-table-header a {
+    color: var(--clr-primary);
+    text-decoration: none;
+}
+
+.dashboard-table-header a:hover,
+.dashboard-table-header a:focus,
+.dashboard-table-header a:active {
+    color: var(--clr-primary);
+    text-decoration: none;
+}
+
+.dashboard-table-header a i {
+    color: var(--clr-primary);
+}
+
+.dashboard-table-header a:hover i,
+.dashboard-table-header a:focus i,
+.dashboard-table-header a:active i {
     color: var(--clr-primary);
 }
 
@@ -1549,7 +1566,7 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
 }
 
 .container-fluid {
-    padding: 1.5%;
+    padding: 0.7rem 1.5rem 1.5rem 1.5rem !important;
     width: 100%;
 }
 
@@ -1805,7 +1822,7 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
 /* table css start css */
 .erp-table-section {
     /* padding-top: 30px; */
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .erp-table-section.dashboard .card {
@@ -1842,7 +1859,7 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
     font-size: 18px;
     text-transform: capitalize;
     color: #191919;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .table-header.p-16 {
@@ -2094,10 +2111,34 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
 
 .view-website {
     /* border: 1px solid var(--clr-primary); */
-    padding: 6px;
+    padding: 0px 12px 0px 12px;
     border-radius: 4px;
 }
+            .pos-add-expense-btn {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 24px;
+                background: #FF6500;
+                border: none;
+                border-radius: 100px;
+                color: #fff;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                text-decoration: none;
+            }
 
+            .pos-add-expense-btn:hover {
+                background: #e55a00;
+                color: #fff;
+            }
+
+            .pos-add-expense-btn svg {
+                width: 24px;
+                height: 24px;
+                flex-shrink: 0;
+            }
 .table-action button {
     font-size: 22px;
     background: none;
@@ -6959,6 +7000,16 @@ tr.position-relative td {
 
 .footer-acn {
     color: var(--clr-primary);
+    text-decoration: none;
+    pointer-events: none;
+    cursor: default;
+}
+
+.footer-acn:hover,
+.footer-acn:focus,
+.footer-acn:active {
+    color: var(--clr-primary);
+    text-decoration: none;
 }
 
 @media (max-width: 1024px) {
@@ -7227,7 +7278,7 @@ tr.position-relative td {
 
 @media (min-width: 1200px) {
     .business-content .bus-stat-title {
-        font-size: 12px !important;
+        font-size: 16px !important;
         line-height: 18px !important;
         white-space: normal !important;
         margin-top: 12px;
@@ -10056,7 +10107,7 @@ tr.position-relative td {
 
 .address-container p {
     text-align: end;
-    font-family: "inter";
+    font-family: "Cairo";
     color: #000;
     font-size: 12px !important;
 }
@@ -10357,7 +10408,7 @@ tr.position-relative td {
 
 .promo-decoration {
     position: absolute;
-    right: 0;
+     inset-inline-end: 0;
     top: 0;
     width: 50%;
     height: 100%;
@@ -10369,7 +10420,7 @@ tr.position-relative td {
 .promo-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* object-fit: cover; */
     object-position: center;
 }
 
@@ -10636,3 +10687,4 @@ tr.position-relative td {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+

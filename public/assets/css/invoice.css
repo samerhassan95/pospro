@@ -1,14 +1,14 @@
 .invoice-container {
     width: 100%;
     padding: 0;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .invoice-content {
     width: 100%;
     background-color: white;
     position: relative;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
 }
 
@@ -45,7 +45,7 @@
 }
 
 .store-name {
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     font-size: 24px;
     font-weight: 700;
     line-height: 20px;
@@ -82,7 +82,7 @@
 .in-table-row td {
     border: none;
     padding: 0px;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     font-size: 12px;
     font-weight: 400;
     line-height: 24px;
@@ -90,7 +90,7 @@
 }
 
 .in-table-row-bottom {
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     font-size: 14px;
     font-weight: 600;
     line-height: 17px;
@@ -106,7 +106,7 @@
 
 .in-table-header {
     font-weight: 900 !important;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     font-size: 16px;
     line-height: 24px;
     color: white;
@@ -133,7 +133,7 @@
 .in-table-body td {
     padding: 5px;
     border: 1.5px solid #d9d9d9 !important;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     font-size: 16px !important;
     font-weight: 400;
     line-height: 20px;
@@ -142,7 +142,7 @@
 
 .text-center {
     text-align: center;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     font-size: 13px;
     font-weight: 400;
     line-height: 24px;
@@ -157,7 +157,7 @@
 .in-footer {
     bottom: 0px;
     left: 0;
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     background-color: #c52127;
     display: flex;
     align-items: center;
@@ -185,7 +185,7 @@
 }
 
 .in-signature h4 {
-    font-family: "Inter", sans-serif;
+    font-family: "Cairo", sans-serif;
     color: white;
     font-size: 14px;
     font-weight: 500;

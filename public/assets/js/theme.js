@@ -10,8 +10,17 @@
         $(".sidebar-opner").on("click ", function () {
             $(".side-bar, .section-container").toggleClass("active");
         });
-        $(".side-bar .close-btn, .side-bar .overlay").on("click ", function () {
+        
+        // Close button always closes sidebar
+        $(".side-bar .close-btn").on("click ", function () {
             $(".side-bar, .section-container").toggleClass("active");
+        });
+        
+        // Overlay only closes on mobile (screen width < 769px)
+        $(".side-bar .overlay").on("click ", function () {
+            if ($(window).width() < 769) {
+                $(".side-bar, .section-container").toggleClass("active");
+            }
         });
 
         $("li>ul").toggleClass("dropdown-menu");
