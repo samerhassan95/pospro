@@ -186,7 +186,7 @@
          <div class="empty-screen-container">
             <div class="empty-screen-content">
                 <img src="{{ asset('assets/images/dashboard/empty.svg') }}" alt="" srcset="">
-                <p>You can not access it!</p>
+                <p>{{ __('You can not access it!') }}</p>
             </div>
          </div>
     </div>

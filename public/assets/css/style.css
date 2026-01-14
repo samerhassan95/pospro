@@ -389,7 +389,8 @@ svg {
     width: var(--sidebar-width);
     height: 100vh;
     z-index: 10;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     opacity: 1;
     visibility: visible;
@@ -926,7 +927,9 @@ font-size: 16px;
     color: #121535;
     padding-top: 2px;
 }
-
+.dropdown-toggle{
+    border-radius: 100px !important;
+}
 .barcode-content img {
     max-width: 90% !important;
     height: 0.24in !important;
@@ -985,7 +988,6 @@ body [dir="ltr"] .side-bar-manu li .dropdown-menu{
 .side-bar-manu {
     padding: 0 10px;
     padding-top: 10px;
-    overflow: hidden;
 }
 
 .side-bar-manu li .dropdown-menu li {

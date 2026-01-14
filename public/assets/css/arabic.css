@@ -161,7 +161,6 @@
     width: 100%;
 }
 [dir="rtl"] .sidebar-opner {
-    margin-right: 0;
     margin-left: 20px;
 }
 [dir="rtl"] .side-bar-manu li a .sidebar-icon {

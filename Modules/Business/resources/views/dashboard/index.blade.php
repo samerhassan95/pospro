@@ -18,8 +18,8 @@
 <div class="container-fluid m-h-100">
     @if (env('DEMO_MODE'))
     <div class="alert alert-dismissible fade show text-center mb-3 text-white" role="alert" style="background: linear-gradient(270deg, #ff7db8 0%, #ee2a7b 100%)">
-        <b class="text-light">Note:</b> This is a demo account — data resets every hour for this account only. Some of module are disabled in this account, to get full access please please create your own account.
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        <b class="text-light">{{ __('Note:') }}</b> {{ __('This is a demo account — data resets every hour for this account only. Some of module are disabled in this account, to get full access please please create your own account.') }}
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="{{ __('Close') }}"></button>
     </div>
     @endif
 
@@ -65,7 +65,7 @@
                         <button class="cal-nav-btn" id="cal-next"><i class="fas fa-chevron-right"></i></button>
                     </div>
                     <div class="calendar-days-header">
-                        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                        <span>{{ __('M') }}</span><span>{{ __('T') }}</span><span>{{ __('W') }}</span><span>{{ __('T') }}</span><span>{{ __('F') }}</span><span>{{ __('S') }}</span><span>{{ __('S') }}</span>
                     </div>
                     <div class="calendar-days-slider" id="calendar-days-slider">
                         {{-- Days will be populated by JS --}}
@@ -332,7 +332,7 @@
     <div class="empty-screen-container">
         <div class="empty-screen-content">
             <img src="{{ asset('assets/images/dashboard/empty.svg') }}" alt="" srcset="">
-            <p>You can not access it!</p>
+            <p>{{ __('You can not access it!') }}</p>
         </div>
     </div>
 </div>

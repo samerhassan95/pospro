@@ -41,7 +41,7 @@
             @endif
             <div class="language-change ">
                 <div class="dropdown">
-                    <button class="btn btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    <button class="btn btn-light rounded-full dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}"
                             alt="" class="flag-icon me-2">
