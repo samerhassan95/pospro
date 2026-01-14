@@ -5,7 +5,7 @@
         <div class="row py-2 d-flex align-items-start justify-content-between border-bottom print-container d-print-none">
 
             <div class="col-md-6 d-flex align-items-center p-2">
-                <span class="Money-Receipt">{{ __('Sales Invoice') }}</span>
+                <span class="Money-Receipt">Simplified Tax Invoice / فاتورة ضريبية مبسطة</span>
             </div>
 
             <div class="col-md-6 d-flex justify-content-end align-items-end">
@@ -40,7 +40,25 @@
             </div>
 
             {{-- Right Side: Invoice --}}
-            <h3 class="right-invoice mb-0 align-self-center">{{ __('INVOICE') }}</h3>
+            <div class="d-flex align-items-center gap-3">
+                @php
+                    $sellerName = $sale->business->companyName ?? '';
+                    $vatRegistrationNumber = $sale->business->vat_no ?? '';
+                    $timestamp = $sale->created_at ? \Carbon\Carbon::parse($sale->created_at)->toIso8601String() : \Carbon\Carbon::now()->toIso8601String();
+                    $invoiceTotal = $sale->totalAmount ?? 0;
+                    $vatTotal = $sale->vat_amount ?? 0;
+                    
+                    $xmlHash = $sale->invoice_hash ?? null;
+                    $ecdsaSignature = $sale->cryptographic_stamp ?? null;
+                    $publicKey = $sale->business->zatca_setting['public_key'] ?? null;
+                    
+                    $zatcaQrContent = generateZatcaQrCode($sellerName, $vatRegistrationNumber, $timestamp, $invoiceTotal, $vatTotal, $xmlHash, $ecdsaSignature, $publicKey);
+                @endphp
+                <div class="qr-code flex-shrink-0" style="width: 400px; height: 400px;">
+                    {!! QrCode::size(400)->generate($zatcaQrContent) !!}
+                </div>
+                <h3 class="right-invoice mb-0 align-self-center">{{ __('INVOICE') }}</h3>
+            </div>
         </div>
         <div class="d-flex align-items-start justify-content-between flex-wrap">
             <div>

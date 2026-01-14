@@ -30,6 +30,17 @@
                 <div class="unpaid-badge-2">{{ __('Unpaid') }}</div>
             @endif
         </td>
+        <td>
+            @if($sale->zatca_status === 'REPORTED')
+                <div class="paid-badge" style="background: #28a745; color: white;">{{ __('Reported') }}</div>
+            @elseif($sale->zatca_status === 'REPORTING')
+                <div class="unpaid-badge" style="background: #ffc107; color: black;">{{ __('Sending...') }}</div>
+            @elseif($sale->zatca_status === 'FAILED' || $sale->zatca_status === 'ERROR')
+                 <div class="unpaid-badge-2" style="background: #dc3545; color: white;" title="{{ $sale->zatca_response['error'] ?? 'Error' }}">{{ __('Failed') }}</div>
+            @else
+                <span class="text-muted">-</span>
+            @endif
+        </td>
 
         <td class="d-print-none">
             <div class="dropdown table-action">

@@ -783,3 +783,40 @@ function transaction_types($transactions): string
         ->unique()
         ->implode(', ');
 }
+
+if (!function_exists('generateZatcaQrCode')) {
+    function generateZatcaQrCode($sellerName, $vatRegistrationNumber, $timestamp, $invoiceTotal, $vatTotal, $xmlHash = null, $ecdsaSignature = null, $publicKey = null, $stampSignature = null)
+    {
+        $data = [
+            1 => $sellerName,
+            2 => $vatRegistrationNumber,
+            3 => $timestamp,
+            4 => $invoiceTotal,
+            5 => $vatTotal
+        ];
+
+        // Add Phase 2 tags if available
+        if ($xmlHash) {
+            $data[6] = $xmlHash;
+        }
+        if ($ecdsaSignature) {
+            $data[7] = $ecdsaSignature;
+        }
+        if ($publicKey) {
+            $data[8] = $publicKey;
+        }
+        if ($stampSignature) {
+            $data[9] = $stampSignature;
+        }
+
+        $result = '';
+        foreach ($data as $tag => $value) {
+            $valueStr = (string) $value;
+            $length = strlen($valueStr);
+            $result .= chr($tag) . chr($length) . $valueStr;
+        }
+
+        return base64_encode($result);
+    }
+}
+

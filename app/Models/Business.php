@@ -32,7 +32,8 @@ class Business extends Model
         'affiliator_id',
         'email',
         'status',
-        'meta'
+        'meta',
+        'zatca_setting'
     ];
 
     public function enrolled_plan()
@@ -67,5 +68,6 @@ class Business extends Model
         'shopOpeningBalance' => 'double',
         'status' => 'integer',
         'meta' => 'json',
+        'zatca_setting' => 'json'
     ];
 }

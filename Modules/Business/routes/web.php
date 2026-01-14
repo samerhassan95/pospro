@@ -285,6 +285,11 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::resource('subscriptions', Business\AcnooSubscriptionController::class)->withoutMiddleware('expired')->only('index');
 
     Route::resource('manage-settings', Business\AcnooSettingsManagerController::class);
+    
+    // ZATCA Settings
+    Route::get('zatca-settings', [Business\ZatcaSettingController::class, 'index'])->name('zatca.index');
+    Route::post('zatca-settings', [Business\ZatcaSettingController::class, 'update'])->name('zatca.update');
+
     Route::post('/invoice-settings', [Business\AcnooSettingsManagerController::class, 'updateInvoice'])->name('invoice.update');
     Route::post('/product-settings', [Business\AcnooSettingsManagerController::class, 'updateProductSetting'])->name('product.settings.update');
 

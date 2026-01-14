@@ -37,13 +37,20 @@ class Sale extends Model
         'payment_type_id',
         'invoiceNumber',
         'saleDate',
-        'image',
+        'status',
         'meta',
         'rounding_option',
         'rounding_amount',
         'actual_total_amount',
         'change_amount',
         'type',
+        'uuid',
+        'invoice_hash',
+        'previous_hash',
+        'cryptographic_stamp',
+        'zatca_status',
+        'zatca_response',
+        'xml_path'
     ];
 
     public function business(): BelongsTo
@@ -130,6 +137,8 @@ class Sale extends Model
         'branch_id' => 'integer',
         'user_id' => 'integer',
         'vat_id' => 'integer',
+        'status' => 'integer',
+        'meta' => 'json',
         'discountAmount' => 'double',
         'dueAmount' => 'double',
         'isPaid' => 'boolean',
@@ -144,5 +153,6 @@ class Sale extends Model
         'actual_total_amount' => 'double',
         'discount_percent' => 'double',
         'meta' => 'json',
+        'zatca_response' => 'json'
     ];
 }

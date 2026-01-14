@@ -397,6 +397,7 @@ class AcnooSaleController extends Controller
                 'payment_type_id' => $request->payment_type_id,
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $dueAmount > 0 ? 0 : 1,
+                'uuid' => \Illuminate\Support\Str::uuid()->toString(), // ZATCA UUID
                 'meta' => [
                     'customer_phone' => $request->customer_phone,
                     'note' => $request->note,
@@ -472,6 +473,11 @@ class AcnooSaleController extends Controller
 
             // Notify user
             sendNotifyToUser($sale->id, route('business.sales.index', ['id' => $sale->id]), __('New sale created.'), $business_id);
+
+            // Trigger ZATCA Reporting
+            if (!empty($business->zatca_setting) && !empty($business->zatca_setting['csid'])) {
+                \App\Jobs\ReportSaleToZatca::dispatch($sale->id);
+            }
 
             DB::commit();
 

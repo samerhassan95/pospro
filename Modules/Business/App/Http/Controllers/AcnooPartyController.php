@@ -128,6 +128,8 @@ class AcnooPartyController extends Controller
             'opening_balance' => 'nullable|numeric|min:-999999999999.99|max:999999999999.99',
             'opening_balance_type' => 'required|in:due,advance',
             'meta' => 'nullable|array',
+        //     'zatca_type' => 'required|in:b2c,b2b',
+        //     'vat_number' => 'required_if:zatca_type,b2b|digits:15',
         ]);
 
         Party::create($request->except('image', 'due', 'wallet', 'opening_balance', 'credit_limit','business_id') + [
@@ -181,6 +183,8 @@ class AcnooPartyController extends Controller
             'opening_balance' => 'nullable|numeric|min:-999999999999.99|max:999999999999.99',
             'opening_balance_type' => 'required|in:due,advance',
             'meta' => 'nullable|array',
+    //         'zatca_type' => 'required|in:b2c,b2b',
+    // 'vat_number' => 'nullable|digits:15',
         ]);
 
         // Previous

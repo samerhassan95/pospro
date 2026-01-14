@@ -121,6 +121,7 @@
                                 <th class="text-start">{{ __('Due') }}</th>
                                 <th class="text-start">{{ __('Payment') }}</th>
                                 <th>{{ __('Status') }}</th>
+                                <th>{{ __('ZATCA') }}</th>
                                 <th>{{ __('Action') }}</th>
                             </tr>
                         </thead>
