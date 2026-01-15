@@ -82,7 +82,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="button-group text-center mt-5">
+                                    <div class="button-group text-end mt-5">
                                         <button type="reset"
                                             class="theme-btn border-btn m-2">{{ __('Reset') }}</button>
                                         <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>

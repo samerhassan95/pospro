@@ -25,7 +25,8 @@
                             <div class="table-top-left d-flex gap-3 margin-l-16">
                                 <div class="gpt-up-down-arrow position-relative">
                                     <select name="per_page" class="form-control">
-                                        <option value="10">{{ __('Show- 10') }}</option>
+                                        <option value="5" selected>{{ __('Show- 5') }}</option>
+                                        <option value="10" >{{ __('Show- 10') }}</option>
                                         <option value="25">{{ __('Show- 25') }}</option>
                                         <option value="50">{{ __('Show- 50') }}</option>
                                         <option value="100">{{ __('Show- 100') }}</option>
@@ -55,32 +56,8 @@
                     </div>
                 </div>
 
-                <div class="responsive-table m-0">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                @usercan('categories.delete')
-                                <th class="w-60">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <input type="checkbox" class="select-all-delete  multi-delete">
-                                    </div>
-                                </th>
-                                @endusercan
-
-                                <th>{{ __('SL') }}.</th>
-                                <th>{{ __('Icon') }}</th>
-                                <th class="text-start">{{ __('Name') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th>{{ __('Action') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="business-category-data">
-                            @include('business::categories.datas')
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    {{ $categories->links('vendor.pagination.bootstrap-5') }}
+                <div id="business-category-data">
+                    @include('business::categories.datas')
                 </div>
             </div>
         </div>
@@ -92,4 +69,3 @@
     @include('business::categories.create')
     @include('business::categories.edit')
 @endpush
-

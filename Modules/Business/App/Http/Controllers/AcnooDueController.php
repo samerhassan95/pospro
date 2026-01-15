@@ -40,7 +40,7 @@ class AcnooDueController extends Controller
 
             $parties = Party::where('business_id', $businessId)
                 ->latest()
-                ->paginate(20);
+                ->paginate(5);
 
             // Replace due with branch-wise due and remove zero-due parties from display
             $parties->getCollection()->transform(function ($party) {
@@ -67,7 +67,7 @@ class AcnooDueController extends Controller
             $parties = Party::where('business_id', $businessId)
                 ->where('due', '>', 0)
                 ->latest()
-                ->paginate(20);
+                ->paginate(5);
         }
 
         return view('business::dues.index', compact('parties', 'total_supplier_due', 'total_customer_due'));
@@ -307,7 +307,7 @@ class AcnooDueController extends Controller
             $query->where('type', 'Supplier');
         }
 
-        $parties = $query->latest()->paginate(20);
+        $parties = $query->latest()->paginate(5);
 
         if ($activeBranch) {
             // Calculate branch-wise due and replace $party->due

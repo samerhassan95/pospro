@@ -206,7 +206,8 @@
             @endusercan
             @endif
 
-            @if ((moduleCheck('MultiBranchAddon') && ((plan_data()['allow_multibranch'] ?? false)) || moduleCheck('WarehouseAddon')))
+            @php $plan = plan_data(); @endphp
+            @if ((moduleCheck('MultiBranchAddon') && ($plan->allow_multibranch ?? false)) || moduleCheck('WarehouseAddon'))
             @usercan('transfers.read')
             <li class="{{ Request::routeIs('business.transfers.index','business.transfers.create','business.transfers.edit') ? 'active' : '' }}">
                 <a href="{{ route('business.transfers.index') }}" class="active">
@@ -219,7 +220,7 @@
             @endusercan
             @endif
 
-            @if (moduleCheck('MultiBranchAddon') && (plan_data()['allow_multibranch'] ?? false))
+            @if (moduleCheck('MultiBranchAddon') && ($plan->allow_multibranch ?? false))
             @usercan('branches.read')
             <li class="dropdown {{ Request::routeIs('multibranch.branches.index', 'multibranch.branches.overview', 'business.roles.index', 'business.roles.edit', 'business.roles.create') ? 'active' : '' }}">
                 <a href="#">
@@ -675,6 +676,7 @@
             </li>
             @endusercanany
 
+            <li class="dropdown">
                 <a href="#">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/icons/party-report.png') }}">
@@ -771,6 +773,9 @@
                     <li>
                         <a class="{{ Request::routeIs('business.zatca.index') ? 'active' : '' }}" href="{{ route('business.zatca.index') }}">{{ __('ZATCA Integration') }}</a> <!-- ZATCA LINK -->
                     </li>
+                    <li>
+                        <a class="{{ Request::routeIs('business.moyasar.index') ? 'active' : '' }}" href="{{ route('business.moyasar.index') }}">{{ __('Moyasar Integration') }}</a>
+                    </li>
                 </ul>
             </li>
             @endusercan
@@ -803,13 +808,13 @@
                 <div class="lg-sub-plan">
                     <div id="sidebar_plan" class=" sidebar-free-plan d-flex align-items-center justify-content-between p-3 flex-column">
                         <div class="text-center">
-                            @if (plan_data() ?? false)
-
+                            @php $plan_info = plan_data(); @endphp
+                            @if ($plan_info)
                             <h3>
-                                {{ plan_data()['plan']['subscriptionName'] ?? '' }}
+                                {{ $plan_info->plan->subscriptionName ?? '' }}
                             </h3>
                             <h5>
-                                {{ __('Expired') }}: {{ formatted_date(plan_data()['will_expire'] ?? '') }}
+                                {{ __('Expired') }}: {{ formatted_date($plan_info->will_expire ?? '') }}
                             </h5>
                             @else
                             <h3>{{ __('No Active Plan') }}</h3>

@@ -18,7 +18,7 @@ class AcnooIncomeCategoryController extends Controller
 
     public function index()
     {
-        $income_categories = IncomeCategory::where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $income_categories = IncomeCategory::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         return view('business::income-categories.index', compact('income_categories'));
     }
 

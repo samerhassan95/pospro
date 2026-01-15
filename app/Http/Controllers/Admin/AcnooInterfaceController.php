@@ -14,7 +14,7 @@ class AcnooInterfaceController extends Controller
 
     public function index(Request $request)
     {
-        $interfaces = PosAppInterface::latest()->paginate($request->per_page ?? 20)->appends($request->query());
+        $interfaces = PosAppInterface::latest()->paginate($request->per_page ?? 5)->appends($request->query());
 
         if ($request->ajax()) {
             return response()->json([

@@ -132,7 +132,7 @@
                                         <span></span>
                                     </div>
                                 </div>
-                                <div class="col-lg-12 d-flex justify-content-center mt-4">
+                                <div class="col-lg-12 d-flex justify-content-end mt-4">
                                     @usercan('barcodes.create')
                                     <button class="theme-btn m-2 submit-btn barcode-preview-btn" id="barcode-preview-btn">{{ __('Preview') }}</button>
                                     @endusercan

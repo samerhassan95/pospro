@@ -33,7 +33,8 @@ class Business extends Model
         'email',
         'status',
         'meta',
-        'zatca_setting'
+        'zatca_setting',
+        'moyasar_setting'
     ];
 
     public function enrolled_plan()
@@ -68,6 +69,7 @@ class Business extends Model
         'shopOpeningBalance' => 'double',
         'status' => 'integer',
         'meta' => 'json',
-        'zatca_setting' => 'json'
+        'zatca_setting' => 'json',
+        'moyasar_setting' => 'json'
     ];
 }

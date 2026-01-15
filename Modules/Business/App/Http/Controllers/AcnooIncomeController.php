@@ -24,7 +24,7 @@ class AcnooIncomeController extends Controller
     public function index()
     {
         $income_categories = IncomeCategory::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
-        $incomes = Income::with('category:id,categoryName', 'payment_type:id,name', 'branch:id,name')->where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $incomes = Income::with('category:id,categoryName', 'payment_type:id,name', 'branch:id,name')->where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         $payment_types = PaymentType::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
 

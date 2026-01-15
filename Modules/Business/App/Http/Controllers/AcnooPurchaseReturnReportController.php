@@ -44,7 +44,7 @@ class AcnooPurchaseReturnReportController extends Controller
             ->where('business_id', $businessId)
             ->whereHas('purchaseReturns')
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
 
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
@@ -95,7 +95,7 @@ class AcnooPurchaseReturnReportController extends Controller
         })->sum('return_amount');
 
         // Pagination
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $purchases = $purchasesQuery->latest()->paginate($perPage);
 
         // Handle AJAX Request

@@ -24,7 +24,7 @@ class AcnooExpenseController extends Controller
     public function index()
     {
         $expense_categories = ExpenseCategory::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
-        $expenses = Expense::with('category:id,categoryName', 'payment_type:id,name', 'branch:id,name')->where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $expenses = Expense::with('category:id,categoryName', 'payment_type:id,name', 'branch:id,name')->where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         $payment_types = PaymentType::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
 

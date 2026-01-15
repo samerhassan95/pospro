@@ -24,13 +24,13 @@ class AcnooVatReportController extends Controller
             ->where('business_id', $businessId)
             ->where('vat_amount', '>', 0)
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         $purchases = Purchase::with('details', 'party', 'details.product', 'details.product.category', 'payment_type:id,name')
             ->where('business_id', $businessId)
             ->where('vat_amount', '>', 0)
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         $vats = Vat::where('business_id', auth()->user()->business_id)->whereStatus(1)->get();
 

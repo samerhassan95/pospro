@@ -10,7 +10,7 @@ class AcnooAffiliateReportController extends Controller
 {
     public function index()
     {
-        $items = Business::with(['enrolled_plan:id,plan_id', 'enrolled_plan.plan:id,subscriptionName', 'category:id,name'])->latest()->paginate(20);
+        $items = Business::with(['enrolled_plan:id,plan_id', 'enrolled_plan.plan:id,subscriptionName', 'category:id,name'])->latest()->paginate(5);
         return view('admin.affiliate-modules.reports.index', compact('items'));
     }
 
@@ -27,7 +27,7 @@ class AcnooAffiliateReportController extends Controller
             });
         })
             ->latest()
-            ->paginate($request->per_page ?? 20);
+            ->paginate($request->per_page ?? 5);
 
         if ($request->ajax()) {
             return response()->json([

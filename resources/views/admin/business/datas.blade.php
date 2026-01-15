@@ -103,6 +103,6 @@
         </tbody>
     </table>
 </div>
-<div class="mt-3">
+<div class="m-2">
     {{ $businesses->links('vendor.pagination.bootstrap-5') }}
 </div>

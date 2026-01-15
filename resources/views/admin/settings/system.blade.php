@@ -88,7 +88,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <div class="button-group text-center mt-4">
+                                                        <div class="button-group text-endmt-4">
                                                             <button class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>
                                                         </div>
                                                     </div>
@@ -161,7 +161,7 @@
                                                 <span>{{ __('QUEUE COMMAND :') }} <span class="text-danger">{{ __('php artisan queue:work') }}</span></span>
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <div class="button-group text-center mt-4">
+                                                        <div class="button-group text-endmt-4">
                                                             <button class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>
                                                         </div>
                                                     </div>
@@ -198,7 +198,7 @@
 
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <div class="button-group text-center mt-4">
+                                                        <div class="button-group text-endmt-4">
                                                             <button class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>
                                                         </div>
                                                     </div>
@@ -261,7 +261,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <div class="button-group text-center mt-4">
+                                                        <div class="button-group text-endmt-4">
                                                             <button class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>
                                                         </div>
                                                     </div>
@@ -295,7 +295,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <div class="button-group text-center mt-4">
+                                                        <div class="button-group text-endmt-4">
                                                             <button class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>
                                                         </div>
                                                     </div>
@@ -322,7 +322,7 @@
 
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <div class="button-group text-center mt-4">
+                                                        <div class="button-group text-endmt-4">
                                                             <button class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>
                                                         </div>
                                                     </div>
@@ -773,7 +773,7 @@
 
                                                     <div class="row">
                                                         <div class="col-lg-12">
-                                                            <div class="button-group text-center mt-4">
+                                                            <div class="button-group text-endmt-4">
                                                                 <button class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>
                                                             </div>
                                                         </div>

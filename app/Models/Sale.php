@@ -126,6 +126,25 @@ class Sale extends Model
     }
 
     /**
+     * Get the isPaid attribute - ensure it's calculated correctly based on dueAmount
+     */
+    public function getIsPaidAttribute($value)
+    {
+        // Get raw attributes to avoid casting issues
+        $dueAmount = $this->attributes['dueAmount'] ?? 0;
+        $paidAmount = $this->attributes['paidAmount'] ?? 0;
+        $totalAmount = $this->attributes['totalAmount'] ?? 0;
+
+        // If there's a due amount, the invoice cannot be paid
+        if ($dueAmount > 0) {
+            return false;
+        }
+
+        // If no due amount and payment was received (paidAmount equals or exceeds totalAmount), it's paid
+        return ($paidAmount > 0 && $paidAmount >= $totalAmount);
+    }
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array
@@ -152,7 +171,6 @@ class Sale extends Model
         'rounding_amount' => 'double',
         'actual_total_amount' => 'double',
         'discount_percent' => 'double',
-        'meta' => 'json',
         'zatca_response' => 'json'
     ];
 }

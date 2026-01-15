@@ -13,7 +13,7 @@ class AcnooNotificationController extends Controller
         $notifications = auth()->user()->notifications()
                             ->whereDate('created_at', today())
                             ->latest()
-                            ->get();
+                            ->paginate(5);
 
         return view('business::notifications.index', compact('notifications'));
     }
@@ -36,7 +36,7 @@ class AcnooNotificationController extends Controller
                                 $q->whereYear('created_at', now()->format('Y'));
                             })
                             ->latest()
-                            ->get();
+                            ->paginate($request->per_page ?? 5);
 
         return response()->json([
             'data' => view('business::notifications.datas', compact('notifications'))->render()

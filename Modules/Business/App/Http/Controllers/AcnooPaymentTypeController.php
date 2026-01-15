@@ -19,7 +19,7 @@ class AcnooPaymentTypeController extends Controller
 
     public function index()
     {
-        $paymentTypes = PaymentType::where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $paymentTypes = PaymentType::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         return view('business::payment-types.index', compact('paymentTypes'));
     }
 

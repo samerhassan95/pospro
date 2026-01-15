@@ -28,8 +28,10 @@ class CartController extends Controller
             }
         }
 
-        // Check if request wants new layout
-        $viewName = request()->get('layout') === 'new' ? 'business::sales.cart-list-new' : 'business::sales.cart-list-new';
+        // Check if request wants new layout (for POS create page)
+        // For inventory pages, use the table-based cart-list view
+        $layout = request()->get('layout');
+        $viewName = $layout === 'new' ? 'business::sales.cart-list-new' : 'business::sales.cart-list';
         return view($viewName, compact('cart_contents'));
     }
 

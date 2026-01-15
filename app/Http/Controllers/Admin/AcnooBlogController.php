@@ -20,7 +20,7 @@ class AcnooBlogController extends Controller
             $q->where(function ($q) use ($request) {
                 $q->where('title', 'like', '%' . $request->search . '%');
             });
-        })->latest()->paginate($request->per_page ?? 20)->appends($request->query());
+        })->latest()->paginate($request->per_page ?? 5)->appends($request->query());
 
         if ($request->ajax()) {
             return response()->json([
@@ -128,7 +128,7 @@ class AcnooBlogController extends Controller
                 ->orwhere('email', 'like', '%' . $request->search . '%')
                 ->orwhere('comment', 'like', '%' . $request->search . '%');
             });
-        })->latest()->paginate($request->per_page ?? 20)->appends($request->query());
+        })->latest()->paginate($request->per_page ?? 5)->appends($request->query());
 
         if ($request->ajax()) {
             return response()->json([

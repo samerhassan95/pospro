@@ -196,8 +196,6 @@
                                         </div>
 
                                     </div>
-                                </div>
-
                                 {{-- Image --}}
                                 <div class="col-lg-3">
                                     <h6 class="img-title">Image <span>(PNG & JPG)</span></h6>
@@ -206,13 +204,14 @@
                                             <div id="iconArea">
                                                 <img src="{{ asset('assets/images/icons/img.png') }}" alt="icon" />
                                             </div>
-                                            <p>Drag & drop your Image</p>
-                                            <p>or <span class="browse-text">Browse</span></p>
+                                            <p>{{ __('Drag & drop your Image') }}</p>
+                                            <p>{{ __('or') }} <span class="browse-text">{{ __('Browse') }}</span></p>
                                         </div>
                                     </div>
                                     <input type="file" name="image" id="fileInput" accept="image/*">
-                                </div>
-                            </div>
+                                </div> {{-- closes col-lg-3 --}}
+                            </div> {{-- closes row --}}
+                        </div> {{-- closes wrapper --}}
 
                             {{-- Buttons --}}
                             <div class="col-lg-12">

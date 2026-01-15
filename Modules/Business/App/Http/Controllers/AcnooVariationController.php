@@ -11,7 +11,7 @@ class AcnooVariationController extends Controller
 
     public function index()
     {
-        $variations = Variation::where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $variations = Variation::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         return view('business::variations.index', compact('variations'));
     }
 

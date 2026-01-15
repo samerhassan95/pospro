@@ -1996,14 +1996,16 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
 .responsive-table {
     overflow: auto;
     margin-top: 20px;
-    min-height: 100vh;
+    /* min-height: 100vh; */
 }
 
 .responsive-table table tr th:first-child {
     width: 0;
     text-align: left;
 }
-
+.customTop{
+    margin-top: 20px;
+}
 .table th {
     font-style: normal;
     font-weight: 600;
@@ -2013,7 +2015,9 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
     color: #121212;
     background: rgba(31, 31, 31, 0.05);
 }
-
+.remove-btn i{
+    color: white !important;
+}
 .table th,
 .table td {
     border-bottom: 1px solid rgba(31, 31, 31, 0.1);
@@ -2227,7 +2231,7 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
     width: 30px;
     height: 30px;
     background: var(--clr-primary);
-    border-radius: 50%;
+    border-radius: 12px;
     line-height: 20px;
     display: flex;
     align-items: center;

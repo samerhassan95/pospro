@@ -38,7 +38,7 @@ class AcnooDueReportController extends Controller
             $query->where('due', '>', 0);
         }
 
-        $parties = $query->paginate(20);
+        $parties = $query->paginate(5);
 
         // Replace customer due with branch-specific due if active branch exists
         if ($activeBranch) {
@@ -89,7 +89,7 @@ class AcnooDueReportController extends Controller
             $query->where('due', '>', 0);
         }
 
-        $parties = $query->paginate($request->per_page ?? 10);
+        $parties = $query->paginate($request->per_page ?? 5);
 
         if ($activeBranch) {
             $parties->setCollection(

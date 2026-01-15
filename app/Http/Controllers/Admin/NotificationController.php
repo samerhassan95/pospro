@@ -24,7 +24,7 @@ class NotificationController extends Controller
 
     public function acnooFilter(Request $request)
     {
-        $notifications = Notification::whereDate('created_at', today())->latest()->paginate($request->per_page ?? 20);
+        $notifications = Notification::whereDate('created_at', today())->latest()->paginate($request->per_page ?? 5);
 
         if ($request->ajax()) {
             return response()->json([

@@ -19,10 +19,11 @@
                         <div class="table-top-left d-flex gap-3 margin-l-16">
                             <div class="gpt-up-down-arrow position-relative">
                                 <select name="per_page" class="form-control">
-                                    <option @selected(request('per_page') == 20) value="20">{{ __('Show 20') }}</option>
-                                    <option @selected(request('per_page') == 50) value="50">{{ __('Show 50') }}</option>
-                                    <option @selected(request('per_page') == 100) value="100">{{ __('Show 100') }}</option>
-                                    <option @selected(request('per_page') == 500) value="500">{{ __('Show 500') }}</option>
+                                    <option value="5" @selected(request('per_page') == 5 || !request('per_page'))>{{ __('Show- 5') }}</option>
+                                    <option value="10" @selected(request('per_page') == 10)>{{ __('Show- 10') }}</option>
+                                    <option value="25" @selected(request('per_page') == 25)>{{ __('Show- 25') }}</option>
+                                    <option value="50" @selected(request('per_page') == 50)>{{ __('Show- 50') }}</option>
+                                    <option value="100" @selected(request('per_page') == 100)>{{ __('Show- 100') }}</option>
                                 </select>
                                 <span></span>
                             </div>
@@ -44,27 +45,8 @@
 
             </div>
 
-            <div class="responsive-table m-0">
-                <table class="table" id="datatable">
-                    <thead>
-                    <tr>
-                        <th> {{ __('SL') }}. </th>
-                        <th> {{ __('Date & Time') }} </th>
-                        <th> {{ __('Name') }} </th>
-                        <th> {{ __('Subscription Plan') }} </th>
-                        <th> {{ __('Duration') }} </th>
-                        <th> {{ __('Expired Date') }} </th>
-                        <th> {{ __('Total Earning') }} </th>
-                        <th> {{ __('Status') }} </th>
-                    </tr>
-                    </thead>
-                    <tbody id="affiliate-reports-data">
-                        @include('admin.affiliate-modules.reports.datas')
-                    </tbody>
-                </table>
-            </div>
-            <div class="mt-3">
-                {{ $items->links('vendor.pagination.bootstrap-5') }}
+            <div id="affiliate-reports-data">
+                @include('admin.affiliate-modules.reports.datas')
             </div>
         </div>
     </div>

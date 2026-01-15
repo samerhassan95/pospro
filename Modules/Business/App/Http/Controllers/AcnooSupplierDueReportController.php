@@ -37,7 +37,7 @@ class AcnooSupplierDueReportController extends Controller
             $query->where('due', '>', 0);
         }
 
-        $parties = $query->paginate(20);
+        $parties = $query->paginate(5);
 
         // Calculate total due
         $total_due = $parties->sum(function ($supplier) use ($activeBranch) {
@@ -96,7 +96,7 @@ class AcnooSupplierDueReportController extends Controller
             $query->where('due', '>', 0);
         }
 
-        $parties = $query->paginate($request->per_page ?? 10);
+        $parties = $query->paginate($request->per_page ?? 5);
 
         // Replace $supplier->due with branch-specific due if active branch exists
         if ($activeBranch) {

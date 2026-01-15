@@ -18,7 +18,7 @@ class AcnooShelfController extends Controller
 
     public function index()
     {
-        $shelves = Shelf::where('business_id', auth()->user()->business_id)->latest()->paginate(10);
+        $shelves = Shelf::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         return view('business::shelves.index', compact('shelves'));
     }
 

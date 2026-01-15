@@ -24,7 +24,7 @@ class AcnooBranchController extends Controller
 
     public function index()
     {
-        $branches = Branch::where('business_id', auth()->user()->business_id)->paginate(10);
+        $branches = Branch::where('business_id', auth()->user()->business_id)->paginate(5);
         return view('multibranchaddon::branches.index', compact('branches'));
     }
 
@@ -39,7 +39,7 @@ class AcnooBranchController extends Controller
                         ->orWhere('address', 'like', '%' . $request->search . '%');
                 });
             })
-            ->paginate($request->per_page ?? 10);
+            ->paginate($request->per_page ?? 5);
 
         if ($request->ajax()) {
             return response()->json([

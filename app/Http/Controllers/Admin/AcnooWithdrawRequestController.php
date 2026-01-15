@@ -11,7 +11,7 @@ class AcnooWithdrawRequestController extends Controller
 {
     public function index()
     {
-        $withdraws = AffiliateTransaction::with('user:id,name')->latest()->paginate(20);
+        $withdraws = AffiliateTransaction::with('user:id,name')->latest()->paginate(5);
         return view('admin.affiliate-modules.withdraws.index', compact('withdraws'));
     }
 
@@ -28,7 +28,7 @@ class AcnooWithdrawRequestController extends Controller
             });
         })
             ->latest()
-            ->paginate($request->per_page ?? 20);
+            ->paginate($request->per_page ?? 5);
 
         if ($request->ajax()) {
             return response()->json([

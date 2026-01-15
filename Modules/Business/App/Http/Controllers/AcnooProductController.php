@@ -43,7 +43,7 @@ class AcnooProductController extends Controller
             ->where('business_id', $user->business_id)
             ->withSum('stocks as total_stock', 'productStock')
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         return view('business::products.index', compact('products'));
     }
@@ -469,7 +469,7 @@ class AcnooProductController extends Controller
                     ->where('productStock', '>', 0);
             })
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         return view('business::products.expired-products.index', compact('expired_products'));
     }
@@ -511,7 +511,7 @@ class AcnooProductController extends Controller
                 });
             })
             ->latest()
-            ->paginate($request->per_page ?? 10);
+            ->paginate($request->per_page ?? 5);
 
         if ($request->ajax()) {
             return response()->json([

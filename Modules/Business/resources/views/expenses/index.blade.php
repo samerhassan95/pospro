@@ -27,6 +27,7 @@
 
                                 <div class="gpt-up-down-arrow position-relative">
                                     <select name="per_page" class="form-control">
+                                        <option value="5" selected>{{ __('Show- 5') }}</option>
                                         <option value="10">{{ __('Show- 10') }}</option>
                                         <option value="25">{{ __('Show- 25') }}</option>
                                         <option value="50">{{ __('Show- 50') }}</option>
@@ -72,37 +73,8 @@
                     </div>
                 </div>
 
-                <div class="responsive-table m-0">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                @usercan('expenses.delete')
-                                <th class="w-60">
-                                   <div class="d-flex align-items-center gap-3">
-                                       <input type="checkbox" class="select-all-delete multi-delete">
-                                   </div>
-                               </th>
-                                @endusercan
-                                 <th>{{ __('SL') }}.</th>
-                                @if(auth()->user()->accessToMultiBranch())
-                                <th class="text-start">{{ __('Branch') }}</th>
-                                @endif
-                                <th class="text-start">{{ __('Amount') }}</th>
-                                <th class="text-start">{{ __('Category') }}</th>
-                                <th class="text-start">{{ __('Expense For') }}</th>
-                                <th class="text-start">{{ __('Payment Type') }}</th>
-                                <th class="text-start">{{ __('Reference Number') }}</th>
-                                <th class="text-start">{{ __('Expense Date') }}</th>
-                                <th>{{ __('Action') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="expenses-data">
-                            @include('business::expenses.datas')
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    {{ $expenses->links('vendor.pagination.bootstrap-5') }}
+                <div id="expenses-data">
+                    @include('business::expenses.datas')
                 </div>
             </div>
         </div>

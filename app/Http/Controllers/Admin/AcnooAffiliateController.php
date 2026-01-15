@@ -15,7 +15,7 @@ class AcnooAffiliateController extends Controller
     {
         $plans = Plan::latest()->get();
         $gateways = Gateway::latest()->get();
-        $affiliates = Affiliate::with(['user:id,business_id,name,email','user.business:id,plan_subscribe_id,will_expire,companyName,phoneNumber,address,subscriptionDate,created_at,business_category_id:id,name','user.business.enrolled_plan:id,plan_id,business_id,plan_id','user.business.enrolled_plan.plan:id,subscriptionName'])->latest()->paginate(20);
+        $affiliates = Affiliate::with(['user:id,business_id,name,email','user.business:id,plan_subscribe_id,will_expire,companyName,phoneNumber,address,subscriptionDate,created_at,business_category_id:id,name','user.business.enrolled_plan:id,plan_id,business_id,plan_id','user.business.enrolled_plan.plan:id,subscriptionName'])->latest()->paginate(5);
         return view('admin.affiliate-modules.affiliate.index', compact('affiliates','plans','gateways'));
     }
 
@@ -36,7 +36,7 @@ class AcnooAffiliateController extends Controller
             });
         })
             ->latest()
-            ->paginate($request->per_page ?? 20);
+            ->paginate($request->per_page ?? 5);
 
         if ($request->ajax()) {
             return response()->json([

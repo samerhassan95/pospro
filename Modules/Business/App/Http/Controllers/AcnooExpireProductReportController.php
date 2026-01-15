@@ -25,7 +25,7 @@ class AcnooExpireProductReportController extends Controller
                 $query->whereDate('expire_date', '=', today())->where('productStock', '>', 0);
             })
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         return view('business::reports.expired-products.index', compact('expired_products'));
     }
@@ -85,7 +85,7 @@ class AcnooExpireProductReportController extends Controller
             });
         }
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $expired_products = $expiredProductsQuery->latest()->paginate($perPage);
 
         if ($request->ajax()) {

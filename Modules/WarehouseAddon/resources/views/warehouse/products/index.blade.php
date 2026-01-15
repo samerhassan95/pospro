@@ -26,6 +26,7 @@
 
                                 <div class="gpt-up-down-arrow position-relative">
                                     <select name="per_page" class="form-control">
+                                        <option value="5" selected>{{ __('Show- 5') }}</option>
                                         <option value="10">{{ __('Show- 10') }}</option>
                                         <option value="25">{{ __('Show- 25') }}</option>
                                         <option value="50">{{ __('Show- 50') }}</option>
@@ -49,32 +50,8 @@
                     </div>
                 </div>
 
-                <div class="responsive-table m-0">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                <th> {{ __('SL') }}. </th>
-                                <th> {{ __('Image') }} </th>
-                                <th> {{ __('Product Name') }} </th>
-                                <th class="d-print-none"> {{ __('Code') }} </th>
-                                <th> {{ __('Brand') }} </th>
-                                <th> {{ __('Category') }} </th>
-                                <th> {{ __('Warehouse') }} </th>
-                                <th> {{ __('Unit') }} </th>
-                                <th> {{ __('Purchase price') }}</th>
-                                <th> {{ __('Sale price') }}</th>
-                                <th> {{ __('Stock') }}</th>
-                                <th> {{ __('Rack') }}</th>
-                                <th> {{ __('Shelf') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="product-data">
-                            @include('warehouseaddon::warehouse.products.datas')
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    {{ $products->links('vendor.pagination.bootstrap-5') }}
+                <div id="product-data">
+                    @include('warehouseaddon::warehouse.products.datas')
                 </div>
             </div>
         </div>

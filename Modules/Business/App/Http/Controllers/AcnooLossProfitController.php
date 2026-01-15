@@ -41,7 +41,7 @@ class AcnooLossProfitController extends Controller
             ->where('business_id', $businessId)
             ->whereDate('created_at', $today)
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         return view('business::loss-profits.index', compact('loss_profits', 'profit', 'loss', 'total_sale_count'));
     }

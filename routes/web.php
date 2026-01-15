@@ -25,6 +25,10 @@ Route::get('/privacy-policy', [Web\PolicyController::class, 'index'])->name('pol
 Route::get('/contact-us', [Web\ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact/store', [Web\ContactController::class, 'store'])->name('contact.store');
 
+// Public Invoice
+Route::get('/invoice/{uuid}', [Web\PublicInvoiceController::class, 'show'])->name('invoice.show');
+Route::post('/invoice/{uuid}/pay', [Web\PublicInvoiceController::class, 'pay'])->name('invoice.pay');
+
 // Payment Routes Start
 Route::get('/payments-gateways/{plan_id}/{business_id}', [Web\PaymentController::class, 'index'])->name('payments-gateways.index');
 Route::post('/payments/{plan_id}/{gateway_id}', [Web\PaymentController::class, 'payment'])->name('payments-gateways.payment');
@@ -51,6 +55,8 @@ Route::group([
     Route::get('/phonepe/status', 'PhonePe@status')->name('phonepe.status');
     Route::post('/paytm/status', 'Paytm@status')->name('paytm.status');
     Route::get('/tap-payment/status', 'TapPayment@status')->name('tap-payment.status');
+    Route::get('/payment/moyasar/status', 'Moyasar@status')->name('moyasar.status');
+    Route::get('/payment/moyasar/view', 'Moyasar@view')->name('moyasar.view');
 });
 // Payment Routes End
 

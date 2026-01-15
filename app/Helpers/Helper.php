@@ -193,7 +193,7 @@ function convert_money($amount, $currency)
     }
 }
 
-function default_currency($key = null, ? Currency $currency = null): object|int|string
+function default_currency($key = null, ?Currency $currency = null): object|int|string
 {
     $currency = $currency ?? cache_remember('default_currency', function () {
         $currency = Currency::whereIsDefault(1)->first();
@@ -820,3 +820,88 @@ if (!function_exists('generateZatcaQrCode')) {
     }
 }
 
+if (!function_exists('checkZatcaComplianceIssues')) {
+    /**
+     * Check ZATCA compliance issues for a sale invoice
+     *
+     * @param \App\Models\Sale $sale
+     * @return array
+     */
+    function checkZatcaComplianceIssues($sale)
+    {
+        $issues = [];
+
+        // Load business with zatca_setting
+        $business = $sale->business ?? \App\Models\Business::find($sale->business_id);
+
+        if (!$business) {
+            $issues[] = __('Business not found');
+            return $issues;
+        }
+
+        // Check ZATCA settings
+        if (empty($business->zatca_setting)) {
+            $issues[] = __('ZATCA settings not configured');
+            return $issues;
+        }
+
+        $zatcaSetting = $business->zatca_setting;
+
+        // Check CSID
+        if (empty($zatcaSetting['csid'])) {
+            $issues[] = __('ZATCA CSID not configured');
+        }
+
+        // Check Secret
+        if (empty($zatcaSetting['secret'])) {
+            $issues[] = __('ZATCA Secret not configured');
+        }
+
+        // Check Private Key
+        if (empty($zatcaSetting['private_key'])) {
+            $issues[] = __('ZATCA Private Key not configured');
+        }
+
+        // Check Business VAT Number
+        if (empty($business->vat_no)) {
+            $issues[] = __('Business VAT number is missing');
+        }
+
+        // Check Business Address
+        if (empty($business->address)) {
+            $issues[] = __('Business address is missing');
+        }
+
+        // Check Business Company Name
+        if (empty($business->companyName)) {
+            $issues[] = __('Business company name is missing');
+        }
+
+        // Check Sale UUID
+        if (empty($sale->uuid)) {
+            $issues[] = __('Invoice UUID is missing');
+        }
+
+        // Check Sale has details
+        if ($sale->details->count() == 0) {
+            $issues[] = __('Invoice has no items');
+        }
+
+        // Check Sale Date
+        if (empty($sale->saleDate)) {
+            $issues[] = __('Invoice date is missing');
+        }
+
+        // Check VAT amount calculation
+        if ($sale->totalAmount > 0 && $sale->vat_amount === null) {
+            $issues[] = __('VAT amount is not calculated');
+        }
+
+        // Check if sale has been returned completely
+        if ($sale->details->sum('quantities') == 0) {
+            $issues[] = __('Invoice has been completely returned');
+        }
+
+        return $issues;
+    }
+}

@@ -12,7 +12,7 @@
                                 </div>
                                 <div class="p-3 pt-0">
                                     <div class="d-flex align-items-center mb-2">
-                                        <img src="assets/web/images/icons/clock.svg" alt="" />
+                                        <img src="{{ asset('assets/web/images/icons/clock.svg') }}" alt="" />
                                         <p class="ms-1 mb-0">{{ formatted_date($blog->updated_at) }}</p>
                                     </div>
                                     <h6 class="h6-line-clamp">{{ $blog->title }}</h6>
@@ -41,7 +41,7 @@
                                 class="object-fit-cover rounded-1  home-blog-small-image" alt="..." />
                             <div class="mx-3">
                                 <div class="d-flex align-items-center">
-                                    <img src="assets/web/images/icons/clock.svg" alt="" />
+                                    <img src="{{ asset('assets/web/images/icons/clock.svg') }}" alt="" />
                                     <p class="ms-1 mb-0">{{ formatted_date($blog->updated_at) }}</p>
                                 </div>
                                 <p class="p-2nd-line-clamp mb-1">

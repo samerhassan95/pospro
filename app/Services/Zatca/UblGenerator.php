@@ -13,19 +13,18 @@ class UblGenerator
         $issueDate = date('Y-m-d', strtotime($sale->saleDate));
         $issueTime = date('H:i:s', strtotime($sale->saleDate));
         
+        $taxableAmount = $sale->subtotal ?? $sale->totalAmount / 1.15;
+        $vatTotal = $sale->vat_amount ?? $sale->totalAmount - $taxableAmount;
+        $totalWithVat = $sale->totalAmount;
+        $allowanceTotal = $sale->discountAmount ?? 0;
+        
         // Build line items XML
         $lineItemsXml = '';
         $lineNumber = 1;
-        $taxableAmount = 0;
-        $taxAmount = 0;
         
         foreach ($sale->details as $detail) {
             $itemTotal = $detail->price * $detail->quantities;
-            $taxableAmount += $itemTotal;
-            
-            // Calculate tax for this line (assuming standard 15% VAT)
-            $lineTaxAmount = $itemTotal * 0.15;
-            $taxAmount += $lineTaxAmount;
+            $lineTaxAmount = $itemTotal * 0.15; // Assuming 15%
             
             $lineItemsXml .= '
     <cac:InvoiceLine>
@@ -53,13 +52,7 @@ class UblGenerator
             $lineNumber++;
         }
         
-        // Calculate totals
-        $subtotal = $taxableAmount;
-        $vatTotal = $sale->vat_amount ?? $taxAmount;
-        $totalWithVat = $sale->totalAmount;
-        $allowanceTotal = $sale->discountAmount ?? 0;
-        
-        // Build complete UBL 2.1 XML
+        // Build complete UBL 2.1 XML (Simplified B2C)
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" 
          xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" 
@@ -70,7 +63,7 @@ class UblGenerator
     <cbc:UUID>' . $sale->uuid . '</cbc:UUID>
     <cbc:IssueDate>' . $issueDate . '</cbc:IssueDate>
     <cbc:IssueTime>' . $issueTime . '</cbc:IssueTime>
-    <cbc:InvoiceTypeCode name="0100000">388</cbc:InvoiceTypeCode>
+    <cbc:InvoiceTypeCode name="0200000">388</cbc:InvoiceTypeCode>
     <cbc:DocumentCurrencyCode>SAR</cbc:DocumentCurrencyCode>
     <cbc:TaxCurrencyCode>SAR</cbc:TaxCurrencyCode>
     
@@ -82,7 +75,7 @@ class UblGenerator
     <cac:AdditionalDocumentReference>
         <cbc:ID>PIH</cbc:ID>
         <cac:Attachment>
-            <cbc:EmbeddedDocumentBinaryObject mimeCode="text/plain">' . base64_encode($sale->previous_hash ?? 'NWZlY2ViNjZmZmM4NmYzOGQ5NTI3ODZjNmQ2OTZjNzljMmRiYzIzOWRkNGU5MWI0NjcyOWQ3M2EyN2ZiNTdlOQ==') . '</cbc:EmbeddedDocumentBinaryObject>
+            <cbc:EmbeddedDocumentBinaryObject mimeCode="text/plain">' . ($sale->previous_hash ?? 'NWZlY2ViNjZmZmM4NmYzOGQ5NTI3ODZjNmQ2OTZjNzljMmRiYzIzOWRkNGU5MWI0NjcyOWQ3M2EyN2ZiNTdlOQ==') . '</cbc:EmbeddedDocumentBinaryObject>
         </cac:Attachment>
     </cac:AdditionalDocumentReference>
     
@@ -158,7 +151,7 @@ class UblGenerator
     <cac:TaxTotal>
         <cbc:TaxAmount currencyID="SAR">' . number_format($vatTotal, 2, '.', '') . '</cbc:TaxAmount>
         <cac:TaxSubtotal>
-            <cbc:TaxableAmount currencyID="SAR">' . number_format($subtotal - $allowanceTotal, 2, '.', '') . '</cbc:TaxableAmount>
+            <cbc:TaxableAmount currencyID="SAR">' . number_format($taxableAmount, 2, '.', '') . '</cbc:TaxableAmount>
             <cbc:TaxAmount currencyID="SAR">' . number_format($vatTotal, 2, '.', '') . '</cbc:TaxAmount>
             <cac:TaxCategory>
                 <cbc:ID>S</cbc:ID>
@@ -175,8 +168,8 @@ class UblGenerator
     </cac:TaxTotal>
     
     <cac:LegalMonetaryTotal>
-        <cbc:LineExtensionAmount currencyID="SAR">' . number_format($subtotal, 2, '.', '') . '</cbc:LineExtensionAmount>
-        <cbc:TaxExclusiveAmount currencyID="SAR">' . number_format($subtotal - $allowanceTotal, 2, '.', '') . '</cbc:TaxExclusiveAmount>
+        <cbc:LineExtensionAmount currencyID="SAR">' . number_format($taxableAmount + $allowanceTotal, 2, '.', '') . '</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="SAR">' . number_format($taxableAmount, 2, '.', '') . '</cbc:TaxExclusiveAmount>
         <cbc:TaxInclusiveAmount currencyID="SAR">' . number_format($totalWithVat, 2, '.', '') . '</cbc:TaxInclusiveAmount>
         <cbc:AllowanceTotalAmount currencyID="SAR">' . number_format($allowanceTotal, 2, '.', '') . '</cbc:AllowanceTotalAmount>
         <cbc:PayableAmount currencyID="SAR">' . number_format($totalWithVat, 2, '.', '') . '</cbc:PayableAmount>

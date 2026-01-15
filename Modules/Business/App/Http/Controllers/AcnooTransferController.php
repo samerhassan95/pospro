@@ -37,7 +37,7 @@ class AcnooTransferController extends Controller
             });
         }
 
-        $transfers = $query->latest()->paginate(20);
+        $transfers = $query->latest()->paginate(5);
 
         $branches = Branch::withTrashed()
             ->where('business_id', auth()->user()->business_id)

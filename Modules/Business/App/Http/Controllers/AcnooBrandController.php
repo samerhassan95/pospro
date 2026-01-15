@@ -23,7 +23,7 @@ class AcnooBrandController extends Controller
 
     public function index()
     {
-        $brands = Brand::where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $brands = Brand::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         return view('business::brands.index', compact('brands'));
     }
 

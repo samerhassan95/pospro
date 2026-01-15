@@ -54,7 +54,7 @@ class AcnooPurchaseController extends Controller
             $purchasesQuery->whereDate('purchaseDate', Carbon::today()->format('Y-m-d'));
         }
 
-        $purchases = $purchasesQuery->latest()->paginate(10);
+        $purchases = $purchasesQuery->latest()->paginate(5);
         $branches = Branch::withTrashed()->where('business_id', $business_id)->latest()->get();
 
         return view('business::purchases.index', compact('purchases', 'purchasesWithReturns', 'branches'));

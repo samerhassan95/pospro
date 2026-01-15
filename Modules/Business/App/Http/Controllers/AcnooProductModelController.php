@@ -18,7 +18,7 @@ class AcnooProductModelController extends Controller
 
     public function index()
     {
-        $models = ProductModel::where('business_id', auth()->user()->business_id)->latest()->paginate(10);
+        $models = ProductModel::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         return view('business::product-models.index', compact('models'));
     }
 

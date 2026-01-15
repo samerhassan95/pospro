@@ -24,6 +24,7 @@
                             <div class="table-top-left d-flex gap-3 margin-l-16">
                                 <div class="gpt-up-down-arrow position-relative">
                                     <select name="per_page" class="form-control">
+                                        <option value="5" selected>{{ __('Show- 5') }}</option>
                                         <option value="10">{{ __('Show- 10') }}</option>
                                         <option value="25">{{ __('Show- 25') }}</option>
                                         <option value="50">{{ __('Show- 50') }}</option>
@@ -56,31 +57,8 @@
                     </div>
                 </div>
 
-                <div class="responsive-table m-0">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                @usercan('expense-categories.delete')
-                                <th class="w-60">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <input type="checkbox" class="select-all-delete multi-delete">
-                                    </div>
-                                </th>
-                                @endusercan
-                                <th>{{ __('SL') }}.</th>
-                                <th class="text-start">{{ __('Category Name') }}</th>
-                                <th class="text-start">{{ __('Description') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th>{{ __('Action') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="expense-categories-data">
-                            @include('business::expense-categories.datas')
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    {{ $expense_categories->links('vendor.pagination.bootstrap-5') }}
+                <div id="expense-categories-data">
+                    @include('business::expense-categories.datas')
                 </div>
             </div>
         </div>

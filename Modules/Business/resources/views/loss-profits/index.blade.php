@@ -52,7 +52,8 @@
                                     <div class="table-top-left d-flex gap-3 d-print-none">
                                         <div class="gpt-up-down-arrow position-relative">
                                             <select name="per_page" class="form-control">
-                                                <option value="10">{{__('Show- 10')}}</option>
+                                                <option value="5" selected>{{__('Show- 5')}}</option>
+                                    <option value="10">{{__('Show- 10')}}</option>
                                                 <option value="25">{{__('Show- 25')}}</option>
                                                 <option value="50">{{__('Show- 50')}}</option>
                                                 <option value="100">{{__('Show- 100')}}</option>
@@ -135,27 +136,8 @@
                     </div>
                 </div>
 
-                <div class="responsive-table m-0">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                <th>{{ __('SL') }}.</th>
-                                <th class="text-start">{{ __('Invoice') }}</th>
-                                <th class="text-start">{{ __('Name') }}</th>
-                                <th class="text-start">{{ __('Total') }}</th>
-                                <th class="text-start">{{ __('Loss/Profit') }}</th>
-                                <th class="text-start">{{ __('Date') }}</th>
-                                <th class="text-start">{{ __('Status') }}</th>
-                                <th class="d-print-none">{{ __('Action') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="loss-profit-data">
-                            @include('business::loss-profits.datas')
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    {{ $loss_profits->links('vendor.pagination.bootstrap-5') }}
+                <div id="loss-profit-data">
+                    @include('business::loss-profits.datas')
                 </div>
             </div>
         </div>

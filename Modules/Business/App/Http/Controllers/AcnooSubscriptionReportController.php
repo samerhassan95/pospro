@@ -19,7 +19,7 @@ class AcnooSubscriptionReportController extends Controller
 
     public function index()
     {
-        $subscribers = PlanSubscribe::with(['plan:id,subscriptionName','business:id,companyName,business_category_id,pictureUrl','business.category:id,name','gateway:id,name'])->where('business_id', auth()->user()->business_id)->whereDate('created_at', Carbon::today()->format('Y-m-d'))->latest()->paginate(20);
+        $subscribers = PlanSubscribe::with(['plan:id,subscriptionName','business:id,companyName,business_category_id,pictureUrl','business.category:id,name','gateway:id,name'])->where('business_id', auth()->user()->business_id)->whereDate('created_at', Carbon::today()->format('Y-m-d'))->latest()->paginate(5);
         return view('business::reports.subscription-reports.subscription-reports', compact('subscribers'));
     }
 
@@ -73,7 +73,7 @@ class AcnooSubscriptionReportController extends Controller
             });
         }
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $subscribers = $subscriberQuery->latest()->paginate($perPage);
 
         if ($request->ajax()) {

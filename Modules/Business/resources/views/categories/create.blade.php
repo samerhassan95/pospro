@@ -29,7 +29,7 @@
                                 </div>
                             </div>
 
-                            <div class="mt-3">
+                            <div class="m-2">
                                 <h2 class='option-title'>{{ __('Select Variations') }}:</h2>
                                 <div class="select-variations-container">
                                     <div class="select-variations-content">
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <div class="offcanvas-footer mt-3">
-                            <div class="button-group text-center mt-5">
+                            <div class="button-group text-end mt-5">
                                 <button type="reset" class="theme-btn border-btn m-2">{{ __('Reset') }}</button>
                                 @usercan('categories.create')
                                 <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>

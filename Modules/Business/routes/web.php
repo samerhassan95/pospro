@@ -19,6 +19,7 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::resource('sales', Business\AcnooSaleController::class);
     Route::post('sales/filter', [Business\AcnooSaleController::class, 'acnooFilter'])->name('sales.filter');
     Route::post('sales/delete-all', [Business\AcnooSaleController::class, 'deleteAll'])->name('sales.delete-all');
+    Route::get('sales/{id}/zatca-issues', [Business\AcnooSaleController::class, 'getZatcaIssues'])->name('sales.zatca-issues');
     Route::get('/get-product-prices', [Business\AcnooSaleController::class, 'getProductPrices'])->name('products.prices');
     Route::get('/sale-cart-data', [Business\AcnooSaleController::class, 'getCartData'])->name('sales.cart-data');
     Route::get('/get-invoice/{id}', [Business\AcnooSaleController::class, 'getInvoice'])->name('sales.invoice');
@@ -285,10 +286,14 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::resource('subscriptions', Business\AcnooSubscriptionController::class)->withoutMiddleware('expired')->only('index');
 
     Route::resource('manage-settings', Business\AcnooSettingsManagerController::class);
-    
+
     // ZATCA Settings
     Route::get('zatca-settings', [Business\ZatcaSettingController::class, 'index'])->name('zatca.index');
     Route::post('zatca-settings', [Business\ZatcaSettingController::class, 'update'])->name('zatca.update');
+
+    // Moyasar Settings
+    Route::get('moyasar-settings', [Business\MoyasarSettingController::class, 'index'])->name('moyasar.index');
+    Route::post('moyasar-settings', [Business\MoyasarSettingController::class, 'update'])->name('moyasar.update');
 
     Route::post('/invoice-settings', [Business\AcnooSettingsManagerController::class, 'updateInvoice'])->name('invoice.update');
     Route::post('/product-settings', [Business\AcnooSettingsManagerController::class, 'updateProductSetting'])->name('product.settings.update');
