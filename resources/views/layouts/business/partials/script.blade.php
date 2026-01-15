@@ -56,3 +56,22 @@
     toastr.warning('Error some occurs!');
 </script>
 @endif
+
+<script>
+    function copyPaymentLink(url) {
+        if (!url) return;
+        
+        const el = document.createElement('textarea');
+        el.value = url;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        
+        if (typeof toastr !== 'undefined') {
+            toastr.success("{{ __('Payment link copied to clipboard!') }}");
+        } else {
+            alert("{{ __('Payment link copied to clipboard!') }}");
+        }
+    }
+</script>

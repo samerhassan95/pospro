@@ -42,13 +42,13 @@
                 <div class="social-login my-3">
                     <div class=" d-flex align-items-center justify-content-center">
                         <a href="{{ url('login/twitter') }}" class="login-social x-login w-100 text-center">
-                            <img src="{{ 'assets/img/icon/X.jpg' }}" alt="Not found">
+                            <img src="{{ asset('assets/img/icon/X.jpg') }}" alt="Not found">
                             {{ __('Log in with X') }}
                         </a>
                     </div>
                     <div class=" d-flex align-items-center justify-content-center">
                         <a href="" class="login-social google-login w-100 text-center">
-                            <img src="{{ 'assets/img/icon/google.svg' }}" alt="">
+                            <img src="{{ asset('assets/img/icon/google.svg') }}" alt="">
                             {{ __('Log in with Google') }}
                         </a>
                     </div>

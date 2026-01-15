@@ -42,7 +42,7 @@ class PaymentController extends Controller
             return redirect(route('order.status', ['status' => 'failed']))->with('message', __('You have already subscribed to this plan. Please try again after - ' . formatted_date($business->will_expire)));
         }
 
-        return $gateways = Gateway::with('currency:id,code,rate,symbol,position')->where('status', 1)->get();
+        $gateways = Gateway::with('currency:id,code,rate,symbol,position')->where('status', 1)->get();
 
         return view('payments.index', compact('gateways', 'plan'));
     }

@@ -34,6 +34,7 @@ class Party extends Model
         'billing_address',
         'shipping_address',
         'meta',
+
     ];
 
     public static function boot()

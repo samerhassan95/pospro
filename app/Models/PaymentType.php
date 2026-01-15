@@ -74,7 +74,9 @@ class PaymentType extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->branch_id = auth()->user()->branch_id ?? auth()->user()->active_branch_id;
+            if (auth()->check()) {
+                $model->branch_id = auth()->user()->branch_id ?? auth()->user()->active_branch_id;
+            }
         });
     }
 

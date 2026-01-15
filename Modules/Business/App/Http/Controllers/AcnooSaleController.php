@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Validation\Rule;
 
@@ -31,7 +32,7 @@ class AcnooSaleController extends Controller
     public function __construct()
     {
         $this->middleware('check.permission:sales.create')->only(['create', 'store']);
-        $this->middleware('check.permission:sales.read')->only(['index']);
+        $this->middleware('check.permission:sales.read')->only(['index', 'getZatcaIssues']);
         $this->middleware('check.permission:sales.update')->only(['edit', 'update']);
         $this->middleware('check.permission:sales.delete')->only(['destroy', 'deleteAll']);
         $this->middleware('check.permission:inventory.create')->only(['createInventory']);
@@ -369,9 +370,17 @@ class AcnooSaleController extends Controller
             $dueAmount = max($roundingTotalAmount - $receiveAmount, 0);
             $paidAmount = $receiveAmount - $changeAmount;
 
-            // Update business/branch balance
+            // Determine if invoice is paid:
+            // - Must have received payment (receive_amount > 0)
+            // - Must have no due amount (dueAmount == 0)
+            // - Must have paid amount equal to total amount
+            $isPaid = ($receiveAmount > 0 && $dueAmount == 0 && $paidAmount >= $roundingTotalAmount) ? 1 : 0;
+
+            // Update business/branch balance only if payment was received
             $business = Business::findOrFail($business_id);
-            updateBalance($paidAmount, 'increment');
+            if ($paidAmount > 0) {
+                updateBalance($paidAmount, 'increment');
+            }
 
             // Create sale record
             $sale = Sale::create([
@@ -396,7 +405,8 @@ class AcnooSaleController extends Controller
                 'dueAmount' => $dueAmount,
                 'payment_type_id' => $request->payment_type_id,
                 'shipping_charge' => $shippingCharge,
-                'isPaid' => $dueAmount > 0 ? 0 : 1,
+                'isPaid' => $isPaid,
+                'uuid' => \Illuminate\Support\Str::uuid()->toString(), // ZATCA UUID
                 'meta' => [
                     'customer_phone' => $request->customer_phone,
                     'note' => $request->note,
@@ -473,6 +483,11 @@ class AcnooSaleController extends Controller
             // Notify user
             sendNotifyToUser($sale->id, route('business.sales.index', ['id' => $sale->id]), __('New sale created.'), $business_id);
 
+            // Trigger ZATCA Reporting
+            if (!empty($business->zatca_setting) && !empty($business->zatca_setting['csid'])) {
+                \App\Jobs\ReportSaleToZatca::dispatch($sale->id);
+            }
+
             DB::commit();
 
             return response()->json([
@@ -500,7 +515,7 @@ class AcnooSaleController extends Controller
             ->latest()
             ->get();
 
-        $products = Product::with('category:id,categoryName', 'unit:id,unitName', 'stocks','stocks.warehouse')
+        $products = Product::with('category:id,categoryName', 'unit:id,unitName', 'stocks', 'stocks.warehouse')
             ->where('business_id', auth()->user()->business_id)
             ->withSum('stocks as total_stock', 'productStock')
             ->having('total_stock', '>', 0)
@@ -618,8 +633,23 @@ class AcnooSaleController extends Controller
             $dueAmount = max($roundingTotalAmount - $receiveAmount, 0);
             $paidAmount = $receiveAmount - $changeAmount;
 
+            // Determine if invoice is paid:
+            // - Must have received payment (receive_amount > 0)
+            // - Must have no due amount (dueAmount == 0)
+            // - Must have paid amount equal to total amount
+            $isPaid = ($receiveAmount > 0 && $dueAmount == 0 && $paidAmount >= $roundingTotalAmount) ? 1 : 0;
+
             $business = Business::findOrFail($business_id);
-            updateBalance($paidAmount, 'increment');
+            // Adjust balance: subtract old paidAmount and add new paidAmount
+            $oldPaidAmount = $sale->paidAmount ?? 0;
+            $balanceDifference = $paidAmount - $oldPaidAmount;
+            if ($balanceDifference != 0) {
+                if ($balanceDifference > 0) {
+                    updateBalance($balanceDifference, 'increment');
+                } else {
+                    updateBalance(abs($balanceDifference), 'decrement');
+                }
+            }
 
             $sale->update([
                 'invoiceNumber' => $request->invoiceNumber,
@@ -637,7 +667,7 @@ class AcnooSaleController extends Controller
                 'change_amount' => $changeAmount,
                 'dueAmount' => $dueAmount,
                 'payment_type_id' => $request->payment_type_id,
-                'isPaid' => $dueAmount > 0 ? 0 : 1,
+                'isPaid' => $isPaid,
                 'meta' => [
                     'customer_phone' => $request->customer_phone,
                     'note' => $request->note,
@@ -1032,7 +1062,8 @@ class AcnooSaleController extends Controller
                 $query->where('productStock', '>', 0);
             },
             'category:id,categoryName',
-            'unit:id,unitName','stocks.warehouse'
+            'unit:id,unitName',
+            'stocks.warehouse'
         ])
             ->where('business_id', auth()->user()->business_id)
             ->withSum('stocks as total_stock', 'productStock')
@@ -1049,5 +1080,146 @@ class AcnooSaleController extends Controller
         $invoice_no = 'S-' . str_pad($sale_id, 5, '0', STR_PAD_LEFT);
 
         return view('business::sales.inventory', compact('customers', 'products', 'invoice_no', 'categories', 'vats', 'payment_types'));
+    }
+
+    /**
+     * Get ZATCA compliance issues for a sale
+     */
+    public function getZatcaIssues($id)
+    {
+        try {
+            $sale = Sale::where('business_id', auth()->user()->business_id)
+                ->with(['business:id,business_id,vat_no,address,companyName,zatca_setting', 'details:id,sale_id,product_id,quantities,price'])
+                ->select('id', 'business_id', 'uuid', 'saleDate', 'totalAmount', 'vat_amount', 'zatca_status', 'zatca_response', 'invoiceNumber')
+                ->findOrFail($id);
+
+            $issues = [];
+
+            // Quick checks first
+            $business = $sale->business;
+
+            if (!$business) {
+                return response()->json([
+                    'success' => true,
+                    'issues' => [__('Business not found')],
+                    'has_issues' => true,
+                    'zatca_status' => $sale->zatca_status ?? null
+                ]);
+            }
+
+            // Check ZATCA settings
+            if (empty($business->zatca_setting)) {
+                $issues[] = __('ZATCA settings not configured. Please configure ZATCA settings first.');
+            } else {
+                $zatcaSetting = $business->zatca_setting;
+
+                // Check CSID
+                if (empty($zatcaSetting['csid'])) {
+                    $issues[] = __('ZATCA CSID not configured');
+                }
+
+                // Check Secret
+                if (empty($zatcaSetting['secret'])) {
+                    $issues[] = __('ZATCA Secret not configured');
+                }
+
+                // Check Private Key
+                if (empty($zatcaSetting['private_key'])) {
+                    $issues[] = __('ZATCA Private Key not configured');
+                }
+            }
+
+            // Check Business VAT Number
+            if (empty($business->vat_no)) {
+                $issues[] = __('Business VAT number is missing. Please add VAT number in business settings.');
+            }
+
+            // Check Business Address
+            if (empty($business->address)) {
+                $issues[] = __('Business address is missing. Please add address in business settings.');
+            }
+
+            // Check Business Company Name
+            if (empty($business->companyName)) {
+                $issues[] = __('Business company name is missing. Please add company name in business settings.');
+            }
+
+            // Check Sale UUID
+            if (empty($sale->uuid)) {
+                $issues[] = __('Invoice UUID is missing. This should be generated automatically.');
+            }
+
+            // Check Sale has details
+            if ($sale->details->count() == 0) {
+                $issues[] = __('Invoice has no items. Cannot report empty invoice to ZATCA.');
+            }
+
+            // Check Sale Date
+            if (empty($sale->saleDate)) {
+                $issues[] = __('Invoice date is missing.');
+            }
+
+            // Check VAT amount calculation
+            if ($sale->totalAmount > 0 && $sale->vat_amount === null) {
+                $issues[] = __('VAT amount is not calculated. Please ensure VAT is properly configured.');
+            }
+
+            // Check if sale has been returned completely
+            if ($sale->details->sum('quantities') == 0) {
+                $issues[] = __('Invoice has been completely returned. Cannot report returned invoice to ZATCA.');
+            }
+
+            // Check for validation errors from ZATCA response if exists
+            if ($sale->zatca_response) {
+                $response = is_string($sale->zatca_response) ? json_decode($sale->zatca_response, true) : $sale->zatca_response;
+
+                if (isset($response['validationResults'])) {
+                    if (isset($response['validationResults']['errorMessages']) && is_array($response['validationResults']['errorMessages'])) {
+                        foreach ($response['validationResults']['errorMessages'] as $error) {
+                            $issues[] = __('ZATCA Error') . ': ' . (is_string($error) ? $error : json_encode($error));
+                        }
+                    }
+                    if (isset($response['validationResults']['warningMessages']) && is_array($response['validationResults']['warningMessages'])) {
+                        foreach ($response['validationResults']['warningMessages'] as $warning) {
+                            $issues[] = __('ZATCA Warning') . ': ' . (is_string($warning) ? $warning : json_encode($warning));
+                        }
+                    }
+                }
+
+                // Check for error messages in response
+                if (isset($response['error'])) {
+                    $issues[] = __('ZATCA Error') . ': ' . (is_string($response['error']) ? $response['error'] : json_encode($response['error']));
+                }
+
+                // Check for rejection reasons
+                if (isset($response['reportedInvoiceIdentifier'])) {
+                    // Invoice was reported but check for any issues
+                }
+            }
+
+            $response = [
+                'success' => true,
+                'issues' => $issues,
+                'has_issues' => count($issues) > 0,
+                'zatca_status' => $sale->zatca_status ?? null,
+                'invoice_number' => $sale->invoiceNumber ?? null
+            ];
+
+            Log::info('ZATCA Issues Response', ['sale_id' => $id, 'issues_count' => count($issues)]);
+
+            return response()->json($response, 200, ['Content-Type' => 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        } catch (\Exception $e) {
+            Log::error('ZATCA Issues Error: ' . $e->getMessage(), [
+                'sale_id' => $id,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => __('Error loading issues: ') . $e->getMessage(),
+                'issues' => [],
+                'has_issues' => false
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
     }
 }

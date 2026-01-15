@@ -17,7 +17,7 @@
             </div>
         </div>
         <h3 class="invoice-title my-1">
-            {{__('invoice')}}
+            Simplified Tax Invoice / فاتورة ضريبية مبسطة
         </h3>
 
         <div class="invoice-info">
@@ -272,9 +272,21 @@
                 <p class="text-center note-pera">{{ get_business_option('business-settings')['note_label'] ?? '' }} :
                     {{ get_business_option('business-settings')['note'] ?? '' }}</p>
             @endif
-            <div class="scanner">
-                <img src="{{ asset(get_business_option('business-settings')['invoice_scanner_logo'] ?? 'assets/images/icons/scanner.svg') }}"
-                    alt="">
+            <div class="scanner justify-content-center d-flex" style="width: 300px; height: 300px; margin: 10px auto;">
+                 @php
+                    $sellerName = $sale->business->companyName ?? '';
+                    $vatRegistrationNumber = $sale->business->vat_no ?? '';
+                    $timestamp = $sale->created_at ? \Carbon\Carbon::parse($sale->created_at)->toIso8601String() : \Carbon\Carbon::now()->toIso8601String();
+                    $invoiceTotal = $sale->totalAmount ?? 0;
+                    $vatTotal = $sale->vat_amount ?? $sale->tax_amount ?? 0;
+                    
+                    $xmlHash = $sale->invoice_hash ?? null;
+                    $ecdsaSignature = $sale->cryptographic_stamp ?? null;
+                    $publicKey = $sale->business->zatca_setting['public_key'] ?? null;
+
+                    $zatcaQrContent = generateZatcaQrCode($sellerName, $vatRegistrationNumber, $timestamp, $invoiceTotal, $vatTotal, $xmlHash, $ecdsaSignature, $publicKey);
+                 @endphp
+                 {!! QrCode::size(300)->generate($zatcaQrContent) !!}
             </div>
             <h6>{{ get_option('general')['admin_footer_text'] ?? '' }} <a href="{{ get_option('general')['admin_footer_link'] ?? '#' }}" target="_blank">{{ get_option('general')['admin_footer_link_text'] ?? '' }}</h6>
         </div>

@@ -20,6 +20,7 @@ class ExpiredMiddleware
             $message = __("You don’t have any active plan. Please subscribe to a plan. Without an active plan, you can only view data.");
 
             $disabledRoutes = [
+                'business.dashboard.index',
                 'business.profiles.update',
                 'business.sales.store',
                 'business.sales.update',

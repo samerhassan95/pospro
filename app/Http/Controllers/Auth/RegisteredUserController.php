@@ -195,26 +195,29 @@ class RegisteredUserController extends Controller
                 ], 403);
             }
 
+            $refId = null;
             if (moduleCheck('AffiliateAddon')) {
-                $refId = null;
-                $refCode = Cookie::get('ref_code');
+                $refCode = \Cookie::get('ref_code');
                 if ($refCode) {
                     $affiliator = Affiliate::where('ref_code', $refCode)->first();
                     if ($affiliator) {
                         $refId = $affiliator->user_id;
                     }
                 }
-
-                $data['affiliator_id'] = $refId;
             }
 
             $data = [
+                'email' => $user->email,
                 'address' => $request->address,
                 'companyName' => $request->companyName,
                 'phoneNumber' => $request->phoneNumber,
                 'shopOpeningBalance' => $request->shopOpeningBalance ?? 0,
                 'business_category_id' => $request->business_category_id,
             ];
+
+            if ($refId) {
+                $data['affiliator_id'] = $refId;
+            }
 
             $business = Business::create($data);
 
@@ -223,17 +226,19 @@ class RegisteredUserController extends Controller
                 'business_id' => $business->id
             ]);
 
-            $currency = Currency::where('is_default', 1)->first();
-            UserCurrency::create([
-                'name' => $currency->name,
-                'code' => $currency->code,
-                'rate' => $currency->rate,
-                'business_id' => $business->id,
-                'symbol' => $currency->symbol,
-                'currency_id' => $currency->id,
-                'position' => $currency->position,
-                'country_name' => $currency->country_name,
-            ]);
+            $currency = Currency::where('is_default', 1)->first() ?? Currency::first();
+            if ($currency) {
+                UserCurrency::create([
+                    'name' => $currency->name,
+                    'code' => $currency->code,
+                    'rate' => $currency->rate,
+                    'business_id' => $business->id,
+                    'symbol' => $currency->symbol,
+                    'currency_id' => $currency->id,
+                    'position' => $currency->position,
+                    'country_name' => $currency->country_name,
+                ]);
+            }
 
             $user->update([
                 'business_id' => $business->id,
@@ -281,8 +286,9 @@ class RegisteredUserController extends Controller
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
+            \Log::error('Business Setup Error: ' . $th->getMessage() . ' at ' . $th->getFile() . ':' . $th->getLine());
             return response()->json([
-                'message' => 'Something went wrong. Please contact the admin.',
+                'message' => 'Something went wrong. Please contact the admin. Error: ' . $th->getMessage(),
             ], 403);
         }
     }
