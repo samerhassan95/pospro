@@ -37,6 +37,52 @@ class AcnooVatReportController extends Controller
         return view('business::reports.vats.index', compact('sales', 'purchases', 'vats'));
     }
 
+    public function filter(\Illuminate\Http\Request $request)
+    {
+        $businessId = auth()->user()->business_id;
+        $perPage = $request->per_page ?? 5;
+        $search = $request->search;
+
+        $sales = Sale::with('user:id,name', 'party:id,name,email,phone,type', 'business:id,companyName', 'payment_type:id,name')
+            ->where('business_id', $businessId)
+            ->where('vat_amount', '>', 0)
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($q) use ($search) {
+                    $q->where('invoiceNumber', 'like', '%' . $search . '%')
+                        ->orWhereHas('party', function ($q) use ($search) {
+                            $q->where('name', 'like', '%' . $search . '%');
+                        });
+                });
+            })
+            ->latest()
+            ->paginate($perPage);
+
+        $purchases = Purchase::with('details', 'party', 'details.product', 'details.product.category', 'payment_type:id,name')
+            ->where('business_id', $businessId)
+            ->where('vat_amount', '>', 0)
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($q) use ($search) {
+                    $q->where('invoiceNumber', 'like', '%' . $search . '%')
+                        ->orWhereHas('party', function ($q) use ($search) {
+                            $q->where('name', 'like', '%' . $search . '%');
+                        });
+                });
+            })
+            ->latest()
+            ->paginate($perPage);
+
+        $vats = Vat::where('business_id', $businessId)->whereStatus(1)->get();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'data' => view('business::reports.vats.sales-datas', compact('sales', 'vats'))->render(),
+                'purchases' => view('business::reports.vats.purchases-datas', compact('purchases', 'vats'))->render()
+            ]);
+        }
+
+        return redirect(url()->previous());
+    }
+
     public function exportExcel($type = 'all')
     {
         return $this->exportFile($type, 'vat-report.xlsx');

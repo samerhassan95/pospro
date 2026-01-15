@@ -354,4 +354,23 @@ $currency = business_currency();
 @push('js')
 <script src="{{ asset('assets/js/chart.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/custom/business-dashboard.js') }}?v={{ time() }}"></script>
+<script>
+    function showTab(tabId) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(function(tab) {
+            tab.classList.remove('active');
+        });
+
+        // Remove active class from all tab buttons
+        document.querySelectorAll('.tab-item').forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+
+        // Show selected tab content
+        document.getElementById(tabId).classList.add('active');
+
+        // Add active class to clicked button
+        document.querySelector('[onclick="showTab(\'' + tabId + '\')"]').classList.add('active');
+    }
+</script>
 @endpush

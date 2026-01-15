@@ -263,6 +263,7 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
 
     // Vat Reports
     Route::resource('vat-reports', Business\AcnooVatReportController::class)->only('index');
+    Route::post('vat-reports/filter', [Business\AcnooVatReportController::class, 'filter'])->name('vat-reports.filter');
     Route::get('vat-reports/excel{type?}', [Business\AcnooVatReportController::class, 'exportExcel'])->name('vat.reports.excel');
     Route::get('vat-reports/csv{type?}', [Business\AcnooVatReportController::class, 'exportCsv'])->name('vat.reports.csv');
 

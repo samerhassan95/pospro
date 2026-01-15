@@ -536,7 +536,7 @@ svg {
 .tab-table-container {
     background-color: white;
     border-radius: 12px;
-    height: 350px;
+    /* height: 350px; */
 }
 
 .table-container {

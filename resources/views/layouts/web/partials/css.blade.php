@@ -1,4 +1,7 @@
-<link rel="shortcut icon" type="image/x-icon" href="{{ asset(get_option('general')['favicon'] ?? 'assets/images/logo/favicon.png')}}">
+<link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/logo/favicon.svg') }}">
+<link rel="icon" type="image/svg+xml" sizes="32x32" href="{{ asset('assets/images/logo/favicon.svg') }}">
+<link rel="icon" type="image/svg+xml" sizes="96x96" href="{{ asset('assets/images/logo/favicon.svg') }}">
+<link rel="apple-touch-icon" href="{{ asset('assets/images/logo/favicon.svg') }}">
 <link rel="stylesheet" href="{{ asset('assets/web/css/bootstrap.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('assets/web/css/swiper-bundle.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('assets/web/fonts/fontawesome/css/all.min.css') }}" />
