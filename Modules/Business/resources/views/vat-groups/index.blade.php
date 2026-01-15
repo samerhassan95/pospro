@@ -33,25 +33,8 @@
             </div>
         </div>
 
-        <div class="responsive-table">
-            <table class="table" id="datatable">
-                <thead>
-                    <tr>
-                        <th class="w-60">{{ __('SL') }}.</th>
-                        <th>{{ __('Name') }}</th>
-                        <th>{{ __('Rate') }}</th>
-                        <th>{{ __('Sub vats') }}</th>
-                        <th>{{ __('Status') }}</th>
-                        <th class="text-center">{{ __('Action') }}</th>
-                    </tr>
-                </thead>
-                <tbody id="vat_group-data">
-                    @include('business::vat-groups.datas')
-                </tbody>
-            </table>
-        </div>
-        <div class="mt-3">
-            {{ $vat_groups->links('vendor.pagination.bootstrap-5') }}
+        <div id="vat_group-data">
+            @include('business::vat-groups.datas')
         </div>
     </div>
 </div>

@@ -23,7 +23,7 @@ class AcnooCategoryController extends Controller
 
     public function index(Request $request)
     {
-        $categories = Category::where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $categories = Category::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         return view('business::categories.index', compact('categories'));
     }
 

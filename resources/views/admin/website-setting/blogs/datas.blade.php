@@ -79,6 +79,6 @@
     </table>
 </div>
 
-<div class="mt-3">
+<div class="m-2">
     {{ $blogs->links('vendor.pagination.bootstrap-5') }}
 </div>

@@ -30,7 +30,7 @@ class AcnooExpenseReportController extends Controller
             ->where('business_id', $businessId)
             ->whereDate('expenseDate', Carbon::today()->format('Y-m-d'))
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
 
@@ -101,7 +101,7 @@ class AcnooExpenseReportController extends Controller
             ->whereDate('expenseDate', '<=', $endDate)
             ->sum('amount');
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $expense_reports = $expenseQuery->latest()->paginate($perPage);
 
         if ($request->ajax()) {

@@ -37,7 +37,7 @@ class AcnooSubscriptionController extends Controller
             });
         })
         ->latest()
-        ->paginate($request->per_page ?? 20)
+        ->paginate($request->per_page ?? 5)
         ->appends($request->query());
 
         if ($request->ajax()) {

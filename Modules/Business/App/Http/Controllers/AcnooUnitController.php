@@ -18,7 +18,7 @@ class AcnooUnitController extends Controller
 
     public function index()
     {
-        $units = Unit::where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $units = Unit::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         return view('business::units.index', compact('units'));
     }
 

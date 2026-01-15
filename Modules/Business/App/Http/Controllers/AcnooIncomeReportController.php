@@ -31,7 +31,7 @@ class AcnooIncomeReportController extends Controller
             ->where('business_id', $businessId)
             ->whereDate('incomeDate', $today)
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
 
@@ -95,7 +95,7 @@ class AcnooIncomeReportController extends Controller
             });
         }
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $income_reports = $incomeQuery->latest()->paginate($perPage);
 
         $total_income = $incomeQuery->sum('amount');

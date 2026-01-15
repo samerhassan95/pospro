@@ -1115,3 +1115,258 @@
 .gpt-dashboard-chart .sms-report .card-body .content canvas {
     max-height: 250px !important;
 }
+
+
+/* ========================================
+   INVENTORY SALES TABLE - MODERN DESIGN
+   ======================================== */
+
+/* Table Container */
+.inventory-table-container {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #eaecf0;
+}
+
+/* Main Table */
+.inventory-sales-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 0;
+}
+
+/* Table Header */
+.inventory-sales-table thead {
+    background: linear-gradient(135deg, #f8f9fc 0%, #f1f3f9 100%);
+}
+
+.inventory-th {
+    padding: 14px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475467;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #eaecf0;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.inventory-th-image { width: 80px; }
+.inventory-th-items { min-width: 120px; text-align: left; }
+.inventory-th-code { width: 100px; }
+.inventory-th-batch { width: 80px; }
+.inventory-th-unit { width: 70px; }
+.inventory-th-price { width: 110px; }
+.inventory-th-qty { width: 130px; }
+.inventory-th-subtotal { width: 110px; }
+.inventory-th-action { width: 60px; }
+
+/* Table Body */
+.inventory-tbody tr {
+    transition: all 0.2s ease;
+}
+
+.inventory-cart-row {
+    background: #fff;
+    border-bottom: 1px solid #f2f4f7;
+}
+
+.inventory-cart-row:hover {
+    background: #fafbfc;
+}
+
+.inventory-cart-row:last-child {
+    border-bottom: none;
+}
+
+.inventory-cart-row td {
+    padding: 10px 8px;
+    vertical-align: middle;
+    text-align: center;
+    color: #344054;
+    font-size: 14px;
+}
+
+/* Product Image Cell */
+.inventory-img-cell {
+    width: 80px;
+    padding: 8px !important;
+}
+
+.inventory-product-img-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #eaecf0;
+    background: #f9fafb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.inventory-product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Item Name Cell */
+.inventory-item-name {
+    text-align: left !important;
+}
+
+.product-name-text {
+    font-weight: 500;
+    color: #1d2939;
+    font-size: 14px;
+}
+
+/* Code Badge */
+.code-badge {
+    display: inline-block;
+    background: #f0f4ff;
+    color: #3b5998;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Batch & Unit */
+.inventory-batch,
+.inventory-unit {
+    color: #667085;
+    font-size: 13px;
+}
+
+/* Price Input */
+.inventory-price-cell {
+    padding: 6px !important;
+}
+
+.inventory-price-input {
+    width: 85px;
+    padding: 6px 8px;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1d2939;
+    text-align: center;
+    background: #fff;
+}
+
+.inventory-price-input:focus {
+    outline: none;
+    border-color: var(--clr-primary);
+}
+
+/* Quantity Cell */
+.inventory-qty-cell {
+    padding: 6px !important;
+}
+
+.inventory-qty-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f9fafb;
+    padding: 3px;
+    border-radius: 6px;
+    border: 1px solid #eaecf0;
+}
+
+.inventory-qty-btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+    background: #fff;
+    color: #667085;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.inventory-qty-btn:hover {
+    background: var(--clr-primary);
+    color: #fff;
+}
+
+.inventory-qty-input {
+    width: 45px;
+    padding: 4px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1d2939;
+    text-align: center;
+    background: #fff;
+}
+
+.inventory-qty-input:focus {
+    outline: none;
+}
+
+/* Subtotal */
+.inventory-subtotal {
+    padding: 8px !important;
+}
+
+.subtotal-amount {
+    font-weight: 600;
+    color: #166534;
+    font-size: 14px;
+    background: #f0fdf4;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Action Cell */
+.inventory-action-cell {
+    padding: 6px !important;
+}
+
+.inventory-remove-btn {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    background: #fef2f2;
+    color: #dc2626;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.inventory-remove-btn:hover {
+    background: #dc2626;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .inventory-th-batch,
+    .inventory-th-unit,
+    .inventory-batch,
+    .inventory-unit {
+        display: none;
+    }
+    
+    .inventory-product-img-wrapper {
+        width: 40px;
+        height: 40px;
+    }
+}

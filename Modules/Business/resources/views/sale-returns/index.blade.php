@@ -20,6 +20,7 @@
 
                             <div class="gpt-up-down-arrow position-relative">
                                 <select name="per_page" class="form-control">
+                                    <option value="5" selected>{{__('Show- 5')}}</option>
                                     <option value="10">{{__('Show- 10')}}</option>
                                     <option value="25">{{__('Show- 25')}}</option>
                                     <option value="50">{{__('Show- 50')}}</option>
@@ -58,30 +59,8 @@
                 </div>
             </div>
 
-            <div class="responsive-table m-0">
-                <table class="table" id="datatable">
-                    <thead>
-                        <tr>
-                            <th>{{ __('SL') }}.</th>
-                            <th>{{ __('Invoice No') }}</th>
-                            @if(auth()->user()->accessToMultiBranch())
-                            <th>{{ __('Branch') }}</th>
-                            @endif
-                            <th>{{ __('Date') }}</th>
-                            <th>{{ __('Name') }}</th>
-                            <th>{{ __('Total') }}</th>
-                            <th>{{ __('Paid') }}</th>
-                            <th>{{ __('Due') }}</th>
-                            <th>{{ __('Return Amount') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sale-return-data">
-                        @include('business::sale-returns.datas')
-                    </tbody>
-                </table>
-            </div>
-            <div class="mt-3">
-                {{ $sales->links('vendor.pagination.bootstrap-5') }}
+            <div id="sale-return-data">
+                @include('business::sale-returns.datas')
             </div>
         </div>
     </div>

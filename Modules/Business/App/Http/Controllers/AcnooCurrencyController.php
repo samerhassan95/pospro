@@ -12,7 +12,7 @@ class AcnooCurrencyController extends Controller
 {
     public function index()
     {
-        $currencies = Currency::whereStatus(1)->orderBy('is_default', 'desc')->paginate(20);
+        $currencies = Currency::whereStatus(1)->orderBy('is_default', 'desc')->paginate(5);
         $user_currency = UserCurrency::where('business_id', auth()->user()->business_id)->first();
         return view('business::currencies.index', compact('currencies','user_currency'));
     }

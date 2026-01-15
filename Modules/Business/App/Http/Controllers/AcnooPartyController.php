@@ -36,7 +36,7 @@ class AcnooPartyController extends Controller
             $query->where('type', 'Supplier');
         }
 
-        $parties = $query->latest()->paginate(20);
+        $parties = $query->latest()->paginate(5);
 
         $parties->setCollection(
             $parties->getCollection()->transform(function ($party) {

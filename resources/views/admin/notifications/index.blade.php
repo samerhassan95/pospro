@@ -16,21 +16,8 @@
                     </div>
                 </div>
 
-                <div class="responsibe-table m-0">
-                    <table class="table" id="erp-table">
-                        <thead>
-                            <tr>
-                                <th>@lang('SL.')</th>
-                                <th>@lang('Message')</th>
-                                <th>@lang('Created At')</th>
-                                <th>@lang('Read At')</th>
-                                <th>@lang('Action')</th>
-                            </tr>
-                        </thead>
-                        <tbody id="notifications-data" class="searchResults">
-                            @include('admin.notifications.datas')
-                        </tbody>
-                    </table>
+                <div id="notifications-data">
+                    @include('admin.notifications.datas')
                 </div>
             </div>
         </div>

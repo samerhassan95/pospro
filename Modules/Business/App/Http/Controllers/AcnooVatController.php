@@ -19,8 +19,8 @@ class AcnooVatController extends Controller
 
     public function index(Request $request)
     {
-        $vats = Vat::where('business_id', auth()->user()->business_id)->orderBy('status', 'desc')->whereNull('sub_vat')->latest()->paginate(10);
-        $vat_groups = Vat::where('business_id', auth()->user()->business_id)->orderBy('status', 'desc')->whereNotNull('sub_vat')->latest()->paginate(10);
+        $vats = Vat::where('business_id', auth()->user()->business_id)->orderBy('status', 'desc')->whereNull('sub_vat')->latest()->paginate(5);
+        $vat_groups = Vat::where('business_id', auth()->user()->business_id)->orderBy('status', 'desc')->whereNotNull('sub_vat')->latest()->paginate(5);
         return view('business::vats.index', compact('vats', 'vat_groups'));
     }
 
@@ -34,7 +34,7 @@ class AcnooVatController extends Controller
                 });
             })
             ->latest()
-            ->paginate(10);
+            ->paginate($request->per_page ?? 5);
 
         if ($request->ajax()) {
             return response()->json([
@@ -55,7 +55,7 @@ class AcnooVatController extends Controller
                 });
             })
             ->latest()
-            ->paginate(10);
+            ->paginate($request->per_page ?? 5);
 
         if ($request->ajax()) {
             return response()->json([
@@ -129,7 +129,7 @@ class AcnooVatController extends Controller
     public function edit($id)
     {
         $vat = Vat::where('business_id', auth()->user()->business_id)->findOrFail($id);
-        $vats = Vat::where('business_id', auth()->user()->business_id)->where('status','1')->whereNull('sub_vat')->latest()->paginate(10);
+        $vats = Vat::where('business_id', auth()->user()->business_id)->where('status','1')->whereNull('sub_vat')->latest()->get();
         return view('business::vat-groups.edit',compact('vat', 'vats'));
     }
 

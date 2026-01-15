@@ -23,7 +23,7 @@ class AcnooBannerController extends Controller
 
     public function index(Request $request)
     {
-        $banners = Banner::latest()->paginate($request->per_page ?? 20)->appends($request->query());
+        $banners = Banner::latest()->paginate($request->per_page ?? 5)->appends($request->query());
 
         if ($request->ajax()) {
             return response()->json([

@@ -30,7 +30,7 @@ class AcnooPurchaseReportController extends Controller
             ->where('business_id', $businessId)
             ->whereDate('purchaseDate', Carbon::today())
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
 
@@ -92,7 +92,7 @@ class AcnooPurchaseReportController extends Controller
             });
         }
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $purchases = $purchasesQuery->latest()->paginate($perPage);
 
         $total_purchase = $purchasesQuery->sum('totalAmount');

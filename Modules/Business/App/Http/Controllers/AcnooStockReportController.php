@@ -34,7 +34,7 @@ class AcnooStockReportController extends Controller
             ->withSum('stocks', 'productStock')
             ->where('business_id', $businessId)
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         return view('business::reports.stocks.stock-reports', compact('stocks', 'total_stock_value', 'total_qty'));
     }
@@ -51,7 +51,7 @@ class AcnooStockReportController extends Controller
             })
             ->withSum('stocks', 'productStock')
             ->latest()
-            ->paginate($request->per_page ?? 10);
+            ->paginate($request->per_page ?? 5);
 
         if ($request->ajax()) {
             return response()->json([

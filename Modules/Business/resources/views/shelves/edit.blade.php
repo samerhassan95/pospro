@@ -19,7 +19,7 @@
                         </div>
 
                         <div class="col-lg-12">
-                            <div class="button-group text-center mt-3">
+                            <div class="button-group text-end mt-3">
                                 <a href="{{ route('business.shelfs.index') }}" class="theme-btn border-btn m-2">{{ __('Cancel') }}</a>
                                 @usercan('shelfs.update')
                                 <button class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>

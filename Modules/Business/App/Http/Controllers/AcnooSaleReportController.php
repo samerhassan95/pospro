@@ -29,7 +29,7 @@ class AcnooSaleReportController extends Controller
         $sales = Sale::with('user:id,name', 'party:id,name,email,phone,type', 'business:id,companyName', 'payment_type:id,name', 'branch:id,name')->where('business_id', $businessId)
             ->whereDate('saleDate', Carbon::today())
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
 
@@ -89,7 +89,7 @@ class AcnooSaleReportController extends Controller
             });
         }
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $sales = $salesQuery->latest()->paginate($perPage);
 
         $total_sale = $salesQuery->sum('totalAmount');

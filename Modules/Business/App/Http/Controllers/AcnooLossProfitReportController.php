@@ -46,7 +46,7 @@ class AcnooLossProfitReportController extends Controller
             ->where('business_id', $businessId)
             ->whereDate('created_at', $today)
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         return view('business::reports.loss-profits.loss-profit-reports', compact('loss_profits', 'profit', 'loss', 'total_sale_count'));
     }
@@ -94,7 +94,7 @@ class AcnooLossProfitReportController extends Controller
                 });
             });
 
-        $loss_profits = $salesQuery->latest()->paginate($request->per_page ?? 10);
+        $loss_profits = $salesQuery->latest()->paginate($request->per_page ?? 5);
 
         $loss = (clone $salesQuery)->where('lossProfit', '<=', 0)->get()
             ->sum(function ($sale) {

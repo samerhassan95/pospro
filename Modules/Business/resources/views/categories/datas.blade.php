@@ -1,53 +1,79 @@
-@foreach($categories as $category)
-    <tr>
-        @usercan('categories.delete')
-        <td class="w-60 checkbox">
-            <input type="checkbox" name="ids[]" class="delete-checkbox-item  multi-delete" value="{{ $category->id }}">
-        </td>
-        @endusercan
-        <td>{{ ($categories->currentPage() - 1) * $categories->perPage() + $loop->iteration }}</td>
-        <td>
-            <img src="{{ asset($category->icon ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="table-product-img">
-        </td>
+<div class="responsive-table m-0">
+    <table class="table" id="datatable">
+        <thead>
+            <tr>
+                @usercan('categories.delete')
+                <th class="w-60">
+                    <div class="d-flex align-items-center gap-3">
+                        <input type="checkbox" class="select-all-delete  multi-delete">
+                    </div>
+                </th>
+                @endusercan
 
-        <td class="text-start">{{ $category->categoryName }}</td>
-        <td class="text-center">
-            <label class="switch">
-                <input type="checkbox" {{ $category->status == 1 ? 'checked' : '' }} class="status" data-url="{{ route('business.categories.status', $category->id) }}">
-                <span class="slider round"></span>
-            </label>
-        </td>
-        <td class="d-print-none">
-            <div class="dropdown table-action">
-                <button type="button" data-bs-toggle="dropdown">
-                    <i class="far fa-ellipsis-v"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li>
-                        @usercan('categories.update')
-                        <a href="#category-edit-modal" class="category-edit-btn" data-bs-toggle="modal"
-                           data-url="{{ route('business.categories.update', $category->id) }}"
-                           data-category-name="{{ $category->categoryName }}"
-                           data-category-icon="{{ asset($category->icon ?? 'assets/images/icons/upload-icon.svg') }}"
-                           data-category-variationcapacity="{{ $category->variationCapacity }}"
-                           data-category-variationcolor="{{ $category->variationColor }}"
-                           data-category-variationsize="{{ $category->variationSize }}"
-                           data-category-variationtype="{{ $category->variationType }}"
-                           data-category-variationweight="{{ $category->variationWeight }}">
-                            <i class="fal fa-pencil-alt"></i>{{__('Edit')}}
-                        </a>
-                        @endusercan
-                    </li>
-                    <li>
-                        @usercan('categories.delete')
-                        <a href="{{ route('business.categories.destroy', $category->id) }}" class="confirm-action" data-method="DELETE">
-                            <i class="fal fa-trash-alt"></i>
-                            {{ __('Delete') }}
-                        </a>
-                        @endusercan
-                    </li>
-                </ul>
-            </div>
-        </td>
-    </tr>
-@endforeach
+                <th>{{ __('SL') }}.</th>
+                <th>{{ __('Icon') }}</th>
+                <th class="text-start">{{ __('Name') }}</th>
+                <th>{{ __('Status') }}</th>
+                <th>{{ __('Action') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($categories as $category)
+                <tr>
+                    @usercan('categories.delete')
+                    <td class="w-60 checkbox">
+                        <input type="checkbox" name="ids[]" class="delete-checkbox-item  multi-delete" value="{{ $category->id }}">
+                    </td>
+                    @endusercan
+                    <td>{{ ($categories->currentPage() - 1) * $categories->perPage() + $loop->iteration }}</td>
+                    <td>
+                        <img src="{{ asset($category->icon ?? 'assets/images/logo/upload2.jpg') }}" alt="Img" class="table-product-img">
+                    </td>
+
+                    <td class="text-start">{{ $category->categoryName }}</td>
+                    <td class="text-center">
+                        <label class="switch">
+                            <input type="checkbox" {{ $category->status == 1 ? 'checked' : '' }} class="status" data-url="{{ route('business.categories.status', $category->id) }}">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    <td class="d-print-none">
+                        <div class="dropdown table-action">
+                            <button type="button" data-bs-toggle="dropdown">
+                                <i class="far fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    @usercan('categories.update')
+                                    <a href="#category-edit-modal" class="category-edit-btn" data-bs-toggle="modal"
+                                       data-url="{{ route('business.categories.update', $category->id) }}"
+                                       data-category-name="{{ $category->categoryName }}"
+                                       data-category-icon="{{ asset($category->icon ?? 'assets/images/icons/upload-icon.svg') }}"
+                                       data-category-variationcapacity="{{ $category->variationCapacity }}"
+                                       data-category-variationcolor="{{ $category->variationColor }}"
+                                       data-category-variationsize="{{ $category->variationSize }}"
+                                       data-category-variationtype="{{ $category->variationType }}"
+                                       data-category-variationweight="{{ $category->variationWeight }}">
+                                        <i class="fal fa-pencil-alt"></i>{{__('Edit')}}
+                                    </a>
+                                    @endusercan
+                                </li>
+                                <li>
+                                    @usercan('categories.delete')
+                                    <a href="{{ route('business.categories.destroy', $category->id) }}" class="confirm-action" data-method="DELETE">
+                                        <i class="fal fa-trash-alt"></i>
+                                        {{ __('Delete') }}
+                                    </a>
+                                    @endusercan
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+<div class="m-2">
+    {{ $categories->links('vendor.pagination.bootstrap-5') }}
+</div>

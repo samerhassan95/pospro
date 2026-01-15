@@ -19,7 +19,7 @@ class AcnooRackController extends Controller
 
     public function index()
     {
-        $racks = Rack::with('shelves:id,name')->where('business_id', auth()->user()->business_id)->latest()->paginate(10);
+        $racks = Rack::with('shelves:id,name')->where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         $shelves = Shelf::whereStatus(1)->where('business_id', auth()->user()->business_id)->latest()->get();
         return view('business::racks.index', compact('racks', 'shelves'));
     }

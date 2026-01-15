@@ -52,7 +52,7 @@ class AcnooSaleController extends Controller
             $query->whereDate('saleDate', Carbon::today());
         }
 
-        $sales = $query->paginate(20);
+        $sales = $query->paginate(5);
 
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
 

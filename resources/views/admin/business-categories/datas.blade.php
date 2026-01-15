@@ -69,6 +69,6 @@
         </tbody>
     </table>
 </div>
-<div class="mt-3">
+<div class="m-2">
     {{ $categories->links('vendor.pagination.bootstrap-5') }}
 </div>

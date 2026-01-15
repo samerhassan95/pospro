@@ -28,7 +28,7 @@ class AcnooLanguageController extends Controller
             ]);
         }
 
-        $languages = $languages->paginate(20);
+        $languages = $languages->paginate($request->per_page ?? 5);
         return view('admin.website-setting.languages.index', compact('languages'));
     }
 

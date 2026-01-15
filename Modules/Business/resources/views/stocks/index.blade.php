@@ -41,6 +41,7 @@
                         <div class="table-top-left d-flex gap-3">
                             <div class="gpt-up-down-arrow position-relative d-print-none">
                                 <select name="per_page" class="form-control">
+                                    <option value="5" selected>{{__('Show- 5')}}</option>
                                     <option value="10">{{__('Show- 10')}}</option>
                                     <option value="25">{{__('Show- 25')}}</option>
                                     <option value="50">{{__('Show- 50')}}</option>
@@ -92,29 +93,8 @@
 
                 </div>
             </div>
-            <div class="responsive-table m-0">
-                <table class="table" id="datatable">
-                    <thead>
-                    <tr>
-                        <th>{{ __('SL') }}.</th>
-                        <th class="text-start">{{ __('Product') }}</th>
-                        <th class="text-start">{{ __('Code') }}</th>
-                        <th class="text-start">{{ __('Category') }}</th>
-                        @usercan('stocks.price')
-                        <th class="text-start">{{ __('Cost') }}</th>
-                        @endusercan
-                        <th class="text-start">{{ __('Qty') }}</th>
-                        <th class="text-center">{{ __('Sale') }}</th>
-                        <th class="text-end">{{ __('Stock Value') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody id="stock-data">
-                        @include('business::stocks.datas')
-                    </tbody>
-                </table>
-            </div>
-            <div class="mt-3">
-                {{ $products->links('vendor.pagination.bootstrap-5') }}
+            <div id="stock-data">
+                @include('business::stocks.datas')
             </div>
         </div>
     </div>

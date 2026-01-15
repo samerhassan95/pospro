@@ -28,7 +28,7 @@ class AcnooPlanController extends Controller
                     ->orWhere('duration', 'like', '%' . $search . '%')
                     ->orWhere('subscriptionPrice', 'like', '%' . $search . '%');
             });
-        })->latest()->paginate($request->per_page ?? 20)->appends($request->query());
+        })->latest()->paginate($request->per_page ?? 5)->appends($request->query());
 
         if ($request->ajax()) {
             return response()->json([

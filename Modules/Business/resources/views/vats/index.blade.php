@@ -39,31 +39,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="responsive-table vatlist-body mt-3">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                @usercan('vats.delete')
-                                <th class="w-60">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <input type="checkbox" class="select-all-delete multi-delete">
-                                    </div>
-                                </th>
-                                @endusercan
-                                <th class="w-60">{{ __('SL') }}.</th>
-                                <th>{{ __('Name') }}</th>
-                                <th>{{ __('Tax Rate') }}</th>
-                                <th>{{ __('Status') }}</th>
-                                <th class="text-center">{{ __('Action') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="vat-data">
-                            @include('business::vats.datas')
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    {{ $vats->links('vendor.pagination.bootstrap-5') }}
+                <div id="vat-data">
+                    @include('business::vats.datas')
                 </div>
             </div>
         </div>

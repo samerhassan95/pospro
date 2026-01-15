@@ -33,7 +33,7 @@ class UserRoleController extends Controller
             ->where('id', '!=', auth()->id()) // remove auth user in listing
             ->where('role', 'staff')
             ->latest()
-            ->paginate(10);
+            ->paginate(5);
 
         $branches = Branch::where('business_id', $user->business_id)->latest()->get();
 

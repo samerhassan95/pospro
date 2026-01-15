@@ -34,7 +34,7 @@ class AcnooTransactionHistoryReportController extends Controller
             ->whereDate('paymentDate', $today)
             ->with('party:id,name,type','payment_type:id,name')
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         return view('business::reports.transaction-history.transaction-reports', compact('transactions', 'total_due', 'total_paid'));
     }
@@ -88,7 +88,7 @@ class AcnooTransactionHistoryReportController extends Controller
             });
         }
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $transactions = $transactionsQuery->latest()->paginate($perPage);
 
         $total_due = $transactionsQuery->sum('totalDue');

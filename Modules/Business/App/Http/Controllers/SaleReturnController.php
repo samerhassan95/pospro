@@ -37,7 +37,7 @@ class SaleReturnController extends Controller
             ->where('business_id', auth()->user()->business_id)
             ->whereHas('saleReturns')
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
 

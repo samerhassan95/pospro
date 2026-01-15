@@ -42,7 +42,7 @@ class AcnooSaleReturnReportController extends Controller
             ->where('business_id', auth()->user()->business_id)
             ->whereHas('saleReturns')
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         $branches = Branch::withTrashed()->where('business_id', auth()->user()->business_id)->latest()->get();
 
@@ -91,7 +91,7 @@ class AcnooSaleReturnReportController extends Controller
             });
         })->sum('return_amount');
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $sales = $salesQuery->latest()->paginate($perPage);
 
         if ($request->ajax()) {

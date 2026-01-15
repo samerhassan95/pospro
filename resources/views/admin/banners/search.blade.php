@@ -83,6 +83,6 @@
         </tbody>
     </table>
 </div>
-<div class="mt-3">
+<div class="m-2">
     {{ $banners->links('vendor.pagination.bootstrap-5') }}
 </div>

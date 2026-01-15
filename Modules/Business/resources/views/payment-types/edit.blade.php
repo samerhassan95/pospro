@@ -31,7 +31,7 @@
 
                          </div>
                         <div class="col-lg-12">
-                            <div class="button-group text-center mt-3">
+                            <div class="button-group text-end mt-3">
                                 <a href="{{ route('business.payment-types.index') }}" class="theme-btn border-btn m-2">{{ __('Cancel') }}</a>
                                 @usercan('payment-types.update')
                                 <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>

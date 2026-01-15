@@ -25,7 +25,7 @@
                          </div>
 
                         <div class="col-lg-12">
-                            <div class="button-group text-center mt-5">
+                            <div class="button-group text-end mt-5">
                                 <a href="{{ route('business.expense-categories.index') }}" class="theme-btn border-btn m-2">{{ __('Cancel') }}</a>
                                 @usercan('expense-categories.update')
                                 <button class="theme-btn m-2 submit-btn">{{ __('Save') }}</button>

@@ -98,22 +98,22 @@
                         </div>
                     </div>
                     <div class="cart-payment">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
+                        <div class="responsive-table m-0">
+                            <table class="table">
                                 <thead>
                                 <tr>
-                                    <th class="border table-background">{{ __('Image') }}</th>
-                                    <th class="border table-background">{{ __('Items') }}</th>
-                                    <th class="border table-background">{{ __('Code') }}</th>
-                                    <th class="border table-background">{{ __('Batch') }}</th>
-                                    <th class="border table-background">{{ __('Unit') }}</th>
-                                    <th class="border table-background">{{ __('Sale Price') }}</th>
-                                    <th class="border table-background">{{ __('Qty') }}</th>
-                                    <th class="border table-background">{{ __('Sub Total') }}</th>
-                                    <th class="border table-background">{{ __('Action') }}</th>
+                                    <th>{{ __('Image') }}</th>
+                                    <th class="text-start">{{ __('Items') }}</th>
+                                    <th>{{ __('Code') }}</th>
+                                    <th>{{ __('Batch') }}</th>
+                                    <th>{{ __('Unit') }}</th>
+                                    <th>{{ __('Sale Price') }}</th>
+                                    <th>{{ __('Qty') }}</th>
+                                    <th>{{ __('Sub Total') }}</th>
+                                    <th>{{ __('Action') }}</th>
                                 </tr>
                                 </thead>
-                                <tbody class='text-start' id="cart-list">
+                                <tbody id="cart-list">
                                 @include('business::sales.cart-list')
                                 </tbody>
                             </table>

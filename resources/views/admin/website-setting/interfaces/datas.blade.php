@@ -81,6 +81,6 @@
     </table>
 </div>
 
-<div class="mt-3">
+<div class="m-2">
     {{ $interfaces->links('vendor.pagination.bootstrap-5') }}
 </div>

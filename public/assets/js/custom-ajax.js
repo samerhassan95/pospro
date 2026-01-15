@@ -72,6 +72,10 @@ $('.filter-form').on('input', function (e) {
         dataType: "json",
         success: function (res) {
             $(table).html(res.data);
+            // Update pagination if provided
+            if (res.pagination) {
+                $(table).closest('.card').find('.pagination-wrapper').html(res.pagination);
+            }
         }
     });
 });

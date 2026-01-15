@@ -158,19 +158,19 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive mt-4">
-                            <table class="table table-bordered text-center">
+                        <div class="customTop" >
+                            <table class="table">
                                 <thead>
                                     <tr>
-                                        <th class="border p-2 table-background">{{ __('Image') }}</th>
-                                        <th class="border p-2 table-background">{{ __('Items') }}</th>
-                                        <th class="border p-2 table-background">{{ __('Code') }}</th>
-                                        <th class="border p-2 table-background">{{ __('Batch') }}</th>
-                                        <th class="border p-2 table-background">{{ __('Unit') }}</th>
-                                        <th class="border p-2 table-background">{{ __('Sale Price') }}</th>
-                                        <th class="border p-2 table-background">{{ __('Qty') }}</th>
-                                        <th class="border p-2 table-background">{{ __('Sub Total') }}</th>
-                                        <th class="border p-2 table-background">{{ __('Action') }}</th>
+                                        <th>{{ __('Image') }}</th>
+                                        <th class="text-start">{{ __('Items') }}</th>
+                                        <th>{{ __('Code') }}</th>
+                                        <th>{{ __('Batch') }}</th>
+                                        <th>{{ __('Unit') }}</th>
+                                        <th>{{ __('Sale Price') }}</th>
+                                        <th>{{ __('Qty') }}</th>
+                                        <th>{{ __('Sub Total') }}</th>
+                                        <th>{{ __('Action') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody id="cart-list">
@@ -283,7 +283,7 @@
                         </div>
 
                         <div class="col-lg-12">
-                            <div class="button-group text-center ">
+                            <div class="button-group text-end">
                                 <button data-route="{{ route('business.carts.remove-all') }}"
                                     class="theme-btn border-btn m-2">Cancel
                                 </button>

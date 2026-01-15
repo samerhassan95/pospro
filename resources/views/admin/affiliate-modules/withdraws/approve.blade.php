@@ -105,7 +105,7 @@
                         </div>
 
                         <div class="col-lg-12">
-                            <div class="button-group text-center mt-5">
+                            <div class="button-group text-end mt-5">
                                 <button type="reset" class="theme-btn border-btn m-2">{{__('Rejected')}}</button>
                                 <button class="theme-btn m-2 submit-btn">{{__('Approve')}}</button>
                             </div>
@@ -143,7 +143,7 @@
                             <input class="form-control" type="file" id="formFile">
                         </div>
                         <div class="col-lg-12">
-                            <div class="button-group text-center mt-3">
+                            <div class="button-group text-end mt-3">
                                 <button type="reset" class="theme-btn border-btn m-2">{{__('Cancel')}}</button>
                                 <button class="theme-btn m-2 submit-btn">{{__('Submit')}}</button>
                             </div>

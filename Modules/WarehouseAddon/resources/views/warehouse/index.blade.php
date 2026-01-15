@@ -25,6 +25,7 @@
 
                                 <div class="gpt-up-down-arrow position-relative">
                                     <select name="per_page" class="form-control">
+                                        <option value="5" selected>{{ __('Show- 5') }}</option>
                                         <option value="10">{{ __('Show- 10') }}</option>
                                         <option value="25">{{ __('Show- 25') }}</option>
                                         <option value="50">{{ __('Show- 50') }}</option>
@@ -69,38 +70,10 @@
                     </div>
                 </div>
 
-                <div class="responsive-table m-0">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                @usercan('warehouses.delete')
-                                <th class="w-60">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <input type="checkbox" class="select-all-delete multi-delete">
-                                    </div>
-                                </th>
-                                @endusercan
-                                <th>{{ __('SL') }}.</th>
-                                @if(moduleCheck('MultiBranchAddon') && multibranch_active())
-                                <th class="text-start">{{ __('Branch') }}</th>
-                                @endif
-                                <th class="text-start">{{ __('Name') }}</th>
-                                <th class="text-start">{{ __('Phone') }}</th>
-                                <th class="text-start">{{ __('Email') }}</th>
-                                <th class="text-start">{{ __('Address') }}</th>
-                                <th class="text-start">{{ __('Stock Qty') }}</th>
-                                <th class="text-start">{{ __('Stock Value') }}</th>
-                                <th>{{ __('Action') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="warehouses-data">
-                            @include('warehouseaddon::warehouse.datas')
-                        </tbody>
-                    </table>
+                <div id="warehouses-data">
+                    @include('warehouseaddon::warehouse.datas')
                 </div>
-                <div class="mt-3">
-                    {{ $warehouses->links('vendor.pagination.bootstrap-5') }}
-                </div>
+                
             </div>
         </div>
     </div>

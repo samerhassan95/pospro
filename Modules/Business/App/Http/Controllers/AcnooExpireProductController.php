@@ -24,7 +24,7 @@ class AcnooExpireProductController extends Controller
                 $query->whereDate('expire_date', '<', today())->where('productStock', '>', 0);
              })
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
         return view('business::expired-products.index', compact('expired_products'));
     }

@@ -18,7 +18,7 @@ class AcnooExpenseCategoryController extends Controller
 
     public function index()
     {
-        $expense_categories = ExpenseCategory::where('business_id', auth()->user()->business_id)->latest()->paginate(20);
+        $expense_categories = ExpenseCategory::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
         return view('business::expense-categories.index', compact('expense_categories'));
     }
 
@@ -32,7 +32,7 @@ class AcnooExpenseCategoryController extends Controller
                 });
             })
             ->latest()
-            ->paginate($request->per_page ?? 10);
+            ->paginate($request->per_page ?? 5);
 
         if($request->ajax()){
             return response()->json([

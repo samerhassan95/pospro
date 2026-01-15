@@ -31,7 +31,7 @@ class UserController extends Controller
                   ->orWhere('role', 'like', '%' . $request->search . '%')
                   ->orWhere('phone', 'like', '%' . $request->search . '%');
             });
-        })->latest()->paginate($request->per_page ?? 20)->appends($request->query());
+        })->latest()->paginate($request->per_page ?? 5)->appends($request->query());
 
         if ($request->ajax()) {
             return response()->json([

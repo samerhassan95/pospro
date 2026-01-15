@@ -37,7 +37,7 @@ class AcnooWarehouseController extends Controller
                 });
             }], DB::raw('productStock * productPurchasePrice'))
             ->latest()
-            ->paginate(20);
+            ->paginate(5);
 
 
         $branches = Branch::withTrashed()
@@ -185,7 +185,7 @@ class AcnooWarehouseController extends Controller
             })
             ->withSum('stocks as total_stock', 'productStock')
             ->latest()
-            ->paginate(10);
+            ->paginate(5);
 
         return view('warehouseaddon::warehouse.products.index', compact('products'));
     }

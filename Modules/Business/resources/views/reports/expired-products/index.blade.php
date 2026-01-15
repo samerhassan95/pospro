@@ -25,7 +25,8 @@
                                 <div class="table-top-left d-flex gap-3 d-print-none">
                                     <div class="gpt-up-down-arrow position-relative">
                                         <select name="per_page" class="form-control">
-                                            <option value="10">{{__('Show- 10')}}</option>
+                                            <option value="5" selected>{{__('Show- 5')}}</option>
+                                    <option value="10">{{__('Show- 10')}}</option>
                                             <option value="25">{{__('Show- 25')}}</option>
                                             <option value="50">{{__('Show- 50')}}</option>
                                             <option value="100">{{__('Show- 100')}}</option>
@@ -106,33 +107,8 @@
                     </div>
                 </div>
 
-                <div class="responsive-table m-0">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>{{ __('SL') }}. </th>
-                                <th>{{ __('Image') }} </th>
-                                <th>{{ __('Product Name') }} </th>
-                                <th>{{ __('Code') }} </th>
-                                <th>{{ __('Brand') }} </th>
-                                <th>{{ __('Category') }} </th>
-                                <th>{{ __('Unit') }} </th>
-                                @usercan('expired-product-reports.price')
-                                <th>{{ __('Purchase price') }}</th>
-                                @endusercan
-                                <th>{{ __('Sale price') }}</th>
-                                <th>{{ __('Stock') }}</th>
-                                <th>{{ __('Expired Date') }}</th>
-                                <th class="d-print-none">{{ __('Action') }} </th>
-                            </tr>
-                        </thead>
-                        <tbody id="expired-product-report-data">
-                            @include('business::reports.expired-products.datas')
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    {{ $expired_products->links('vendor.pagination.bootstrap-5') }}
+                <div id="expired-product-report-data">
+                    @include('business::reports.expired-products.datas')
                 </div>
             </div>
         </div>

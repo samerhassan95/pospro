@@ -58,7 +58,7 @@ class AcnooStockController extends Controller
         }
 
         // Paginate manually (after filtering)
-        $perPage = 20;
+        $perPage = 5;
         $currentPage = request('page', 1);
         $paginated = new LengthAwarePaginator(
             $products->forPage($currentPage, $perPage),
@@ -116,7 +116,7 @@ class AcnooStockController extends Controller
         });
 
         // Paginate manually
-        $perPage = $request->per_page ?? 10;
+        $perPage = $request->per_page ?? 5;
         $currentPage = $request->page ?? 1;
 
         $paginated = new \Illuminate\Pagination\LengthAwarePaginator(
