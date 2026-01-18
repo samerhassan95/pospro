@@ -6,6 +6,11 @@
         </a>
         <button class="close-btn"><i class="fal fa-times"></i></button>
     </div>
+    <!-- Sidebar Search -->
+    <div class="sidebar-search-wrapper">
+        <input type="text" class="sidebar-search-input" placeholder="{{ __('Search menu...') }}" id="sidebarSearch">
+    </div>
+    
     <div class="side-bar-manu">
         <ul>
             @usercan('dashboard.read')

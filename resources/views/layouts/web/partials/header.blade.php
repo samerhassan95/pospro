@@ -5,9 +5,10 @@
                 aria-controls="staticBackdrop">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
-            <a href="{{ route('home') }}" class="header-logo"><img
-                    src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
-                    alt="header-logo" /></a>
+              <a href="{{ route('business.dashboard.index') }}" class="logo-link">
+            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img">
+            <span class="sidebar-logo-text !text-2xl"><span class="bytes-text">Bytes</span> Pos</span>
+        </a>
 
 
 

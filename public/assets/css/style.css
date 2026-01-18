@@ -383,6 +383,7 @@ svg {
 .side-bar {
     /* padding: 0 10px; */
     position: fixed;
+    background-color: #f7f7f7 !important;
     top: 0;
     left: 0;
     width: var(--sidebar-width);
@@ -394,7 +395,7 @@ svg {
     opacity: 1;
     visibility: visible;
     background: #FAFAFA;
-    box-shadow: 0px 3.93px 88.43px 1.97px #00000014;
+    /* box-shadow: 0px 3.93px 88.43px 1.97px #00000014; */
     transition: all 0.4s ease;
     font-family: Cairo !important;
     font-size: 15px !important;
@@ -403,22 +404,22 @@ svg {
     text-align: left !important;
 }
 
-/* Scrollbar Styling */
+/* Scrollbar Styling - Hidden but scrollable */
 .side-bar::-webkit-scrollbar {
-    width: 1px;
+    width: 0;
 }
 
 .side-bar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 10px;
-}
-
-.side-bar::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.8);
+    background: transparent;
 }
 
 .side-bar::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
+    background: transparent;
+}
+
+/* Firefox */
+.side-bar {
+    scrollbar-width: none;
 }
 
 .padding-top-bottom {
@@ -447,7 +448,7 @@ svg {
 
 .side-bar-logo .sidebar-logo-text {
     font-family: 'Lufga', sans-serif;
-    font-size: 28px;
+    font-size: 28px ;
     font-weight: 500;
     line-height: 20px;
     letter-spacing: 0px;
@@ -973,9 +974,9 @@ font-size: 14px;
 
 .side-bar-manu li .dropdown-menu {
     margin-left: 20px;
- border-right: 1px solid #fff;
- border-top: 1px solid #fff;
- border-bottom: 1px solid #fff;
+ border-right: none;
+ border-top: none;
+ border-bottom: none;
 }
 
 body [dir="rtl"] .side-bar-manu li .dropdown-menu{
@@ -1134,6 +1135,36 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
 
 .side-bar.active:hover .sidebar-icon img {
     width: 16px;
+}
+
+/* Sidebar Search Styling */
+.sidebar-search-wrapper {
+    padding: 12px 10px;
+    margin-top: 10px;
+    background: #FAFAFA;
+    border: none;
+}
+
+.sidebar-search-input {
+    width: 100%;
+    padding: 10px 12px;
+    background: #FAFAFA;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: Cairo, sans-serif;
+    color: #525252;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.sidebar-search-input::placeholder {
+    color: #a3a3a3;
+}
+
+.sidebar-search-input:focus {
+    background: #f5f5f5;
+    color: #000;
 }
 
 .section-container {

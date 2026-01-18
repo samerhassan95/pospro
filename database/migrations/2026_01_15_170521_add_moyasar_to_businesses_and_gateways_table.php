@@ -22,20 +22,27 @@ return new class extends Migration
         // Add Moyasar to gateways table for Admin
         $exists = DB::table('gateways')->where('namespace', 'App\Library\Moyasar')->exists();
         if (!$exists) {
-            DB::table('gateways')->insert([
-                'name' => 'Moyasar',
-                'mode' => 'Sandbox',
-                'status' => 1,
-                'namespace' => 'App\Library\Moyasar',
-                'data' => json_encode([
-                    'api_key' => '',
-                    'publishable_key' => '',
-                ]),
-                'platform' => 'Both',
-                'currency_id' => 1, // Default currency
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            // Get the first available currency
+            $currency = DB::table('currencies')->first();
+            
+            if ($currency) {
+                $currencyId = $currency->id;
+
+                DB::table('gateways')->insert([
+                    'name' => 'Moyasar',
+                    'mode' => 'Sandbox',
+                    'status' => 1,
+                    'namespace' => 'App\Library\Moyasar',
+                    'data' => json_encode([
+                        'api_key' => '',
+                        'publishable_key' => '',
+                    ]),
+                    'platform' => 'Both',
+                    'currency_id' => $currencyId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
     }
 
