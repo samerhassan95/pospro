@@ -22,6 +22,7 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::get('sales/{id}/zatca-issues', [Business\AcnooSaleController::class, 'getZatcaIssues'])->name('sales.zatca-issues');
     Route::get('/get-product-prices', [Business\AcnooSaleController::class, 'getProductPrices'])->name('products.prices');
     Route::get('/sale-cart-data', [Business\AcnooSaleController::class, 'getCartData'])->name('sales.cart-data');
+    Route::get('/sale-cart', [Business\AcnooSaleController::class, 'showSaleCart'])->name('sales.cart');
     Route::get('/get-invoice/{id}', [Business\AcnooSaleController::class, 'getInvoice'])->name('sales.invoice');
     Route::post('sale/product-filter', [Business\AcnooSaleController::class, 'productFilter'])->name('sales.product-filter');
     Route::post('sale/category-filter', [Business\AcnooSaleController::class, 'categoryFilter'])->name('sales.category-filter');

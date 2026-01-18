@@ -125,7 +125,8 @@ class AcnooPurchaseController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'data' => view('business::purchases.datas', compact('purchases', 'purchasesWithReturns'))->render()
+                'data' => view('business::purchases.datas', compact('purchases', 'purchasesWithReturns'))->render(),
+                'pagination' => $purchases->links('vendor.pagination.bootstrap-5')->render()
             ]);
         }
 

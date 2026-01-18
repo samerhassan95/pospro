@@ -1424,15 +1424,18 @@ $(".report-filter-form").on("input change", function (e) {
     let table = form.attr("table");
 
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: form.attr("action"),
         data: form.serialize(),
         dataType: "json",
-        contentType: false,
-        cache: false,
-        processData: false,
         success: function (res) {
             $(table).html(res.data);
+            
+            // Update pagination if it exists in the response
+            if (res.pagination !== undefined) {
+                $(table).closest('.card').find('.mt-3').html(res.pagination);
+            }
+            
             if (res.total_sale !== undefined) {
                 $("#total_sale").text(res.total_sale);
             }

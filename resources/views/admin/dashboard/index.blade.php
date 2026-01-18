@@ -16,6 +16,13 @@
 
     @can('dashboard-read')
     <div class="container-fluid m-h-100">
+        <!-- Hero Banner -->
+        @include('admin.components.banner', [
+            'title' => __('Revolutionizing Your Online Presence'),
+            'description' => __('BYTES guides your business through the digital landscape with innovative solutions and personalized strategies.'),
+            'buttonText' => __('Check our Services'),
+            'buttonLink' => '#'
+        ])
         <div class="row gpt-dashboard-chart mb-30">
             <div class="col-12">
                 <div class="business-stat-container">

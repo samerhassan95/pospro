@@ -15,6 +15,8 @@
 <!-- Style -->
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ time() }}">
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}?v={{ time() }}">
+<!-- Banner -->
+<link rel="stylesheet" href="{{ asset('resources/css/banner.css') }}?v={{ time() }}">
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 @stack('css')

@@ -29,16 +29,13 @@
             <div class="dashboard-promo-banner">
                 <div class="promo-content">
                     <h2>{{ __('Revolutionizing Your Online Presence') }}</h2>
-                    <p>{{ __('Manage your business through the digital landscape with innovative solutions and personalized strategies.') }}</p>
+                    <p>{{ __('BYTES guides your business through the digital landscape with innovative solutions and personalized strategies.') }}</p>
                     <a href="{{ route('business.sales.create') }}" class="promo-btn">
                         {{ __('Create Sale') }}
                         <span class="btn-icon">
                             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.21852 3.1416H8.98739M8.98739 3.1416V6.91047M8.98739 3.1416L2.79485 9.33448" stroke="#09090B" stroke-width="1.25629" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </span>
                     </a>
-                </div>
-                <div class="promo-decoration">
-                    <img src="{{ asset('assets/images/Gradients.svg') }}" alt="" class="promo-image">
                 </div>
             </div>
         </div>

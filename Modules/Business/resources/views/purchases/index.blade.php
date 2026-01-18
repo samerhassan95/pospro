@@ -98,8 +98,40 @@
                     </div>
                 </div>
 
-                <div id="purchases-data">
-                    @include('business::purchases.datas')
+                <div class="responsive-table m-0">
+                    <table class="table" id="datatable">
+                        <thead>
+                            <tr>
+                                @usercan('purchases.delete')
+                                <th class="w-60">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <input type="checkbox" class="select-all-delete multi-delete ">
+                                    </div>
+                                </th>
+                                @endusercan
+                                <th>{{ __('SL') }}.</th>
+                                <th class="text-start">{{ __('Date') }}</th>
+                                @if(auth()->user()->accessToMultiBranch())
+                                <th class="text-start">{{ __('Branch') }}</th>
+                                @endif
+                                <th class="text-start">{{ __('Invoice No') }}</th>
+                                <th class="text-start">{{ __('Supplier Name') }}</th>
+                                <th class="text-start">{{ __('Total') }}</th>
+                                <th class="text-start">{{ __('Discount') }}</th>
+                                <th class="text-start">{{ __('Paid') }}</th>
+                                <th class="text-start">{{ __('Due') }}</th>
+                                <th class="text-start">{{ __('Payment') }}</th>
+                                <th>{{ __('Status') }}</th>
+                                <th>{{ __('Action') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="purchases-data">
+                            @include('business::purchases.datas')
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    {{ $purchases->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>

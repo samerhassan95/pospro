@@ -346,7 +346,7 @@
                                         </div>
 
                                         <div class="col-lg-12">
-                                            <div class="text-center mt-5">
+                                            <div class="text-end mt-5">
                                                 <button type="submit" class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>
                                             </div>
                                         </div>
@@ -393,7 +393,7 @@
                                         </div>
 
                                         <div class="col-lg-12 mt-5">
-                                            <div class="text-center mt-5">
+                                            <div class="text-end mt-5">
                                                 <button type="submit" class="theme-btn m-2 submit-btn">{{ __('Update') }}</button>
                                             </div>
                                         </div>

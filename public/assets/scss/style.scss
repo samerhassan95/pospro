@@ -123,7 +123,7 @@ svg {
     --svg-font-size: 14px;
     width: var(--svg-font-size);
     height: var(--svg-font-size);
-    margin-top: -4px;
+    // margin-top: -4px;
     -webkit-transition: all 0.4s ease;
     -moz-transition: all 0.4s ease;
     transition: all 0.4s ease;
@@ -465,7 +465,7 @@ svg {
     color: red !important;
 }
 .notifications{
-    margin-left: 10px;
+    // margin-left: 10px;
 
     .dropdown-toggleer{
         position: relative;

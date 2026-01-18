@@ -3,9 +3,13 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-6 col-lg-5">
-                <a href="{{ route('home') }}">
-                    <img src="{{ asset($general->value['footer_logo'] ?? '') }}" alt="footer-logo" class="footer-logo" />
-                </a>
+     
+                        <a href="{{ route('home') }}" class="logo-link">
+            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img">
+            <span class="sidebar-logo-text !text-white" style="
+    color: white !important;
+"><span class="bytes-text">Bytes</span> Pos</span>
+        </a>
                 <p class="mt-3 footer-details">
                     {{ $page_data['headings']['footer_short_title'] ?? '' }}
                 </p>

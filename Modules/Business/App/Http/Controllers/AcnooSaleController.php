@@ -303,6 +303,12 @@ class AcnooSaleController extends Controller
     }
 
     /** Get cart info */
+    public function showSaleCart()
+    {
+        $cart_contents = Cart::content()->filter(fn($item) => $item->options->type == 'sale');
+        return view('business::sales.cart-list-new', compact('cart_contents'));
+    }
+
     public function getCartData()
     {
         $cart_contents = Cart::content()->filter(fn($item) => $item->options->type == 'sale');

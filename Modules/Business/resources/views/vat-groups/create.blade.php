@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
 
-                                <div class="offcanvas-footer mt-3 d-flex justify-content-center">
+                                <div class="offcanvas-footer mt-3 d-flex justify-content-end">
                                     <a href="{{ route('business.vats.index') }}" class="cancel-btn btn btn-outline-danger">{{ __('Cancel') }}</a>
                                     @usercan('vats.create')
                                     <button class="submit-btn btn btn-primary text-white" type="submit">{{ __('Save') }}</button>

@@ -40,7 +40,7 @@
 
             @if (auth()->user()->role == 'superadmin')
             <div class="notifications dropdown">
-                <a href="#" class="dropdown-toggleer mt-1 me-2" data-bs-toggle="dropdown">
+                <a href="#" class="dropdown-toggleer " data-bs-toggle="dropdown">
                     <i><img src="{{ asset('assets/images/icons/bel.svg') }}" alt=""></i>
                     <span class="bg-red">{{ auth()->user()->unreadNotifications->count() }}</span>
                 </a>

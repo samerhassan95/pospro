@@ -158,7 +158,7 @@
                             </div>
                         </div>
 
-                        <div class="customTop" >
+                        <div class="customTop responsive-table mt-12" >
                             <table class="table">
                                 <thead>
                                     <tr>

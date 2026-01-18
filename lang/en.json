@@ -2039,5 +2039,9 @@
     "installer_messages.updater.final.finished": "Application's database has been successfully updated.",
     "installer_messages.updater.final.exit": "Click here to exit",
     "installer_messages.updater.log.success_message": "Laravel Installer successfully UPDATED on ",
-    "Loading Dashboard...": "Loading Dashboard..."
+    "Loading Dashboard...": "Loading Dashboard...",
+    "Revolutionizing Your Online Presence": "Revolutionizing Your Online Presence",
+    "BYTES guides your business through the digital landscape with innovative solutions and personalized strategies.": "BYTES guides your business through the digital landscape with innovative solutions and personalized strategies.",
+    "Check our Services": "Check our Services",
+    "Create Sale": "Create Sale"
 }

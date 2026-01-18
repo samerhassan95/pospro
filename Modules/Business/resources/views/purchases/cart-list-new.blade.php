@@ -14,8 +14,9 @@
                 @endusercan
             </div>
             <div class="cart-item-actions">
-                <button type="button" class="remove-item-btn remove-btn">
-                    <i class="fas fa-times"></i>
+                <button type="button" class="remove-item-btn ">
+                    <i class="fas fa-times" style="font-size: 12px; line-height: 1;"></i>
+                    <span style="display: none;">×</span>
                 </button>
                 <div class="qty-control-wrapper">
                     <button type="button" class="qty-btn minus-btn">
