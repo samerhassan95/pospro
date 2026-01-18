@@ -8,7 +8,14 @@
     </div>
     <!-- Sidebar Search -->
     <div class="sidebar-search-wrapper">
-        <input type="text" class="sidebar-search-input" placeholder="{{ __('Search menu...') }}" id="sidebarSearch">
+        <div class="sidebar-search-container">
+            <input type="text" class="sidebar-search-input" placeholder="{{ __('Search menu...') }}" id="sidebarSearch">
+            <span class="sidebar-search-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.33333 1C3.91 1 1.16667 3.74333 1.16667 7.16667C1.16667 10.59 3.91 13.3333 7.33333 13.3333C8.81667 13.3333 10.2167 12.8833 11.3333 12.1167L14.1167 14.9L15.2333 13.7833L12.45 10.9833C13.2167 9.86667 13.6667 8.46667 13.6667 7.16667C13.6667 3.74333 10.7567 1 7.33333 1ZM7.33333 2.33333C10.0833 2.33333 12.3333 4.58333 12.3333 7.16667C12.3333 9.75 10.0833 12 7.33333 12C4.58333 12 2.33333 9.75 2.33333 7.16667C2.33333 4.58333 4.58333 2.33333 7.33333 2.33333Z" fill="#a3a3a3"/>
+                </svg>
+            </span>
+        </div>
     </div>
     
     <div class="side-bar-manu">
@@ -836,3 +843,5 @@
         </ul>
     </div>
 </nav>
+
+<script src="{{ asset('assets/js/sidebar-search.js') }}"></script>
