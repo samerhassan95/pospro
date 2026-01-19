@@ -1,9 +1,11 @@
 <header class="main-header-section sticky-top d-print-none">
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between" style="flex-wrap: nowrap;">
         <div class="bg-white d-flex align-items-center">
             <div class="sidebar-opner menu-opener"><i class="fal fa-bars" aria-hidden="true"></i></div>
-            <a class="pos-logo" href="{{ route('admin.dashboard.index') }}"><img src="{{ asset(get_option('general')['common_header_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo"></a>
-        </div>
+           <a href="{{ route('admin.dashboard.index') }}" class="pos-logo">
+            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img">
+            <span class="sidebar-logo-text"><span class="bytes-text">Bytes</span> Pos</span>
+        </a>        </div>
 
         <div class="header-right d-flex align-items-center">
             <a target="_blank" class="text-custom-primary view-website" href="{{ route('home') }}">
@@ -81,22 +83,140 @@
                             <img src="{{ asset(Auth::user()->image ?? 'assets/images/icons/default-user.png') }}" alt="Profile">
                         </div>
                     </a>
-                    <div class="business-profile bg-success">
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ url('cache-clear') }}"><i class="far fa-undo"></i> {{ __('Clear cache') }}</a></li>
-                            <li><a href="{{ route('admin.profiles.index') }}"><i class="fal fa-user"></i> {{ __('My Profile') }}</a></li>
-                            <li>
-                                <a href="javascript:void(0)" class="logoutButton">
-                                    <i class="far fa-sign-out"></i> {{ __('Logout') }}
-                                    <form action="{{ route('logout') }}" method="post" id="logoutForm">
-                                        @csrf
-                                    </form>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="dropdown-menu dropdown-menu-scroll">
+                        <li>
+                            <a class="dropdown-item" href="{{ url('cache-clear') }}">
+                                <i class="far fa-undo"></i> {{ __('Clear cache') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('admin.profiles.index') }}">
+                                <i class="fal fa-user"></i> {{ __('My Profile') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="javascript:void(0)" class="logoutButton">
+                                <i class="far fa-sign-out"></i> {{ __('Logout') }}
+                                <form action="{{ route('logout') }}" method="post" id="logoutForm">
+                                    @csrf
+                                </form>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </header>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fix dropdown functionality on mobile devices
+    function initMobileDropdowns() {
+        // Language dropdown
+        const languageToggle = document.querySelector('.language-change .dropdown-toggle');
+        const languageMenu = document.querySelector('.language-change .dropdown-menu');
+        
+        // Profile dropdown
+        const profileToggle = document.querySelector('.profile-info .dropdown-toggle, .profile-info a[data-bs-toggle="dropdown"]');
+        const profileMenu = document.querySelector('.profile-info .dropdown-menu');
+        
+        // Notification dropdown
+        const notificationToggle = document.querySelector('.notifications .dropdown-toggleer');
+        const notificationMenu = document.querySelector('.notifications .dropdown-menu, .notifications .notification-container');
+        
+        // Function to close all dropdowns
+        function closeAllDropdowns() {
+            if (languageMenu) languageMenu.classList.remove('show');
+            if (profileMenu) profileMenu.classList.remove('show');
+            if (notificationMenu) notificationMenu.classList.remove('show');
+            document.querySelectorAll('.dropdown-toggle, a[data-bs-toggle="dropdown"]').forEach(toggle => {
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        }
+        
+        // Language dropdown functionality
+        if (languageToggle && languageMenu) {
+            languageToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = languageMenu.classList.contains('show');
+                closeAllDropdowns();
+                
+                if (!isOpen) {
+                    languageMenu.classList.add('show');
+                    languageToggle.setAttribute('aria-expanded', 'true');
+                }
+            });
+        }
+        
+        // Profile dropdown functionality
+        if (profileToggle && profileMenu) {
+            profileToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = profileMenu.classList.contains('show');
+                closeAllDropdowns();
+                
+                if (!isOpen) {
+                    profileMenu.classList.add('show');
+                    profileToggle.setAttribute('aria-expanded', 'true');
+                }
+            });
+        }
+        
+        // Notification dropdown functionality
+        if (notificationToggle && notificationMenu) {
+            notificationToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = notificationMenu.classList.contains('show');
+                closeAllDropdowns();
+                
+                if (!isOpen) {
+                    notificationMenu.classList.add('show');
+                    notificationToggle.setAttribute('aria-expanded', 'true');
+                }
+            });
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                closeAllDropdowns();
+            }
+        });
+        
+        // Prevent dropdown from closing when clicking inside
+        document.querySelectorAll('.dropdown-menu, .notification-container').forEach(menu => {
+            menu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+        
+        // Close dropdown when clicking on dropdown items (except for notifications)
+        document.querySelectorAll('.language-change .dropdown-item, .profile-info .dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Don't close for logout button as it has its own handler
+                if (!item.classList.contains('logoutButton')) {
+                    closeAllDropdowns();
+                }
+            });
+        });
+    }
+    
+    // Initialize dropdowns
+    initMobileDropdowns();
+    
+    // Reinitialize on window resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(initMobileDropdowns, 250);
+    });
+});
+</script>
+@endpush

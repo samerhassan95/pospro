@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Test</title>
+    <link rel="stylesheet" href="public/assets/css/style.css">
+    <link rel="stylesheet" href="public/assets/css/arabic.css">
+    <style>
+        /* Test styles */
+        body { margin: 0; font-family: Arial, sans-serif; }
+        .test-content { padding: 20px; }
+        .mobile-test { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="test-content">
+        <h1>Sidebar Mobile Test</h1>
+        <p>Resize your browser to mobile width (768px or less) to test the sidebar behavior.</p>
+        
+        <div class="mobile-test">
+            <h3>Expected Behavior on Mobile:</h3>
+            <ul>
+                <li>✅ Close button should be visible</li>
+                <li>✅ Sidebar should slide in from left when opened</li>
+                <li>✅ Overlay should appear when sidebar is open</li>
+                <li>✅ Clicking close button should close sidebar</li>
+                <li>✅ Clicking overlay should close sidebar</li>
+            </ul>
+        </div>
+        
+        <button class="sidebar-opner" style="padding: 10px 20px; background: #FF6500; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Open Sidebar
+        </button>
+    </div>
+
+    <!-- Sidebar -->
+    <nav class="side-bar">
+        <div class="side-bar-logo">
+            <a href="#" class="logo-link">
+                <span class="sidebar-logo-text"><span class="bytes-text">Bytes</span> Pos</span>
+            </a>
+            <button class="close-btn" style="background: none; border: none; font-size: 20px; cursor: pointer;">✕</button>
+        </div>
+        <div class="side-bar-manu">
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#">Sales</a></li>
+                <li><a href="#">Reports</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="section-container">
+        <div style="padding: 20px;">
+            <h2>Main Content Area</h2>
+            <p>This content should shift when sidebar is toggled on desktop.</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Simplified version of the sidebar script
+        $(document).ready(function() {
+            let manuStor = $(".side-bar").html();
+            $(".side-bar").html("<div class='overlay'></div>" + manuStor);
+            
+            $(".sidebar-opner").on("click", function () {
+                $(".side-bar, .section-container").toggleClass("active");
+            });
+            
+            $(".side-bar .close-btn").on("click", function () {
+                $(".side-bar, .section-container").toggleClass("active");
+            });
+            
+            $(".side-bar .overlay").on("click", function () {
+                if ($(window).width() < 769) {
+                    $(".side-bar, .section-container").toggleClass("active");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

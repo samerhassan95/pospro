@@ -112,7 +112,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="d-flex align-items-center justify-content-between position-relative">
+        <div class="d-flex flex-wrap align-items-center justify-content-between position-relative">
             <div>
                 <table class="table">
                     <tbody>
@@ -157,7 +157,7 @@
             </div>
         </div>
         <div class="pdf-footer">
-            <div class="in-signature-container d-flex align-items-center justify-content-between">
+            <div class="in-signature-container d-flex flex-wrap align-items-center justify-content-between">
                 <div class="in-signature">
                     <hr class="in-hr">
                     <h4>{{ __('Customer Signature') }}</h4>

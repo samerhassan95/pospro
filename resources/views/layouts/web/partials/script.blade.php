@@ -14,6 +14,8 @@
 <script src="{{ asset('assets/js/custom-ajax.js') }}?v={{ time() }}"></script>
 <script src="{{ asset('assets/web/js/custom.js') }}?v={{ time() }}"></script>
 <script src="{{ asset('assets/js/auth.js') }}?v={{ time() }}"></script>
+<!-- Dropdown Fix for Mobile -->
+<script src="{{ asset('assets/js/dropdown-fix.js') }}?v={{ time() }}"></script>
 
 @stack('js')
 

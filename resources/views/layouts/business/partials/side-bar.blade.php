@@ -818,7 +818,7 @@
             @usercan('subscriptions.read')
             <li>
                 <div class="lg-sub-plan">
-                    <div id="sidebar_plan" class=" sidebar-free-plan d-flex align-items-center justify-content-between p-3 flex-column">
+                    <div id="sidebar_plan" class=" sidebar-free-plan d-flex flex-wrap align-items-center justify-content-between p-3 flex-column">
                         <div class="text-center">
                             @php $plan_info = plan_data(); @endphp
                             @if ($plan_info)

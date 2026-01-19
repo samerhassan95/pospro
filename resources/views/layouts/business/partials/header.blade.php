@@ -1,12 +1,16 @@
 <header class="main-header-section sticky-top d-print-none">
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between" style="flex-wrap: nowrap;">
         <div class="bg-white d-flex align-items-center">
             <div class="sidebar-opner menu-opener"><i class="fal fa-bars" aria-hidden="true"></i></div>
   
-            <a class="pos-logo" href="javascript:void(0)"><img src="{{ asset(get_option('general')['common_header_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo"></a>
+      
+              <a href="{{ route('admin.dashboard.index') }}" class="pos-logo">
+            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img">
+            <span class="sidebar-logo-text"><span class="bytes-text">Bytes</span> Pos</span>
+        </a>
         </div>
 
-        <div class=" header-right d-flex align-items-center">
+        <div class=" header-right d-flex justify-content-center align-items-center">
             <a href="{{ route('business.sales.create') }}" class="pos-add-expense-btn">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.599 9.11326C17.8868 9.40104 17.8868 9.86761 17.599 10.1554L15.438 12.3165C15.1502 12.6042 14.6836 12.6042 14.3958 12.3165C14.1081 12.0287 14.1081 11.5621 14.3958 11.2743L16.5569 9.11326C16.8447 8.82548 17.3113 8.82548 17.599 9.11326Z" fill="currentColor"/>
@@ -40,12 +44,12 @@
 <path d="M3.19143 4.45934C3.19143 2.95786 4.41603 1.75 5.91512 1.75H18.0849C19.584 1.75 20.8086 2.95786 20.8086 4.45934C20.8086 5.00972 20.9532 5.55089 21.2287 6.02939L22.2149 7.74274C22.4737 8.19195 22.6839 8.55669 22.7347 9.16669C22.7553 9.41456 22.7576 9.62312 22.726 9.82441C22.6958 10.0172 22.6381 10.1717 22.5956 10.2854L22.5894 10.3023C22.0565 11.7329 20.6723 12.75 19.0513 12.75C17.695 12.75 16.5023 12.037 15.8374 10.9644C14.9338 12.0575 13.5446 12.75 12 12.75C10.4554 12.75 9.06617 12.0575 8.16259 10.9644C7.49773 12.037 6.30506 12.75 4.94875 12.75C3.32768 12.75 1.94355 11.7329 1.41065 10.3022L1.40436 10.2854C1.3619 10.1717 1.30421 10.0172 1.27397 9.82441C1.2424 9.62312 1.24469 9.41457 1.26533 9.16669C1.31613 8.55668 1.52628 8.19195 1.78509 7.74274L2.77133 6.02939C3.04677 5.55089 3.19143 5.00972 3.19143 4.45934Z" fill="currentColor"/>
 </svg>
 
-                <p>
+                <span>
                     {{ $branch->name ?? '' }}
-                </p>
+                </span>
             </a>
             @endif
-            <div class="language-change ">
+            <div class="language-change">
                 <div class="dropdown">
                     <button class="btn btn-light rounded-full dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -108,24 +112,22 @@
                             <img src="{{ asset(auth()->user()->image ?? 'assets/images/icons/default-user.png') }}" alt="Profile">
                         </div>
                     </a>
-                    <div class=" business-profile bg-success">
-
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="{{ route('business.profiles.index') }}"> <i class="fal fa-user"></i>
-                                    {{ __('My Profile') }}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="logoutButton">
-                                    <i class="far fa-sign-out"></i> {{ __('Logout') }}
-                                    <form action="{{ route('logout') }}" method="post" id="logoutForm">
-                                        @csrf
-                                    </form>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="dropdown-menu dropdown-menu-scroll">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('business.profiles.index') }}"> 
+                                <i class="fal fa-user"></i>
+                                {{ __('My Profile') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="javascript:void(0)" class="logoutButton">
+                                <i class="far fa-sign-out"></i> {{ __('Logout') }}
+                                <form action="{{ route('logout') }}" method="post" id="logoutForm">
+                                    @csrf
+                                </form>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="sidebar-opner menu-openerr"><i class="fal fa-bars" aria-hidden="true"></i></div>
             </div>
@@ -151,4 +153,117 @@
             </div>
         </div>
     </div>
+@endpush
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fix dropdown functionality on mobile devices
+    function initMobileDropdowns() {
+        // Language dropdown
+        const languageToggle = document.querySelector('.language-change .dropdown-toggle');
+        const languageMenu = document.querySelector('.language-change .dropdown-menu');
+        
+        // Profile dropdown
+        const profileToggle = document.querySelector('.profile-info .dropdown-toggle, .profile-info a[data-bs-toggle="dropdown"]');
+        const profileMenu = document.querySelector('.profile-info .dropdown-menu');
+        
+        // Notification dropdown
+        const notificationToggle = document.querySelector('.notifications .dropdown-toggleer');
+        const notificationMenu = document.querySelector('.notifications .dropdown-menu, .notifications .notification-container');
+        
+        // Function to close all dropdowns
+        function closeAllDropdowns() {
+            if (languageMenu) languageMenu.classList.remove('show');
+            if (profileMenu) profileMenu.classList.remove('show');
+            if (notificationMenu) notificationMenu.classList.remove('show');
+            document.querySelectorAll('.dropdown-toggle, a[data-bs-toggle="dropdown"]').forEach(toggle => {
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        }
+        
+        // Language dropdown functionality
+        if (languageToggle && languageMenu) {
+            languageToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = languageMenu.classList.contains('show');
+                closeAllDropdowns();
+                
+                if (!isOpen) {
+                    languageMenu.classList.add('show');
+                    languageToggle.setAttribute('aria-expanded', 'true');
+                }
+            });
+        }
+        
+        // Profile dropdown functionality
+        if (profileToggle && profileMenu) {
+            profileToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = profileMenu.classList.contains('show');
+                closeAllDropdowns();
+                
+                if (!isOpen) {
+                    profileMenu.classList.add('show');
+                    profileToggle.setAttribute('aria-expanded', 'true');
+                }
+            });
+        }
+        
+        // Notification dropdown functionality
+        if (notificationToggle && notificationMenu) {
+            notificationToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const isOpen = notificationMenu.classList.contains('show');
+                closeAllDropdowns();
+                
+                if (!isOpen) {
+                    notificationMenu.classList.add('show');
+                    notificationToggle.setAttribute('aria-expanded', 'true');
+                }
+            });
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                closeAllDropdowns();
+            }
+        });
+        
+        // Prevent dropdown from closing when clicking inside
+        document.querySelectorAll('.dropdown-menu, .notification-container').forEach(menu => {
+            menu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+        
+        // Close dropdown when clicking on dropdown items (except for notifications)
+        document.querySelectorAll('.language-change .dropdown-item, .profile-info .dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Don't close for logout button as it has its own handler
+                if (!item.classList.contains('logoutButton')) {
+                    closeAllDropdowns();
+                }
+            });
+        });
+    }
+    
+    // Initialize dropdowns
+    initMobileDropdowns();
+    
+    // Reinitialize on window resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(initMobileDropdowns, 250);
+    });
+});
+</script>
 @endpush

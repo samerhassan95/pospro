@@ -407,6 +407,8 @@ svg {
 }
 .header-right{
     display: flex;
+     flex-wrap: wrap;
+      flex-wrap: wrap !important;
     background-color:white !important;
     padding:4px 10px !important;
     justify-content: flex-end;

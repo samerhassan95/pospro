@@ -72,12 +72,12 @@
                                                 <div class="product-left">
                                                     <img src="{{ asset($product->productPicture ?? 'assets/images/products/box.svg') }}" alt="">
                                                     <div class="product-text">
-                                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                                        <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
                                                             <div class="product-title">{{ $product->productName }}</div>
                                                             <p>Code : {{ $product->productCode }}</p>
                                                         </div>
                                                         @foreach ($product->stocks as $stock)
-                                                            <div class="d-flex align-items-center justify-content-between w-100 multi-items add-batch-item"
+                                                            <div class="d-flex flex-wrap align-items-center justify-content-between w-100 multi-items add-batch-item"
                                                                  data-product_stock_id="{{ $stock->id }}"
                                                                  data-product_id="{{ $product->id }}"
                                                                  data-product_batch_no="{{ $stock->batch_no ?? '' }}"
@@ -122,11 +122,11 @@
                                                 <div class="product-left">
                                                     <img src="{{ asset($product->productPicture ?? 'assets/images/products/box.svg') }}" alt="">
                                                     <div class="product-text">
-                                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                                        <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
                                                             <div class="product-title">{{ $product->productName }}</div>
                                                             <p>{{ __('Code') }}: {{ $product->productCode }}</p>
                                                         </div>
-                                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                                        <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
                                                             <div class="product-des">
                                                                 {{ __('Batch') }}: {{ $stock->batch_no ?? 'N/A' }}
                                                                 {{ $product->color ? ', Color: ' . $product->color : '' }}
@@ -215,7 +215,7 @@
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-6 mt-5 sub-total-container">
                             <div class="payment-container mb-3 amount-info-container inventory-amount-info-container">
-                                <div class="mb-2 d-flex align-items-center justify-content-between">
+                                <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                     <h6>{{ __('Sub Total') }}</h6>
                                     <h6 class="fw-bold" id="sub_total">
                                         {{ currency_format(0, currency: business_currency()) }}</h6>
@@ -262,17 +262,17 @@
                                             class="form-control right-start-input" placeholder="0">
                                     </div>
                                 </div>
-                                <div class=" d-flex align-items-center justify-content-between fw-bold">
+                                <div class=" d-flex flex-wrap align-items-center justify-content-between fw-bold">
                                     <div class="fw-bold">{{ __('Total Amount') }}</div>
                                     <h6 class='fw-bold' id="total_amount">
                                         {{ currency_format(0, currency: business_currency()) }}</h6>
                                 </div>
-                                <div class="mb-2 d-flex align-items-center justify-content-between">
+                                <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                     <h6>{{ __('Rounding(+/-)') }}</h6>
                                     <h6 id="rounding_amount">
                                         {{ currency_format(0, currency: business_currency()) }}</h6>
                                 </div>
-                                <div class="mb-2 d-flex align-items-center justify-content-between">
+                                <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                     <h6 class="fw-bold">{{ __('Payable Amount') }}</h6>
                                     <h6 class="fw-bold" id="payable_amount">
                                         {{ currency_format(0, currency: business_currency()) }}</h6>

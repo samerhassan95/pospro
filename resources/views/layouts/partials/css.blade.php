@@ -15,6 +15,8 @@
 <!-- Style -->
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ time() }}">
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}?v={{ time() }}">
+<!-- Dropdown Fix for Mobile -->
+<link rel="stylesheet" href="{{ asset('assets/css/dropdown-fix.css') }}?v={{ time() }}">
 <!-- Banner -->
 <link rel="stylesheet" href="{{ asset('resources/css/banner.css') }}?v={{ time() }}">
 <!-- Toaster -->

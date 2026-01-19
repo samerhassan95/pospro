@@ -11,7 +11,7 @@
         </a>        </div>
         <div class="mybazar-login-section">
             <div class="mybazar-login-avatar">
-                         <img src="{{ asset('assets/images/Login.png') }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
+                         <img src="{{ asset('assets/images/login.png') }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
             </div>
             <div class="mybazar-login-wrapper">
                 <div class="login-wrapper">

@@ -16,13 +16,7 @@
 
     @can('dashboard-read')
     <div class="container-fluid m-h-100">
-        <!-- Hero Banner -->
-        @include('admin.components.banner', [
-            'title' => __('Revolutionizing Your Online Presence'),
-            'description' => __('BYTES guides your business through the digital landscape with innovative solutions and personalized strategies.'),
-            'buttonText' => __('Check our Services'),
-            'buttonLink' => '#'
-        ])
+
         <div class="row gpt-dashboard-chart mb-30">
             <div class="col-12">
                 <div class="business-stat-container">
@@ -73,7 +67,7 @@
 
 
         <div class="row mb-30">
-            <div class="col-xxl-8 mb-30">
+            <div class="col-md-6 mb-30">
                 <div class="card new-card dashboard-card border-0 p-0 h-100">
                     <div class="dashboard-chart">
                         <h4>{{ __('Finance Overview') }}</h4>
@@ -98,7 +92,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-4 mb-30">
+            <div class="col-md-6 mb-30">
                 <div class="card new-card sms-report border-0 p-0 h-100">
                     <div class="dashboard-chart">
                         <h4>{{ __('Subscription Plan') }}</h4>

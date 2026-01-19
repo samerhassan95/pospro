@@ -1,7 +1,7 @@
 <div class="modal fade" id="product-modal">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
-            <div class="modal-header d-flex align-items-center justify-content-between">
+            <div class="modal-header d-flex flex-wrap align-items-center justify-content-between">
                 <h1 class="modal-title fs-5">{{ __('Add Items') }}</h1>
                 <div class="custom-modal-header">
                     <button type="button" class="btn-close custom-close-btn" data-bs-dismiss="modal" aria-label="Close" ></button>

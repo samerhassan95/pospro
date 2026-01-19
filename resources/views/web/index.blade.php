@@ -182,7 +182,7 @@
 
     <section class="blogs-section ">
         <div class="container">
-            <div class="section-title d-flex align-items-center justify-content-between flex-wrap">
+            <div class="section-title d-flex flex-wrap align-items-center justify-content-between flex-wrap">
                 <h2>{{ $page_data['headings']['blog_title'] ?? '' }}</h2>
                 <a href="{{ url($page_data['headings']['blog_view_all_btn_link'] ?? '') }}"
                     class="custom-btn custom-outline-btn bg-white">

@@ -117,7 +117,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="d-flex align-items-center justify-content-between position-relative">
+            <div class="d-flex flex-wrap align-items-center justify-content-between position-relative">
                 <div>
                     <table class="table">
                         <tbody>
@@ -211,7 +211,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="d-flex align-items-center justify-content-between position-relative">
+            <div class="d-flex flex-wrap align-items-center justify-content-between position-relative">
                 <h2 class="word-amount">{{ amountInWords($total_return_amount) }}</h2>
                 <div>
                     <table class="table">
@@ -297,7 +297,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="d-flex align-items-center justify-content-between position-relative">
+            <div class="d-flex flex-wrap align-items-center justify-content-between position-relative">
                 <h2 class="word-amount">{{ amountInWords($subtotal) }}</h2>
                 <div>
                     <table class="table">
@@ -388,7 +388,7 @@
 
 
         <div class="pdf-footer">
-            <div class="in-signature-container d-flex align-items-center justify-content-between ">
+            <div class="in-signature-container d-flex flex-wrap align-items-center justify-content-between ">
                 <div class="in-signature">
                     <hr class="in-hr">
                     <h4>{{ __('Customer Signature') }}</h4>

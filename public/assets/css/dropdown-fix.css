@@ -1,0 +1,200 @@
+/* AGGRESSIVE DROPDOWN FIX FOR SMALL SCREENS */
+/* This file contains the most aggressive CSS overrides to fix dropdown positioning */
+
+/* FORCE ABSOLUTE POSITIONING ON ALL DROPDOWNS - SMALL SCREENS */
+@media (max-width: 576px) {
+    /* NUCLEAR OPTION - Override everything with maximum specificity */
+    html body .navbar .navbar-collapse .navbar-nav .dropdown-menu,
+    html body .navbar .navbar-nav .dropdown-menu,
+    html body .header-section .navbar .navbar-nav .dropdown-menu,
+    html body .main-header-section .navbar .navbar-nav .dropdown-menu,
+    html body .navbar-nav .dropdown-menu,
+    html body .dropdown-menu,
+    html body .dropdown-menu-scroll,
+    html body .language-change .dropdown-menu,
+    html body .notifications .dropdown-menu,
+    html body .notification-container,
+    html body .profile-info .dropdown-menu,
+    html body .business-profile .dropdown-menu,
+    html body .home-page-language-change .dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        z-index: 99999 !important;
+        display: none !important;
+        float: none !important;
+        width: auto !important;
+        min-width: 160px !important;
+        max-width: 300px !important;
+        background: #fff !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+        margin: 0 !important;
+        padding: 0.5rem 0 !important;
+        overflow-y: auto !important;
+        max-height: 300px !important;
+    }
+    
+    /* SHOW STATE - MAXIMUM OVERRIDE */
+    html body .navbar .navbar-collapse .navbar-nav .dropdown-menu.show,
+    html body .navbar .navbar-nav .dropdown-menu.show,
+    html body .header-section .navbar .navbar-nav .dropdown-menu.show,
+    html body .main-header-section .navbar .navbar-nav .dropdown-menu.show,
+    html body .navbar-nav .dropdown-menu.show,
+    html body .dropdown-menu.show,
+    html body .dropdown-menu-scroll.show,
+    html body .language-change .dropdown-menu.show,
+    html body .notifications .dropdown-menu.show,
+    html body .notification-container.show,
+    html body .profile-info .dropdown-menu.show,
+    html body .business-profile .dropdown-menu.show,
+    html body .home-page-language-change .dropdown-menu.show {
+        position: absolute !important;
+        display: block !important;
+        top: 100% !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        z-index: 99999 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        float: none !important;
+        width: auto !important;
+        min-width: 160px !important;
+        max-width: 300px !important;
+        background: #fff !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+        margin: 0 !important;
+        padding: 0.5rem 0 !important;
+        overflow-y: auto !important;
+        max-height: 300px !important;
+    }
+    
+    /* LANGUAGE-SPECIFIC MARGIN OVERRIDES */
+    /* Arabic mode - language dropdown gets -100px left margin */
+    html[dir="rtl"] body .language-change .dropdown-menu.show {
+        margin: 0 0 0 -100px !important;
+        left: -100px !important;
+    }
+    
+    /* English mode - profile dropdown gets -100px left margin */
+    html[dir="ltr"] body .profile-info .dropdown-menu.show,
+    html[dir="ltr"] body .business-profile .dropdown-menu.show {
+        margin: 0 0 0 -100px !important;
+        left: -100px !important;
+    }
+    
+    /* Profile dropdown specific positioning for small screens */
+    html body .profile-info .dropdown-menu.show,
+    html body .business-profile .dropdown-menu.show {
+        left: auto !important;
+        right: 0 !important;
+    }
+    
+    /* RTL Profile dropdown positioning */
+    html[dir="rtl"] body .profile-info .dropdown-menu.show,
+    html[dir="rtl"] body .business-profile .dropdown-menu.show {
+        left: 0 !important;
+        right: auto !important;
+    }
+    
+    /* FORCE PARENT CONTAINERS TO ALLOW OVERFLOW */
+    html body .navbar,
+    html body .navbar-collapse,
+    html body .navbar-nav,
+    html body .main-header-section,
+    html body .header-section,
+    html body .container,
+    html body .container-fluid,
+    html body .dropdown,
+    html body .language-change,
+    html body .notifications,
+    html body .profile-info,
+    html body .business-profile,
+    html body .home-page-language-change {
+        overflow: visible !important;
+        position: relative !important;
+    }
+    
+    /* OVERRIDE BOOTSTRAP NAVBAR STATIC POSITIONING */
+    html body .navbar-nav .dropdown-menu {
+        position: absolute !important;
+    }
+    
+    /* CUSTOM DROPDOWN CONTENT FOR WEB HEADERS */
+    html body .header-section .menu-dropdown .dropdown-content {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        z-index: 99999 !important;
+        display: block !important;
+        background: #fff !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+        min-width: 160px !important;
+        padding: 0.5rem 0 !important;
+    }
+}
+
+/* MEDIUM SCREENS */
+@media (max-width: 768px) {
+    /* Apply same fixes for medium screens */
+    html body .navbar-nav .dropdown-menu.show,
+    html body .dropdown-menu.show,
+    html body .dropdown-menu-scroll.show,
+    html body .language-change .dropdown-menu.show,
+    html body .notifications .dropdown-menu.show,
+    html body .notification-container.show,
+    html body .profile-info .dropdown-menu.show,
+    html body .business-profile .dropdown-menu.show,
+    html body .home-page-language-change .dropdown-menu.show {
+        position: absolute !important;
+        display: block !important;
+        top: 100% !important;
+        z-index: 99999 !important;
+        margin: 0 !important;
+    }
+    
+    /* LANGUAGE-SPECIFIC MARGIN OVERRIDES FOR MEDIUM SCREENS */
+    /* Arabic mode - language dropdown gets -100px left margin */
+    html[dir="rtl"] body .language-change .dropdown-menu.show {
+        margin: 0 0 0 -100px !important;
+        left: -100px !important;
+    }
+    
+    /* English mode - profile dropdown gets -100px left margin */
+    html[dir="ltr"] body .profile-info .dropdown-menu.show,
+    html[dir="ltr"] body .business-profile .dropdown-menu.show {
+        margin: 0 0 0 -100px !important;
+        left: -100px !important;
+    }
+    
+    /* Profile dropdown specific positioning */
+    html body .profile-info .dropdown-menu.show,
+    html body .business-profile .dropdown-menu.show {
+        right: 0 !important;
+        left: auto !important;
+    }
+    
+    /* RTL Profile dropdown positioning */
+    html[dir="rtl"] body .profile-info .dropdown-menu.show,
+    html[dir="rtl"] body .business-profile .dropdown-menu.show {
+        right: auto !important;
+        left: 0 !important;
+    }
+}
+
+/* LARGE SCREENS - Ensure normal behavior */
+@media (min-width: 992px) {
+    /* Let Bootstrap handle large screens normally */
+    .navbar-expand-lg .navbar-nav .dropdown-menu {
+        position: absolute;
+    }
+}

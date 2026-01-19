@@ -13,6 +13,8 @@
 <!-- Custom Css -->
 <link rel="stylesheet" href="{{ asset('assets/web/css/styles.css') }}?v={{ time() }}" />
 <link rel="stylesheet" href="{{ asset('assets/web/css/responsive.css') }}?v={{ time() }}" />
+<!-- Dropdown Fix for Mobile -->
+<link rel="stylesheet" href="{{ asset('assets/css/dropdown-fix.css') }}?v={{ time() }}" />
 
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">

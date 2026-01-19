@@ -17,7 +17,7 @@
                                     <input class="form-control" type="file" name="file" required>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between">
                                 @usercan('bulk-uploads.create')
                                 <button type="submit" class="add-order-btn rounded-2 border-0 submit-btn mt-3">Submit</button>
                                 @endusercan

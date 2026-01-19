@@ -1,7 +1,7 @@
 <div class="modal fade" id="calculatorModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog calculator-dialog" role="document">
         <div class="modal-content calculator-content">
-            <div class="modal-header d-flex align-items-center justify-content-between">
+            <div class="modal-header d-flex flex-wrap align-items-center justify-content-between">
                 <div class="custom-modal-header">
                     <button type="button" class="btn-close custom-close-btn calculator-btn" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>

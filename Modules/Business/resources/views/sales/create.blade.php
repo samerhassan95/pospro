@@ -16,11 +16,11 @@
         @endif
         .pos-fullscreen-body { margin: 0; padding: 0; background: #f5f5f5; }
         .pos-fullscreen-wrapper { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
-        .pos-top-header {padding: 12px 24px 0px 24px; display: flex; justify-content: space-between; align-items: center; background:#e6eaf2 !important; }
+        .pos-top-header {padding: 12px 24px 0px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background:#e6eaf2 !important; }
         .pos-brand { display: flex; align-items: center; gap: 12px; }
         .pos-brand-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0; }
         .pos-brand-subtitle { font-size: 12px; color: #6b7280; margin: 0; }
-        .pos-top-nav { background: white; padding: 8px 8px; border-radius: 100px;  display: flex; align-items: center; gap: 8px; }
+        .pos-top-nav { background: white; padding: 8px 8px; border-radius: 100px;  display: flex; flex-wrap: wrap; flex-wrap: wrap; align-items: center; gap: 8px; }
         .pos-nav-btn { width: 40px; height: 40px; border-radius: 8px; border: none; background: #fff; display: flex; align-items: center; justify-content: center; color: #374151; cursor: pointer; transition: all 0.2s; text-decoration: none; flex-shrink: 0; }
         .pos-nav-btn:hover { background: #f9fafb; color: #1a1a1a; }
         .pos-nav-btn i { font-size: 16px; }

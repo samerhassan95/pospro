@@ -705,7 +705,7 @@ function populateProducts(products = []) {
                             : "";
 
                         return `
-                            <div class="d-flex align-items-center justify-content-between w-100 multi-items add-batch-item"
+                            <div class="d-flex flex-wrap align-items-center justify-content-between w-100 multi-items add-batch-item"
                                 data-stock_id="${stock.id}"
                                 data-batch_no="${stock.batch_no}"
                                 data-product_id="${product.id}"
@@ -750,7 +750,7 @@ function populateProducts(products = []) {
                     <div class="product-left">
                         <img src="${imageUrl}" alt="">
                         <div class="product-text">
-                            <div class="d-flex align-items-center justify-content-between w-100">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
                                 <div class="product-title">${
                                     product.productName
                                 }</div>

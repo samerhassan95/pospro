@@ -59,7 +59,7 @@
                                     </div>
 
                                     @foreach ($plan['features'] ?? [] as $key => $item)
-                                        <div class="d-flex align-items-center justify-content-between plans">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between plans">
                                             <div class="d-flex align-items-center gap-2">
                                                 <p>
                                                     <i class="fas {{ isset($item[1]) ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }} me-1"></i>
@@ -70,7 +70,7 @@
                                     @endforeach
 
                                     @if (moduleCheck('MultiBranchAddon'))
-                                    <div class="d-flex align-items-center justify-content-between plans">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between plans">
                                         <div class="d-flex align-items-center gap-2">
                                             <p><i class="fas {{ $plan->allow_multibranch == 1 ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }} me-1"></i>
                                                 {{ __('Multi-branch Allowed') }}
@@ -80,7 +80,7 @@
                                     @endif
 
                                     @if (moduleCheck('CustomDomainAddon'))
-                                    <div class="d-flex align-items-center justify-content-between plans">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between plans">
                                         <div class="d-flex align-items-center gap-2">
                                             <p><i class="fas {{ $plan->addon_domain_limit > 0 ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }} me-1"></i>
                                                 {{ $plan->addon_domain_limit > 0 ? __('Addon Limit:') . ' ' . $plan->addon_domain_limit : __('Addon Domain Available?') }}
@@ -88,7 +88,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex align-items-center justify-content-between plans">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between plans">
                                         <div class="d-flex align-items-center gap-2">
                                             <p><i class="fas {{ $plan->subdomain_limit > 0 ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }} me-1"></i>
                                                 {{ $plan->subdomain_limit > 0 ? __('Subdomain Limit:') . ' ' . $plan->subdomain_limit : __('Subdomain Available?') }}

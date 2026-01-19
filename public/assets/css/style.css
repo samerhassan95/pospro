@@ -620,6 +620,44 @@ svg {
     .loss-profit-container {
         flex-wrap: wrap;
     }
+
+    /* Mobile sidebar behavior */
+    .side-bar {
+        left: -100%;
+        transition: left 0.3s ease-in-out;
+    }
+
+    .side-bar.active {
+        left: 0;
+    }
+
+    .section-container {
+        padding-left: 0;
+    }
+
+    .section-container.active {
+        padding-left: 0;
+    }
+
+    /* Overlay for mobile sidebar */
+    .side-bar .overlay {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    /* .side-bar.active .overlay {
+        opacity: 1;
+        pointer-events: auto;
+    } */
 }
 
 @media (max-width: 480px) {
@@ -756,6 +794,15 @@ font-size: 14px;
     right: 15px;
     top: 15px;
     display: none;
+}
+
+/* Show close button on mobile screens */
+@media (max-width: 768px) {
+    .close-btn {
+        display: block !important;
+        z-index: 1000;
+        cursor: pointer;
+    }
 }
 
 .multiple-button-group .reset-btn,
@@ -1153,6 +1200,12 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
     border: none;
 }
 
+/* Sidebar overlay - hidden by default on desktop */
+.side-bar .overlay {
+    display: none;
+    pointer-events: none;
+}
+
 .sidebar-search-container {
     position: relative;
     display: flex;
@@ -1261,29 +1314,49 @@ body [dir="rtl"] .sidebar-search-icon {
 .main-header-section .profile-info .dropdown-menu {
     background: #fff;
     -webkit-box-shadow: 0px 0px 7px -5px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 0px 7px -5px rgba(0, 0, 0, 0.75);
-    min-width: 160px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
 }
 
 .main-header-section .profile-info .dropdown-menu li {
-    border-bottom: 1px solid #454a54;
-    font-size: 12px;
+    border-bottom: 1px solid #f1f3f4;
+    font-size: 14px;
     padding: 0;
     display: block;
-    border-bottom: 1px solid #ccc;
+}
+
+.main-header-section .profile-info .dropdown-menu li:last-child {
+    border-bottom: none;
 }
 
 .main-header-section .profile-info .dropdown-menu li a {
-    display: block;
-    color: #000;
-    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    color: #495057;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
 }
 
 .main-header-section .profile-info .dropdown-menu li a i {
-    margin-right: 10px;
+    margin-right: 12px;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    color: #6c757d;
 }
 
 .main-header-section .profile-info .dropdown-menu li a:hover {
+    color: var(--clr-primary);
+    background-color: #f8f9fa;
+}
+
+.main-header-section .profile-info .dropdown-menu li a:hover i {
     color: var(--clr-primary);
 }
 
@@ -1319,6 +1392,8 @@ body [dir="rtl"] .sidebar-search-icon {
 
     .pos-logo {
         display: block;
+        padding-bottom: 10px;
+        background-color: #f7f7f7 !important;
     }
 
     .menu-opener {
@@ -1370,6 +1445,7 @@ body [dir="rtl"] .sidebar-search-icon {
     display: -ms-flexbox;
 
     display: flex;
+    flex-wrap: wrap;
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
@@ -3762,7 +3838,7 @@ input:checked + .slider:before {
     .mybazar-login-wrapper {
         display: flex;
         align-items: center;
-        justify-content: end;
+        justify-content: center;
     }
 }
 
@@ -3786,10 +3862,10 @@ input:checked + .slider:before {
 }
 
 .mybazar-login-section .mybazar-login-wrapper {
-    width: 40%;
+    width: 50%;
     position: relative;
     z-index: 2;
-    margin-right: 80px;
+    /* margin-right: 80px; */
     /* display: flex;
     align-items: center;
     justify-content: center; */
@@ -4261,7 +4337,11 @@ input:checked + .slider:before {
 .add-suplier-modal-wrapper .input-group .input-group-text {
     border: none;
 }
-
+.profile-info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .service-btn-possition {
     background: var(--clr-primary) !important;
     color: #fff !important;
@@ -8073,6 +8153,14 @@ tr.position-relative td {
 }
 
 @media (max-width: 768px) {
+    /* Force header elements to be visible */
+    .header-right .view-website,
+    .header-right .language-change,
+    .header-right .notifications {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
 }
 
 .sub-plan {
@@ -10428,7 +10516,9 @@ tr.position-relative td {
     z-index: 2;
  
 }
-
+ [dir="rtl"] .promo-content h2{
+     margin-bottom: 36px;
+ }
 .promo-content h2 {
     color: #fff;
     font-size: 67px;
@@ -10700,7 +10790,9 @@ tr.position-relative td {
     .promo-content h2 {
         font-size: 18px;
     }
-    
+    .promo-content p{
+         font-size: 16px;
+    }
     .due-header {
         flex-direction: column;
         align-items: flex-start;
@@ -10806,4 +10898,851 @@ tr.position-relative td {
     content: "×" !important;
     font-family: Arial, sans-serif !important;
     font-weight: bold !important;
+}
+/* Header responsive - Keep large screen appearance on all screen sizes */
+@media (max-width: 768px) {
+    .header-right {
+        gap: 8px;
+        padding: 4px 8px !important;
+        flex-wrap: nowrap;
+        /* overflow-x: auto; */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+    
+    .header-right::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+    
+    /* Ensure all elements maintain their original size and appearance */
+    .view-website svg {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+    }
+    
+    .language-change .btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .language-change .flag-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .notifications {
+        flex-shrink: 0;
+    }
+    
+    .notifications .bg-red {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: #dc3545;
+        color: white;
+        border-radius: 50%;
+        min-width: 20px;
+        height: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid white;
+    }
+    
+    .notifications .dropdown-toggleer {
+        position: relative;
+        text-decoration: none;
+        display: inline-block;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-right {
+        gap: 6px;
+        padding: 4px 6px !important;
+    }
+    
+    /* .main-header-section .d-flex {
+        flex-wrap: nowrap;
+    } */
+    
+    /* Keep original sizes but ensure they fit */
+    .language-change .btn {
+        font-size: 0.875rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
+
+/* Ensure proper flex behavior */
+.header-right > * {
+    flex-shrink: 0;
+}
+
+/* Make sure the main container doesn't wrap */
+.main-header-section > .d-flex {
+    flex-wrap: nowrap;
+}
+/* Force visibility of header elements on all screen sizes */
+.header-right .view-website,
+.header-right .language-change,
+.header-right .notifications {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Ensure header doesn't wrap */
+/* .main-header-section .d-flex {
+    flex-wrap: nowrap !important;
+} */
+
+/* Make sure header-right is always visible */
+.header-right {
+    display: flex !important;
+     flex-wrap: wrap;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-width: 0;
+}
+
+/* Prevent elements from being hidden by overflow */
+.main-header-section {
+    overflow: visible !important;
+}
+/* Additional mobile fixes to ensure visibility */
+@media (max-width: 768px) {
+    .header-right {
+        min-width: auto !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .header-right > * {
+        flex-shrink: 0 !important;
+        min-width: auto !important;
+    }
+    
+    /* Ensure language dropdown is visible */
+    .language-change {
+        display: block !important;
+    }
+    
+    .language-change .btn {
+        white-space: nowrap !important;
+        min-width: auto !important;
+    }
+    
+    /* Ensure notifications are visible */
+    .notifications {
+        display: block !important;
+    }
+    
+    /* Ensure website link is visible */
+    .view-website {
+        display: inline-block !important;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Extra small screens - still keep everything visible */
+    .header-right {
+        /* overflow-x: auto !important; */
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
+    
+    .header-right::-webkit-scrollbar {
+        display: none !important;
+    }
+}
+/* Fix dropdown functionality on small screens */
+@media (max-width: 768px) {
+    /* Language dropdown fixes */
+    .language-change .dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: auto !important;
+        transform: none !important;
+        z-index: 9999 !important;
+        min-width: 200px !important;
+        max-height: 300px !important;
+        overflow-y: auto !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        background-color: #fff !important;
+        margin-top: 2px !important;
+    }
+    
+    /* Notifications dropdown fixes */
+    .notifications .dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        right: 0 !important;
+        left: auto !important;
+        transform: none !important;
+        z-index: 9999 !important;
+        min-width: 280px !important;
+        max-width: 320px !important;
+        max-height: 400px !important;
+        overflow-y: auto !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        background-color: #fff !important;
+        margin-top: 2px !important;
+    }
+    
+    /* Ensure dropdown containers have proper positioning */
+    .language-change,
+    .notifications {
+        position: relative !important;
+    }
+    
+    /* Fix dropdown items */
+    .language-change .dropdown-item,
+    .notifications .dropdown-item {
+        padding: 0.5rem 1rem !important;
+        color: #212529 !important;
+        text-decoration: none !important;
+        background-color: transparent !important;
+        border: 0 !important;
+        display: block !important;
+        width: 100% !important;
+        clear: both !important;
+        font-weight: 400 !important;
+        line-height: 1.5 !important;
+        white-space: nowrap !important;
+    }
+    
+    .language-change .dropdown-item:hover,
+    .language-change .dropdown-item:focus,
+    .notifications .dropdown-item:hover,
+    .notifications .dropdown-item:focus {
+        background-color: #f8f9fa !important;
+        color: #1e2125 !important;
+    }
+    
+    /* Fix dropdown toggle buttons */
+    .language-change .dropdown-toggle::after {
+        display: inline-block !important;
+        margin-left: 0.255em !important;
+        vertical-align: 0.255em !important;
+        content: "" !important;
+        border-top: 0.3em solid !important;
+        border-right: 0.3em solid transparent !important;
+        border-bottom: 0 !important;
+        border-left: 0.3em solid transparent !important;
+    }
+    
+    /* Ensure dropdowns work with touch */
+    .dropdown-toggle {
+        cursor: pointer !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+    
+    /* Fix notification container specific styles */
+    .notification-container {
+        position: absolute !important;
+        top: 100% !important;
+        right: 0 !important;
+        z-index: 9999 !important;
+        min-width: 280px !important;
+        max-width: 320px !important;
+        background-color: #fff !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        margin-top: 2px !important;
+    }
+    
+    .notification-container .notification-header,
+    .notification-container .notification-footer {
+        padding: 0.75rem 1rem !important;
+        border-bottom: 1px solid #dee2e6 !important;
+    }
+    
+    .notification-container .notification-footer {
+        border-bottom: none !important;
+        border-top: 1px solid #dee2e6 !important;
+    }
+    
+    .notification-container ul {
+        max-height: 200px !important;
+        overflow-y: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+    
+    .notification-container ul li {
+        border-bottom: 1px solid #f8f9fa !important;
+    }
+    
+    .notification-container ul li:last-child {
+        border-bottom: none !important;
+    }
+    
+    .notification-container ul li a {
+        display: block !important;
+        padding: 0.75rem 1rem !important;
+        color: #212529 !important;
+        text-decoration: none !important;
+    }
+    
+    .notification-container ul li a:hover {
+        background-color: #f8f9fa !important;
+    }
+}
+
+/* Fix for very small screens */
+@media (max-width: 576px) {
+    .language-change .dropdown-menu {
+        min-width: 180px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+    
+    .notifications .dropdown-menu,
+    .notification-container {
+        min-width: 250px !important;
+        max-width: 280px !important;
+        right: 0 !important;
+        left: auto !important;
+    }
+    
+    /* Force absolute positioning for all header dropdowns on small screens */
+    .navbar-nav .dropdown-menu,
+    .main-header-section .dropdown-menu,
+    .header-section .dropdown-menu,
+    .header-right .dropdown-menu {
+        position: absolute !important;
+        z-index: 1050 !important;
+        top: 100% !important;
+        left: 0 !important;
+        display: none;
+        width: auto !important;
+        min-width: 160px !important;
+        float: none !important;
+    }
+    
+    /* Show dropdown when active - complete styling with highest specificity */
+    .navbar .navbar-nav .dropdown-menu.show,
+    .navbar-nav .dropdown-menu.show,
+    .main-header-section .dropdown-menu.show,
+    .header-section .dropdown-menu.show,
+    .header-right .dropdown-menu.show {
+        display: block !important;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        z-index: 1050 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        background-color: #fff !important;
+        border: 1px solid rgba(0,0,0,.15) !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175) !important;
+        min-width: 160px !important;
+        width: auto !important;
+        float: none !important;
+        margin-top: 0 !important;
+    }
+    
+    /* Override Bootstrap navbar collapse behavior with highest specificity */
+    .navbar-collapse .navbar-nav .dropdown-menu,
+    .collapse .navbar-nav .dropdown-menu,
+    .navbar-collapse .dropdown-menu,
+    .collapse .dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        float: none !important;
+        width: auto !important;
+        margin-top: 0 !important;
+        background-color: #fff !important;
+        border: 1px solid rgba(0,0,0,.15) !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175) !important;
+    }
+    
+    /* Force absolute positioning even when shown */
+    .navbar-collapse .navbar-nav .dropdown-menu.show,
+    .collapse .navbar-nav .dropdown-menu.show {
+        position: absolute !important;
+        display: block !important;
+        top: 100% !important;
+        left: 0 !important;
+    }
+    
+    /* Ensure header containers don't interfere */
+    .main-header-section,
+    .header-section,
+    .navbar {
+        overflow: visible !important;
+        position: relative !important;
+    }
+}
+/* Additional mobile dropdown fixes */
+@media (max-width: 768px) {
+    /* Fix touch events */
+    .dropdown-toggle,
+    .dropdown-toggleer {
+        -webkit-tap-highlight-color: transparent !important;
+        touch-action: manipulation !important;
+    }
+    
+    /* Ensure dropdown containers are positioned correctly */
+    .dropdown {
+        position: relative !important;
+    }
+    
+    /* Additional notification container styling */
+    .notification-container.show {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        position: absolute !important;
+        z-index: 9999 !important;
+        top: 100% !important;
+        left: 0 !important;
+    }
+    
+    /* Ensure all dropdown types work on medium screens too */
+    .navbar-nav .dropdown-menu.show,
+    .main-header-section .dropdown-menu.show,
+    .header-section .dropdown-menu.show,
+    .language-change .dropdown-menu.show,
+    .notifications .dropdown-menu.show,
+    .profile-info .dropdown-menu.show,
+    .business-profile .dropdown-menu.show,
+    .home-page-language-change .dropdown-menu.show {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        z-index: 9999 !important;
+        display: block !important;
+    }
+    
+    /* Fix Bootstrap dropdown conflicts */
+    .dropdown-menu[data-bs-popper] {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        margin-top: 2px !important;
+    }
+    
+    .notifications .dropdown-menu[data-bs-popper],
+    .notifications .notification-container {
+        left: auto !important;
+        right: 0 !important;
+    }
+    
+    /* Smooth transitions */
+    .dropdown-menu,
+    .notification-container {
+        transition: opacity 0.15s ease-in-out !important;
+    }
+    
+    /* Fix for iOS Safari */
+    .dropdown-toggle:focus,
+    .dropdown-toggleer:focus {
+        outline: none !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+    }
+}
+
+/* Final Bootstrap override for dropdown positioning on small screens */
+@media (max-width: 576px) {
+    /* Highest specificity override for Bootstrap navbar dropdowns */
+    .navbar .navbar-collapse .navbar-nav .dropdown-menu,
+    .navbar .navbar-nav .dropdown-menu,
+    .header-section .navbar .navbar-nav .dropdown-menu,
+    .main-header-section .navbar .navbar-nav .dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        display: none !important;
+        float: none !important;
+        width: auto !important;
+        min-width: 160px !important;
+        z-index: 1050 !important;
+    }
+    
+    /* Force show state to be absolute */
+    .navbar .navbar-collapse .navbar-nav .dropdown-menu.show,
+    .navbar .navbar-nav .dropdown-menu.show,
+    .header-section .navbar .navbar-nav .dropdown-menu.show,
+    .main-header-section .navbar .navbar-nav .dropdown-menu.show {
+        position: absolute !important;
+        display: block !important;
+        top: 100% !important;
+        left: 0 !important;
+        z-index: 1050 !important;
+    }
+    
+    /* Force all parent containers to allow overflow */
+    .navbar,
+    .navbar-collapse,
+    .navbar-nav,
+    .main-header-section,
+    .header-section,
+    .container,
+    .container-fluid {
+        overflow: visible !important;
+        position: relative !important;
+    }
+    
+    /* Additional fix for dropdown positioning */
+    .dropdown {
+        position: relative !important;
+        overflow: visible !important;
+    }
+    
+    /* Force dropdown to break out of any container - ALL DROPDOWN TYPES */
+    .navbar-nav .dropdown-menu.show,
+    .navbar-nav .dropdown-menu-scroll.show,
+    .main-header-section .dropdown-menu.show,
+    .header-section .dropdown-menu.show,
+    .language-change .dropdown-menu.show,
+    .notifications .dropdown-menu.show,
+    .notification-container.show,
+    .profile-info .dropdown-menu.show,
+    .business-profile .dropdown-menu.show,
+    .home-page-language-change .dropdown-menu.show {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        transform: none !important;
+        z-index: 9999 !important;
+        display: block !important;
+        float: none !important;
+        width: auto !important;
+        min-width: 160px !important;
+        background: #fff !important;
+        border: 1px solid #ccc !important;
+        border-radius: 4px !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+        margin: 0 !important;
+        padding: 5px 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    /* Ensure dropdown appears outside parent bounds */
+    .dropdown-menu-scroll.show,
+    .dropdown-menu-scroll {
+        position: absolute !important;
+        overflow-y: auto !important;
+        max-height: 200px !important;
+        top: 100% !important;
+        left: 0 !important;
+        z-index: 9999 !important;
+    }
+    
+    /* Override any static positioning from Bootstrap navbar */
+    .navbar-nav .dropdown-menu-scroll,
+    .navbar-collapse .dropdown-menu-scroll {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        display: none !important;
+    }
+    
+    .navbar-nav .dropdown-menu-scroll.show,
+    .navbar-collapse .dropdown-menu-scroll.show {
+        position: absolute !important;
+        display: block !important;
+        top: 100% !important;
+        left: 0 !important;
+    }
+    
+    /* Fix for web header custom dropdowns */
+    .header-section .menu-dropdown .dropdown-content {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        z-index: 9999 !important;
+        display: block !important;
+        background: #fff !important;
+        border: 1px solid #ccc !important;
+        border-radius: 4px !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+        min-width: 160px !important;
+    }
+    
+    /* Ensure all dropdown containers are positioned correctly */
+    .language-change,
+    .notifications,
+    .profile-info,
+    .business-profile,
+    .home-page-language-change,
+    .menu-dropdown {
+        position: relative !important;
+        overflow: visible !important;
+    }
+}
+/* RTL Support for Profile Dropdown */
+[dir="rtl"] .main-header-section .profile-info .dropdown-menu {
+    left: auto !important;
+    right: 0 !important;
+}
+
+[dir="rtl"] .main-header-section .profile-info .dropdown-menu li a {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .main-header-section .profile-info .dropdown-menu li a i {
+    margin-right: 0;
+    margin-left: 12px;
+}
+
+/* Business Profile Dropdown Enhancement */
+.business-profile .dropdown-menu {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+}
+
+.business-profile .dropdown-menu li {
+    border-bottom: 1px solid #f1f3f4;
+    padding: 0;
+}
+
+.business-profile .dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+.business-profile .dropdown-menu li a {
+    display: flex;
+    align-items: center;
+    color: #495057;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.business-profile .dropdown-menu li a i {
+    margin-right: 12px;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.business-profile .dropdown-menu li a:hover {
+    color: var(--clr-primary);
+    background-color: #f8f9fa;
+}
+
+.business-profile .dropdown-menu li a:hover i {
+    color: var(--clr-primary);
+}
+
+/* RTL Support for Business Profile Dropdown */
+[dir="rtl"] .business-profile .dropdown-menu {
+    left: auto !important;
+    right: 0 !important;
+}
+
+[dir="rtl"] .business-profile .dropdown-menu li a {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .business-profile .dropdown-menu li a i {
+    margin-right: 0;
+    margin-left: 12px;
+}
+
+/* Profile Info Container Enhancement */
+.profile-info {
+    position: relative;
+}
+
+.profile-info img {
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.profile-info:hover img {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.greet-name h6 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.greet-name small {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* Mobile Profile Dropdown Positioning */
+@media (max-width: 768px) {
+    .main-header-section .profile-info .dropdown-menu,
+    .business-profile .dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        right: 0 !important;
+        left: auto !important;
+        min-width: 180px;
+        margin-top: 0.25rem;
+    }
+    
+    [dir="rtl"] .main-header-section .profile-info .dropdown-menu,
+    [dir="rtl"] .business-profile .dropdown-menu {
+        right: auto !important;
+        left: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-header-section .profile-info .dropdown-menu,
+    .business-profile .dropdown-menu {
+        min-width: 160px;
+        font-size: 13px;
+    }
+    
+    .main-header-section .profile-info .dropdown-menu li a,
+    .business-profile .dropdown-menu li a {
+        padding: 0.6rem 0.8rem;
+    }
+}
+
+/* Language-specific dropdown margins for small screens - OVERRIDE EVERYTHING INCLUDING INLINE STYLES */
+@media (max-width: 768px) {
+    /* Arabic mode - translate dropdown margin adjustment with maximum specificity */
+    html body [dir="rtl"] .main-header-section .header-right .language-change .dropdown-menu[style],
+    html body [dir="rtl"] .main-header-section .header-right .language-change ul.dropdown-menu[style],
+    html body [dir="rtl"] .header-section .language-change .dropdown-menu[style],
+    html body [dir="rtl"] .header-section .language-change ul.dropdown-menu[style],
+    html body [dir="rtl"] .language-change .dropdown-menu.show[style],
+    html body [dir="rtl"] .language-change ul.dropdown-menu.show[style],
+    html body [dir="rtl"] .language-change .dropdown-menu[style],
+    html body [dir="rtl"] .language-change ul.dropdown-menu[style] {
+        margin: 0 0 0 -100px !important;
+        margin-top: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 0 !important;
+        margin-left: -100px !important;
+        left: -100px !important;
+        transform: translateX(0) !important;
+    }
+    
+    /* English mode - profile dropdown margin adjustment with maximum specificity */
+    html body [dir="ltr"] .main-header-section .header-right .profile-info .dropdown-menu[style],
+    html body [dir="ltr"] .main-header-section .header-right .profile-info ul.dropdown-menu[style],
+    html body [dir="ltr"] .main-header-section .profile-info .dropdown-menu.show[style],
+    html body [dir="ltr"] .main-header-section .profile-info ul.dropdown-menu.show[style],
+    html body [dir="ltr"] .main-header-section .profile-info .dropdown-menu[style],
+    html body [dir="ltr"] .main-header-section .profile-info ul.dropdown-menu[style],
+    html body [dir="ltr"] .header-section .business-profile .dropdown-menu[style],
+    html body [dir="ltr"] .header-section .business-profile ul.dropdown-menu[style],
+    html body [dir="ltr"] .business-profile .dropdown-menu.show[style],
+    html body [dir="ltr"] .business-profile ul.dropdown-menu.show[style],
+    html body [dir="ltr"] .business-profile .dropdown-menu[style],
+    html body [dir="ltr"] .business-profile ul.dropdown-menu[style] {
+        margin: 0 0 0 -100px !important;
+        margin-top: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 0 !important;
+        margin-left: -100px !important;
+        left: -100px !important;
+        transform: translateX(0) !important;
+    }
+    
+    /* Additional override for Popper.js positioned dropdowns */
+    html body [dir="rtl"] ul.dropdown-menu[data-popper-placement][style],
+    html body [dir="rtl"] .dropdown-menu[data-popper-placement][style] {
+        margin: 0 0 0 -100px !important;
+        left: -100px !important;
+        transform: translateX(0) !important;
+    }
+    
+    html body [dir="ltr"] ul.dropdown-menu[data-popper-placement][style],
+    html body [dir="ltr"] .dropdown-menu[data-popper-placement][style] {
+        margin: 0 0 0 -100px !important;
+        left: -100px !important;
+        transform: translateX(0) !important;
+    }
+    
+    /* Nuclear option for Arabic (RTL) - LANGUAGE DROPDOWN ONLY */
+    html body [dir="rtl"] .language-change ul.dropdown-menu.show[style*="position: absolute"],
+    html body [dir="rtl"] .language-change .dropdown-menu.show[style*="position: absolute"] {
+        margin-left: -200px !important;
+        left: -200px !important;
+    }
+    
+    /* Nuclear option for English (LTR) - PROFILE DROPDOWN ONLY */
+    html body [dir="ltr"] .profile-info ul.dropdown-menu.show[style*="position: absolute"],
+    html body [dir="ltr"] .profile-info .dropdown-menu.show[style*="position: absolute"],
+    html body [dir="ltr"] .business-profile ul.dropdown-menu.show[style*="position: absolute"],
+    html body [dir="ltr"] .business-profile .dropdown-menu.show[style*="position: absolute"] {
+        margin-left: -300px !important;
+        left: -300px !important;
+    }
+    
+    /* OVERRIDE THE GLOBAL SHOW STATE RULE - RESET MARGINS FOR SPECIFIC DROPDOWNS */
+    /* Arabic mode - only language dropdown gets -100px margin */
+    html body [dir="rtl"] .navbar .navbar-collapse .navbar-nav .dropdown-menu.show,
+    html body [dir="rtl"] .navbar .navbar-nav .dropdown-menu.show,
+    html body [dir="rtl"] .header-section .navbar .navbar-nav .dropdown-menu.show,
+    html body [dir="rtl"] .main-header-section .navbar .navbar-nav .dropdown-menu.show,
+    html body [dir="rtl"] .navbar-nav .dropdown-menu.show,
+    html body [dir="rtl"] .dropdown-menu.show,
+    html body [dir="rtl"] .dropdown-menu-scroll.show,
+    html body [dir="rtl"] .notifications .dropdown-menu.show,
+    html body [dir="rtl"] .notification-container.show,
+    html body [dir="rtl"] .profile-info .dropdown-menu.show,
+    html body [dir="rtl"] .business-profile .dropdown-menu.show,
+    html body [dir="rtl"] .home-page-language-change .dropdown-menu.show {
+        margin: 0 !important;
+    }
+    
+    html body [dir="rtl"] .language-change .dropdown-menu.show {
+        margin: 0 0 0 -100px !important;
+    }
+    
+    /* English mode - only profile dropdown gets -100px margin */
+    html body [dir="ltr"] .navbar .navbar-collapse .navbar-nav .dropdown-menu.show,
+    html body [dir="ltr"] .navbar .navbar-nav .dropdown-menu.show,
+    html body [dir="ltr"] .header-section .navbar .navbar-nav .dropdown-menu.show,
+    html body [dir="ltr"] .main-header-section .navbar .navbar-nav .dropdown-menu.show,
+    html body [dir="ltr"] .navbar-nav .dropdown-menu.show,
+    html body [dir="ltr"] .dropdown-menu.show,
+    html body [dir="ltr"] .dropdown-menu-scroll.show,
+    html body [dir="ltr"] .language-change .dropdown-menu.show,
+    html body [dir="ltr"] .notifications .dropdown-menu.show,
+    html body [dir="ltr"] .notification-container.show,
+    html body [dir="ltr"] .home-page-language-change .dropdown-menu.show {
+        margin: 0 !important;
+    }
+    
+    html body [dir="ltr"] .profile-info .dropdown-menu.show,
+    html body [dir="ltr"] .business-profile .dropdown-menu.show {
+        margin: 0 0 0 -100px !important;
+    }
 }

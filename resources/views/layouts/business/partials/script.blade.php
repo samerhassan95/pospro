@@ -17,6 +17,8 @@
 <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom/custom.js') }}?v={{ time() }}"></script>
 <script src="{{ asset('assets/js/custom/tagify.js') }}"></script>
+<!-- Dropdown Fix for Mobile -->
+<script src="{{ asset('assets/js/dropdown-fix.js') }}?v={{ time() }}"></script>
 
 {{-- choice --}}
 <script src="{{ asset('assets/js/choices.min.js') }}"></script>

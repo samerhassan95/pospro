@@ -194,17 +194,17 @@
                                     <div class=" col-lg-4 sub-total-container">
                                         <div
                                             class="payment-container mb-3 amount-info-container inventory-amount-info-container transfer-amount-info">
-                                            <div class="mb-2 d-flex align-items-center justify-content-between">
+                                            <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                                 <h6>{{ __('Sub Total') }}</h6>
                                                 <h6 class="fw-bold" id="total_amount">{{ currency_format($transfer->sub_total) }}</h6>
                                             </div>
 
-                                            <div class="mb-2 d-flex align-items-center justify-content-between">
+                                            <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                                 <h6>{{ __('Discount') }}</h6>
                                                 <h6 class="fw-bold" id="discount_amount">{{ currency_format($transfer->total_discount) }}</h6>
                                             </div>
 
-                                            <div class="mb-2 d-flex align-items-center justify-content-between">
+                                            <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                                 <h6>{{ __('Tax') }}</h6>
                                                 <h6 class="fw-bold" id="tax_amount">{{ currency_format($transfer->total_tax) }}</h6>
                                             </div>
@@ -217,7 +217,7 @@
                                                     <input type="number" step="any" name="shipping_charge" value="{{ $transfer->shipping_charge }}" id="shipping_amount" class="form-control right-start-input" placeholder="0">
                                                 </div>
                                             </div>
-                                            <div class=" d-flex align-items-center justify-content-between fw-bold">
+                                            <div class=" d-flex flex-wrap align-items-center justify-content-between fw-bold">
                                                 <div class="fw-bold">{{ __('Total Amount') }}</div>
                                                 <h6 class='fw-bold' id="grand_total_amount">{{ currency_format($transfer->grand_total) }}</h6>
                                             </div>

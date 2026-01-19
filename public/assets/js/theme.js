@@ -12,14 +12,18 @@
         });
         
         // Close button always closes sidebar
-        $(".side-bar .close-btn").on("click ", function () {
-            $(".side-bar, .section-container").toggleClass("active");
+        $(".side-bar .close-btn").on("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(".side-bar, .section-container").removeClass("active");
         });
         
-        // Overlay only closes on mobile (screen width < 769px)
-        $(".side-bar .overlay").on("click ", function () {
+        // Overlay closes sidebar (responsive behavior)
+        $(".side-bar .overlay").on("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
             if ($(window).width() < 769) {
-                $(".side-bar, .section-container").toggleClass("active");
+                $(".side-bar, .section-container").removeClass("active");
             }
         });
 
@@ -68,6 +72,7 @@
             //if this isn't a link, prevent the page from being redirected
             if (checkElement.is(subMenuSelector)) {
                 e.preventDefault();
+                e.stopPropagation(); // Prevent event bubbling that might interfere with sidebar closing
             }
         });
 
@@ -83,6 +88,22 @@
         // Save scroll position before leaving the page
         $(window).on("beforeunload", function () {
             localStorage.setItem("sidebar-scroll", sidebar.scrollTop());
+        });
+
+        // Close sidebar with Escape key
+        $(document).on("keydown", function(e) {
+            if (e.key === "Escape" && $(".side-bar").hasClass("active")) {
+                $(".side-bar, .section-container").removeClass("active");
+            }
+        });
+
+        // Ensure sidebar can always be closed by clicking outside (for desktop)
+        $(document).on("click", function(e) {
+            if ($(window).width() >= 769 && $(".side-bar").hasClass("active")) {
+                if (!$(e.target).closest(".side-bar, .sidebar-opner").length) {
+                    $(".side-bar, .section-container").removeClass("active");
+                }
+            }
         });
     }
 

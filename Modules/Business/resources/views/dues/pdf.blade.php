@@ -146,7 +146,7 @@
                 </div>
             </div>
             <div class="pdf-footer">
-                <div class="in-signature-container d-flex align-items-center justify-content-between">
+                <div class="in-signature-container d-flex flex-wrap align-items-center justify-content-between">
                     <div class="in-signature left-content">
                         <hr class="in-hr">
                         <h4>{{ __('Customer Signature') }}</h4>
