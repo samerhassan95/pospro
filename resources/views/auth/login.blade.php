@@ -6,13 +6,15 @@
 
 @section('main_content')
     <div class="footer">
-        <div class="footer-logo w-100 mx-4">
-            <img src="{{ asset(get_option('general')['login_page_logo'] ?? '') }}" alt="">
-        </div>
+        <div class="footer-logo">
+             <a  href="{{ route('home') }}" class="logo-link">
+            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
+            <span class="sidebar-logo-text "><span class="bytes-text">Bytes</span> Pos</span>
+        </a>        </div>
         <div class="mybazar-login-section">
             <div class="mybazar-login-avatar">
-                <img src="{{ asset(get_option('general')['login_page_image'] ?? 'assets/images/login/login.png') }}"
-                    alt="">
+                         <img src="{{ asset('assets/images/Login.png') }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
+
             </div>
             <div class="mybazar-login-wrapper">
                 <div class="login-wrapper">
@@ -21,18 +23,20 @@
                         <h6>{{ __('Welcome back, Please login in to your account') }}</h6>
                         <form method="POST" action="{{ route('login') }}" class="login_form">
                             @csrf
-                            <div class="input-group">
-                                <span><img src="{{ asset('assets/images/icons/user.png') }}" alt="img"></span>
-                                <input type="email" name="email" class="form-control email" placeholder="{{ __('Enter your Email') }}">
+                            <div class="form-group mb-3">
+                                <label for="email" class="form-label">{{ __('User Name') }}</label>
+                                <input type="email" name="email" id="email" class="form-control email" placeholder="User Name" style="border-radius: 12px; padding: 15px; border: 1px solid #e0e0e0; background-color: white;">
                             </div>
 
-                            <div class="input-group">
-                                <span><img src="{{ asset('assets/images/icons/lock.png') }}" alt="img"></span>
-                                <span class="hide-pass">
-                                    <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img">
-                                    <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img">
-                                </span>
-                                <input type="password" name="password" class="form-control password" placeholder="{{ __('Password') }}">
+                            <div class="form-group mb-3">
+                                <label for="password" class="form-label">{{ __('Password') }}</label>
+                                <div class="position-relative">
+                                    <input type="password" name="password" id="password" class="form-control password" placeholder="Password" style="border-radius: 12px; padding: 15px; border: 1px solid #e0e0e0; background-color: white; padding-right: 50px;">
+                                    <span class="hide-pass position-absolute" style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                        <img src="{{ asset('assets/images/icons/Hide.svg') }}" alt="img" style="width: 20px; height: 20px;" class="hide-icon">
+                                        <img src="{{ asset('assets/images/icons/show.svg') }}" alt="img" style="width: 20px; height: 20px; display: none;" class="show-icon">
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="mt-lg-3 mb-0 forget-password">

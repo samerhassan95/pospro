@@ -1,26 +1,41 @@
 "use strict";
 
+"use strict";
+
 $(".hide-pass").on("click", function () {
     var model = $("#auth").data("model");
     $(this).toggleClass("show-pass");
+
+    // Get the hide and show icons within this specific toggle
+    var hideIcon = $(this).find('.hide-icon');
+    var showIcon = $(this).find('.show-icon');
 
     // LOGIN
     if (model === "Login") {
         let passwordInput = $(".password");
         if (passwordInput.attr("type") === "password") {
             passwordInput.attr("type", "text");
+            hideIcon.hide();
+            showIcon.show();
         } else {
             passwordInput.attr("type", "password");
+            hideIcon.show();
+            showIcon.hide();
         }
     }
     // REGISTRATION & RESET PASSWORD
     else {
-        let passwordInput = $(this).siblings("input");
+        // Find the input field in the same parent container
+        let passwordInput = $(this).parent().find("input[type='password'], input[type='text']");
         let passwordType = passwordInput.attr("type");
         if (passwordType === "password") {
             passwordInput.attr("type", "text");
+            hideIcon.hide();
+            showIcon.show();
         } else {
             passwordInput.attr("type", "password");
+            hideIcon.show();
+            showIcon.hide();
         }
     }
 });

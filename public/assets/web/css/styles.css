@@ -401,6 +401,15 @@ html {
     font-size: 15px;
     font-weight: 500;
 }
+ .sidebar-logo-text{
+       font-size: 18px;
+       
+}
+.header-section a  .sidebar-logo-text{
+       font-size: 18px;
+       
+}
+
 .header-section a:hover {
     color: var(--clr-primary) !important;
 }
@@ -676,6 +685,7 @@ html {
     padding-top: 120px;
     background-repeat: no-repeat;
     background-size: cover;
+    background-color: #000 !important;
 }
 
 .video-wrapper .fa {

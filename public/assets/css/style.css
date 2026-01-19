@@ -1,9 +1,9 @@
 /* Import Cairo font */
 @import url("../../fonts/cairo/cairo.css");
 
-/* Lufga font fallback - using Cairo as alternative */
+/* cairo font fallback - using Cairo as alternative */
 @font-face {
-    font-family: 'Lufga';
+    font-family: 'cairo';
     src: local('Cairo');
     font-weight: 500;
     font-style: normal;
@@ -448,8 +448,8 @@ svg {
     width: auto;
 }
 
-.side-bar-logo .sidebar-logo-text {
-    font-family: 'Lufga', sans-serif;
+.side-bar-logo .sidebar-logo-text     {
+    font-family: 'cairo', sans-serif;
     font-size: 28px ;
     font-weight: 500;
     line-height: 20px;
@@ -457,7 +457,12 @@ svg {
     text-align: center;
     color: #000;
 }
-
+.footer  .footer-logo .sidebar-logo-text {
+        font-size: 20px ;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0px;
+}
 .side-bar-logo .sidebar-logo-text .bytes-text {
     color: #FF6500;
 }
@@ -3726,18 +3731,19 @@ input:checked + .slider:before {
 ----------------------------------------*/
 .footer {
     min-height: 100vh;
-    background-color: var(--clr-primary);
+    background-color:white;
 }
 
 .footer .footer-logo {
     width: 90%;
-    margin: auto;
+    margin:  auto;
+    padding: 20px;
 }
 
-.footer .footer-logo img {
-    margin-top: 20px;
+.footer .footer-logo   {
+   
     height: 48px;
-    width: auto;
+   
 }
 
 .mybazar-login-section {
@@ -3791,8 +3797,8 @@ input:checked + .slider:before {
 
 .mybazar-login-section .login-wrapper {
     max-width: 630px;
-    background: #fff;
-    box-shadow: -16px 0px 50px 0px #0000000d;
+    /* background: #fff;
+    box-shadow: -16px 0px 50px 0px #0000000d; */
     border-radius: 16px;
     padding: 24px 30px;
     display: flex;

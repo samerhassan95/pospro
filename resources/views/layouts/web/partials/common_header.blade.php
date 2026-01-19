@@ -1,10 +1,10 @@
 <header class="header-section">
     <nav class="navbar navbar-expand-lg p-0">
         <div class="container">
-            <a href="{{ route('home') }}" class="header-logo">
-                <img src="{{ asset($general->value['common_header_logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
-                    alt="header-logo" />
-            </a>
+              <a  href="{{ route('home') }}" class="logo-link">
+            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img">
+            <span class="sidebar-logo-text !text-2xl"><span class="bytes-text">Bytes</span> Pos</span>
+        </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
                 aria-controls="staticBackdrop">
                 <span class="navbar-toggler-icon"></span>

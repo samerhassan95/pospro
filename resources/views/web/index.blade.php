@@ -5,7 +5,9 @@
 @endsection
 
 @section('main_content')
-    <section class="home-banner-section" style="background-image: url('{{ asset($page_data['slider_bg_img'] ?? 'assets/web/images/banner/banner1.png') }}');">
+    <section class="home-banner-section" 
+    style="background-color: black"
+    >
         <div class="container">
             <div class="row align-items-center pb-5 py-lg-5">
                 <div class="col-lg-6 order-2 order-lg-1 mt-5 mt-lg-0">
