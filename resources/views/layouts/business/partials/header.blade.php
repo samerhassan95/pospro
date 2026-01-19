@@ -120,7 +120,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="javascript:void(0)" class="logoutButton">
+                            <a class="dropdown-item logoutButton" href="javascript:void(0)">
                                 <i class="far fa-sign-out"></i> {{ __('Logout') }}
                                 <form action="{{ route('logout') }}" method="post" id="logoutForm">
                                     @csrf

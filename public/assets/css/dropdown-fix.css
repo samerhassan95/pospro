@@ -197,4 +197,22 @@
     .navbar-expand-lg .navbar-nav .dropdown-menu {
         position: absolute;
     }
+    
+    /* RESET MARGINS FOR LARGE SCREENS - OVERRIDE ANY LANGUAGE-SPECIFIC RULES */
+    html[dir="ltr"] body .language-change .dropdown-menu.show,
+    html[dir="ltr"] body .profile-info .dropdown-menu.show,
+    html[dir="ltr"] body .business-profile .dropdown-menu.show {
+        margin: 0 !important;
+        left: 50px !important;
+        right: auto !important;
+    }
+    
+    /* RTL POSITIONING FOR LARGE SCREENS */
+    html[dir="rtl"] body .language-change .dropdown-menu.show,
+    html[dir="rtl"] body .profile-info .dropdown-menu.show,
+    html[dir="rtl"] body .business-profile .dropdown-menu.show {
+        margin: 0 0 0  -100 !important;
+        left: 10px !important;
+        right: -100 !important;
+    }
 }
