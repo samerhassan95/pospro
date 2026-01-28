@@ -7,6 +7,7 @@
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/css/choices.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/calculator.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/pos-products.css') . '?v=' . time() }}">
     <style>
         /* Force RTL SVG flip */
         @if (in_array(app()->getLocale(), ['ar', 'arbh', 'eg-ar', 'fa', 'prs', 'ps', 'ur']))
@@ -16,7 +17,7 @@
         @endif
         .pos-fullscreen-body { margin: 0; padding: 0; background: #f5f5f5; }
         .pos-fullscreen-wrapper { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
-        .pos-top-header {padding: 12px 24px 0px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background:#e6eaf2 !important; }
+        .pos-top-header {padding: 12px 24px 0px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background:#F7F7F7 !important; }
         .pos-brand { display: flex; align-items: center; gap: 12px; }
         .pos-brand-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0; }
         .pos-brand-subtitle { font-size: 12px; color: #6b7280; margin: 0; }
@@ -32,8 +33,8 @@
         .pos-header-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: #fff; border: 1px solid #e5e7eb; border-radius: 100px; color: #374151; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; transition: all 0.2s; }
         .pos-header-btn:hover { background: #f9fafb; color: #1a1a1a; border-color: #d1d5db; }
         .pos-header-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
-        .pos-main-container { display: grid; grid-template-columns: 420px 1fr; gap: 20px; padding: 20px; background: #e6eaf2 !important; }
-        @media (max-width: 1200px) { .pos-main-container { grid-template-columns: 380px 1fr; } }
+        .pos-main-container { display: grid; grid-template-columns: 1fr 420px; gap: 20px; padding: 20px; background: #F7F7F7 !important; }
+        @media (max-width: 1200px) { .pos-main-container { grid-template-columns:1fr 380px ; } }
         @media (max-width: 992px) { .pos-main-container { grid-template-columns: 1fr; } }
         .order-sidebar { background: #fff; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; border-right: none; }
         .order-header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
@@ -88,36 +89,85 @@
         .payment-field input:focus, .payment-field select:focus { outline: none; border-color: #FF6500; }
         .save-order-btn { width: 100%; padding: 14px; background: #FF6500; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 10px; }
         .save-order-btn:hover { background: #e55a00; }
-        .products-section { background: #fff; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; }
-        .products-header-new { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-        .products-title { font-size: 18px; font-weight: 600; color: #1a1a1a; margin: 0; }
-        .filters-btn { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e5e7eb; background: #fff; border-radius: 8px; font-size: 14px; color: #374151; cursor: pointer; }
-        .filters-btn:hover { background: #f9fafb; }
-        .product-search-wrapper { margin-bottom: 20px; }
-        .product-search-input { width: 100%; padding: 12px 16px 12px 44px; border: 1px solid #e5e7eb; border-radius: 10px; font-size: 14px; background: #f9fafb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 14px center no-repeat; }
-        .product-search-input:focus { outline: none; border-color: #FF6500; background-color: #fff; }
-        .choices__inner { padding: 12px 16px; border: 1px solid #e5e7eb !important; border-radius: 10px !important; font-size: 14px !important; background: #f9fafb !important; min-height: 44px !important; }
-        .choices__inner:focus, .choices.is-focused .choices__inner { border-color: #FF6500 !important; background-color: #fff !important; }
-        .choices__list--dropdown { border: 1px solid #e5e7eb; border-radius: 8px; }
-        .choices__list--single { padding: 0; }
-        .choices[data-type*=select-one] .choices__input { background-color: #f9fafb; border-radius: 8px; padding: 8px; }
-        .products-grid-wrapper { }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
-        .product-card-new { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; }
-        .product-card-image { width: 100%; height: 140px; object-fit: cover; background: #f9fafb; }
-        .product-card-body { padding: 12px; display: flex; flex-direction: column; flex: 1; min-height: 120px; }
-        .product-card-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-        .product-card-info { flex: 1; min-width: 0; flex-basis: 100%; }
-        .product-card-name { font-size: 14px; font-weight: 500; color: #1a1a1a; margin: 0 0 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
-        .product-card-code { font-size: 12px; color: #9ca3af; margin: 0; }
-        .product-card-price { font-size: 14px; font-weight: 600; color: #1a1a1a; white-space: nowrap; flex-basis: 100%; text-align: right; }
-        .add-product-btn { width: 32px; height: 32px; border-radius: 50%; background: #FF6500; border: none; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; flex-shrink: 0; align-self: flex-end; margin-top: auto; }
+        .products-section { background: #fff; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* Tabs */
+        .pos-tabs-wrapper { display: flex; gap: 12px; padding-bottom: 24px;  border-bottom:2px solid #f0f0f0; }
+        .pos-tab-btn {    background: transparent; padding: 10px 24px; border:2px solid #f0f0f0; color: #666; border-radius: 100px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; }
+        .pos-tab-btn.active { background: #FF6500; color: #fff; }
+        .pos-tab-btn:hover:not(.active) {   background: transparent; }
+        
+        /* Category Section */
+        .pos-category-section { margin-bottom: 32px; }
+        .pos-section-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px 0; }
+        .pos-category-scroll-wrapper { position: relative; }
+        .pos-category-list { display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; padding: 8px 0; scrollbar-width: none; -ms-overflow-style: none; }
+        .pos-category-list::-webkit-scrollbar { display: none; }
+        .pos-category-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 100px; padding: 12px; border: 2px solid #f0f0f0; background: #fff; border-radius: 12px; cursor: pointer; transition: all 0.3s; flex-shrink: 0; }
+        .pos-category-item:hover { border-color: #FF6500; transform: translateY(-2px); }
+        .pos-category-item.active { border-color: #FF6500; background: #fff5f0; }
+        .pos-category-icon { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #f9f9f9; }
+        .pos-category-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .pos-category-icon svg { width: 32px; height: 32px; color: #666; }
+        .pos-category-item.active .pos-category-icon svg { color: #FF6500; }
+        .pos-category-name { font-size: 13px; font-weight: 500; color: #1a1a1a; text-align: center; }
+        .pos-category-scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: transparent !important; border: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .pos-category-scroll-btn:hover { background: #f9fafb; }
+        .pos-category-scroll-btn.prev { left: -12px; }
+        .pos-category-scroll-btn.next { right: -12px; }
+        
+        /* Products Grid */
+        .pos-products-section { flex: 1; overflow-y: auto; }
+        .pos-products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding-bottom: 20px; }
+        
+        /* Product Card */
+        .pos-product-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 16px; overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column; }
+        .pos-product-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .pos-product-image-wrapper { width: 100%; height: 160px; overflow: hidden; background: #f9f9f9; border-radius: 16px 16px 0 0; }
+        .pos-product-image { width: 100%; height: 100%; object-fit: cover; }
+        .pos-product-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+        .pos-product-header { display: flex; flex-direction: column; gap: 4px; }
+        .pos-product-name { font-size: 15px; font-weight: 600; color: #1a1a1a; margin: 0; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .pos-product-desc { font-size: 12px; color: #999; margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .pos-product-price { font-size: 16px; font-weight: 700; color: #1a1a1a; margin: 0; }
+        
+        /* Category Header with Arrows */
+        .pos-category-header { display: flex !important; justify-content: flex-start !important; align-items: center !important; margin-bottom: 20px !important; gap: 20px !important; }
+        .pos-section-title { font-size: 22px !important; font-weight: 700 !important; color: #000 !important; margin: 0 !important; flex: 0 0 auto !important; }
+        .pos-category-nav-buttons { display: flex !important; gap: 8px !important; align-items: center !important; }
+        .pos-category-scroll-btn { position: static !important; transform: none !important; width: 36px !important; height: 36px !important; border-radius: 50% !important; background: #f5f5f5 !important; border: 2px solid #000 !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; box-shadow: none !important; transition: all 0.3s !important; flex-shrink: 0 !important; }
+        .pos-category-scroll-btn:hover:not(.active) { background: #e8e8e8 !important; border-color: #000 !important; }
+        .pos-category-scroll-btn.active { background: #FF6500 !important; border-color: #FF6500 !important; }
+        .pos-category-scroll-btn:not(.active) { opacity: 0.5 !important; cursor: not-allowed !important;         background: transparent !important; }
+        .pos-category-scroll-btn svg { color: #666 !important; width: 18px !important; height: 18px !important; }
+        .pos-category-scroll-btn.active svg { color: #fff !important; }
+        
+        /* Product Options */
+        .pos-product-options { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .pos-option-group { display: flex; flex-direction: column; gap: 6px; }
+        .pos-option-label { font-size: 16px; font-weight: bold; color: #1a1a1a; margin: 0; }
+        .pos-option-buttons { display: flex; gap: 6px; }
+        .pos-option-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e5e7eb; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 12px; font-weight: bold; color: #666; }
+        .pos-option-btn:hover { border-color: #FF6500; color: #FF6500; }
+        .pos-option-btn.active { border-color: #FF6500; background: #fff5f0; color: #FF6500; }
+        .pos-option-btn svg { width: 16px; height: 16px; }
+        
+        /* Add to Cart Button */
+        .pos-add-to-cart-btn { width: 100%; padding: 12px; background: #FF6500; color: #fff; border: none; border-radius: 100px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .pos-add-to-cart-btn:hover { background: #e55a00; transform: scale(1.02); }
+        .pos-add-to-cart-btn:active { transform: scale(0.98); }
+        
         .hidden-cart-inputs { display: none; }
+        
+        /* Responsive */
+        @media (max-width: 1400px) { .pos-products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
+        @media (max-width: 1200px) { .pos-products-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); } }
+        @media (max-width: 992px) { .pos-products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); } }
     </style>
 @endpush
 
 @section('main_content')
-    <form action="{{ route('business.sales.store') }}" method="post" enctype="multipart/form-data" class="ajaxform pos-fullscreen-form">
+    <form id="sale-form" action="{{ route('business.sales.store') }}" method="post" enctype="multipart/form-data" class="ajaxform pos-fullscreen-form">
         @csrf
         
         <!-- Top Header Bar -->
@@ -166,79 +216,168 @@
         </div>
 
         <div class="pos-main-container">
-            <!-- Left Sidebar - Order Section -->
-            <div class="order-sidebar">
-                <div class="order-header">
-                    <h4 class="order-title">{{ __('Order') }} #{{ $invoice_no }}</h4>
-                    <input type="hidden" name="invoiceNumber" value="{{ $invoice_no }}">
-                    <p class="order-date">{{ now()->format('d M, Y') }}</p>
-                    <input type="hidden" name="saleDate" value="{{ now()->format('Y-m-d') }}">
+
+            <!-- Right Side - Products Section -->
+            <div class="products-section">
+                <!-- Tabs -->
+                <div class="pos-tabs-wrapper">
+                    <button type="button" class="pos-tab-btn">{{ __('Tables') }}</button>
+                    <button type="button" class="pos-tab-btn active">{{ __('Products') }}</button>
                 </div>
 
-                <div class="customer-section">
-                    <div class="customer-select-wrapper">
-                        <select required name="party_id" id="party_id" class="form-select customer-select choices-select">
+                <!-- Category Section -->
+                <div class="pos-category-section">
+                    <div class="pos-category-header">
+                        <h3 class="pos-section-title">{{ __('Category') }}</h3>
+                        <div class="pos-category-nav-buttons">
+                            <button type="button" class="pos-category-scroll-btn prev">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="pos-category-scroll-btn next">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="pos-category-scroll-wrapper">
+                        <div class="pos-category-list" id="category-list">
+                            <!-- All Categories Option -->
+                            <button type="button" class="pos-category-item active" data-category="all">
+                                <div class="pos-category-icon">
+                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="6" y="6" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2.5"/>
+                                        <rect x="28" y="6" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2.5"/>
+                                        <rect x="6" y="28" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2.5"/>
+                                        <rect x="28" y="28" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2.5"/>
+                                    </svg>
+                                </div>
+                                <span class="pos-category-name">{{ __('All') }}</span>
+                            </button>
+                            @foreach($categories as $category)
+                            <button type="button" class="pos-category-item" data-category="{{ $category->id }}">
+                                <div class="pos-category-icon">
+                                    @if($category->icon)
+                                    <img src="{{ asset($category->icon) }}" alt="{{ $category->categoryName }}">
+                                    @else
+                                    <!-- Default category icon -->
+                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 18L24 8L40 18V38C40 39.0609 39.5786 40.0783 38.8284 40.8284C38.0783 41.5786 37.0609 42 36 42H12C10.9391 42 9.92172 41.5786 9.17157 40.8284C8.42143 40.0783 8 39.0609 8 38V18Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M18 42V24H30V42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    @endif
+                                </div>
+                                <span class="pos-category-name">{{ $category->categoryName }}</span>
+                            </button>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Special Menu / Products Grid -->
+                <div class="pos-products-section">
+                    <h3 class="pos-section-title">{{ __('Special Menu') }}</h3>
+                    <div class="pos-products-grid" id="products-list">
+                        @include('business::sales.product-list-new')
+                    </div>
+                </div>
+            </div>
+                        <!-- Left Sidebar - Order Section -->
+            <div class="order-sidebar">
+                <!-- Search Customer Section -->
+                <div class="sidebar-search-customer">
+                    <div class="search-customer-wrapper">
+          
+                        <select required name="party_id" id="party_id" class="sidebar-customer-select choices-select">
                             <option value="">{{ __('Search Customer') }}</option>
                             <option class="guest-option" value="guest">{{ __('Guest') }}</option>
                             @foreach ($customers as $customer)
                                 <option value="{{ $customer->id }}" data-type="{{ $customer->type }}" data-phone="{{ $customer->phone }}">{{ $customer->name }}({{ $customer->type }}{{ $customer->due ? ' ' . currency_format($customer->due, currency: business_currency()) : '' }}) {{ $customer->phone }}</option>
                             @endforeach
                         </select>
-                        <a href="#customer-create-modal" data-bs-toggle="modal" class="add-customer-btn"><i class="fas fa-plus"></i></a>
+                        <a href="#customer-create-modal" data-bs-toggle="modal" class="sidebar-add-customer-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
                     </div>
                     <div class="guest-phone-field d-none guest_phone">
                         <input type="text" name="customer_phone" class="form-control" placeholder="{{ __('Enter Customer Phone Number') }}">
                     </div>
                 </div>
 
-                <div class="cart-section">
-                    <div class="cart-header">
-                        <span class="cart-title">{{ __('Products') }}</span>
-                        <button type="button" class="clear-cart-btn cancel-sale-btn" data-route="{{ route('business.carts.remove-all') }}">{{ __('Clear All') }} <i class="fas fa-trash-alt"></i></button>
+                <!-- Order Details Card -->
+                <div class="sidebar-order-details">
+                    <h4 class="sidebar-section-title">{{ __('Order Details') }}</h4>
+                    <div class="order-details-content">
+                        <div class="order-detail-row">
+                            <span class="detail-value" id="selected-customer-name">{{ __('Johnson Mitchell') }}</span>
+                        </div>
+                        <div class="order-detail-row">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                                <circle cx="10" cy="10" r="8" stroke="#666" stroke-width="1.5"/>
+                                <path d="M10 5V10L13 13" stroke="#666" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            <span class="detail-value">{{ now()->format('D, M\TH\LY Y') }} {{ now()->format('h:i A') }}</span>
+                        </div>
+                        <div class="order-detail-row">
+                            <span class="detail-value" id="selected-customer-phone">+1(415)123-4547</span>
+                        </div>
                     </div>
-                    <div class="cart-items-list" id="cart-list">@include('business::sales.cart-list-new')</div>
+                    <input type="hidden" name="invoiceNumber" value="{{ $invoice_no }}">
+                    <input type="hidden" name="saleDate" value="{{ now()->format('Y-m-d') }}">
                 </div>
 
-                <div class="order-summary">
+                <!-- Delivery Type Tabs -->
+                <div class="sidebar-delivery-tabs">
+                    <button type="button" class="delivery-tab-btn">{{ __('Delivery') }}</button>
+                    <button type="button" class="delivery-tab-btn">{{ __('Pre-order') }}</button>
+                    <button type="button" class="delivery-tab-btn active">{{ __('Takeaway') }}</button>
+                </div>
+
+                <!-- Cart Section -->
+                <div class="sidebar-cart-section">
+                    <div class="sidebar-cart-header">
+                        <span class="cart-title">{{ __('Products') }}</span>
+                        <button type="button" class="sidebar-clear-all-btn cancel-sale-btn" data-route="{{ route('business.carts.remove-all') }}">{{ __('Clear All') }}</button>
+                    </div>
+                    <div class="sidebar-cart-items" id="cart-list">@include('business::sales.cart-list-new')</div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="sidebar-order-summary">
                     <div class="summary-row"><span>{{ __('Items') }}</span><span id="items_count">0</span></div>
                     <div class="summary-row"><span>{{ __('Subtotal') }}</span><span id="sub_total">{{ currency_format(0, currency: business_currency()) }}</span></div>
                     <div class="summary-row"><span>{{ __('Discount') }}</span><span id="discount_display">0</span></div>
                     <div class="summary-row"><span>{{ __('Taxes') }}</span><span id="vat_display">0</span></div>
                     <div class="summary-row"><span>{{ __('Shipping') }}</span><span id="shipping_display">0</span></div>
                     <div class="summary-row"><span>{{ __('Rounding (-/+)') }}</span><span id="rounding_amount">0</span></div>
-                    <div class="summary-row total"><span>{{ __('Total') }}</span><span id="total_amount">{{ currency_format(0, currency: business_currency()) }}</span></div>
+                    <div class="summary-row summary-total"><span>{{ __('Total') }}</span><span id="total_amount">{{ currency_format(0, currency: business_currency()) }}</span></div>
                 </div>
 
-                <button type="button" class="cancel-order-btn cancel-sale-btn" data-route="{{ route('business.carts.remove-all') }}">{{ __('Cancel Order') }}</button>
+                <!-- Hidden Inputs -->
+                <div class="hidden-cart-inputs" style="display: none;">
+                    <input name="receive_amount" type="number" step="any" id="receive_amount" min="0" value="0">
+                    <input type="number" step="any" id="change_amount" value="0" readonly>
+                    <input type="number" step="any" id="due_amount" value="0" readonly>
+                    <select name="payment_type_id" id="payment_type_id">@foreach ($payment_types as $type)<option value="{{ $type->id }}">{{ $type->name }}</option>@endforeach</select>
+                    <input type="text" name="note" id="payment_note">
+                    <select name="vat_id" class="vat_select"><option value="">{{ __('Select') }}</option>@foreach ($vats as $vat)<option value="{{ $vat->id }}" data-rate="{{ $vat->rate }}">{{ $vat->name }} ({{ $vat->rate }}%)</option>@endforeach</select>
+                    <input type="number" step="any" name="vat_amount" id="vat_amount" min="0" value="0">
+                    <select name="discount_type" class="discount_type"><option value="flat">{{ __('Flat') }}</option><option value="percent">{{ __('Percent') }}</option></select>
+                    <input type="number" step="any" name="discountAmount" id="discount_amount" min="0" value="0">
+                    <input type="number" step="any" name="shipping_charge" id="shipping_charge" value="0">
+                </div>
 
-                <div class="payment-section-new">
-                    <div class="payment-field"><label>{{ __('Receive Amount') }}</label><input name="receive_amount" type="number" step="any" id="receive_amount" min="0" placeholder="0"></div>
-                    <div class="payment-field"><label>{{ __('Change Amount') }}</label><input type="number" step="any" id="change_amount" placeholder="0" readonly></div>
-                    <div class="payment-field"><label>{{ __('Due Amount') }}</label><input type="number" step="any" id="due_amount" placeholder="0" readonly></div>
-                    <div class="payment-field"><label>{{ __('Payment Type') }}</label><select name="payment_type_id">@foreach ($payment_types as $type)<option value="{{ $type->id }}">{{ $type->name }}</option>@endforeach</select></div>
-                    <div class="payment-field"><label>{{ __('Note') }}</label><input type="text" name="note" placeholder="{{ __('Type note...') }}"></div>
-                    <div class="hidden-cart-inputs">
-                        <select name="vat_id" class="vat_select"><option value="">{{ __('Select') }}</option>@foreach ($vats as $vat)<option value="{{ $vat->id }}" data-rate="{{ $vat->rate }}">{{ $vat->name }} ({{ $vat->rate }}%)</option>@endforeach</select>
-                        <input type="number" step="any" name="vat_amount" id="vat_amount" min="0" value="0">
-                        <select name="discount_type" class="discount_type"><option value="flat">{{ __('Flat') }}</option><option value="percent">{{ __('Percent') }}</option></select>
-                        <input type="number" step="any" name="discountAmount" id="discount_amount" min="0" value="0">
-                        <input type="number" step="any" name="shipping_charge" id="shipping_charge" value="0">
-                    </div>
-                    @usercan('sales.create')<button type="submit" class="save-order-btn">{{ __('Save Order') }}</button>@endusercan
+                <!-- Action Buttons -->
+                <div class="sidebar-action-buttons">
+                    @usercan('sales.create')<button type="button" class="sidebar-pay-btn" id="open-payment-modal">{{ __('Pay the Bill') }}</button>@endusercan
+                    <button type="button" class="sidebar-cancel-btn cancel-sale-btn" data-route="{{ route('business.carts.remove-all') }}">{{ __('Cancel Order') }}</button>
                 </div>
             </div>
 
-            <!-- Right Side - Products Section -->
-            <div class="products-section">
-                <div class="products-header-new">
-                    <h4 class="products-title">{{ __('Products') }}</h4>
-                    <button type="button" class="filters-btn"><i class="fas fa-sliders-h"></i> {{ __('Filters') }}</button>
-                </div>
-                <div class="product-search-wrapper">
-                    <form action="{{ route('business.sales.product-filter') }}" method="post" class="product-filter product-filter-form" table="#products-list">@csrf<input type="text" name="search" id="sale_product_search" class="product-search-input" placeholder="{{ __('Search Product') }}"></form>
-                </div>
-                <div class="products-grid-wrapper"><div class="products-grid" id="products-list">@include('business::sales.product-list-new')</div></div>
-            </div>
         </div>
 
         @php $currency = business_currency(); $rounding_amount_option = sale_rounding(); @endphp
@@ -258,6 +397,106 @@
         <input type="hidden" id="warehouse_module_exist" value="{{ moduleCheck('WarehouseAddon') ? 1 : 0 }}">
         <input type="hidden" id="payable_amount" value="0">
     </form>
+
+    <!-- Payment Modal -->
+    <div class="payment-modal-overlay" id="payment-modal-overlay">
+        <div class="payment-modal">
+            <div class="payment-modal-header">
+                <h3 class="payment-modal-title">{{ __('Collect Payment') }}</h3>
+                <div class="payment-modal-order-info">
+                    <div class="payment-order-number">{{ __('Order') }} #<span id="modal-order-number">{{ $invoice_no }}</span></div>
+                    <div class="payment-order-total" id="modal-order-total">{{ currency_format(0, currency: business_currency()) }}</div>
+                </div>
+            </div>
+
+            <div class="payment-modal-tabs">
+                <button type="button" class="payment-tab-btn active" data-tab="full">{{ __('Full Payment') }}</button>
+                <button type="button" class="payment-tab-btn" data-tab="split">{{ __('Split Bill') }}</button>
+            </div>
+
+            <div class="payment-methods">
+                <button type="button" class="payment-method-btn active" data-method="cash">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M28 8H4C2.89543 8 2 8.89543 2 10V22C2 23.1046 2.89543 24 4 24H28C29.1046 24 30 23.1046 30 22V10C30 8.89543 29.1046 8 28 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 20C18.2091 20 20 18.2091 20 16C20 13.7909 18.2091 12 16 12C13.7909 12 12 13.7909 12 16C12 18.2091 13.7909 20 16 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>{{ __('Cash') }}</span>
+                </button>
+                <button type="button" class="payment-method-btn" data-method="card">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M2 12H30" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 20H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>{{ __('Card') }}</span>
+                </button>
+                <button type="button" class="payment-method-btn" data-method="upi">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 28C22.6274 28 28 22.6274 28 16C28 9.37258 22.6274 4 16 4C9.37258 4 4 9.37258 4 16C4 22.6274 9.37258 28 16 28Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 10V22M10 16H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>{{ __('UPI') }}</span>
+                </button>
+                <button type="button" class="payment-method-btn" data-method="due">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 28C22.6274 28 28 22.6274 28 16C28 9.37258 22.6274 4 16 4C9.37258 4 4 9.37258 4 16C4 22.6274 9.37258 28 16 28Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 8V16L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>{{ __('DUE') }}</span>
+                </button>
+            </div>
+
+            <div class="payment-amounts">
+                <div class="payment-amount-field">
+                    <label>{{ __('Due Amount') }}</label>
+                    <input type="text" id="modal-due-amount" readonly value="0">
+                </div>
+                <div class="payment-amount-field">
+                    <label>{{ __('Receive Amount') }}</label>
+                    <input type="text" id="modal-receive-amount" value="0">
+                </div>
+            </div>
+
+            <div class="payment-summary">
+                <div class="payment-summary-row">
+                    <span>{{ __('Total Bill') }}</span>
+                    <span id="modal-total-bill">{{ currency_format(0, currency: business_currency()) }}</span>
+                </div>
+                <div class="payment-summary-row">
+                    <span>{{ __('Amount Paid') }}</span>
+                    <span id="modal-amount-paid">{{ currency_format(0, currency: business_currency()) }}</span>
+                </div>
+                <div class="payment-summary-row">
+                    <span>{{ __('Due Amount') }}</span>
+                    <span id="modal-due-summary">{{ currency_format(0, currency: business_currency()) }}</span>
+                </div>
+            </div>
+
+            <div class="payment-numpad">
+                <button type="button" class="numpad-btn" data-value="7">7</button>
+                <button type="button" class="numpad-btn" data-value="8">8</button>
+                <button type="button" class="numpad-btn" data-value="9">9</button>
+                <button type="button" class="numpad-btn" data-value="4">4</button>
+                <button type="button" class="numpad-btn" data-value="5">5</button>
+                <button type="button" class="numpad-btn" data-value="6">6</button>
+                <button type="button" class="numpad-btn" data-value="1">1</button>
+                <button type="button" class="numpad-btn" data-value="2">2</button>
+                <button type="button" class="numpad-btn" data-value="3">3</button>
+                <button type="button" class="numpad-btn" data-value="0">0</button>
+                <button type="button" class="numpad-btn" data-value=".">.</button>
+                <button type="button" class="numpad-btn numpad-clear" data-value="clear">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="payment-modal-actions">
+                <button type="button" class="payment-cancel-btn" id="cancel-payment-btn">{{ __('Cancel') }}</button>
+                <button type="submit" form="sale-form" class="payment-complete-btn" id="complete-payment-btn">{{ __('Complete Payment') }}</button>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('modal')
@@ -273,4 +512,6 @@
     <script src="{{ asset('assets/js/custom/sale.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/math.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom/calculator.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/pos-products.js') . '?v=' . time() }}"></script>
+    <script src="{{ asset('assets/js/custom/pos-payment-modal.js') . '?v=' . time() }}"></script>
 @endpush
