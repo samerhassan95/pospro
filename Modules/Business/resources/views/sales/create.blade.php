@@ -1201,12 +1201,6 @@
                         </div>
                         <!-- Hidden field for table status - managed automatically -->
                         <input type="hidden" id="order-table-status" value="utilized">
-                    </div>          <option value="utilized" selected>{{ __('Utilized') }} - {{ __('In Progress') }}</option>
-                                    <option value="completed">{{ __('Completed') }} - {{ __('Free Table') }}</option>
-                                    <option value="blocked">{{ __('Blocked') }}</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
