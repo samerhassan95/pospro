@@ -37,6 +37,15 @@ class Sale extends Model
         'payment_type_id',
         'invoiceNumber',
         'saleDate',
+        'supply_date',
+        'po_number',
+        'contract_number',
+        'payment_terms',
+        'payment_means',
+        'shipping_address_line1',
+        'shipping_address_line2',
+        'shipping_city',
+        'shipping_postal_code',
         'status',
         'meta',
         'rounding_option',
@@ -50,7 +59,8 @@ class Sale extends Model
         'cryptographic_stamp',
         'zatca_status',
         'zatca_response',
-        'xml_path'
+        'xml_path',
+        'invoice_type'
     ];
 
     public function business(): BelongsTo

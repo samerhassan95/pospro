@@ -1,3 +1,8 @@
+{{-- Check if B2B invoice and use dedicated template --}}
+@if($sale->invoice_type === 'b2b')
+    @include('business::sales.invoices.b2b-invoice')
+@else
+{{-- Original B2C Invoice --}}
 <div class="invoice-container">
     <div class="invoice-content">
         {{-- Print Header --}}
@@ -5,7 +10,13 @@
         <div class="row py-2 d-flex align-items-start justify-content-between border-bottom print-container d-print-none">
 
             <div class="col-md-6 d-flex align-items-center p-2">
-                <span class="Money-Receipt">Simplified Tax Invoice / فاتورة ضريبية مبسطة</span>
+                <span class="Money-Receipt">
+                    @if($sale->invoice_type === 'b2b')
+                        Tax Invoice / فاتورة ضريبية
+                    @else
+                        Simplified Tax Invoice / فاتورة ضريبية مبسطة
+                    @endif
+                </span>
             </div>
 
             <div class="col-md-6 d-flex justify-content-end align-items-end">
@@ -34,14 +45,51 @@
 
         <div class="d-flex justify-content-between align-items-start gap-3 print-logo-container pt-4 pb-2">
             {{-- Left Side: Logo and Company Info --}}
-            <div class="d-flex align-items-center gap-3 logo pdf-logo">
+            <div class="d-flex align-items-start gap-3 logo pdf-logo" style="flex: 1;">
                 <img class="invoice-logo"
                     src="{{ asset(get_business_option('business-settings')['invoice_logo'] ?? 'assets/images/default.svg') ?? '' }}"
-                    style="max-width: 150px; height: auto;"
+                    style="max-width: 120px; height: auto;"
                     alt="Logo">
                 <div>
-                    <h2 class="mb-0 fw-bold text-dark">{{ $sale->business->companyName ?? '' }}</h2>
-                    <p class="mb-0 text-muted small">{{ $sale->business->address ?? '' }}</p>
+                    <h2 class="mb-1 fw-bold text-dark">{{ $sale->business->companyName ?? '' }}</h2>
+                    
+                    @if($sale->invoice_type === 'b2b')
+                        {{-- B2B Seller Details - Show full address --}}
+                        @if($sale->business->building_number || $sale->business->street_name)
+                            <p class="mb-1 small text-muted">
+                                @if($sale->business->building_number)
+                                    {{ __('Building') }}: {{ $sale->business->building_number }},
+                                @endif
+                                @if($sale->business->street_name)
+                                    {{ $sale->business->street_name }}
+                                @endif
+                            </p>
+                        @endif
+                        
+                        @if($sale->business->district || $sale->business->city)
+                            <p class="mb-1 small text-muted">
+                                @if($sale->business->district)
+                                    {{ $sale->business->district }},
+                                @endif
+                                @if($sale->business->city)
+                                    {{ $sale->business->city }}
+                                @endif
+                                @if($sale->business->postal_code)
+                                    - {{ $sale->business->postal_code }}
+                                @endif
+                            </p>
+                        @endif
+                    @else
+                        {{-- B2C Seller Details - Simple address only --}}
+                        <p class="mb-1 text-muted small">{{ $sale->business->address ?? '' }}</p>
+                    @endif
+                    
+                    @if($sale->business->phoneNumber)
+                        <p class="mb-1 small text-muted"><i class="fas fa-phone me-1"></i> {{ $sale->business->phoneNumber }}</p>
+                    @endif
+                    @if($sale->business->email)
+                        <p class="mb-0 small text-muted"><i class="fas fa-envelope me-1"></i> {{ $sale->business->email }}</p>
+                    @endif
                 </div>
             </div>
 
@@ -65,7 +113,13 @@
                 </div>
                 <div class="text-end mt-1">
                     <h4 class="text-uppercase fw-bold text-primary mb-0" style="letter-spacing: 2px;">{{ __('INVOICE') }}</h4>
-                    <span class="text-muted small">Tax Invoice / فاتورة ضريبية</span>
+                    <span class="text-muted small">
+                        @if($sale->invoice_type === 'b2b')
+                            Tax Invoice / فاتورة ضريبية
+                        @else
+                            Simplified Tax Invoice / فاتورة ضريبية مبسطة
+                        @endif
+                    </span>
                 </div>
             </div>
         </div>
@@ -74,8 +128,51 @@
                 <div class="p-3 border rounded h-100 bg-light-subtle">
                     <h6 class="text-uppercase fw-bold text-muted mb-2 small">{{ __('Bill To') }} / العميل</h6>
                     <h5 class="mb-1 fw-bold">{{ $sale->party->name ?? 'Guest' }}</h5>
-                    <p class="mb-1 small text-muted"><i class="fas fa-phone-alt me-1"></i> {{ $sale->party->phone ?? '---' }}</p>
-                    <p class="mb-0 small text-muted"><i class="fas fa-map-marker-alt me-1"></i> {{ $sale->party->address ?? '---' }}</p>
+                    
+                    @if($sale->invoice_type === 'b2b' && $sale->party)
+                        {{-- B2B Customer Details - Show full information --}}
+                        @if($sale->party->vat_number)
+                            <p class="mb-1 small"><strong>{{ __('VAT Number') }}:</strong> {{ $sale->party->vat_number }}</p>
+                        @endif
+                        
+                        @if($sale->party->building_number || $sale->party->street_name)
+                            <p class="mb-1 small text-muted">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                @if($sale->party->building_number)
+                                    {{ __('Building') }}: {{ $sale->party->building_number }},
+                                @endif
+                                @if($sale->party->street_name)
+                                    {{ $sale->party->street_name }}
+                                @endif
+                            </p>
+                        @endif
+                        
+                        @if($sale->party->district || $sale->party->city)
+                            <p class="mb-1 small text-muted">
+                                @if($sale->party->district)
+                                    {{ $sale->party->district }},
+                                @endif
+                                @if($sale->party->city)
+                                    {{ $sale->party->city }}
+                                @endif
+                                @if($sale->party->postal_code)
+                                    - {{ $sale->party->postal_code }}
+                                @endif
+                            </p>
+                        @endif
+                        
+                        @if($sale->party->country_code)
+                            <p class="mb-1 small text-muted">
+                                <strong>{{ __('Country') }}:</strong> {{ $sale->party->country_code }}
+                            </p>
+                        @endif
+                        
+                        <p class="mb-0 small text-muted"><i class="fas fa-phone-alt me-1"></i> {{ $sale->party->phone ?? '---' }}</p>
+                    @else
+                        {{-- B2C Customer Details - Simple information only --}}
+                        <p class="mb-1 small text-muted"><i class="fas fa-phone-alt me-1"></i> {{ $sale->party->phone ?? '---' }}</p>
+                        <p class="mb-0 small text-muted"><i class="fas fa-map-marker-alt me-1"></i> {{ $sale->party->address ?? '---' }}</p>
+                    @endif
                 </div>
             </div>
             <div class="col-6 text-end">
@@ -415,3 +512,6 @@
         </div>
     </div>
 </div>
+
+@endif
+{{-- End B2C Invoice --}}

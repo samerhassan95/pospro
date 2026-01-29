@@ -37,13 +37,24 @@ class SettingController extends Controller
             'phoneNumber' => 'nullable|min:5|max:15',
             'vat_name' => 'nullable|max:250',
             'vat_no' => 'nullable|max:250|required_with:vat_name',
+            'commercial_registration' => 'nullable|string|max:50',
+            'additional_id' => 'nullable|string|max:50',
+            'bank_name' => 'nullable|string|max:100',
+            'bank_account_number' => 'nullable|string|max:50',
             'invoice_logo' => 'nullable|image',
             'invoice_scanner_logo' => 'nullable|image',
             'sale_rounding_option' => 'nullable|in:none,round_up,nearest_whole_number,nearest_0.05,nearest_0.1,nearest_0.5',
             'product_profit_option' => 'nullable|in:markup,margin',
             'note' => 'nullable|string|max:250',
             'note_label' => 'nullable|string|max:250',
-            'gratitude_message' => 'nullable|string|max:250'
+            'gratitude_message' => 'nullable|string|max:250',
+            // B2B Address Fields
+            'building_number' => 'nullable|string|max:10',
+            'street_name' => 'nullable|string|max:100',
+            'district' => 'nullable|string|max:100',
+            'city' => 'nullable|string|max:100',
+            'postal_code' => 'nullable|string|max:10',
+            'country_code' => 'nullable|string|size:2',
         ]);
 
         DB::beginTransaction();
@@ -59,15 +70,26 @@ class SettingController extends Controller
                 'email' => $request->email,
                 'vat_name' => $request->vat_name,
                 'vat_no' => $request->vat_no,
+                'commercial_registration' => $request->commercial_registration,
+                'additional_id' => $request->additional_id,
+                'bank_name' => $request->bank_name,
+                'bank_account_number' => $request->bank_account_number,
+                // B2B Address Fields
+                'building_number' => $request->building_number,
+                'street_name' => $request->street_name,
+                'district' => $request->district,
+                'city' => $request->city,
+                'postal_code' => $request->postal_code,
+                'country_code' => $request->country_code ? strtoupper($request->country_code) : null,
             ]);
 
-            $data = $request->except('_token', '_method', 'logo', 'favicon', 'invoice_logo', 'invoice_scanner_logo', 'address', 'companyName', 'business_category_id', 'phoneNumber');
+            $data = $request->except('_token', '_method', 'logo', 'favicon', 'invoice_logo', 'invoice_scanner_logo', 'address', 'companyName', 'business_category_id', 'phoneNumber', 'email', 'vat_name', 'vat_no', 'commercial_registration', 'additional_id', 'bank_name', 'bank_account_number', 'building_number', 'street_name', 'district', 'city', 'postal_code', 'country_code');
 
             $setting = Option::find($id);
 
             if ($setting) {
                 $setting->update($request->except($data) + [
-                    'value' => $request->except('_token', '_method', 'invoice_logo', 'invoice_scanner_logo', 'address', 'companyName', 'business_category_id', 'phoneNumber', 'email') + [
+                    'value' => $request->except('_token', '_method', 'invoice_logo', 'invoice_scanner_logo', 'address', 'companyName', 'business_category_id', 'phoneNumber', 'email', 'vat_name', 'vat_no', 'commercial_registration', 'additional_id', 'bank_name', 'bank_account_number', 'building_number', 'street_name', 'district', 'city', 'postal_code', 'country_code') + [
                         'business_id' => $business->id,
                         'invoice_logo' => $request->invoice_logo ? $this->upload($request, 'invoice_logo', $setting->value['invoice_logo'] ?? null) : ($setting->value['invoice_logo'] ?? null),
                         'invoice_scanner_logo' => $request->invoice_scanner_logo ? $this->upload($request, 'invoice_scanner_logo', $setting->value['invoice_scanner_logo'] ?? null) : ($setting->value['invoice_scanner_logo'] ?? null),

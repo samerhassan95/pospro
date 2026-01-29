@@ -383,6 +383,15 @@
                         {{ __('Settings') }}
                     </a>
                 </li>
+
+                <li class="{{ Request::routeIs('admin.zatca.subscription.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.zatca.subscription.index') }}">
+                        <span class="sidebar-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </span>
+                        {{ __('ZATCA Subscriptions') }}
+                    </a>
+                </li>
             @endcan
 
         </ul>

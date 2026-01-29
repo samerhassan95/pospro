@@ -2,5 +2,8 @@
     "Business": true,
     "WarehouseAddon": true,
     "ThermalPrinterAddon": true,
-    "MultiBranchAddon": true
+    "MultiBranchAddon": true,
+    "HrmAddon": true,
+    "SubdomainAddon": true,
+    "CustomDomainAddon": true
 }

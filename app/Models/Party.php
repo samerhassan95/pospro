@@ -34,7 +34,16 @@ class Party extends Model
         'billing_address',
         'shipping_address',
         'meta',
-
+        'zatca_type',
+        'vat_number',
+        'commercial_registration',
+        'additional_id',
+        'building_number',
+        'street_name',
+        'district',
+        'city',
+        'postal_code',
+        'country_code',
     ];
 
     public static function boot()

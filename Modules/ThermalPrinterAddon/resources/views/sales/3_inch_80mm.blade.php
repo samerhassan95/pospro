@@ -8,7 +8,35 @@
         <div class="mt-2">
             <h4 class="company-name">{{ $sale->business->companyName ?? 'Pos Pro' }}</h4>
             <div class="company-info">
-                <p> {{__('Address')}} : {{ $sale->business->address ?? '' }}</p>
+                @if($sale->invoice_type === 'b2b')
+                    {{-- B2B Seller Details --}}
+                    @if($sale->business->building_number || $sale->business->street_name)
+                        <p>
+                            @if($sale->business->building_number)
+                                {{__('Building')}}: {{ $sale->business->building_number }},
+                            @endif
+                            @if($sale->business->street_name)
+                                {{ $sale->business->street_name }}
+                            @endif
+                        </p>
+                    @endif
+                    @if($sale->business->district || $sale->business->city)
+                        <p>
+                            @if($sale->business->district)
+                                {{ $sale->business->district }},
+                            @endif
+                            @if($sale->business->city)
+                                {{ $sale->business->city }}
+                            @endif
+                            @if($sale->business->postal_code)
+                                - {{ $sale->business->postal_code }}
+                            @endif
+                        </p>
+                    @endif
+                @else
+                    {{-- B2C Seller Details --}}
+                    <p> {{__('Address')}} : {{ $sale->business->address ?? '' }}</p>
+                @endif
                 <p> {{__('Mobile')}} : {{ $sale->business->phoneNumber ?? '' }}</p>
                 <p> {{__('Email')}} : {{ auth()->user()->email ?? '' }}</p>
                 @if (!empty($sale->business->vat_name))
@@ -17,13 +45,48 @@
             </div>
         </div>
         <h3 class="invoice-title my-1">
-            Simplified Tax Invoice / فاتورة ضريبية مبسطة
+            @if($sale->invoice_type === 'b2b')
+                Tax Invoice / فاتورة ضريبية
+            @else
+                Simplified Tax Invoice / فاتورة ضريبية مبسطة
+            @endif
         </h3>
 
         <div class="invoice-info">
             <div class="">
                 <p> {{__('Invoice')}} : {{ $sale->invoiceNumber ?? '' }}</p>
                 <p> {{__('Name')}} : {{ $sale->party->name ?? 'Cash' }}</p>
+                
+                @if($sale->invoice_type === 'b2b' && $sale->party)
+                    {{-- B2B Customer Details --}}
+                    @if($sale->party->vat_number)
+                        <p> {{__('VAT No')}} : {{ $sale->party->vat_number }}</p>
+                    @endif
+                    @if($sale->party->building_number || $sale->party->street_name)
+                        <p>
+                            @if($sale->party->building_number)
+                                {{__('Building')}}: {{ $sale->party->building_number }},
+                            @endif
+                            @if($sale->party->street_name)
+                                {{ $sale->party->street_name }}
+                            @endif
+                        </p>
+                    @endif
+                    @if($sale->party->district || $sale->party->city)
+                        <p>
+                            @if($sale->party->district)
+                                {{ $sale->party->district }},
+                            @endif
+                            @if($sale->party->city)
+                                {{ $sale->party->city }}
+                            @endif
+                            @if($sale->party->postal_code)
+                                - {{ $sale->party->postal_code }}
+                            @endif
+                        </p>
+                    @endif
+                @endif
+                
                 <p> {{__('Mobile')}} : {{ $sale->party->phone ?? '' }}</p>
             </div>
             <div class="">
@@ -272,7 +335,7 @@
                 <p class="text-center note-pera">{{ get_business_option('business-settings')['note_label'] ?? '' }} :
                     {{ get_business_option('business-settings')['note'] ?? '' }}</p>
             @endif
-            <div class="scanner justify-content-center d-flex" style="width: 300px; height: 300px; margin: 10px auto;">
+            <div class="scanner justify-content-center d-flex" style="width: 150px; height: 150px; margin: 10px auto;">
                  @php
                     $sellerName = $sale->business->companyName ?? '';
                     $vatRegistrationNumber = $sale->business->vat_no ?? '';
@@ -286,7 +349,7 @@
 
                     $zatcaQrContent = generateZatcaQrCode($sellerName, $vatRegistrationNumber, $timestamp, $invoiceTotal, $vatTotal, $xmlHash, $ecdsaSignature, $publicKey);
                  @endphp
-                 {!! QrCode::size(300)->generate($zatcaQrContent) !!}
+                 {!! QrCode::size(150)->generate($zatcaQrContent) !!}
             </div>
             <h6>{{ get_option('general')['admin_footer_text'] ?? '' }} <a href="{{ get_option('general')['admin_footer_link'] ?? '#' }}" target="_blank">{{ get_option('general')['admin_footer_link_text'] ?? '' }}</h6>
         </div>
