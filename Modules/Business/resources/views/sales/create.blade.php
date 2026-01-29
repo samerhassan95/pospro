@@ -103,6 +103,17 @@
         .pos-category-scroll-wrapper { position: relative; }
         .pos-category-list { display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; padding: 8px 0; scrollbar-width: none; -ms-overflow-style: none; }
         .pos-category-list::-webkit-scrollbar { display: none; }
+        
+        /* Limit visible categories on small screens - show 2.25 items */
+        @media (max-width: 768px) {
+            .pos-category-scroll-wrapper { max-width: 100%; overflow: hidden; }
+            .pos-category-list { max-width: calc((100px * 2.25) + (16px * 2.25) + 24px); } /* 2.25 items + gaps + padding */
+        }
+        
+        @media (max-width: 576px) {
+            .pos-category-list { max-width: calc((100px * 2.25) + (16px * 2.25) + 24px); } /* 2.25 items visible */
+        }
+        
         .pos-category-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 100px; padding: 12px; border: 2px solid #f0f0f0; background: #fff; border-radius: 12px; cursor: pointer; transition: all 0.3s; flex-shrink: 0; }
         .pos-category-item:hover { border-color: #FF6500; transform: translateY(-2px); }
         .pos-category-item.active { border-color: #FF6500; background: #fff5f0; }
@@ -135,10 +146,11 @@
         .pos-category-header { display: flex !important; justify-content: flex-start !important; align-items: center !important; margin-bottom: 20px !important; gap: 20px !important; }
         .pos-section-title { font-size: 22px !important; font-weight: 700 !important; color: #000 !important; margin: 0 !important; flex: 0 0 auto !important; }
         .pos-category-nav-buttons { display: flex !important; gap: 8px !important; align-items: center !important; }
-        .pos-category-scroll-btn { position: static !important; transform: none !important; width: 36px !important; height: 36px !important; border-radius: 50% !important; background: #f5f5f5 !important; border: 2px solid #000 !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; box-shadow: none !important; transition: all 0.3s !important; flex-shrink: 0 !important; }
-        .pos-category-scroll-btn:hover:not(.active) { background: #e8e8e8 !important; border-color: #000 !important; }
+        .pos-category-scroll-btn { position: static !important; transform: none !important; width: 36px !important; height: 36px !important; border-radius: 50% !important; background: #fff !important; border: 2px solid #e0e0e0 !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; box-shadow: none !important; transition: all 0.3s !important; flex-shrink: 0 !important; }
+        .pos-category-scroll-btn:hover { background: #f5f5f5 !important; border-color: #FF6500 !important; }
         .pos-category-scroll-btn.active { background: #FF6500 !important; border-color: #FF6500 !important; }
-        .pos-category-scroll-btn:not(.active) { opacity: 0.5 !important; cursor: not-allowed !important;         background: transparent !important; }
+        .pos-category-scroll-btn.active:hover { background: #e55a00 !important; }
+        .pos-category-scroll-btn.disabled { opacity: 0.3 !important; cursor: not-allowed !important; pointer-events: none !important; }
         .pos-category-scroll-btn svg { color: #666 !important; width: 18px !important; height: 18px !important; }
         .pos-category-scroll-btn.active svg { color: #fff !important; }
         
@@ -166,7 +178,7 @@
         
         /* Table Reservation System */
         .tables-reservation-section { padding: 20px 0; }
-        .table-management-buttons { display: flex; gap: 15px; margin-bottom: 20px; }
+        .table-management-buttons { display: flex; flex-wrap:wrap; gap: 15px; margin-bottom: 20px; }
         .btn-add-table, .btn-manage-tables { display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: #FF6500; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .btn-add-table:hover, .btn-manage-tables:hover { background: #e55a00; transform: translateY(-2px); }
         .btn-manage-tables { background: #374151; }
@@ -179,24 +191,73 @@
         .legend-color.blocked { background: #fff301; }
         .legend-text { font-size: 14px; color: #666; }
         
-        .restaurant-floor-plan { position: relative; width: 100%; height: 700px; border: 3px solid #000; border-radius: 8px; background: #fff; margin-bottom: 30px; overflow: visible; }
-        .restaurant-floor-plan::before { content: ''; position: absolute; right: -80px; top: calc(47% - 60px); width: 0; height: 0; border-right: 80px solid #fff; border-top: 60px solid transparent; border-bottom: 60px solid transparent; z-index: 5; }
-        .restaurant-floor-plan::after { content: ''; position: absolute; right: -3px; top: calc(47% - 60px); width: 6px; height: 120px; background: #fff; z-index: 6; }
+        /* Floor plan wrapper - allows cutout to extend outside */
+        .floor-plan-wrapper { 
+            position: relative; 
+            width: 100%; 
+            margin-bottom: 30px; 
+        }
         
-        .floor-area { position: absolute; border: 2px solid #000; background: #fff; z-index: 1; }
+        /* Make floor plan scrollable on small screens */
+        @media (max-width: 768px) {
+            .floor-plan-wrapper {
+                overflow-x: auto;
+                overflow-y: auto;
+                max-height: 80vh;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+            }
+            
+            .restaurant-floor-plan {
+                min-width: 800px; /* Ensure floor plan doesn't shrink too much */
+                min-height: 700px;
+                position: relative; /* Ensure absolute positioned items stay in place */
+            }
+            
+            /* Ensure draggable items maintain position */
+            .table-item, .area-item {
+                position: absolute !important;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .floor-plan-wrapper {
+                max-height: 70vh;
+            }
+            
+            .restaurant-floor-plan {
+                min-width: 600px;
+            }
+        }
+        
+        .restaurant-floor-plan { position: relative; width: 100%; height: 700px; border: 3px solid #000; border-radius: 8px; background: #fff; overflow: hidden; }
+        
+        /* Entrance cut-out cover - positioned relative to wrapper */
+        .entrance-cutout-cover { position: absolute; background: #fff; z-index: 6; pointer-events: none; }
+        
+        .floor-area { position: absolute; border: 2px solid #000; background: #fff; z-index: 1; cursor: move; }
         .bar-area { top: 20px; left: 20px; width: 180px; height: 140px; display: flex; align-items: center; justify-content: center; }
-        .area-label { font-size: 14px; color: #666; text-align: center; }
+        .area-label { font-size: 14px; color: #666; text-align: center; pointer-events: none; }
         .toilets-wall { top: 180px; left: 20px; width: 60px; height: 180px; display: flex; align-items: center; justify-content: center; }
-        .toilets-label { font-size: 12px; color: #666; z-index: 2; }
+        .toilets-label { font-size: 12px; color: #666; z-index: 2; pointer-events: none; }
         
-        .center-square { position: absolute; top: 35%; left: 45%; transform: translate(-50%, -50%); width: 100px; height: 100px; border: 2px solid #000; background: #fff; z-index: 1; }
+        .center-square { position: absolute; top: 35%; left: 45%; transform: translate(-50%, -50%); width: 100px; height: 100px; border: 2px solid #000; background: #fff; z-index: 1; cursor: move; }
         
-        .entrance-area { position: absolute; top: 47%; right: 20px; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 1; }
-        .entrance-label { font-size: 14px; color: #666; }
+        .entrance-area { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 7; cursor: move; }
+        .entrance-label { font-size: 14px; color: #666; pointer-events: none; }
         .entrance-arrow { display: none; }
         
         .table-item { position: absolute; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; z-index: 10; }
         .table-item:hover { transform: scale(1.05); }
+        
+        /* Table rotation support */
+        .table-item[data-rotation="90"] { transform: rotate(90deg); }
+        .table-item[data-rotation="180"] { transform: rotate(180deg); }
+        .table-item[data-rotation="270"] { transform: rotate(270deg); }
+        .table-item[data-rotation="90"]:hover { transform: rotate(90deg) scale(1.05); }
+        .table-item[data-rotation="180"]:hover { transform: rotate(180deg) scale(1.05); }
+        .table-item[data-rotation="270"]:hover { transform: rotate(270deg) scale(1.05); }
         
         .table-circle { width: 80px; height: 80px; border-radius: 50%; }
         .table-rounded { width: 140px; height: 80px; border-radius: 12px; }
@@ -207,9 +268,55 @@
         
         .table-name { position: absolute; font-size: 14px; font-weight: 600; color: #000; z-index: 2; }
         
+        /* Counter-rotate table name to keep it horizontal */
+        .table-item[data-rotation="90"] .table-name { transform: rotate(-90deg); }
+        .table-item[data-rotation="180"] .table-name { transform: rotate(-180deg); }
+        .table-item[data-rotation="270"] .table-name { transform: rotate(-270deg); }
+        
+        /* Counter-rotate complete order button to keep it upright */
+        .table-item[data-rotation="90"] .complete-order-btn { transform: rotate(-90deg); }
+        .table-item[data-rotation="180"] .complete-order-btn { transform: rotate(-180deg); }
+        .table-item[data-rotation="270"] .complete-order-btn { transform: rotate(-270deg); }
+        
+        /* Counter-rotate reservation badge to keep it upright */
+        .table-item[data-rotation="90"] .reservation-badge { transform: rotate(-90deg); }
+        .table-item[data-rotation="180"] .reservation-badge { transform: rotate(-180deg); }
+        .table-item[data-rotation="270"] .reservation-badge { transform: rotate(-270deg); }
+        
         /* Reservation info badge on table */
         .reservation-badge { position: absolute; top: -10px; right: -10px; background: #fff301; color: #000; border: 2px solid #000; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; z-index: 3; cursor: pointer; }
         .reservation-badge:hover { transform: scale(1.2); }
+        
+        /* Complete order button on utilized tables */
+        .complete-order-btn {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: #10b981;
+            color: white;
+            border: 2px solid #059669;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 3;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+        }
+        .complete-order-btn:hover {
+            transform: scale(1.15);
+            background: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.6);
+        }
+        .complete-order-btn svg {
+            width: 18px;
+            height: 18px;
+        }
         
         .chair-wrapper { position: absolute; width: 100%; height: 100%; }
         .chair { position: absolute; width: 30px; height: 15px; border-radius: 4px; }
@@ -275,6 +382,11 @@
         .table-item .chair.chair-blocked { background: #fff301 !important; }
         
         .table-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
+        
+        /* Make table controls single column on small screens */
+        @media (max-width: 768px) {
+            .table-controls { grid-template-columns: 1fr; gap: 20px; }
+        }
         .controls-section { }
         .controls-title { font-size: 16px; font-weight: 600; color: #999; margin-bottom: 15px; }
         .toggle-group { display: flex; flex-direction: column; gap: 15px; }
@@ -447,20 +559,25 @@
                         </div>
                     </div>
 
-                    <!-- Restaurant Floor Plan -->
-                    <div class="restaurant-floor-plan">
-                        <!-- Entrance Cover (White line on border) -->
-                        <div class="entrance-cover"></div>
-                        
-                        <!-- Bar Area -->
-                        <div class="floor-area bar-area">
-                            <span class="area-label">{{ __('Bar Area') }}</span>
-                        </div>
+                    <!-- Restaurant Floor Plan Wrapper -->
+                    <div class="floor-plan-wrapper">
+                        <!-- Restaurant Floor Plan -->
+                        <div class="restaurant-floor-plan">
+                            <!-- Entrance -->
+                            <div class="entrance-area" data-area="entrance" data-entrance-side="right" style="top: 47%; right: 20px;">
+                                <span class="entrance-label">{{ __('Entrance') }}</span>
+                                <div class="entrance-arrow"></div>
+                            </div>
+                            
+                            <!-- Bar Area -->
+                            <div class="floor-area bar-area" data-area="bar-area">
+                                <span class="area-label">{{ __('Bar Area') }}</span>
+                            </div>
 
-                        <!-- Toilets Wall -->
-                        <div class="floor-area toilets-wall">
-                            <span class="toilets-label">{{ __('Toilets') }}</span>
-                        </div>
+                            <!-- Toilets Wall -->
+                            <div class="floor-area toilets-wall" data-area="toilets">
+                                <span class="toilets-label">{{ __('Toilets') }}</span>
+                            </div>
 
                         <!-- Tables -->
                         <!-- Top Row - 10 Chair Horizontal Rectangle (replaces Ta1 and Ta2) -->
@@ -590,14 +707,12 @@
                             </div>
                         </div>
 
-                        <!-- Entrance -->
-                        <div class="entrance-area">
-                            <span class="entrance-label">{{ __('Entrance') }}</span>
-                            <div class="entrance-arrow"></div>
-                        </div>
-
                         <!-- Center Square (decoration/pillar) -->
-                        <div class="center-square"></div>
+                        <div class="center-square" data-area="center-square"></div>
+                    </div>
+                    
+                    <!-- Entrance cut-out cover only (no arrow) -->
+                    <div class="entrance-cutout-cover"></div>
                     </div>
 
                     <!-- Live Views & Integration Toggles -->
@@ -1222,6 +1337,72 @@
         </div>
     </div>
 
+    <!-- Complete Order Modal -->
+    <div class="modal fade" id="completeOrderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #10b981; color: white;">
+                    <h5 class="modal-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
+                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        {{ __('Complete Order') }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="complete-order-info">
+                        <h6 style="font-weight: bold; margin-bottom: 15px;">{{ __('Order Details') }}</h6>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td style="width: 40%; color: #666;">{{ __('Table') }}:</td>
+                                <td style="font-weight: bold;" id="complete-table-name"></td>
+                            </tr>
+                            <tr>
+                                <td style="color: #666;">{{ __('Customer') }}:</td>
+                                <td id="complete-customer-name"></td>
+                            </tr>
+                            <tr>
+                                <td style="color: #666;">{{ __('Guests') }}:</td>
+                                <td id="complete-guests"></td>
+                            </tr>
+                            <tr>
+                                <td style="color: #666;">{{ __('Order Time') }}:</td>
+                                <td id="complete-order-time"></td>
+                            </tr>
+                        </table>
+                        
+                        <div style="background: #f3f4f6; padding: 12px; border-radius: 8px; margin-top: 15px;">
+                            <strong>{{ __('Order Items') }}:</strong>
+                            <div id="complete-order-items" style="margin-top: 8px; white-space: pre-wrap;"></div>
+                        </div>
+                        
+                        <div id="complete-notes-section" style="margin-top: 15px; display: none;">
+                            <strong>{{ __('Notes') }}:</strong>
+                            <div id="complete-order-notes" style="margin-top: 8px; color: #666; font-style: italic;"></div>
+                        </div>
+                        
+                        <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin-top: 20px; border-radius: 4px;">
+                            <strong style="color: #92400e;">⚠️ {{ __('Confirm Completion') }}</strong>
+                            <p style="margin: 8px 0 0 0; color: #78350f; font-size: 14px;">
+                                {{ __('This will mark the order as complete and free the table for new customers.') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button type="button" class="btn complete-order" id="confirm-complete-order" style="background: #10b981; border-color: #10b981;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 6px;">
+                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        {{ __('Complete Order') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @include('business::sales.calculator')
     @include('business::sales.category-search')
     @include('business::sales.brand-search')
@@ -1814,6 +1995,115 @@
                 });
             }
             
+            // ========== TABLE ROTATION FEATURE ==========
+            
+            // Rotate table by 90 degrees
+            function rotateTable(table) {
+                const currentRotation = parseInt(table.getAttribute('data-rotation') || '0');
+                const newRotation = (currentRotation + 90) % 360;
+                
+                table.setAttribute('data-rotation', newRotation);
+                
+                // Save rotation
+                const tableName = table.getAttribute('data-table');
+                saveTablePosition(tableName, table);
+                
+                console.log(`Table ${tableName} rotated to ${newRotation}°`);
+            }
+            
+            // Reset table rotation to 0
+            function resetTableRotation(table) {
+                table.setAttribute('data-rotation', '0');
+                
+                const tableName = table.getAttribute('data-table');
+                saveTablePosition(tableName, table);
+                
+                console.log(`Table ${tableName} rotation reset`);
+            }
+            
+            // Add right-click context menu for rotation
+            document.addEventListener('contextmenu', function(e) {
+                const table = e.target.closest('.table-item');
+                if (!table) return;
+                
+                e.preventDefault();
+                
+                // Remove existing context menu
+                const existingMenu = document.getElementById('table-context-menu');
+                if (existingMenu) existingMenu.remove();
+                
+                // Create context menu
+                const menu = document.createElement('div');
+                menu.id = 'table-context-menu';
+                menu.style.cssText = `
+                    position: fixed;
+                    top: ${e.clientY}px;
+                    left: ${e.clientX}px;
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 10000;
+                    min-width: 180px;
+                    padding: 8px 0;
+                `;
+                
+                const currentRotation = parseInt(table.getAttribute('data-rotation') || '0');
+                const tableName = table.getAttribute('data-table');
+                
+                menu.innerHTML = `
+                    <div style="padding: 8px 16px; font-weight: bold; border-bottom: 1px solid #eee; color: #666;">
+                        ${tableName}
+                    </div>
+                    <div class="menu-item" data-action="rotate" style="padding: 10px 16px; cursor: pointer; transition: background 0.2s;">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="vertical-align: middle; margin-right: 8px;">
+                            <path d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M8 2L10 4M8 2L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Rotate 90° (Current: ${currentRotation}°)
+                    </div>
+                    <div class="menu-item" data-action="reset" style="padding: 10px 16px; cursor: pointer; transition: background 0.2s;">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="vertical-align: middle; margin-right: 8px;">
+                            <path d="M2 8H14M8 2V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Reset Rotation
+                    </div>
+                `;
+                
+                document.body.appendChild(menu);
+                
+                // Add hover effects
+                menu.querySelectorAll('.menu-item').forEach(item => {
+                    item.addEventListener('mouseenter', function() {
+                        this.style.background = '#f3f4f6';
+                    });
+                    item.addEventListener('mouseleave', function() {
+                        this.style.background = 'transparent';
+                    });
+                });
+                
+                // Handle menu actions
+                menu.querySelector('[data-action="rotate"]').addEventListener('click', function() {
+                    rotateTable(table);
+                    menu.remove();
+                });
+                
+                menu.querySelector('[data-action="reset"]').addEventListener('click', function() {
+                    resetTableRotation(table);
+                    menu.remove();
+                });
+                
+                // Close menu on click outside
+                setTimeout(() => {
+                    document.addEventListener('click', function closeMenu() {
+                        menu.remove();
+                        document.removeEventListener('click', closeMenu);
+                    });
+                }, 10);
+            });
+            
+            // ========== END TABLE ROTATION FEATURE ==========
+            
             // Make tables draggable function
             function makeDraggable(table) {
                 table.addEventListener('mousedown', function(e) {
@@ -1877,6 +2167,9 @@
                         } else if (status === 'utilized') {
                             // Order in progress
                             selectedTable.classList.add('utilized');
+                            
+                            // Add complete order button
+                            addCompleteOrderButton(selectedTable);
                             
                             // Store order data
                             const orderData = {
@@ -2323,6 +2616,110 @@
                 detailsModal.show();
             }
             
+            // Add complete order button to utilized tables
+            function addCompleteOrderButton(table) {
+                // Remove existing button if any
+                const existingBtn = table.querySelector('.complete-order-btn');
+                if (existingBtn) existingBtn.remove();
+                
+                // Create complete order button
+                const completeBtn = document.createElement('div');
+                completeBtn.className = 'complete-order-btn';
+                completeBtn.title = 'Complete Order & Free Table';
+                completeBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                `;
+                
+                // Add click handler to open modal
+                completeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const tableName = table.getAttribute('data-table');
+                    const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
+                    const orderData = tableOrders[tableName];
+                    
+                    if (orderData) {
+                        // Populate modal with order details
+                        document.getElementById('complete-table-name').textContent = tableName;
+                        document.getElementById('complete-customer-name').textContent = orderData.customer || '-';
+                        document.getElementById('complete-guests').textContent = orderData.guests || '1';
+                        document.getElementById('complete-order-time').textContent = orderData.time || '-';
+                        document.getElementById('complete-order-items').textContent = orderData.items || '{{ __("No items") }}';
+                        
+                        // Show/hide notes section
+                        const notesSection = document.getElementById('complete-notes-section');
+                        const notesContent = document.getElementById('complete-order-notes');
+                        if (orderData.notes) {
+                            notesContent.textContent = orderData.notes;
+                            notesSection.style.display = 'block';
+                        } else {
+                            notesSection.style.display = 'none';
+                        }
+                        
+                        // Store table reference for completion
+                        window.currentCompleteTable = table;
+                        
+                        // Open modal
+                        const modal = new bootstrap.Modal(document.getElementById('completeOrderModal'));
+                        modal.show();
+                    }
+                });
+                
+                table.appendChild(completeBtn);
+            }
+            
+            // Handle complete order confirmation - use setTimeout to ensure DOM is ready
+            setTimeout(function() {
+                const confirmCompleteBtn = document.getElementById('confirm-complete-order');
+                if (confirmCompleteBtn) {
+                    // Remove any existing listeners
+                    const newBtn = confirmCompleteBtn.cloneNode(true);
+                    confirmCompleteBtn.parentNode.replaceChild(newBtn, confirmCompleteBtn);
+                    
+                    // Add new listener
+                    newBtn.addEventListener('click', function() {
+                        const table = window.currentCompleteTable;
+                        if (!table) {
+                            console.error('No table reference found');
+                            return;
+                        }
+                        
+                        const tableName = table.getAttribute('data-table');
+                        console.log('Completing order for:', tableName);
+                        
+                        // Remove order from localStorage
+                        const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
+                        delete tableOrders[tableName];
+                        localStorage.setItem('tableOrders', JSON.stringify(tableOrders));
+                        
+                        // Update table status to free
+                        table.classList.remove('utilized', 'blocked');
+                        table.classList.add('free');
+                        
+                        // Remove the complete button
+                        const completeBtn = table.querySelector('.complete-order-btn');
+                        if (completeBtn) completeBtn.remove();
+                        
+                        // Close modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('completeOrderModal'));
+                        if (modal) modal.hide();
+                        
+                        console.log(`Order completed for ${tableName}, table is now free`);
+                        
+                        // Show success message
+                        setTimeout(() => {
+                            alert(`✅ Order completed! ${tableName} is now free.`);
+                        }, 300);
+                    });
+                    
+                    console.log('Complete order button listener attached');
+                } else {
+                    console.error('confirm-complete-order button not found');
+                }
+            }, 500);
+            
             // Restore table statuses from localStorage on page load
             function restoreTableStatuses() {
                 const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
@@ -2353,6 +2750,8 @@
                     if (!hasReservation && tableOrders[tableName]) {
                         table.classList.remove('free', 'blocked');
                         table.classList.add('utilized');
+                        // Add complete order button
+                        addCompleteOrderButton(table);
                         console.log(`${tableName}: Has active order (utilized)`);
                     }
                     
@@ -2459,6 +2858,163 @@
                 console.log('Custom table saved:', tableData);
             }
             
+            // Save table position to localStorage (for all tables)
+            function saveTablePosition(tableName, tableElement) {
+                const tablePositions = JSON.parse(localStorage.getItem('tablePositions') || '{}');
+                
+                tablePositions[tableName] = {
+                    top: tableElement.style.top,
+                    left: tableElement.style.left,
+                    right: tableElement.style.right,
+                    bottom: tableElement.style.bottom,
+                    rotation: tableElement.getAttribute('data-rotation') || '0'
+                };
+                
+                localStorage.setItem('tablePositions', JSON.stringify(tablePositions));
+            }
+            
+            // Restore table positions from localStorage
+            function restoreTablePositions() {
+                const tablePositions = JSON.parse(localStorage.getItem('tablePositions') || '{}');
+                
+                console.log('Restoring table positions:', tablePositions);
+                
+                document.querySelectorAll('.table-item').forEach(table => {
+                    const tableName = table.getAttribute('data-table');
+                    
+                    if (tablePositions[tableName]) {
+                        const position = tablePositions[tableName];
+                        if (position.top) table.style.top = position.top;
+                        if (position.left) table.style.left = position.left;
+                        if (position.right) table.style.right = position.right;
+                        if (position.bottom) table.style.bottom = position.bottom;
+                        
+                        // Restore rotation
+                        if (position.rotation && position.rotation !== '0') {
+                            table.setAttribute('data-rotation', position.rotation);
+                        }
+                        
+                        console.log(`Position restored for ${tableName}:`, position);
+                    }
+                });
+                
+                console.log('All table positions restored');
+            }
+            
+            // Save area position to localStorage (for Bar, Toilets, Entrance)
+            function saveAreaPosition(areaName, areaElement) {
+                const areaPositions = JSON.parse(localStorage.getItem('areaPositions') || '{}');
+                
+                areaPositions[areaName] = {
+                    top: areaElement.style.top,
+                    left: areaElement.style.left,
+                    right: areaElement.style.right,
+                    bottom: areaElement.style.bottom
+                };
+                
+                // Save entrance side if it's the entrance
+                if (areaName === 'entrance') {
+                    areaPositions[areaName].entranceSide = areaElement.getAttribute('data-entrance-side');
+                }
+                
+                localStorage.setItem('areaPositions', JSON.stringify(areaPositions));
+            }
+            
+            // Restore area positions from localStorage
+            function restoreAreaPositions() {
+                const areaPositions = JSON.parse(localStorage.getItem('areaPositions') || '{}');
+                
+                console.log('Restoring area positions:', areaPositions);
+                
+                document.querySelectorAll('[data-area]').forEach(area => {
+                    const areaName = area.getAttribute('data-area');
+                    
+                    if (areaPositions[areaName]) {
+                        const position = areaPositions[areaName];
+                        if (position.top) area.style.top = position.top;
+                        if (position.left) area.style.left = position.left;
+                        if (position.right) area.style.right = position.right;
+                        if (position.bottom) area.style.bottom = position.bottom;
+                        if (position.entranceSide && areaName === 'entrance') {
+                            area.setAttribute('data-entrance-side', position.entranceSide);
+                            // Don't call updateEntranceCutout here - will be called in setTimeout
+                        }
+                        
+                        console.log(`Position restored for ${areaName}:`, position);
+                    }
+                });
+                
+                console.log('All area positions restored');
+            }
+            
+            // Update entrance cutout position based on entrance location
+            function updateEntranceCutout(entranceElement, side) {
+                const wrapper = entranceElement.closest('.floor-plan-wrapper');
+                const floorPlan = entranceElement.closest('.restaurant-floor-plan');
+                const cutoutCover = wrapper.querySelector('.entrance-cutout-cover');
+                
+                if (!cutoutCover) return;
+                
+                // Always use getBoundingClientRect for accurate positioning
+                const entranceRect = entranceElement.getBoundingClientRect();
+                const floorPlanRect = floorPlan.getBoundingClientRect();
+                
+                // Calculate entrance position relative to floor plan
+                const entranceTop = entranceRect.top - floorPlanRect.top;
+                const entranceLeft = entranceRect.left - floorPlanRect.left;
+                const entranceWidth = entranceRect.width;
+                const entranceHeight = entranceRect.height;
+                
+                console.log('Cutout calculation:', {
+                    side,
+                    entranceTop,
+                    entranceLeft,
+                    entranceWidth,
+                    entranceHeight
+                });
+                
+                if (side === 'right') {
+                    // Cover the border line on right side
+                    cutoutCover.style.width = '6px';
+                    cutoutCover.style.height = '120px';
+                    cutoutCover.style.right = '-3px';
+                    cutoutCover.style.left = 'auto';
+                    cutoutCover.style.top = (entranceTop + entranceHeight / 2 - 60) + 'px';
+                    cutoutCover.style.bottom = 'auto';
+                } else if (side === 'left') {
+                    // Cover the border line on left side
+                    cutoutCover.style.width = '6px';
+                    cutoutCover.style.height = '120px';
+                    cutoutCover.style.left = '-3px';
+                    cutoutCover.style.right = 'auto';
+                    cutoutCover.style.top = (entranceTop + entranceHeight / 2 - 60) + 'px';
+                    cutoutCover.style.bottom = 'auto';
+                } else if (side === 'top') {
+                    // Cover the border line on top side
+                    cutoutCover.style.width = '120px';
+                    cutoutCover.style.height = '6px';
+                    cutoutCover.style.top = '-3px';
+                    cutoutCover.style.bottom = 'auto';
+                    cutoutCover.style.left = (entranceLeft + entranceWidth / 2 - 60) + 'px';
+                    cutoutCover.style.right = 'auto';
+                } else if (side === 'bottom') {
+                    // Cover the border line on bottom side
+                    cutoutCover.style.width = '120px';
+                    cutoutCover.style.height = '6px';
+                    cutoutCover.style.bottom = '-3px';
+                    cutoutCover.style.top = 'auto';
+                    cutoutCover.style.left = (entranceLeft + entranceWidth / 2 - 60) + 'px';
+                    cutoutCover.style.right = 'auto';
+                }
+                
+                console.log('Cutout positioned:', {
+                    top: cutoutCover.style.top,
+                    left: cutoutCover.style.left,
+                    right: cutoutCover.style.right,
+                    bottom: cutoutCover.style.bottom
+                });
+            }
+            
             // Delete custom table from localStorage
             function deleteCustomTable(tableName) {
                 const customTables = JSON.parse(localStorage.getItem('customTables') || '[]');
@@ -2553,9 +3109,11 @@
                     
                     // Clear all reservations & orders
                     document.getElementById('clear-all-data-btn').addEventListener('click', function() {
-                        if (confirm('Are you sure you want to clear all reservations and orders? This cannot be undone.')) {
+                        if (confirm('Are you sure you want to clear all reservations, orders, and positions? This cannot be undone.')) {
                             localStorage.removeItem('tableReservations');
                             localStorage.removeItem('tableOrders');
+                            localStorage.removeItem('tablePositions');
+                            localStorage.removeItem('areaPositions');
                             
                             document.querySelectorAll('.table-item').forEach(table => {
                                 table.classList.remove('blocked', 'utilized');
@@ -2564,7 +3122,7 @@
                             
                             document.querySelectorAll('.reservation-badge').forEach(badge => badge.remove());
                             
-                            alert('All reservations and orders cleared!');
+                            alert('All reservations, orders, and positions cleared! Refresh the page to reset positions.');
                             manageTablesModal.hide();
                         }
                     });
@@ -2591,7 +3149,80 @@
             // Restore table statuses on page load
             restoreTableStatuses();
             
-            // Wait a bit for DOM to be fully ready, then check reservation times
+            // Restore table positions after tables are loaded
+            restoreTablePositions();
+            
+            // Restore area positions (Bar, Toilets, Entrance)
+            restoreAreaPositions();
+            
+            // Wait for DOM to be fully ready, then update entrance cutout
+            // Use window.load event AND font loading to ensure all elements are fully rendered
+            function initializeEntranceCutout() {
+                const entranceArea = document.querySelector('.entrance-area');
+                if (!entranceArea) {
+                    console.error('❌ Entrance area not found');
+                    return;
+                }
+                
+                const entranceSide = entranceArea.getAttribute('data-entrance-side') || 'right';
+                
+                // Retry logic with multiple attempts
+                let retryCount = 0;
+                const maxRetries = 10;
+                
+                function attemptUpdate() {
+                    // Force a reflow
+                    entranceArea.offsetHeight;
+                    
+                    const rect = entranceArea.getBoundingClientRect();
+                    const computedStyle = window.getComputedStyle(entranceArea);
+                    const isVisible = computedStyle.display !== 'none' && computedStyle.visibility !== 'hidden';
+                    
+                    console.log(`=== Entrance Cutout Attempt ${retryCount + 1} ===`);
+                    console.log('Side:', entranceSide);
+                    console.log('Rect:', rect.width, 'x', rect.height);
+                    console.log('Display:', computedStyle.display, 'Visibility:', computedStyle.visibility);
+                    
+                    // Check if element has dimensions OR if we've exhausted retries
+                    if ((rect.width === 0 || rect.height === 0) && retryCount < maxRetries && isVisible) {
+                        retryCount++;
+                        console.log(`⚠️ Entrance not rendered yet, retry ${retryCount}/${maxRetries} in 300ms...`);
+                        setTimeout(attemptUpdate, 300);
+                    } else if (rect.width > 0 && rect.height > 0) {
+                        updateEntranceCutout(entranceArea, entranceSide);
+                        console.log('✅ Cutout Updated Successfully');
+                    } else {
+                        // Force update anyway - the cutout calculation will use the entrance position
+                        console.warn('⚠️ Forcing cutout update despite 0 dimensions');
+                        updateEntranceCutout(entranceArea, entranceSide);
+                        console.log('✅ Cutout forced update completed');
+                    }
+                }
+                
+                attemptUpdate();
+            }
+            
+            // Wait for fonts to load before initializing
+            function startInitialization() {
+                if (document.fonts && document.fonts.ready) {
+                    document.fonts.ready.then(() => {
+                        console.log('📝 Fonts loaded, initializing entrance cutout...');
+                        setTimeout(initializeEntranceCutout, 200);
+                    });
+                } else {
+                    // Fallback if fonts API not available
+                    setTimeout(initializeEntranceCutout, 500);
+                }
+            }
+            
+            // Initialize on window load (ensures all resources loaded)
+            if (document.readyState === 'complete') {
+                startInitialization();
+            } else {
+                window.addEventListener('load', startInitialization);
+            }
+            
+            // Also run initial checks
             setTimeout(() => {
                 checkReservationTimes();
                 console.log('Initial reservation check completed');
@@ -2794,6 +3425,11 @@
                 makeDraggable(table);
             });
             
+            // Add draggable to static areas (Bar, Toilets, Entrance)
+            document.querySelectorAll('[data-area]').forEach(area => {
+                makeDraggable(area);
+            });
+            
             document.addEventListener('mousemove', function(e) {
                 if (!isDragging || !currentTable) return;
                 
@@ -2803,31 +3439,105 @@
                 let newX = e.clientX - parentRect.left - offsetX;
                 let newY = e.clientY - parentRect.top - offsetY;
                 
-                // Keep table within bounds
-                const tableWidth = currentTable.offsetWidth;
-                const tableHeight = currentTable.offsetHeight;
+                // Check if this is the entrance area
+                const isEntrance = currentTable.getAttribute('data-area') === 'entrance';
                 
-                newX = Math.max(0, Math.min(newX, parent.offsetWidth - tableWidth));
-                newY = Math.max(0, Math.min(newY, parent.offsetHeight - tableHeight));
-                
-                currentTable.style.left = newX + 'px';
-                currentTable.style.top = newY + 'px';
-                currentTable.style.right = 'auto';
-                currentTable.style.bottom = 'auto';
+                if (isEntrance) {
+                    // Entrance can move freely, but snap to nearest edge
+                    const tableWidth = currentTable.offsetWidth;
+                    const tableHeight = currentTable.offsetHeight;
+                    
+                    // Calculate distances to each edge
+                    const distToLeft = newX;
+                    const distToRight = parent.offsetWidth - (newX + tableWidth);
+                    const distToTop = newY;
+                    const distToBottom = parent.offsetHeight - (newY + tableHeight);
+                    
+                    // Find nearest edge
+                    const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
+                    
+                    let entranceSide = 'right';
+                    
+                    if (minDist === distToLeft) {
+                        // Snap to left edge
+                        entranceSide = 'left';
+                        currentTable.style.left = '20px';
+                        currentTable.style.right = 'auto';
+                        newY = Math.max(0, Math.min(newY, parent.offsetHeight - tableHeight));
+                        currentTable.style.top = newY + 'px';
+                        currentTable.style.bottom = 'auto';
+                    } else if (minDist === distToRight) {
+                        // Snap to right edge
+                        entranceSide = 'right';
+                        currentTable.style.right = '20px';
+                        currentTable.style.left = 'auto';
+                        newY = Math.max(0, Math.min(newY, parent.offsetHeight - tableHeight));
+                        currentTable.style.top = newY + 'px';
+                        currentTable.style.bottom = 'auto';
+                    } else if (minDist === distToTop) {
+                        // Snap to top edge
+                        entranceSide = 'top';
+                        currentTable.style.top = '20px';
+                        currentTable.style.bottom = 'auto';
+                        newX = Math.max(0, Math.min(newX, parent.offsetWidth - tableWidth));
+                        currentTable.style.left = newX + 'px';
+                        currentTable.style.right = 'auto';
+                    } else {
+                        // Snap to bottom edge
+                        entranceSide = 'bottom';
+                        currentTable.style.bottom = '20px';
+                        currentTable.style.top = 'auto';
+                        newX = Math.max(0, Math.min(newX, parent.offsetWidth - tableWidth));
+                        currentTable.style.left = newX + 'px';
+                        currentTable.style.right = 'auto';
+                    }
+                    
+                    // Update entrance side attribute
+                    currentTable.setAttribute('data-entrance-side', entranceSide);
+                    
+                    // Update cutout position
+                    updateEntranceCutout(currentTable, entranceSide);
+                } else {
+                    // Normal dragging for tables and other areas
+                    const tableWidth = currentTable.offsetWidth;
+                    const tableHeight = currentTable.offsetHeight;
+                    
+                    newX = Math.max(0, Math.min(newX, parent.offsetWidth - tableWidth));
+                    newY = Math.max(0, Math.min(newY, parent.offsetHeight - tableHeight));
+                    
+                    currentTable.style.left = newX + 'px';
+                    currentTable.style.top = newY + 'px';
+                    currentTable.style.right = 'auto';
+                    currentTable.style.bottom = 'auto';
+                }
             });
             
             document.addEventListener('mouseup', function() {
                 if (isDragging && currentTable) {
                     currentTable.style.cursor = 'move';
                     
-                    // Check if this is a custom table and save its new position
+                    // Check if it's a table or an area
                     const tableName = currentTable.getAttribute('data-table');
-                    const customTables = JSON.parse(localStorage.getItem('customTables') || '[]');
-                    const isCustomTable = customTables.some(t => t.name === tableName);
+                    const areaName = currentTable.getAttribute('data-area');
                     
-                    if (isCustomTable) {
-                        saveCustomTable(currentTable);
-                        console.log('Custom table position updated:', tableName);
+                    if (tableName) {
+                        // Save position for tables
+                        saveTablePosition(tableName, currentTable);
+                        
+                        // Check if this is a custom table and save its full data
+                        const customTables = JSON.parse(localStorage.getItem('customTables') || '[]');
+                        const isCustomTable = customTables.some(t => t.name === tableName);
+                        
+                        if (isCustomTable) {
+                            saveCustomTable(currentTable);
+                            console.log('Custom table position updated:', tableName);
+                        } else {
+                            console.log('Default table position saved:', tableName);
+                        }
+                    } else if (areaName) {
+                        // Save position for static areas
+                        saveAreaPosition(areaName, currentTable);
+                        console.log('Area position saved:', areaName);
                     }
                     
                     isDragging = false;
