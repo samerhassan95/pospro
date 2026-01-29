@@ -5,49 +5,116 @@
 
     // Category Scroll Functionality
     function initCategoryScroll() {
-        const categoryList = $('.pos-category-list');
+        console.log('=== initCategoryScroll called ===');
+        
+        // Support both sales and purchases pages
+        // Try to find the category list element
+        let categoryList = $('.pos-category-list');
+        if (categoryList.length === 0) {
+            console.log('No .pos-category-list found, trying #purchase-category-list');
+            categoryList = $('#purchase-category-list');
+        }
+        if (categoryList.length === 0) {
+            console.log('No #purchase-category-list found, trying #category-list');
+            categoryList = $('#category-list');
+        }
+        
         const prevBtn = $('.pos-category-scroll-btn.prev');
         const nextBtn = $('.pos-category-scroll-btn.next');
         
-        if (categoryList.length && prevBtn.length && nextBtn.length) {
-            // Scroll on button click
-            prevBtn.on('click', function(e) {
-                e.preventDefault();
-                categoryList.animate({
-                    scrollLeft: categoryList.scrollLeft() - 200
-                }, 300);
-            });
+        console.log('Category list found:', categoryList.length, categoryList);
+        console.log('Prev button found:', prevBtn.length, prevBtn);
+        console.log('Next button found:', nextBtn.length, nextBtn);
+        
+        if (categoryList.length === 0) {
+            console.error('❌ Category list not found! Cannot initialize scroll.');
+            return false;
+        }
+        
+        if (prevBtn.length === 0 || nextBtn.length === 0) {
+            console.error('❌ Scroll buttons not found! Cannot initialize scroll.');
+            return false;
+        }
+        
+        console.log('✅ All elements found, initializing category scroll...');
+        
+        // Log element details for debugging
+        console.log('Category list element:', categoryList[0]);
+        console.log('Category list scrollWidth:', categoryList[0].scrollWidth);
+        console.log('Category list clientWidth:', categoryList[0].clientWidth);
+        console.log('Is scrollable?', categoryList[0].scrollWidth > categoryList[0].clientWidth);
+        
+        // Scroll on button click
+        prevBtn.off('click').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('⬅️ Prev button clicked');
+            const element = categoryList[0];
+            const currentScroll = element.scrollLeft;
+            const targetScroll = Math.max(0, currentScroll - 200);
+            console.log('Current scroll:', currentScroll, 'Target:', targetScroll);
             
-            nextBtn.on('click', function(e) {
-                e.preventDefault();
-                categoryList.animate({
-                    scrollLeft: categoryList.scrollLeft() + 200
-                }, 300);
+            // Use native smooth scroll
+            element.scrollTo({
+                left: targetScroll,
+                behavior: 'smooth'
             });
+        });
+        
+        nextBtn.off('click').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('➡️ Next button clicked');
+            const element = categoryList[0];
+            const currentScroll = element.scrollLeft;
+            const maxScroll = element.scrollWidth - element.clientWidth;
+            const targetScroll = Math.min(maxScroll, currentScroll + 200);
+            console.log('Current scroll:', currentScroll, 'Target:', targetScroll, 'Max:', maxScroll);
             
-            // Update button visibility and active state based on scroll position
-            function updateScrollButtons() {
-                const scrollLeft = categoryList.scrollLeft();
-                const maxScroll = categoryList[0].scrollWidth - categoryList[0].clientWidth;
-                
-                // Update prev button
-                if (scrollLeft <= 0) {
-                    prevBtn.removeClass('active').css('opacity', '0.5').css('pointer-events', 'none');
-                } else {
-                    prevBtn.addClass('active').css('opacity', '1').css('pointer-events', 'auto');
-                }
-                
-                // Update next button
-                if (scrollLeft >= maxScroll - 5) {
-                    nextBtn.removeClass('active').css('opacity', '0.5').css('pointer-events', 'none');
-                } else {
-                    nextBtn.addClass('active').css('opacity', '1').css('pointer-events', 'auto');
-                }
+            // Use native smooth scroll
+            element.scrollTo({
+                left: targetScroll,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Update button visibility and active state based on scroll position
+        function updateScrollButtons() {
+            const scrollLeft = categoryList.scrollLeft();
+            const scrollWidth = categoryList[0].scrollWidth;
+            const clientWidth = categoryList[0].clientWidth;
+            const maxScroll = scrollWidth - clientWidth;
+            
+            console.log('📊 Scroll info:', {scrollLeft, scrollWidth, clientWidth, maxScroll});
+            
+            // Update prev button
+            if (scrollLeft <= 0) {
+                prevBtn.addClass('disabled').removeClass('active');
+                console.log('⬅️ Prev button disabled');
+            } else {
+                prevBtn.removeClass('disabled').addClass('active');
+                console.log('⬅️ Prev button enabled');
             }
             
-            categoryList.on('scroll', updateScrollButtons);
-            updateScrollButtons();
+            // Update next button
+            if (scrollLeft >= maxScroll - 5) {
+                nextBtn.addClass('disabled').removeClass('active');
+                console.log('➡️ Next button disabled');
+            } else {
+                nextBtn.removeClass('disabled').addClass('active');
+                console.log('➡️ Next button enabled');
+            }
         }
+        
+        // Remove old scroll listener and add new one
+        categoryList.off('scroll').on('scroll', updateScrollButtons);
+        
+        // Initial update with delay to ensure DOM is ready
+        setTimeout(updateScrollButtons, 100);
+        setTimeout(updateScrollButtons, 500);
+        
+        console.log('✅ Category scroll initialized successfully');
+        return true;
     }
     
     // Category Filter
@@ -141,10 +208,25 @@
     
     // Initialize all functions
     $(document).ready(function() {
+        console.log('DOM Ready - Initializing POS Products...');
         initCategoryScroll();
         initCategoryFilter();
         initProductOptions();
         initTabs();
+        
+        // Re-initialize after a delay to handle dynamic content
+        setTimeout(function() {
+            console.log('Re-initializing category scroll after delay...');
+            initCategoryScroll();
+        }, 1000);
+    });
+    
+    // Also initialize on window load as a fallback
+    $(window).on('load', function() {
+        console.log('Window Load - Re-initializing category scroll...');
+        setTimeout(function() {
+            initCategoryScroll();
+        }, 500);
     });
     
 })(jQuery);
