@@ -411,70 +411,50 @@
     {{-- Header --}}
     <div class="b2b-header">
         <h1>{{ __('TAX INVOICE') }} / فاتورة ضريبية</h1>
-        <p>{{ __('Tax Invoice issued between businesses') }} / تصدر غالباً بين منشأة ومنشأة</p>
+        <p style="margin-top: 4px; font-size: 9px;">{{ __('Tax Invoice issued between businesses') }} / (تصدر غالباً بين منشأة ومنشأة أخرى)</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding: 4px 0;">
+            <div>
+                <p style="margin: 2px 0; font-size: 8px;"><strong>{{ __('Serial Number') }} / الرقم التسلسلي:</strong> {{ $sale->invoiceNumber ?? '' }}</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="margin: 2px 0; font-size: 8px;"><strong>{{ __('Date') }} / التاريخ:</strong> {{ formatted_date($sale->saleDate ?? '') }} {{ formatted_time($sale->saleDate ?? '') }}</p>
+            </div>
+        </div>
     </div>
 
     {{-- Seller and Buyer Information --}}
     <div class="b2b-parties">
         {{-- Seller (البائع) --}}
         <div class="b2b-party-box">
-            <h3>{{ __('Seller Information') }} / بيانات البائع</h3>
-            <p><strong>{{ __('Company Name') }}:</strong> {{ $sale->business->companyName ?? '---' }}</p>
-            <p><strong>{{ __('VAT Number') }}:</strong> {{ $sale->business->vat_no ?? '---' }}</p>
-            @if($sale->business->commercial_registration)
-            <p><strong>{{ __('CR Number') }}:</strong> {{ $sale->business->commercial_registration }}</p>
-            @endif
-            @if($sale->business->additional_id)
-            <p><strong>{{ __('Additional ID') }}:</strong> {{ $sale->business->additional_id }}</p>
-            @endif
-            <p><strong>{{ __('Building No') }}:</strong> {{ $sale->business->building_number ?? '---' }}</p>
-            <p><strong>{{ __('Street') }}:</strong> {{ $sale->business->street_name ?? '---' }}</p>
-            <p><strong>{{ __('District') }}:</strong> {{ $sale->business->district ?? '---' }}</p>
-            <p><strong>{{ __('City') }}:</strong> {{ $sale->business->city ?? '---' }}</p>
-            <p><strong>{{ __('Postal Code') }}:</strong> {{ $sale->business->postal_code ?? '---' }}</p>
-            <p><strong>{{ __('Country') }}:</strong> {{ $sale->business->country_code ?? '---' }}</p>
-            <p><strong>{{ __('Phone') }}:</strong> {{ $sale->business->phoneNumber ?? '---' }}</p>
-            <p><strong>{{ __('Email') }}:</strong> {{ $sale->business->email ?? '---' }}</p>
+            <h3>{{ __('Seller Information') }} / معلومات البائع</h3>
+            <p><strong>{{ __('Seller Name') }} / اسم البائع:</strong> {{ $sale->business->companyName ?? '---' }}</p>
+            <p><strong>{{ __('Seller Address') }} / عنوان البائع:</strong> 
+                @if($sale->business->building_number || $sale->business->street_name || $sale->business->district || $sale->business->city)
+                    {{ $sale->business->building_number ?? '' }}{{ $sale->business->building_number && $sale->business->street_name ? ', ' : '' }}{{ $sale->business->street_name ?? '' }}{{ ($sale->business->building_number || $sale->business->street_name) && ($sale->business->district || $sale->business->city) ? ', ' : '' }}{{ $sale->business->district ?? '' }}{{ $sale->business->district && $sale->business->city ? ', ' : '' }}{{ $sale->business->city ?? '' }}{{ $sale->business->postal_code ? ' - ' . $sale->business->postal_code : '' }}
+                @else
+                    ---
+                @endif
+            </p>
+            <p><strong>{{ __('VAT Registration Number') }} / رقم تسجيل ضريبة القيمة المضافة للبائع:</strong> {{ $sale->business->vat_no ?? '---' }}</p>
+            <p><strong>{{ __('Commercial Registration Number') }} / رقم السجل التجاري:</strong> {{ $sale->business->commercial_registration ?? '---' }}</p>
         </div>
 
         {{-- Buyer (المشتري) --}}
         <div class="b2b-party-box">
-            <h3>{{ __('Buyer Information') }} / بيانات المشتري</h3>
-            <p><strong>{{ __('Company Name') }}:</strong> {{ $sale->party->name ?? 'Guest' }}</p>
-            <p><strong>{{ __('VAT Number') }}:</strong> {{ $sale->party->vat_number ?? '---' }}</p>
-            @if($sale->party && $sale->party->commercial_registration)
-            <p><strong>{{ __('CR Number') }}:</strong> {{ $sale->party->commercial_registration }}</p>
-            @endif
-            @if($sale->party && $sale->party->additional_id)
-            <p><strong>{{ __('Additional ID') }}:</strong> {{ $sale->party->additional_id }}</p>
-            @endif
-            <p><strong>{{ __('Building No') }}:</strong> {{ $sale->party->building_number ?? '---' }}</p>
-            <p><strong>{{ __('Street') }}:</strong> {{ $sale->party->street_name ?? '---' }}</p>
-            <p><strong>{{ __('District') }}:</strong> {{ $sale->party->district ?? '---' }}</p>
-            <p><strong>{{ __('City') }}:</strong> {{ $sale->party->city ?? '---' }}</p>
-            <p><strong>{{ __('Postal Code') }}:</strong> {{ $sale->party->postal_code ?? '---' }}</p>
-            <p><strong>{{ __('Country') }}:</strong> {{ $sale->party->country_code ?? '---' }}</p>
-            <p><strong>{{ __('Phone') }}:</strong> {{ $sale->party->phone ?? '---' }}</p>
+            <h3>{{ __('Buyer Information') }} / معلومات المشتري</h3>
+            <p><strong>{{ __('Buyer Name') }} / اسم المشتري:</strong> {{ $sale->party->name ?? 'Guest' }}</p>
+            <p><strong>{{ __('Buyer Address') }} / عنوان المشتري:</strong> 
+                @if($sale->party && ($sale->party->building_number || $sale->party->street_name || $sale->party->district || $sale->party->city))
+                    {{ $sale->party->building_number ?? '' }}{{ $sale->party->building_number && $sale->party->street_name ? ', ' : '' }}{{ $sale->party->street_name ?? '' }}{{ ($sale->party->building_number || $sale->party->street_name) && ($sale->party->district || $sale->party->city) ? ', ' : '' }}{{ $sale->party->district ?? '' }}{{ $sale->party->district && $sale->party->city ? ', ' : '' }}{{ $sale->party->city ?? '' }}{{ $sale->party->postal_code ? ' - ' . $sale->party->postal_code : '' }}
+                @else
+                    ---
+                @endif
+            </p>
+            <p><strong>{{ __('VAT Registration Number') }} / رقم تسجيل ضريبة القيمة المضافة للمشتري:</strong> {{ $sale->party->vat_number ?? '---' }}</p>
+            <p><strong>{{ __('Commercial Registration Number') }} / رقم السجل التجاري:</strong> {{ ($sale->party && $sale->party->commercial_registration) ? $sale->party->commercial_registration : '---' }}</p>
         </div>
     </div>
 
-    {{-- Invoice Details --}}
-    <div class="b2b-invoice-details">
-        <div>
-            <p><strong>{{ __('Invoice Number') }}:</strong> {{ $sale->invoiceNumber ?? '' }}</p>
-            <p><strong>{{ __('Invoice Date') }}:</strong> {{ formatted_date($sale->saleDate ?? '') }}</p>
-            @if($sale->supply_date)
-            <p><strong>{{ __('Supply Date') }}:</strong> {{ formatted_date($sale->supply_date) }}</p>
-            @endif
-        </div>
-        <div style="text-align: right;">
-            <p><strong>{{ __('Payment Method') }}:</strong> {{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}</p>
-            <p><strong>{{ __('Sales By') }}:</strong> {{ $sale->user->name ?? 'Admin' }}</p>
-            @if($sale->po_number)
-            <p><strong>{{ __('PO Number') }}:</strong> {{ $sale->po_number }}</p>
-            @endif
-        </div>
-    </div>
 
     {{-- Additional Information --}}
     @if($sale->contract_number || $sale->payment_terms || $sale->payment_means)
@@ -512,131 +492,106 @@
     <table class="b2b-table">
         <thead>
             <tr>
-                <th style="width: 30px;">#</th>
-                <th style="width: 60px;">{{ __('Code') }}<br>الرمز</th>
-                <th>{{ __('Description') }}<br>الوصف</th>
-                <th style="width: 40px;">{{ __('UoM') }}<br>وحدة</th>
-                <th style="width: 40px;" class="text-center">{{ __('Qty') }}<br>كمية</th>
-                <th style="width: 60px;" class="text-right">{{ __('List Pr.') }}<br>السعر</th>
-                <th style="width: 45px;" class="text-right">{{ __('Disc %') }}<br>خصم</th>
-                <th style="width: 60px;" class="text-right">{{ __('Net Pr.') }}<br>الصافي</th>
-                <th style="width: 50px;" class="text-right">{{ __('VAT') }}<br>ضريبة</th>
-                <th style="width: 70px;" class="text-right">{{ __('Total') }}<br>إجمالي</th>
+                <th style="width: 80px;">{{ __('Product') }}<br>المنتج</th>
+                <th style="width: 60px;" class="text-right">{{ __('Unit Price') }}<br>سعر الوحدة</th>
+                <th style="width: 50px;" class="text-center">{{ __('Quantity') }}<br>الكمية</th>
+                <th style="width: 80px;" class="text-right">{{ __('Subtotal without Tax') }}<br>المجموع الفرعي بدون الضريبة</th>
+                <th style="width: 60px;" class="text-center">{{ __('Tax Rate') }}<br>نسبة الضريبة</th>
+                <th style="width: 70px;" class="text-right">{{ __('Tax Value') }}<br>قيمة الضريبة</th>
+                <th style="width: 90px;" class="text-right">{{ __('Total including VAT') }}<br>المجموع شامل ضريبة القيمة المضافة</th>
             </tr>
         </thead>
         <tbody>
             @php 
                 $subtotal = 0;
                 $totalTax = 0;
+                // Get VAT rate from sale or vat relationship or default to 15%
+                $vatRate = $sale->vat->rate ?? $sale->vat_percent ?? 15;
+                if ($vatRate == 0 || $vatRate == null) {
+                    $vatRate = 15; // Default to 15% if not set
+                }
             @endphp
             @foreach ($sale->details as $detail)
                 @php
-                    $listPrice = $detail->list_price ?? $detail->price ?? 0;
-                    $discountPercent = $detail->discount_percent ?? 0;
-                    $netPrice = $detail->net_price ?? $detail->price ?? 0;
+                    $unitPrice = $detail->list_price ?? $detail->price ?? 0;
                     $quantity = $detail->quantities ?? 0;
-                    $lineTotal = $netPrice * $quantity;
-                    $taxPerItem = $detail->tax_per_item ?? ($lineTotal * ($sale->vat_percent ?? 15) / 100);
-                    $lineTotalWithTax = $lineTotal + $taxPerItem;
+                    $lineSubtotal = $unitPrice * $quantity;
+                    // Use tax_per_item if available, otherwise calculate from line subtotal
+                    $taxValue = $detail->tax_per_item ?? ($lineSubtotal * $vatRate / 100);
+                    $lineTotalWithTax = $lineSubtotal + $taxValue;
                     
-                    $subtotal += $lineTotal;
-                    $totalTax += $taxPerItem;
+                    $subtotal += $lineSubtotal;
+                    $totalTax += $taxValue;
                 @endphp
                 <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $detail->item_code ?? $detail->product->id ?? '' }}</td>
                     <td>{{ $detail->product->productName ?? '' }}</td>
-                    <td class="text-center">{{ $detail->unit_of_measure ?? 'PCS' }}</td>
+                    <td class="text-right">{{ currency_format($unitPrice, currency: business_currency()) }}</td>
                     <td class="text-center">{{ $quantity }}</td>
-                    <td class="text-right">{{ currency_format($listPrice, currency: business_currency()) }}</td>
-                    <td class="text-right">{{ $discountPercent > 0 ? number_format($discountPercent, 1) . '%' : '-' }}</td>
-                    <td class="text-right">{{ currency_format($netPrice, currency: business_currency()) }}</td>
-                    <td class="text-right">{{ currency_format($taxPerItem, currency: business_currency()) }}</td>
+                    <td class="text-right">{{ currency_format($lineSubtotal, currency: business_currency()) }}</td>
+                    <td class="text-center">{{ number_format($vatRate, 0) }}%</td>
+                    <td class="text-right">{{ currency_format($taxValue, currency: business_currency()) }}</td>
                     <td class="text-right">{{ currency_format($lineTotalWithTax, currency: business_currency()) }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-    {{-- Tax Summary --}}
-    <div class="b2b-tax-summary">
-        <h4>{{ __('Tax Summary') }} / ملخص الضرائب</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th>{{ __('Tax Rate %') }}<br>نسبة الضريبة</th>
-                    <th>{{ __('Taxable Amount') }}<br>المبلغ الخاضع</th>
-                    <th>{{ __('Tax Amount') }}<br>قيمة الضريبة</th>
-                    <th>{{ __('Total Inc. Tax') }}<br>الإجمالي شامل</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-center">{{ $sale->vat_percent ?? 15 }}%</td>
-                    <td class="text-right">{{ currency_format($subtotal, currency: business_currency()) }}</td>
-                    <td class="text-right">{{ currency_format($sale->vat_amount, currency: business_currency()) }}</td>
-                    <td class="text-right">{{ currency_format($subtotal + $sale->vat_amount, currency: business_currency()) }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    {{-- Totals --}}
-    <div class="b2b-totals">
-        <table>
+    {{-- Totals Section - Matching ZATCA Sample --}}
+    @php
+        // Calculate final VAT amount - use sale vat_amount if available, otherwise calculate from subtotal
+        $finalVatAmount = $sale->vat_amount ?? ($subtotal * $vatRate / 100);
+        // Ensure we use the correct VAT rate (not 0)
+        $displayVatRate = $vatRate > 0 ? $vatRate : 15;
+    @endphp
+    <div class="b2b-totals" style="margin-top: 10px; margin-bottom: 10px;">
+        <table style="width: 100%; max-width: 400px; margin-left: auto; border-collapse: collapse;">
             <tr>
-                <td>{{ __('Subtotal') }} / المجموع الفرعي:</td>
-                <td style="text-align: right;"><strong>{{ currency_format($subtotal, currency: business_currency()) }}</strong></td>
+                <td style="padding: 5px; text-align: right; font-size: 8px; border-bottom: 1px solid #E0E0E0;">{{ __('Total') }} / المجموع:</td>
+                <td style="padding: 5px; text-align: right; font-size: 8px; font-weight: 600; border-bottom: 1px solid #E0E0E0;">{{ currency_format($subtotal, currency: business_currency()) }}</td>
             </tr>
             <tr>
-                <td>{{ __('VAT') }} ({{ $sale->vat_percent ?? 15 }}%) / الضريبة:</td>
-                <td style="text-align: right;"><strong>{{ currency_format($sale->vat_amount, currency: business_currency()) }}</strong></td>
+                <td style="padding: 5px; text-align: right; font-size: 8px; border-bottom: 1px solid #E0E0E0;">{{ __('VAT') }} ({{ number_format($displayVatRate, 0) }}%) / ضريبة القيمة المضافة ({{ number_format($displayVatRate, 0) }}%):</td>
+                <td style="padding: 5px; text-align: right; font-size: 8px; font-weight: 600; border-bottom: 1px solid #E0E0E0;">{{ currency_format($finalVatAmount, currency: business_currency()) }}</td>
             </tr>
-            @if($sale->discountAmount > 0)
-            <tr>
-                <td>{{ __('Discount') }} / الخصم:</td>
-                <td style="text-align: right;"><strong>-{{ currency_format($sale->discountAmount, currency: business_currency()) }}</strong></td>
-            </tr>
-            @endif
-            @if($sale->shipping_charge > 0)
-            <tr>
-                <td>{{ __('Shipping') }} / الشحن:</td>
-                <td style="text-align: right;"><strong>{{ currency_format($sale->shipping_charge, currency: business_currency()) }}</strong></td>
-            </tr>
-            @endif
             <tr class="total-row">
-                <td>{{ __('Total Amount') }} / الإجمالي الكلي:</td>
-                <td style="text-align: right;">{{ currency_format($sale->totalAmount, currency: business_currency()) }}</td>
+                <td style="padding: 8px; text-align: right; font-size: 10px; font-weight: bold; background: linear-gradient(135deg, #1565C0 0%, #1976D2 100%); color: white;">{{ __('Total with Tax') }} ({{ number_format($displayVatRate, 0) }}%) / المجموع مع الضريبة ({{ number_format($displayVatRate, 0) }}%):</td>
+                <td style="padding: 8px; text-align: right; font-size: 10px; font-weight: bold; background: linear-gradient(135deg, #1565C0 0%, #1976D2 100%); color: white;">{{ currency_format($subtotal + $finalVatAmount, currency: business_currency()) }}</td>
             </tr>
         </table>
     </div>
 
-    {{-- Footer with QR and Signatures --}}
-    <div class="b2b-footer">
-        <div class="b2b-qr">
-            @php
-                $sellerName = $sale->business->companyName ?? '';
-                $vatRegistrationNumber = $sale->business->vat_no ?? '';
-                $timestamp = $sale->created_at ? \Carbon\Carbon::parse($sale->created_at)->toIso8601String() : \Carbon\Carbon::now()->toIso8601String();
-                $invoiceTotal = $sale->totalAmount ?? 0;
-                $vatTotal = $sale->vat_amount ?? 0;
-                $xmlHash = $sale->invoice_hash ?? null;
-                $ecdsaSignature = $sale->cryptographic_stamp ?? null;
-                $publicKey = $sale->business->zatca_setting['public_key'] ?? null;
-                $zatcaQrContent = generateZatcaQrCode($sellerName, $vatRegistrationNumber, $timestamp, $invoiceTotal, $vatTotal, $xmlHash, $ecdsaSignature, $publicKey);
-            @endphp
-            {!! QrCode::size(80)->generate($zatcaQrContent) !!}
-            <p>{{ __('Scan for Verification') }}<br>امسح للتحقق</p>
-        </div>
-        
-        <div class="b2b-footer-text">
-            <p>
-                <strong>{{ __('Note') }}:</strong> {{ __('This is a computer-generated tax invoice compliant with ZATCA Phase 2 requirements.') }}
-                {{ __('Contact') }}: {{ $sale->business->phoneNumber ?? '' }}
-            </p>
-            @if($sale->uuid)
-            <p style="font-size: 6px; margin-top: 3px;"><strong>UUID:</strong> {{ $sale->uuid }}</p>
-            @endif
+    {{-- Footer with QR Code - Matching ZATCA Sample Layout --}}
+    <div class="b2b-footer" style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #E0E0E0;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            {{-- QR Code on Left --}}
+            <div class="b2b-qr" style="flex: 0 0 auto; margin-right: 15px;">
+                @php
+                    $sellerName = $sale->business->companyName ?? '';
+                    $vatRegistrationNumber = $sale->business->vat_no ?? '';
+                    $timestamp = $sale->created_at ? \Carbon\Carbon::parse($sale->created_at)->toIso8601String() : \Carbon\Carbon::now()->toIso8601String();
+                    $invoiceTotal = $sale->totalAmount ?? 0;
+                    // Use calculated VAT amount for QR code (recalculate if needed)
+                    $qrVatAmount = isset($finalVatAmount) ? $finalVatAmount : ($sale->vat_amount ?? ($subtotal * ($sale->vat->rate ?? $sale->vat_percent ?? 15) / 100));
+                    $xmlHash = $sale->invoice_hash ?? null;
+                    $ecdsaSignature = $sale->cryptographic_stamp ?? null;
+                    $publicKey = $sale->business->zatca_setting['public_key'] ?? null;
+                    $zatcaQrContent = generateZatcaQrCode($sellerName, $vatRegistrationNumber, $timestamp, $invoiceTotal, $qrVatAmount, $xmlHash, $ecdsaSignature, $publicKey);
+                @endphp
+                {!! QrCode::size(100)->generate($zatcaQrContent) !!}
+                <p style="font-size: 7px; margin-top: 4px; text-align: center; font-weight: 500;">{{ __('QR Code') }}<br>رمز الاستجابة السريعة (QR Code)</p>
+                <p style="font-size: 6px; margin-top: 2px; text-align: center; color: #666;">{{ __('Date and time of invoice issuance') }}<br>تاريخ و وقت إصدار الفاتورة</p>
+            </div>
+            
+            {{-- Footer Text on Right --}}
+            <div class="b2b-footer-text" style="flex: 1; padding-left: 10px;">
+                <p style="font-size: 7px; line-height: 1.5; color: #666; text-align: justify;">
+                    <strong>{{ __('Note') }}:</strong> {{ __('This is a computer-generated tax invoice compliant with ZATCA Phase 2 requirements.') }}
+                    {{ __('Contact') }}: {{ $sale->business->phoneNumber ?? '' }}
+                </p>
+                @if($sale->uuid)
+                <p style="font-size: 6px; margin-top: 3px; color: #666;"><strong>UUID:</strong> {{ $sale->uuid }}</p>
+                @endif
+            </div>
         </div>
     </div>
 
