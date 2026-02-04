@@ -1,0 +1,12 @@
+{
+    "name": "CustomDomainAddon",
+    "alias": "customdomainaddon",
+    "version": "1.0",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\CustomDomainAddon\\App\\Providers\\CustomDomainAddonServiceProvider"
+    ],
+    "files": []
+}

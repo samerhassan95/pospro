@@ -819,7 +819,7 @@
                             <option value="">{{ __('Search Customer') }}</option>
                             <option class="guest-option" value="guest">{{ __('Guest') }}</option>
                             @foreach ($customers as $customer)
-                                <option value="{{ $customer->id }}" data-type="{{ $customer->type }}" data-phone="{{ $customer->phone }}">{{ $customer->name }}({{ $customer->type }}{{ $customer->due ? ' ' . currency_format($customer->due, currency: business_currency()) : '' }}) {{ $customer->phone }}</option>
+                                <option value="{{ $customer->id }}" data-type="{{ $customer->type }}" data-phone="{{ $customer->phone }}" data-zatca-type="{{ $customer->zatca_type ?? 'b2c' }}">{{ $customer->name }}({{ $customer->type }}{{ $customer->due ? ' ' . currency_format($customer->due, currency: business_currency()) : '' }}) {{ $customer->phone }}</option>
                             @endforeach
                         </select>
                         <a href="#customer-create-modal" data-bs-toggle="modal" class="sidebar-add-customer-btn">
@@ -830,6 +830,17 @@
                     </div>
                     <div class="guest-phone-field d-none guest_phone">
                         <input type="text" name="customer_phone" class="form-control" placeholder="{{ __('Enter Customer Phone Number') }}">
+                    </div>
+                    
+                    <!-- B2B Additional Fields Button -->
+                    <div class="b2b-fields-wrapper d-none" id="b2b-fields-wrapper" style="margin-top: 10px;">
+                        <button type="button" class="btn btn-outline-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#b2bAdditionalFieldsModal">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 5px;">
+                                <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3.89543 5 3 5.89543 3 7V19C3 19.5523 3.44772 20 4 20H19C19.5523 20 20 19.5523 20 19V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            {{ __('B2B Additional Fields') }}
+                        </button>
                     </div>
                 </div>
 
@@ -1397,6 +1408,7 @@
     @include('business::sales.brand-search')
     @include('business::sales.customer-create')
     @include('business::sales.stock-list')
+    @include('business::sales.partials.b2b-additional-fields')
 @endpush
 
 @push('js')
@@ -3563,4 +3575,25 @@
     <script src="{{ asset('assets/js/custom/calculator.js') }}"></script>
     <script src="{{ asset('assets/js/custom/pos-products.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/pos-payment-modal.js') . '?v=' . time() }}"></script>
+    
+    <script>
+        // Show/Hide B2B Additional Fields button based on customer type
+        document.addEventListener('DOMContentLoaded', function() {
+            const partySelect = document.getElementById('party_id');
+            const b2bFieldsWrapper = document.getElementById('b2b-fields-wrapper');
+            
+            if (partySelect && b2bFieldsWrapper) {
+                partySelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const zatcaType = selectedOption.getAttribute('data-zatca-type');
+                    
+                    if (zatcaType === 'b2b') {
+                        b2bFieldsWrapper.classList.remove('d-none');
+                    } else {
+                        b2bFieldsWrapper.classList.add('d-none');
+                    }
+                });
+            }
+        });
+    </script>
 @endpush

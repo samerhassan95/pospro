@@ -66,14 +66,14 @@
                             </div>
                             <div class="col-12 ">
                                 <div class="d-flex align-items-center">
-                                    <select name="party_id" class="form-select  choices-select customer-select"
+                                    <select name="party_id" id="party_id_edit" class="form-select  choices-select customer-select"
                                             aria-label="Select Customer">
                                         <option value="">{{ __('Select Customer') }}</option>
                                         <option class="guest-option"
                                                 value="guest" @selected($sale->party_id === null || $sale->party_id === 'guest')>
                                             {{ __('Guest') }}</option>
                                         @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id }}" data-type="{{ $customer->type }}"
+                                            <option value="{{ $customer->id }}" data-type="{{ $customer->type }}" data-zatca-type="{{ $customer->zatca_type ?? 'b2c' }}"
                                                     @selected($sale->party_id == $customer->id)>{{ $customer->name }}
                                                 ({{ $customer->type }}{{ $customer->due ? ' ' . currency_format($customer->due, currency:business_currency()) : '' }}
                                                 )
@@ -93,6 +93,17 @@
                                 <input type="text" name="customer_phone" class="form-control" id="customer_phone"
                                        placeholder="{{ __('Enter Customer Phone Number') }}"
                                        value="{{ $sale->meta['customer_phone'] ?? '' }}">
+                            </div>
+                            
+                            <!-- B2B Additional Fields Button -->
+                            <div class="col-12 mt-3 {{ $sale->party && $sale->party->zatca_type === 'b2b' ? '' : 'd-none' }}" id="b2b-fields-wrapper-edit">
+                                <button type="button" class="btn btn-outline-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#b2bAdditionalFieldsModal">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 5px;">
+                                        <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3.89543 5 3 5.89543 3 7V19C3 19.5523 3.44772 20 4 20H19C19.5523 20 20 19.5523 20 19V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    {{ __('B2B Additional Fields') }}
+                                </button>
                             </div>
 
                         </div>
@@ -324,10 +335,46 @@
     @include('business::sales.category-search')
     @include('business::sales.brand-search')
     @include('business::sales.stock-list')
+    @include('business::sales.partials.b2b-additional-fields')
 @endpush
 
 @push('js')
     <script src="{{ asset('assets/js/custom/sale.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/calculator.js') }}"></script>
     <script src="{{ asset('assets/js/choices.min.js') }}"></script>
+    
+    <script>
+        // Show/Hide B2B Additional Fields button based on customer type
+        document.addEventListener('DOMContentLoaded', function() {
+            const partySelect = document.getElementById('party_id_edit');
+            const b2bFieldsWrapper = document.getElementById('b2b-fields-wrapper-edit');
+            
+            if (partySelect && b2bFieldsWrapper) {
+                partySelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const zatcaType = selectedOption.getAttribute('data-zatca-type');
+                    
+                    if (zatcaType === 'b2b') {
+                        b2bFieldsWrapper.classList.remove('d-none');
+                    } else {
+                        b2bFieldsWrapper.classList.add('d-none');
+                    }
+                });
+            }
+            
+            // Pre-fill B2B fields if editing existing sale
+            @if($sale->supply_date || $sale->po_number || $sale->contract_number)
+                document.getElementById('supply_date').value = '{{ $sale->supply_date }}';
+                document.getElementById('po_number').value = '{{ $sale->po_number }}';
+                document.getElementById('contract_number').value = '{{ $sale->contract_number }}';
+                document.getElementById('payment_terms').value = '{{ $sale->payment_terms }}';
+                document.getElementById('payment_means').value = '{{ $sale->payment_means }}';
+                document.getElementById('shipping_address_line1').value = '{{ $sale->shipping_address_line1 }}';
+                document.getElementById('shipping_address_line2').value = '{{ $sale->shipping_address_line2 }}';
+                document.getElementById('shipping_city').value = '{{ $sale->shipping_city }}';
+                document.getElementById('shipping_postal_code').value = '{{ $sale->shipping_postal_code }}';
+                document.getElementById('shipping_country_code').value = '{{ $sale->shipping_country_code }}';
+            @endif
+        });
+    </script>
 @endpush

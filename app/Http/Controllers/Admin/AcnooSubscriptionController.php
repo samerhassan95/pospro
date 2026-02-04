@@ -124,6 +124,13 @@ class AcnooSubscriptionController extends Controller
 
             DB::commit();
 
+            // Report to ZATCA
+            try {
+                \App\Jobs\ReportSubscriptionToZatca::dispatch($subscribe->id);
+            } catch (\Exception $e) {
+                \Log::error("Failed to dispatch ZATCA Job for Subscription #{$subscribe->id}: " . $e->getMessage());
+            }
+
             Cache::forget('plan-data-'. $subscribe->business_id);
 
             return response()->json([
@@ -138,7 +145,35 @@ class AcnooSubscriptionController extends Controller
 
     public function getInvoice($invoice_id)
     {
-        $subscriber = PlanSubscribe::with(['plan:id,subscriptionName', 'business:id,companyName,business_category_id,phoneNumber,address', 'business.category:id,name', 'gateway:id,name'])->findOrFail($invoice_id);
-        return view('admin.subscribe-order.invoice', compact('subscriber'));
+        $subscriber = PlanSubscribe::with(['plan', 'business', 'gateway'])->findOrFail($invoice_id);
+        
+        // ZATCA Data Calculation
+        $vatRate = 15.00;
+        $vatFactor = 1.15;
+        $totalAmount = (float)$subscriber->price;
+        $taxableAmount = $totalAmount / $vatFactor;
+        $vatTotal = $totalAmount - $taxableAmount;
+
+        $qrCode = null;
+        if ($subscriber->zatca_status && $subscriber->zatca_status !== 'FAILED') {
+            $zatcaOption = \App\Models\Option::where('key', 'superadmin_zatca_setting')->first();
+            $zatcaSettings = $zatcaOption ? $zatcaOption->value : null;
+            
+            if ($zatcaSettings && $subscriber->invoice_hash && $subscriber->cryptographic_stamp) {
+                $zatcaService = new \App\Services\Zatca\ZatcaService();
+                $qrCode = $zatcaService->generateQrCode(
+                    $zatcaSettings['csr_config']['common_name'],
+                    $zatcaSettings['csr_config']['organization_identifier'],
+                    $subscriber->created_at->toIso8601String(),
+                    number_format($totalAmount, 2, '.', ''),
+                    number_format($vatTotal, 2, '.', ''),
+                    $subscriber->invoice_hash,
+                    $subscriber->cryptographic_stamp,
+                    $zatcaSettings['public_key']
+                );
+            }
+        }
+
+        return view('admin.subscribe-order.invoice', compact('subscriber', 'totalAmount', 'taxableAmount', 'vatTotal', 'vatRate', 'qrCode'));
     }
 }

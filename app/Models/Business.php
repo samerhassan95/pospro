@@ -29,12 +29,22 @@ class Business extends Model
         'shopOpeningBalance',
         'vat_name',
         'vat_no',
+        'commercial_registration',
+        'additional_id',
+        'bank_account_number',
+        'bank_name',
         'affiliator_id',
         'email',
         'status',
         'meta',
         'zatca_setting',
-        'moyasar_setting'
+        'moyasar_setting',
+        'building_number',
+        'street_name',
+        'district',
+        'city',
+        'postal_code',
+        'country_code',
     ];
 
     public function enrolled_plan()

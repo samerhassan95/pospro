@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/customdomainaddon",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\CustomDomainAddon\\": "",
+            "Modules\\CustomDomainAddon\\App\\": "app/",
+            "Modules\\CustomDomainAddon\\Database\\Factories\\": "database/factories/",
+            "Modules\\CustomDomainAddon\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\CustomDomainAddon\\Tests\\": "tests/"
+        }
+    }
+}

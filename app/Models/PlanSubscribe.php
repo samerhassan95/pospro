@@ -19,6 +19,15 @@ class PlanSubscribe extends Model
         'price',
         'notes',
         'plan_id',
+        'service_code',
+        'service_start_date',
+        'service_end_date',
+        'tax_period_start',
+        'tax_period_end',
+        'po_number',
+        'contract_number',
+        'payment_terms',
+        'payment_means',
         'duration',
         'gateway_id',
         'business_id',
@@ -26,6 +35,14 @@ class PlanSubscribe extends Model
         'allow_multibranch',
         'addon_domain_limit',
         'subdomain_limit',
+        'uuid',
+        'invoice_number',
+        'invoice_type',
+        'zatca_status',
+        'invoice_hash',
+        'previous_hash',
+        'cryptographic_stamp',
+        'zatca_response'
     ];
 
     protected $casts = [
@@ -38,7 +55,17 @@ class PlanSubscribe extends Model
         'allow_multibranch' => 'integer',
         'addon_domain_limit' => 'integer',
         'subdomain_limit' => 'integer',
+        'zatca_response' => 'json'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = (string) \Illuminate\Support\Str::uuid();
+            $model->invoice_number = 'SUB-' . strtoupper(\Illuminate\Support\Str::random(8));
+        });
+    }
 
     public function plan(): BelongsTo
     {

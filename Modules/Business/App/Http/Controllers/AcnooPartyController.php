@@ -128,8 +128,16 @@ class AcnooPartyController extends Controller
             'opening_balance' => 'nullable|numeric|min:-999999999999.99|max:999999999999.99',
             'opening_balance_type' => 'required|in:due,advance',
             'meta' => 'nullable|array',
-        //     'zatca_type' => 'required|in:b2c,b2b',
-        //     'vat_number' => 'required_if:zatca_type,b2b|digits:15',
+            'zatca_type' => 'required|in:b2c,b2b',
+            'vat_number' => 'required_if:zatca_type,b2b|nullable|digits:15',
+            'commercial_registration' => 'nullable|string|max:50',
+            'additional_id' => 'nullable|string|max:50',
+            'building_number' => 'required_if:zatca_type,b2b|nullable|string|max:255',
+            'street_name' => 'required_if:zatca_type,b2b|nullable|string|max:255',
+            'district' => 'required_if:zatca_type,b2b|nullable|string|max:255',
+            'city' => 'required_if:zatca_type,b2b|nullable|string|max:255',
+            'postal_code' => 'required_if:zatca_type,b2b|nullable|string|max:10',
+            'country_code' => 'required|string|max:2',
         ]);
 
         Party::create($request->except('image', 'due', 'wallet', 'opening_balance', 'credit_limit','business_id') + [
@@ -183,8 +191,16 @@ class AcnooPartyController extends Controller
             'opening_balance' => 'nullable|numeric|min:-999999999999.99|max:999999999999.99',
             'opening_balance_type' => 'required|in:due,advance',
             'meta' => 'nullable|array',
-    //         'zatca_type' => 'required|in:b2c,b2b',
-    // 'vat_number' => 'nullable|digits:15',
+            'zatca_type' => 'required|in:b2c,b2b',
+            'vat_number' => 'required_if:zatca_type,b2b|nullable|digits:15',
+            'commercial_registration' => 'nullable|string|max:50',
+            'additional_id' => 'nullable|string|max:50',
+            'building_number' => 'required_if:zatca_type,b2b|nullable|string|max:255',
+            'street_name' => 'required_if:zatca_type,b2b|nullable|string|max:255',
+            'district' => 'required_if:zatca_type,b2b|nullable|string|max:255',
+            'city' => 'required_if:zatca_type,b2b|nullable|string|max:255',
+            'postal_code' => 'required_if:zatca_type,b2b|nullable|string|max:10',
+            'country_code' => 'required|string|max:2',
         ]);
 
         // Previous

@@ -336,6 +336,17 @@ class AcnooSaleController extends Controller
             'discount_type' => 'nullable|in:flat,percent',
             'shipping_charge' => 'nullable|numeric',
             'saleDate' => 'nullable|date',
+            // B2B Additional Fields
+            'supply_date' => 'nullable|date',
+            'po_number' => 'nullable|string|max:50',
+            'contract_number' => 'nullable|string|max:50',
+            'payment_terms' => 'nullable|string|max:255',
+            'payment_means' => 'nullable|string|max:50',
+            'shipping_address_line1' => 'nullable|string|max:255',
+            'shipping_address_line2' => 'nullable|string|max:255',
+            'shipping_city' => 'nullable|string|max:100',
+            'shipping_postal_code' => 'nullable|string|max:10',
+            'shipping_country_code' => 'nullable|string|size:2',
         ]);
 
         $business_id = auth()->user()->business_id;
@@ -388,6 +399,12 @@ class AcnooSaleController extends Controller
                 updateBalance($paidAmount, 'increment');
             }
 
+            // Get party information to determine invoice type
+            $party = null;
+            if ($request->party_id && $request->party_id != 'guest') {
+                $party = Party::find($request->party_id);
+            }
+            
             // Create sale record
             $sale = Sale::create([
                 'user_id' => auth()->id(),
@@ -413,6 +430,18 @@ class AcnooSaleController extends Controller
                 'shipping_charge' => $shippingCharge,
                 'isPaid' => $isPaid,
                 'uuid' => \Illuminate\Support\Str::uuid()->toString(), // ZATCA UUID
+                'invoice_type' => $party && $party->zatca_type === 'b2b' ? 'b2b' : 'b2c', // Auto-detect from party
+                // B2B Additional Fields
+                'supply_date' => $request->supply_date,
+                'po_number' => $request->po_number,
+                'contract_number' => $request->contract_number,
+                'payment_terms' => $request->payment_terms,
+                'payment_means' => $request->payment_means,
+                'shipping_address_line1' => $request->shipping_address_line1,
+                'shipping_address_line2' => $request->shipping_address_line2,
+                'shipping_city' => $request->shipping_city,
+                'shipping_postal_code' => $request->shipping_postal_code,
+                'shipping_country_code' => $request->shipping_country_code ? strtoupper($request->shipping_country_code) : null,
                 'meta' => [
                     'customer_phone' => $request->customer_phone,
                     'note' => $request->note,
@@ -576,6 +605,17 @@ class AcnooSaleController extends Controller
             'discount_type' => 'nullable|in:flat,percent',
             'saleDate' => 'nullable|date',
             'shipping_charge' => 'nullable|numeric',
+            // B2B Additional Fields
+            'supply_date' => 'nullable|date',
+            'po_number' => 'nullable|string|max:50',
+            'contract_number' => 'nullable|string|max:50',
+            'payment_terms' => 'nullable|string|max:255',
+            'payment_means' => 'nullable|string|max:50',
+            'shipping_address_line1' => 'nullable|string|max:255',
+            'shipping_address_line2' => 'nullable|string|max:255',
+            'shipping_city' => 'nullable|string|max:100',
+            'shipping_postal_code' => 'nullable|string|max:10',
+            'shipping_country_code' => 'nullable|string|size:2',
         ]);
 
         $business_id = auth()->user()->business_id;
@@ -674,6 +714,17 @@ class AcnooSaleController extends Controller
                 'dueAmount' => $dueAmount,
                 'payment_type_id' => $request->payment_type_id,
                 'isPaid' => $isPaid,
+                // B2B Additional Fields
+                'supply_date' => $request->supply_date,
+                'po_number' => $request->po_number,
+                'contract_number' => $request->contract_number,
+                'payment_terms' => $request->payment_terms,
+                'payment_means' => $request->payment_means,
+                'shipping_address_line1' => $request->shipping_address_line1,
+                'shipping_address_line2' => $request->shipping_address_line2,
+                'shipping_city' => $request->shipping_city,
+                'shipping_postal_code' => $request->shipping_postal_code,
+                'shipping_country_code' => $request->shipping_country_code ? strtoupper($request->shipping_country_code) : null,
                 'meta' => [
                     'customer_phone' => $request->customer_phone,
                     'note' => $request->note,
@@ -806,7 +857,17 @@ class AcnooSaleController extends Controller
 
     public function getInvoice($sale_id)
     {
-        $sale = Sale::where('business_id', auth()->user()->business_id)->with('user:id,name,role', 'party:id,name,phone,address', 'business:id,phoneNumber,companyName,vat_name,vat_no,address,email', 'details:id,price,quantities,product_id,sale_id,stock_id', 'details.stock:id,batch_no', 'details.product:id,productName', 'payment_type:id,name')->findOrFail($sale_id);
+        $sale = Sale::where('business_id', auth()->user()->business_id)
+            ->with([
+                'user:id,name,role',
+                'party:id,name,phone,address,zatca_type,vat_number,building_number,street_name,district,city,postal_code,country_code',
+                'business:id,phoneNumber,companyName,vat_name,vat_no,address,email,building_number,street_name,district,city,postal_code,country_code',
+                'details:id,price,quantities,product_id,sale_id,stock_id',
+                'details.stock:id,batch_no',
+                'details.product:id,productName',
+                'payment_type:id,name'
+            ])
+            ->findOrFail($sale_id);
 
         $sale_returns = SaleReturn::with('sale:id,party_id,isPaid,totalAmount,dueAmount,paidAmount,invoiceNumber', 'sale.party:id,name', 'details', 'details.saleDetail.product:id,productName')
             ->where('business_id', auth()->user()->business_id)

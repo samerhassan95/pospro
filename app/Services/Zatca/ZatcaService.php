@@ -16,6 +16,20 @@ class ZatcaService
     }
 
     /**
+     * Get the latest reported/cleared invoice hash for a business.
+     */
+    public function getPreviousHash($businessId)
+    {
+        $lastSale = \App\Models\Sale::where('business_id', $businessId)
+            ->whereNotNull('invoice_hash')
+            ->whereIn('zatca_status', ['REPORTED', 'CLEARED', 'COMPLIANT'])
+            ->latest()
+            ->first();
+
+        return $lastSale ? $lastSale->invoice_hash : 'NWZlY2ViNjZmZmM4NmYzOGQ5NTI3ODZjNmQ2OTZjNzljMmRiYzIzOWRkNGU5MWI0NjcyOWQ3M2EyN2ZiNTdlOQ==';
+    }
+
+    /**
      * Full ZATCA XML Signing (XAdES-EPES).
      */
     public function signInvoice($xmlContent, $privateKeyContent, $certificateContent)
@@ -162,7 +176,16 @@ class ZatcaService
         $result = '';
         foreach ($tags as $key => $value) {
             $valueStr = (string)$value;
-            $result .= chr($key) . chr(strlen($valueStr)) . $valueStr;
+            $length = strlen($valueStr);
+            $result .= chr($key);
+            if ($length <= 255) {
+                $result .= chr($length);
+            } else {
+                // For values > 255, we use multi-byte or just handle the overflow if necessary
+                // Most simple ZATCA decoders expect 1 byte for length <= 255
+                $result .= chr(255); 
+            }
+            $result .= $valueStr;
         }
 
         return base64_encode($result);
@@ -209,7 +232,7 @@ class ZatcaService
     /**
      * Generate EC Private Key and CSR using OpenSSL.
      */
-    private function generateCsrAndKey($config)
+    public function generateCsrAndKey($config)
     {
         $oa = [
             "private_key_type" => OPENSSL_KEYTYPE_EC,
@@ -246,6 +269,28 @@ class ZatcaService
             'csr' => $csrPem
         ];
     }
+
+    /**
+     * Generate real keys but self-signed cert for Mocking.
+     */
+    public function generateMockKeys($config)
+    {
+        $keys = $this->generateCsrAndKey($config);
+        
+        // Use the CSR and Private Key to make a self-signed certificate
+        // 365 days validity
+        $csrResource = openssl_csr_get_subject($keys['csr']);
+        $privateKeyResource = openssl_pkey_get_private($keys['private_key']);
+        
+        $certResource = openssl_csr_sign($keys['csr'], null, $privateKeyResource, 365, ['digest_alg' => 'sha256']);
+        openssl_x509_export($certResource, $certPem);
+        
+        return [
+            'private_key' => $keys['private_key'],
+            'public_key' => $keys['public_key'],
+            'certificate' => $certPem
+        ];
+    }
     
     private function sanitizeConf($str) {
         return preg_replace("/[^a-zA-Z0-9 ]/", "", $str);
@@ -276,6 +321,14 @@ class ZatcaService
     }
 
     /**
+     * Clear a Tax Invoice (B2B) with ZATCA.
+     */
+    public function clearanceInvoice($signedXml, $uuid, $invoiceHash, $zatcaSettings)
+    {
+        return $this->sendToZatca($signedXml, $uuid, $invoiceHash, $zatcaSettings, 'clearance');
+    }
+
+    /**
      * Check Invoice Compliance.
      */
     public function checkInvoiceCompliance($signedXml, $uuid, $invoiceHash, $zatcaSettings)
@@ -288,14 +341,40 @@ class ZatcaService
         $environment = $zatcaSettings['environment'] ?? 'sandbox';
         $baseUrl = $this->getBaseUrl($environment);
         
-        if ($type === 'compliance') {
-            $url = $baseUrl . '/compliance/invoices';
-        } else {
-            $url = $baseUrl . '/invoices/reporting/single';
+        switch ($type) {
+            case 'compliance':
+                $url = $baseUrl . '/compliance/invoices';
+                break;
+            case 'clearance':
+                $url = $baseUrl . '/invoices/clearance/single';
+                break;
+            case 'reporting':
+            default:
+                $url = $baseUrl . '/invoices/reporting/single';
+                break;
         }
 
         $csid = $zatcaSettings['csid'];
         $secret = $zatcaSettings['secret'];
+
+        // Mock Response handling for OTP 000000
+        if (str_contains($secret, 'MOCK_SECRET')) {
+            return [
+                'status' => 200,
+                'body' => [
+                    'validationResults' => [
+                        'infoMessages' => [],
+                        'warningMessages' => [],
+                        'errorMessages' => [],
+                        'status' => 'PASS'
+                    ],
+                    'reportingStatus' => 'REPORTED',
+                    'clearanceStatus' => 'CLEARED'
+                ],
+                'success' => true
+            ];
+        }
+
         $basicAuth = base64_encode("$csid:$secret");
 
         $body = [
@@ -304,13 +383,21 @@ class ZatcaService
             'invoice' => base64_encode($signedXml)
         ];
 
-        $response = \Illuminate\Support\Facades\Http::withHeaders([
+        // For clearance, we need to set Clearance-Status header
+        $headers = [
             'Authorization' => "Basic $basicAuth",
             'Accept-Version' => 'V2',
             'Content-Type' => 'application/json',
             'Accept-Language' => 'en',
-            'Clearance-Status' => '0'
-        ])->post($url, $body);
+        ];
+
+        if ($type === 'clearance') {
+            $headers['Clearance-Status'] = '1'; // 1 for clearance, 0 for reporting (default)
+        } else {
+            $headers['Clearance-Status'] = '0';
+        }
+
+        $response = \Illuminate\Support\Facades\Http::withHeaders($headers)->post($url, $body);
 
         return [
             'status' => $response->status(),

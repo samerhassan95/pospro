@@ -205,6 +205,22 @@
                                         </div>
                                     </a>
                                 </div>
+
+                                <div>
+                                    <a href="{{ route('admin.zatca.subscription.index') }}" class="text-decoration-none text-dark">
+                                        <div class="setting-box">
+                                            <div class="d-flex align-items-center jusitfy-content-center gap-3">
+                                                <div class="settings-icon">
+                                                    <i class="fas fa-file-invoice-dollar fs-2 text-danger"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="">{{__('ZATCA (Subscriptions)')}}</h6>
+                                                    <small class="text-muted d-block">{{__('Manage ZATCA Phase 2 compliance for platform subscriptions.')}}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
 

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار حقول B2B</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .b2b-field {
+            display: none;
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .required {
+            color: red;
+        }
+        .success {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 اختبار حقول B2B</h1>
+    <p>هذا ملف اختبار للتأكد من أن JavaScript يعمل بشكل صحيح</p>
+
+    <form id="testForm">
+        <div class="form-group">
+            <label>اسم العميل</label>
+            <input type="text" name="name" placeholder="شركة الأمثلة المحدودة" required>
+        </div>
+
+        <div class="form-group">
+            <label>نوع الفاتورة</label>
+            <select name="zatca_type" id="zatca_type" onchange="toggleB2BFields(this.value)">
+                <option value="b2c">B2C - Simplified Invoice</option>
+                <option value="b2b">B2B - Tax Invoice</option>
+            </select>
+        </div>
+
+        <div class="form-group b2b-field" id="vat_number_field">
+            <label>الرقم الضريبي <span class="required">*</span></label>
+            <input type="text" name="vat_number" id="vat_number" placeholder="300123456789003" maxlength="15">
+            <small>15 رقم - إلزامي للفواتير B2B</small>
+        </div>
+
+        <div class="form-group b2b-field">
+            <label>رقم المبنى <span class="required">*</span></label>
+            <input type="text" name="building_number" placeholder="1234">
+        </div>
+
+        <div class="form-group b2b-field">
+            <label>اسم الشارع <span class="required">*</span></label>
+            <input type="text" name="street_name" placeholder="شارع الملك فهد">
+        </div>
+
+        <div class="form-group b2b-field">
+            <label>الحي <span class="required">*</span></label>
+            <input type="text" name="district" placeholder="العليا">
+        </div>
+
+        <div class="form-group b2b-field">
+            <label>المدينة <span class="required">*</span></label>
+            <input type="text" name="city" placeholder="الرياض">
+        </div>
+
+        <div class="form-group b2b-field">
+            <label>الرمز البريدي <span class="required">*</span></label>
+            <input type="text" name="postal_code" placeholder="12345" maxlength="10">
+        </div>
+
+        <div class="form-group b2b-field">
+            <label>كود الدولة <span class="required">*</span></label>
+            <select name="country_code">
+                <option value="SA">Saudi Arabia (SA)</option>
+                <option value="AE">United Arab Emirates (AE)</option>
+                <option value="BH">Bahrain (BH)</option>
+            </select>
+        </div>
+
+        <button type="button" onclick="testForm()" style="padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            اختبار
+        </button>
+    </form>
+
+    <div class="success" id="successMsg">
+        ✅ تم! الحقول تعمل بشكل صحيح
+    </div>
+
+    <script>
+        function toggleB2BFields(type) {
+            const b2bFields = document.querySelectorAll('.b2b-field');
+            const vatInput = document.getElementById('vat_number');
+            
+            console.log('Toggle called with type:', type);
+            console.log('Found fields:', b2bFields.length);
+            
+            if (type === 'b2b') {
+                b2bFields.forEach(function(field) {
+                    field.style.display = 'block';
+                    const input = field.querySelector('input, select');
+                    if (input) input.required = true;
+                });
+                console.log('✅ B2B fields shown');
+            } else {
+                b2bFields.forEach(function(field) {
+                    field.style.display = 'none';
+                    const input = field.querySelector('input, select');
+                    if (input) input.required = false;
+                });
+                console.log('❌ B2B fields hidden');
+            }
+        }
+
+        function testForm() {
+            const select = document.getElementById('zatca_type');
+            const type = select.value;
+            
+            if (type === 'b2b') {
+                const visibleFields = Array.from(document.querySelectorAll('.b2b-field'))
+                    .filter(f => f.style.display !== 'none');
+                
+                if (visibleFields.length > 0) {
+                    document.getElementById('successMsg').style.display = 'block';
+                    console.log('✅ Test passed! Visible fields:', visibleFields.length);
+                } else {
+                    alert('❌ خطأ: الحقول لم تظهر!');
+                    console.log('❌ Test failed! No visible fields');
+                }
+            } else {
+                alert('اختر B2B أولاً');
+            }
+        }
+
+        // Test on load
+        console.log('Page loaded. Testing...');
+        console.log('zatca_type element:', document.getElementById('zatca_type'));
+        console.log('b2b-field elements:', document.querySelectorAll('.b2b-field').length);
+    </script>
+</body>
+</html>

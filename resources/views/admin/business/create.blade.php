@@ -96,6 +96,44 @@
                                     </div>
                                 </div>
 
+                                <div class="col-lg-12 mb-3 mt-4">
+                                    <h6 class="text-danger border-bottom pb-2">{{ __('ZATCA / Tax Information') }} (بيانات ضريبية)</h6>
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('VAT Number') }} (الرقم الضريبي)</label>
+                                    <input type="text" name="vat_no" class="form-control" placeholder="300000000000003">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('Building Number') }} (رقم المبنى)</label>
+                                    <input type="text" name="building_number" class="form-control" placeholder="1234">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('Street Name') }} (اسم الشارع)</label>
+                                    <input type="text" name="street_name" class="form-control" placeholder="King Fahad Road">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('District') }} (الحي)</label>
+                                    <input type="text" name="district" class="form-control" placeholder="Al Malaz">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('City') }} (المدينة)</label>
+                                    <input type="text" name="city" class="form-control" placeholder="Riyadh">
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('Postal Code') }} (الرمز البريدي)</label>
+                                    <input type="text" name="postal_code" class="form-control" placeholder="12345">
+                                </div>
+
+                                <div class="col-lg-12 mb-3 mt-4">
+                                    <h6 class="text-danger border-bottom pb-2">{{ __('Additional Info') }}</h6>
+                                </div>
+
                                 <div class="col-lg-6">
                                     <div class="row">
                                         <div class="col-10">

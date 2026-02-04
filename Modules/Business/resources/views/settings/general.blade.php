@@ -62,6 +62,79 @@
                                         <input type="text" name="vat_no" value="{{ $business->vat_no }}" class="form-control" placeholder="{{ __('Enter VAT/GST Number') }}">
                                     </div>
 
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Commercial Registration Number') }} / رقم السجل التجاري</label>
+                                        <input type="text" name="commercial_registration" value="{{ $business->commercial_registration }}" class="form-control" placeholder="{{ __('Enter CR Number') }}">
+                                        <small class="text-muted">{{ __('Required for B2B invoices') }}</small>
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Additional ID') }} / معرف إضافي</label>
+                                        <input type="text" name="additional_id" value="{{ $business->additional_id }}" class="form-control" placeholder="{{ __('Enter Additional ID') }}">
+                                        <small class="text-muted">{{ __('Optional - Additional identification number') }}</small>
+                                    </div>
+
+                                    {{-- Bank Information --}}
+                                    <div class="col-lg-12 mt-4">
+                                        <h5 class="text-primary border-bottom pb-2">{{ __('Bank Information') }} / معلومات البنك</h5>
+                                        <p class="text-muted small">{{ __('Bank details for payment information on invoices') }}</p>
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Bank Name') }} / اسم البنك</label>
+                                        <input type="text" name="bank_name" value="{{ $business->bank_name }}" class="form-control" placeholder="{{ __('Enter Bank Name') }}">
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Bank Account Number') }} / رقم الحساب البنكي</label>
+                                        <input type="text" name="bank_account_number" value="{{ $business->bank_account_number }}" class="form-control" placeholder="{{ __('Enter IBAN or Account Number') }}">
+                                        <small class="text-muted">{{ __('e.g., SA1234567890123456789012') }}</small>
+                                    </div>
+
+                                    {{-- B2B Address Fields --}}
+                                    <div class="col-lg-12 mt-4">
+                                        <h5 class="text-primary border-bottom pb-2">{{ __('B2B Invoice Address Details') }} / تفاصيل عنوان الفاتورة الضريبية</h5>
+                                        <p class="text-muted small">{{ __('These details will appear on B2B tax invoices') }}</p>
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Building Number') }} / رقم المبنى</label>
+                                        <input type="text" name="building_number" value="{{ $business->building_number }}" class="form-control" placeholder="{{ __('Enter Building Number') }}">
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Street Name') }} / اسم الشارع</label>
+                                        <input type="text" name="street_name" value="{{ $business->street_name }}" class="form-control" placeholder="{{ __('Enter Street Name') }}">
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('District') }} / الحي</label>
+                                        <input type="text" name="district" value="{{ $business->district }}" class="form-control" placeholder="{{ __('Enter District') }}">
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('City') }} / المدينة</label>
+                                        <input type="text" name="city" value="{{ $business->city }}" class="form-control" placeholder="{{ __('Enter City') }}">
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Postal Code') }} / الرمز البريدي</label>
+                                        <input type="text" name="postal_code" value="{{ $business->postal_code }}" class="form-control" placeholder="{{ __('Enter Postal Code') }}">
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Country Code') }} / رمز الدولة</label>
+                                        <input type="text" name="country_code" value="{{ $business->country_code }}" class="form-control" placeholder="{{ __('e.g., SA, EG, AE') }}" maxlength="2">
+                                        <small class="text-muted">{{ __('2-letter country code (ISO 3166-1 alpha-2)') }}</small>
+                                    </div>
+
+                                    <div class="col-lg-12 mt-3">
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle"></i>
+                                            <strong>{{ __('Note') }}:</strong> {{ __('Fill these fields to display complete address information on B2B tax invoices. These fields are required for ZATCA compliance.') }}
+                                        </div>
+                                    </div>
+
                                     <div class="col-lg-6">
                                         <label class="custom-top-label">{{ __('Sale Rounding Option') }}</label>
                                         <div class="gpt-up-down-arrow position-relative">

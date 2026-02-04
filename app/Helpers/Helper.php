@@ -483,7 +483,7 @@ function plan_data($business_id = null)
     $business_id = $business_id ?? auth()->user()->business_id;
 
     return cache_remember('plan-data-' . $business_id, function () use ($business_id) {
-        $planSubscribe = PlanSubscribe::with('plan:id,subscriptionName')->where('business_id', $business_id)->latest()->first();
+        $planSubscribe = PlanSubscribe::with('plan:id,subscriptionName,addon_domain_limit,subdomain_limit,allow_multibranch')->where('business_id', $business_id)->latest()->first();
 
         if ($planSubscribe) {
             $business = Business::findOrFail($planSubscribe->business_id);

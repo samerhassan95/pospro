@@ -110,9 +110,147 @@
                                 </button>
                             </div>
                         </form>
+
+                        @if (!empty($business->zatca_setting['csid']))
+                            <div class="row mt-5">
+                                <div class="col-md-12 mb-3">
+                                    <h5>{{ __('Step 3: Compliance Testing / اختبار التوافق') }}</h5>
+                                    <p class="text-muted">{{ __('To move to Production, you must test at least 3-5 invoices successfully in Sandbox/Simulation.') }}</p>
+                                    <hr>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{ __('Invoice #') }}</th>
+                                                    <th>{{ __('Date') }}</th>
+                                                    <th>{{ __('Total') }}</th>
+                                                    <th>{{ __('ZATCA Status') }}</th>
+                                                    <th>{{ __('Action') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($sales as $sale)
+                                                    <tr>
+                                                        <td>{{ $sale->invoiceNumber }}</td>
+                                                        <td>{{ $sale->saleDate }}</td>
+                                                        <td>{{ currency_format($sale->totalAmount) }}</td>
+                                                        <td>
+                                                            @if($sale->zatca_status == 'REPORTED' || $sale->zatca_status == 'COMPLIANT')
+                                                                <span class="badge bg-success">{{ $sale->zatca_status }}</span>
+                                                            @elseif($sale->zatca_status == 'FAILED')
+                                                                <span class="badge bg-danger">{{ $sale->zatca_status }}</span>
+                                                                <button class="btn btn-sm btn-info ms-2" onclick="showZatcaResponse('{{ $sale->id }}')">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>
+                                                                <div id="response-{{ $sale->id }}" style="display:none;">{{ $sale->zatca_response }}</div>
+                                                            @else
+                                                                <span class="badge bg-secondary">{{ __('Pending') }}</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-warning btn-sm" onclick="testCompliance('{{ $sale->id }}', this)">
+                                                                <i class="fas fa-flask"></i> {{ __('Test Compliance') }}
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-3 mt-5">
+                                    <h5>{{ __('Step 4: Go Live / تفعيل الإنتاج') }}</h5>
+                                    <p class="text-muted">{{ __('Only click this after you have successfully tested invoices above.') }}</p>
+                                    <hr>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <form action="{{ route('business.zatca.production-csid') }}" method="POST">
+                                        @csrf
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle"></i> {{ __('Action: This will request a Production CSID from ZATCA. This action is permanent for this device.') }}
+                                        </div>
+                                        <button type="submit" class="btn btn-success btn-lg w-100" 
+                                            {{ ($business->zatca_setting['environment'] ?? '') == 'production' ? 'disabled' : '' }}>
+                                            <i class="fas fa-rocket"></i> {{ __('Request Production CSID & Go Live') }}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal for Response -->
+    <div class="modal fade" id="zatcaResponseModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('ZATCA Response Details') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <pre id="responseContent" style="background: #f8f9fa; padding: 15px; border-radius: 5px;"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @push('js')
+    <script>
+        function testCompliance(saleId, btn) {
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+
+            fetch(`{{ url('business/zatca-test-invoice') }}/${saleId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                
+                if (data.success) {
+                    toastr.success('Invoice is compliant with ZATCA!');
+                } else {
+                    let msg = data.message || 'Compliance check failed.';
+                    if (data.body && data.body.validationResults) {
+                        const errors = data.body.validationResults.errorMessages.map(e => e.message).join('\n');
+                        msg += '\n\nErrors:\n' + errors;
+                    }
+                    alert(msg);
+                }
+                location.reload();
+            })
+            .catch(error => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert('An error occurred during testing: ' + error.message);
+            });
+        }
+
+        function showZatcaResponse(id) {
+            const content = document.getElementById('response-' + id).innerText;
+            try {
+                const json = JSON.parse(content);
+                document.getElementById('responseContent').innerText = JSON.stringify(json, null, 4);
+            } catch (e) {
+                document.getElementById('responseContent').innerText = content;
+            }
+            new bootstrap.Modal(document.getElementById('zatcaResponseModal')).show();
+        }
+    </script>
+    @endpush
 @endsection

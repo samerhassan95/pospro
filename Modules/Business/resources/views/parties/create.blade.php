@@ -91,25 +91,115 @@
                                     </div>
                                     @endif
 
-                                    {{-- VAT Number (always visible for ZATCA) --}}
-                                    {{-- <div class="col-lg-6 mb-2">
-                                        <label>{{ __('VAT Number') }}</label>
-                                        <input type="text" name="vat_number" class="form-control" placeholder="300XXXXXXXXXXXX" maxlength="15">
-                                    </div> --}}
+                                    {{-- ZATCA Type --}}
+                                    <div class="col-lg-6 mb-2">
+                                        <label>{{ __('Invoice Type') }}</label>
+                                        <select name="zatca_type" id="zatca_type" class="form-control" onchange="toggleB2BFields(this.value)">
+                                            <option value="b2c">{{ __('B2C - Simplified Invoice') }}</option>
+                                            <option value="b2b">{{ __('B2B - Tax Invoice') }}</option>
+                                        </select>
+                                    </div>
 
-{{-- ZATCA Type
-<div class="col-lg-6 mb-2">
-    <label>{{ __('ZATCA Type') }}</label>
-    <select name="zatca_type" class="form-control">
-        <option value="b2c">{{ __('B2C') }}</option>
-        <option value="b2b">{{ __('B2B') }}</option>
-    </select>
-</div> --}}
+                                    <script>
+                                    function toggleB2BFields(type) {
+                                        const b2bFields = document.querySelectorAll('.b2b-field');
+                                        const vatField = document.getElementById('vat_number_field');
+                                        const vatInput = document.getElementById('vat_number');
+                                        
+                                        if (type === 'b2b') {
+                                            // Show fields
+                                            b2bFields.forEach(function(field) {
+                                                field.style.display = 'block';
+                                                const input = field.querySelector('input, select');
+                                                if (input) input.required = true;
+                                            });
+                                            if (vatField) {
+                                                vatField.style.display = 'block';
+                                                if (vatInput) vatInput.required = true;
+                                            }
+                                        } else {
+                                            // Hide fields
+                                            b2bFields.forEach(function(field) {
+                                                field.style.display = 'none';
+                                                const input = field.querySelector('input, select');
+                                                if (input) input.required = false;
+                                            });
+                                            if (vatField) {
+                                                vatField.style.display = 'none';
+                                                if (vatInput) vatInput.required = false;
+                                            }
+                                        }
+                                    }
+                                    </script>
+
+                                    {{-- VAT Number (required for B2B) --}}
+                                    <div class="col-lg-6 mb-2" id="vat_number_field" style="display: none;">
+                                        <label>{{ __('VAT Number') }} <span class="text-danger">*</span></label>
+                                        <input type="text" name="vat_number" id="vat_number" class="form-control" placeholder="300XXXXXXXXXXXX" maxlength="15">
+                                        <small class="text-muted">{{ __('15 digits - Required for B2B invoices') }}</small>
+                                    </div>
+
+                                    {{-- Commercial Registration (B2B) --}}
+                                    <div class="col-lg-6 mb-2 b2b-field" style="display: none;">
+                                        <label>{{ __('Commercial Registration') }} / رقم السجل التجاري</label>
+                                        <input type="text" name="commercial_registration" class="form-control" placeholder="{{ __('Enter CR Number') }}">
+                                        <small class="text-muted">{{ __('Optional - Company registration number') }}</small>
+                                    </div>
+
+                                    {{-- Additional ID (B2B) --}}
+                                    <div class="col-lg-6 mb-2 b2b-field" style="display: none;">
+                                        <label>{{ __('Additional ID') }} / معرف إضافي</label>
+                                        <input type="text" name="additional_id" class="form-control" placeholder="{{ __('Enter Additional ID') }}">
+                                        <small class="text-muted">{{ __('Optional - Additional identification') }}</small>
+                                    </div>
 
                                     {{-- Address --}}
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Address') }}</label>
                                         <input type="text" name="address" class="form-control" placeholder="{{ __('Enter Address') }}">
+                                    </div>
+
+                                    {{-- Building Number --}}
+                                    <div class="col-lg-6 mb-2 b2b-field" style="display: none;">
+                                        <label>{{ __('Building Number') }} <span class="text-danger">*</span></label>
+                                        <input type="text" name="building_number" class="form-control" placeholder="{{ __('Enter Building Number') }}">
+                                    </div>
+
+                                    {{-- Street Name --}}
+                                    <div class="col-lg-6 mb-2 b2b-field" style="display: none;">
+                                        <label>{{ __('Street Name') }} <span class="text-danger">*</span></label>
+                                        <input type="text" name="street_name" class="form-control" placeholder="{{ __('Enter Street Name') }}">
+                                    </div>
+
+                                    {{-- District --}}
+                                    <div class="col-lg-6 mb-2 b2b-field" style="display: none;">
+                                        <label>{{ __('District') }} <span class="text-danger">*</span></label>
+                                        <input type="text" name="district" class="form-control" placeholder="{{ __('Enter District') }}">
+                                    </div>
+
+                                    {{-- City --}}
+                                    <div class="col-lg-6 mb-2 b2b-field" style="display: none;">
+                                        <label>{{ __('City') }} <span class="text-danger">*</span></label>
+                                        <input type="text" name="city" class="form-control" placeholder="{{ __('Enter City') }}">
+                                    </div>
+
+                                    {{-- Postal Code --}}
+                                    <div class="col-lg-6 mb-2 b2b-field" style="display: none;">
+                                        <label>{{ __('Postal Code') }} <span class="text-danger">*</span></label>
+                                        <input type="text" name="postal_code" class="form-control" placeholder="{{ __('Enter Postal Code') }}" maxlength="10">
+                                    </div>
+
+                                    {{-- Country Code --}}
+                                    <div class="col-lg-6 mb-2 b2b-field" style="display: none;">
+                                        <label>{{ __('Country Code') }} <span class="text-danger">*</span></label>
+                                        <select name="country_code" class="form-control">
+                                            <option value="SA" selected>{{ __('Saudi Arabia (SA)') }}</option>
+                                            <option value="AE">{{ __('United Arab Emirates (AE)') }}</option>
+                                            <option value="BH">{{ __('Bahrain (BH)') }}</option>
+                                            <option value="KW">{{ __('Kuwait (KW)') }}</option>
+                                            <option value="OM">{{ __('Oman (OM)') }}</option>
+                                            <option value="QA">{{ __('Qatar (QA)') }}</option>
+                                        </select>
                                     </div>
 
                                     {{-- Billing & Shipping Address --}}
@@ -230,3 +320,53 @@
     </div>
 </div>
 @endsection
+
+
+@push('scripts')
+<script>
+    // Use vanilla JavaScript if jQuery not available
+    document.addEventListener('DOMContentLoaded', function() {
+        const zatcaTypeSelect = document.getElementById('zatca_type');
+        const b2bFields = document.querySelectorAll('.b2b-field');
+        const vatNumberField = document.getElementById('vat_number_field');
+        const vatNumberInput = document.getElementById('vat_number');
+
+        function toggleB2BFields() {
+            const type = zatcaTypeSelect.value;
+            
+            if (type === 'b2b') {
+                // Show B2B fields
+                b2bFields.forEach(field => {
+                    field.style.display = 'block';
+                    const input = field.querySelector('input, select');
+                    if (input) input.required = true;
+                });
+                
+                if (vatNumberField) {
+                    vatNumberField.style.display = 'block';
+                    if (vatNumberInput) vatNumberInput.required = true;
+                }
+            } else {
+                // Hide B2B fields
+                b2bFields.forEach(field => {
+                    field.style.display = 'none';
+                    const input = field.querySelector('input, select');
+                    if (input) input.required = false;
+                });
+                
+                if (vatNumberField) {
+                    vatNumberField.style.display = 'none';
+                    if (vatNumberInput) vatNumberInput.required = false;
+                }
+            }
+        }
+
+        // Listen for changes
+        if (zatcaTypeSelect) {
+            zatcaTypeSelect.addEventListener('change', toggleB2BFields);
+            // Trigger on page load
+            toggleB2BFields();
+        }
+    });
+</script>
+@endpush

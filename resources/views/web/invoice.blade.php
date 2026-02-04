@@ -67,13 +67,28 @@
                             @php
                                 $sellerName = $business->companyName;
                                 $vatRegistrationNumber = $business->vat_no;
-                                $timestamp = $sale->created_at->toIso8601String();
+                                $timestamp = \Carbon\Carbon::parse($sale->saleDate)->toIso8601String();
                                 $invoiceTotal = $sale->totalAmount;
                                 $vatTotal = $sale->vat_amount;
-                                $zatcaQrContent = generateZatcaQrCode($sellerName, $vatRegistrationNumber, $timestamp, $invoiceTotal, $vatTotal);
+                                
+                                // Phase 2 Details
+                                $hash = $sale->invoice_hash;
+                                $signature = $sale->cryptographic_stamp;
+                                $publicKey = $business->zatca_setting['public_key'] ?? null;
+                                
+                                $zatcaQrContent = generateZatcaQrCode(
+                                    $sellerName, 
+                                    $vatRegistrationNumber, 
+                                    $timestamp, 
+                                    $invoiceTotal, 
+                                    $vatTotal,
+                                    $hash,
+                                    $signature,
+                                    $publicKey
+                                );
                             @endphp
                             <div class="qr-code-bg shadow-sm">
-                                {!! QrCode::size(100)->generate($zatcaQrContent) !!}
+                                {!! QrCode::size(120)->generate($zatcaQrContent) !!}
                             </div>
                         </div>
                     </div>

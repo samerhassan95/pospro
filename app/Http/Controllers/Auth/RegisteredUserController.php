@@ -255,26 +255,26 @@ class RegisteredUserController extends Controller
             }
 
             if ($plan) {
+                $subscribe = PlanSubscribe::create([
+                    'plan_id' => $plan->id,
+                    'business_id' => $business->id,
+                    'duration' => $plan->duration,
+                    'price' => $plan->offerPrice ?? $plan->subscriptionPrice,
+                    'payment_status' => 'unpaid', // Mark as unpaid so it shows in admin to be approved later
+                    'allow_multibranch' => $plan->allow_multibranch
+                ]);
 
-                $plan_price = $plan->offerPrice == 0 && $plan->offerPrice != null ? $plan->offerPrice : $plan->subscriptionPrice;
+                $business->update([
+                    'plan_subscribe_id' => $subscribe->id,
+                    'subscriptionDate' => now(),
+                    'will_expire' => now()->addDays($plan->duration),
+                ]);
 
-                if ($plan_price <= 0) {
-                    $subscribe = PlanSubscribe::create([
-                        'plan_id' => $plan->id,
-                        'business_id' => $business->id,
-                        'duration' => $plan->duration,
-                        'allow_multibranch' => $plan->allow_multibranch
-                    ]);
-
-                    $business->update([
-                        'plan_subscribe_id' => $subscribe->id,
-                        'subscriptionDate' => $plan ? now() : null,
-                        'will_expire' => $plan ? now()->addDays($plan->duration) : null,
-                    ]);
-                } else {
-                    $message = 'Your business setup is completed. Now you are going to the payment page.';
-                    $redirect_url = route('payments-gateways.index', ['plan_id' => $plan->id, 'business_id' => $business->id]);
-                }
+                $message = 'Your business setup is completed. You can now access your dashboard.';
+                $redirect_url = route('business.dashboard.index');
+                
+                // Ensure the user is logged in
+                Auth::login($user);
             }
 
             DB::commit();

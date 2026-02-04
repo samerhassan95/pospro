@@ -109,6 +109,12 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('settings', ADMIN\SettingController::class)->only('index', 'update');
     Route::resource('system-settings', ADMIN\SystemSettingController::class)->only('index', 'store');
 
+    // ZATCA for Subscriptions (Super Admin perspective)
+    Route::get('zatca-subscription-settings', [ADMIN\ZatcaSubscriptionSettingController::class, 'index'])->name('zatca.subscription.index');
+    Route::post('zatca-subscription-settings', [ADMIN\ZatcaSubscriptionSettingController::class, 'update'])->name('zatca.subscription.update');
+    Route::post('zatca-subscription-test/{id}', [ADMIN\ZatcaSubscriptionSettingController::class, 'testInvoice'])->name('zatca.subscription.test');
+    Route::post('zatca-subscription-production-csid', [ADMIN\ZatcaSubscriptionSettingController::class, 'getProductionCsid'])->name('zatca.subscription.production-csid');
+
     // Gateway
     Route::resource('gateways', ADMIN\GatewayController::class)->only('index', 'update');
 

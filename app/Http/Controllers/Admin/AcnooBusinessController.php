@@ -86,6 +86,12 @@ class AcnooBusinessController extends Controller
             'shopOpeningBalance' => 'nullable|numeric',
             'business_category_id' => 'required|exists:business_categories,id',
             'plan_subscribe_id' => 'nullable|exists:plans,id',
+            'vat_no' => 'nullable|string',
+            'building_number' => 'nullable|string',
+            'street_name' => 'nullable|string',
+            'district' => 'nullable|string',
+            'city' => 'nullable|string',
+            'postal_code' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -102,6 +108,13 @@ class AcnooBusinessController extends Controller
                 'business_category_id' => $request->business_category_id,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl') : NULL,
                 'user_id' => $user->id,
+                'vat_no' => $request->vat_no,
+                'building_number' => $request->building_number,
+                'street_name' => $request->street_name,
+                'district' => $request->district,
+                'city' => $request->city,
+                'postal_code' => $request->postal_code,
+                'country_code' => 'SA',
             ]);
 
             PaymentType::create([
@@ -141,6 +154,15 @@ class AcnooBusinessController extends Controller
                 ]);
 
                 sendNotification($subscribe->id, route('admin.subscription-reports.index', ['id' => $subscribe->id]), __('Plan subscribed by ' . $user->name));
+
+                // Report to ZATCA if paid (or if you want to report even pending)
+                if ($subscribe->payment_status === 'paid') {
+                    try {
+                        \App\Jobs\ReportSubscriptionToZatca::dispatch($subscribe->id);
+                    } catch (\Exception $e) {
+                         \Log::error("ZATCA Dispatch Error in Business Store: " . $e->getMessage());
+                    }
+                }
             }
 
             DB::commit();
@@ -184,6 +206,12 @@ class AcnooBusinessController extends Controller
             'shopOpeningBalance' => 'nullable|numeric',
             'business_category_id' => 'required|exists:business_categories,id',
             'plan_subscribe_id' => 'nullable|exists:plans,id',
+            'vat_no' => 'nullable|string',
+            'building_number' => 'nullable|string',
+            'street_name' => 'nullable|string',
+            'district' => 'nullable|string',
+            'city' => 'nullable|string',
+            'postal_code' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -198,6 +226,12 @@ class AcnooBusinessController extends Controller
                 'shopOpeningBalance' => $request->shopOpeningBalance,
                 'business_category_id' => $request->business_category_id,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl', $business->pictureUrl) : $business->pictureUrl,
+                'vat_no' => $request->vat_no,
+                'building_number' => $request->building_number,
+                'street_name' => $request->street_name,
+                'district' => $request->district,
+                'city' => $request->city,
+                'postal_code' => $request->postal_code,
             ]);
 
             $user->update([
@@ -326,6 +360,13 @@ class AcnooBusinessController extends Controller
             }
 
             sendNotification($subscribe->id, route('admin.subscription-reports.index', ['id' => $subscribe->id]), __('Plan subscribed by ' . auth()->user()->name));
+
+            // Report to ZATCA
+            try {
+                \App\Jobs\ReportSubscriptionToZatca::dispatch($subscribe->id);
+            } catch (\Exception $e) {
+                 \Log::error("ZATCA Dispatch Error in Upgrade Plan: " . $e->getMessage());
+            }
 
             DB::commit();
             return response()->json([
