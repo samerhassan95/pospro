@@ -2139,7 +2139,7 @@ gap: 10px;
     overflow-x: auto;
     overflow-y: visible;
     margin-top: 20px;
-    /* min-height: 100vh; */
+    min-height: 400px;
 }
 
 .responsive-table table tr th:first-child {
@@ -10799,7 +10799,8 @@ tr.position-relative td {
         gap: 12px;
     }
 }
-/* Dashboard Loading Overlay */
+/* Dashboard Loading Overlay - COMMENTED OUT */
+/*
 .dashboard-loading-overlay {
     position: fixed;
     top: 0;
@@ -10825,7 +10826,6 @@ tr.position-relative td {
     padding: 40px;
   
     border-radius: 12px;
-    /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
     max-width: 400px;
     width: 90%;
 }

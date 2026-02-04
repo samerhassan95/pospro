@@ -6,13 +6,13 @@
 
 @section('main_content')
 
-    <!-- Dashboard Loading Overlay -->
-    <div id="dashboard-loading-overlay" class="dashboard-loading-overlay">
+    {{-- Dashboard Loading Overlay --}}
+    {{-- <div id="dashboard-loading-overlay" class="dashboard-loading-overlay">
         <div class="loading-content">
             <div class="loading-spinner-large"></div>
             <h4>{{ __('Loading Dashboard...') }}</h4>
         </div>
-    </div>
+    </div> --}}
 
     @can('dashboard-read')
     <div class="container-fluid m-h-100">

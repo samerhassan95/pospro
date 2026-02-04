@@ -37,6 +37,8 @@ $(document).ready(function () {
     });
 });
 
+// Loading functions - COMMENTED OUT
+/*
 function showDashboardLoading() {
     $('#dashboard-loading-overlay').removeClass('hidden');
 }
@@ -46,6 +48,7 @@ function hideDashboardLoading() {
         $('#dashboard-loading-overlay').addClass('hidden');
     }, 500); // Small delay for smooth transition
 }
+*/
 
 function getDashboardData() {
     var url = $("#get-dashboard").val();

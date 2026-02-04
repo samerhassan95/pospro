@@ -155,11 +155,11 @@
             </div>
             <div class="modal-body">
                 <div id="zatcaIssuesContent">
-                    <div class="text-center">
+                    {{-- <div class="text-center">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">{{ __('Loading...') }}</span>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="modal-footer">
@@ -181,7 +181,7 @@
 
         // Disable button and show loading
         btn.prop('disabled', true);
-        content.html('<div class="text-center py-4"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">{{ __("Loading issues...") }}</p></div>');
+        // content.html('<div class="text-center py-4"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">{{ __("Loading issues...") }}</p></div>');
 
         // Show modal immediately
         if (!modal.hasClass('show')) {

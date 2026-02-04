@@ -1129,6 +1129,7 @@
     overflow-y: visible;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     border: 1px solid #eaecf0;
+    min-height: 300px;
 }
 
 /* Main Table */
@@ -1368,4 +1369,84 @@
         width: 35px;
         height: 35px;
     }
+}
+
+/* Fix for tables with single or few items */
+.table-container {
+    min-height: 300px;
+}
+
+.responsive-table .table {
+    min-height: 150px;
+}
+
+/* Ensure table body has minimum height when content is minimal */
+.inventory-tbody {
+    min-height: 200px;
+}
+
+.table tbody {
+    min-height: 200px;
+}
+
+/* For dashboard tables */
+.dashboard-table-content {
+    min-height: 250px;
+}
+
+.dashboard-table-content tbody {
+    min-height: 200px;
+}
+/* Ensure minimum height is maintained for screen display */
+@media screen {
+    .responsive-table {
+        min-height: 400px !important;
+    }
+    
+    .inventory-table-container {
+        min-height: 300px !important;
+    }
+    
+    .table-container {
+        min-height: 300px !important;
+    }
+}
+
+/* Additional fix for single row tables */
+.table tbody tr:only-child {
+    height: 60px;
+}
+
+.inventory-cart-row:only-child {
+    height: 60px;
+}
+/* Specific fix for tables with minimal content */
+.table tbody:empty::after,
+.table tbody tr:only-child::after {
+    content: "";
+    display: block;
+    height: 100px;
+    width: 100%;
+}
+
+/* Alternative approach - ensure table wrapper has proper height */
+.customTop .responsive-table {
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+.customTop .responsive-table .table {
+    flex: 1;
+    min-height: 150px;
+}
+
+/* For action column dropdown positioning */
+.table tbody tr {
+    position: relative;
+}
+
+.table tbody tr .dropdown-menu {
+    position: absolute;
+    z-index: 1000;
 }

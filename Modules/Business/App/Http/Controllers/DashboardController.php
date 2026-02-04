@@ -48,10 +48,19 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        return view('business::dashboard.index', compact('stocks', 'purchases', 'sales'));
+        // Load dashboard statistics directly to avoid AJAX delay
+        $dashboardData = $this->getDashboardDataArray();
+
+        return view('business::dashboard.index', compact('stocks', 'purchases', 'sales', 'dashboardData'));
     }
 
     public function getDashboardData()
+    {
+        $data = $this->getDashboardDataArray();
+        return response()->json($data);
+    }
+
+    private function getDashboardDataArray()
     {
         $businessId = auth()->user()->business_id;
 
@@ -147,7 +156,7 @@ class DashboardController extends Controller
         $data['this_month_total_purchase_return'] = currency_format(PurchaseReturnDetail::whereIn('purchase_return_id', $purchaseReturns)
             ->sum('return_amount'), currency: business_currency(), abbreviate: true);
 
-        return response()->json($data);
+        return $data;
     }
 
     public function overall_report()

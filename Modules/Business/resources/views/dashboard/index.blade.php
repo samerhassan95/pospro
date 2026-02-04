@@ -6,13 +6,13 @@
 
 @section('main_content')
 
-<!-- Dashboard Loading Overlay -->
-<div id="dashboard-loading-overlay" class="dashboard-loading-overlay">
+{{-- Dashboard Loading Overlay --}}
+{{-- <div id="dashboard-loading-overlay" class="dashboard-loading-overlay">
     <div class="loading-content">
         <div class="loading-spinner-large"></div>
         <h4>{{ __('Loading Dashboard...') }}</h4>
     </div>
-</div>
+</div> --}}
 
 @if(auth()->user()->hasPermission('dashboard.read'))
 <div class="container-fluid m-h-100">
@@ -85,7 +85,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame1.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Sales') }}</p>
-                        <h4 class="bus-stat-count" id="total_sales">0</h4>
+                        <h4 class="bus-stat-count" id="total_sales">{{ $dashboardData['total_sales'] ?? '0' }}</h4>
                     </div>
 
                     <div class="business-content">
@@ -93,7 +93,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame2.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Purchase') }}</p>
-                        <h4 class="bus-stat-count" id="total_purchase">0</h4>
+                        <h4 class="bus-stat-count" id="total_purchase">{{ $dashboardData['total_purchase'] ?? '0' }}</h4>
                     </div>
 
                     <div class="business-content">
@@ -101,7 +101,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame3.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Income') }}</p>
-                        <h4 class="bus-stat-count" id="total_income">0</h4>
+                        <h4 class="bus-stat-count" id="total_income">{{ $dashboardData['total_income'] ?? '0' }}</h4>
                     </div>
 
                     <div class="business-content">
@@ -109,7 +109,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame4.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Expense') }}</p>
-                        <h4 class="bus-stat-count" id="total_expense">0</h4>
+                        <h4 class="bus-stat-count" id="total_expense">{{ $dashboardData['total_expense'] ?? '0' }}</h4>
                     </div>
 
                     <div class="business-content">
@@ -117,7 +117,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame5.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Customer') }}</p>
-                        <h4 class="bus-stat-count" id="total_customer">0</h4>
+                        <h4 class="bus-stat-count" id="total_customer">{{ $dashboardData['total_customer'] ?? '0' }}</h4>
                     </div>
 
                     <div class="business-content">
@@ -125,7 +125,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame6.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Supplier') }}</p>
-                        <h4 class="bus-stat-count" id="total_supplier">0</h4>
+                        <h4 class="bus-stat-count" id="total_supplier">{{ $dashboardData['total_supplier'] ?? '0' }}</h4>
                     </div>
 
                     <div class="business-content">
@@ -133,7 +133,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame7.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Sales Returns') }}</p>
-                        <h4 class="bus-stat-count" id="total_sales_return">0</h4>
+                        <h4 class="bus-stat-count" id="total_sales_return">{{ $dashboardData['total_sales_return'] ?? '0' }}</h4>
                     </div>
 
                     <div class="business-content">
@@ -141,7 +141,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame8.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Purchase Returns') }}</p>
-                        <h4 class="bus-stat-count" id="total_purchase_return">0</h4>
+                        <h4 class="bus-stat-count" id="total_purchase_return">{{ $dashboardData['total_purchase_return'] ?? '0' }}</h4>
                     </div>
                 </div>
             </div>

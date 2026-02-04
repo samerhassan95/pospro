@@ -143,6 +143,8 @@ $(document).ready(function() {
     });
 });
 
+// Business Dashboard Loading functions - COMMENTED OUT
+/*
 function showBusinessDashboardLoading() {
     $('#dashboard-loading-overlay').removeClass('hidden');
 }
@@ -152,6 +154,7 @@ function hideBusinessDashboardLoading() {
         $('#dashboard-loading-overlay').addClass('hidden');
     }, 500); // Small delay for smooth transition
 }
+*/
 
 function getDashboardData() {
     var url = $("#get-dashboard").val();
