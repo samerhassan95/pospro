@@ -786,7 +786,7 @@ svg {
 }
 .pending{
     background: rgba(255, 164, 28, 0.2) !important;
-    color: #FFA41C !important;
+    color: var(--clr-primary) !important;
 }
 .aproved{
     background: rgba(37, 212, 169, 0.1) !important;

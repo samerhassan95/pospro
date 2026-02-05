@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body create-account-body  pt-0">
                 <div class="d-flex align-items-center justify-content-center">
-                    <img class="create-account-logo" src="{{ asset(get_option('general')['common_header_logo'] ?? 'assets/img/icon/1.svg') }}" alt="">
+                    <img class="create-account-logo" src="{{ asset(get_login_page_logo()) }}" alt="">
                 </div>
                 <h4 class="text-center">{{ __('Create an Free Account!') }}</h4>
                 <p class="text-center">{{ __('Hey, Enter Your details to get Sign Up to your account') }}</p>
@@ -158,7 +158,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body success-modal-body text-center">
-                <img src="{{ asset(get_option('general')['common_header_logo'] ?? 'assets/img/icon/1.svg') }}" alt="">
+                <img src="{{ asset(get_login_page_logo()) }}" alt="">
                 <h4>{{ __('Successfully!') }}</h4>
                 <p>{{ __('Congratulations, Your account has been') }} <br> {{ __('successfully created') }}</p>
                 <a href="{{ get_option('general')['app_link'] ?? '' }}" target="_blank" class="cancel-btn btn btn-outline-danger">{{ __('Download Apk') }}</a>

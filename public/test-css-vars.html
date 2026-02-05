@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSS Variables Test</title>
+    <style>
+        /* This simulates what should happen */
+        :root {
+            --clr-primary: #ff0000 !important;
+            --clr-secondary: #00ff00 !important;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        
+        .test-box {
+            width: 300px;
+            height: 100px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .primary {
+            background-color: var(--clr-primary);
+        }
+        
+        .secondary {
+            background-color: var(--clr-secondary);
+        }
+        
+        .btn-test {
+            background-color: var(--clr-primary);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSS Variables Test</h1>
+    
+    <p>If this works, your Laravel app should work too!</p>
+    
+    <div class="test-box primary">
+        Primary Color (Should be RED)
+    </div>
+    
+    <div class="test-box secondary">
+        Secondary Color (Should be GREEN)
+    </div>
+    
+    <button class="btn-test">Test Button (Should be RED)</button>
+    
+    <hr style="margin: 40px 0;">
+    
+    <h2>Computed Values:</h2>
+    <div id="values"></div>
+    
+    <script>
+        const root = document.documentElement;
+        const primary = getComputedStyle(root).getPropertyValue('--clr-primary').trim();
+        const secondary = getComputedStyle(root).getPropertyValue('--clr-secondary').trim();
+        
+        document.getElementById('values').innerHTML = `
+            <p><strong>Primary:</strong> <code>${primary}</code></p>
+            <p><strong>Secondary:</strong> <code>${secondary}</code></p>
+        `;
+        
+        console.log('CSS Variables:', { primary, secondary });
+    </script>
+</body>
+</html>

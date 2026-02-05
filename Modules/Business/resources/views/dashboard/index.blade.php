@@ -26,12 +26,12 @@
     {{-- Dashboard Banner Section --}}
     <div class="row mb-4 align-items-stretch">
         <div class="col-lg-8 col-md-12 mb-3 mb-lg-0 d-flex">
-            <div class="dashboard-promo-banner">
+            <div class="dashboard-promo-banner" @if(get_dashboard_banner_image() && get_dashboard_banner_image() !== 'assets/images/dashboard/banner-bg.jpg') style="background-image: url('{{ asset(get_dashboard_banner_image()) }}'); background-size: cover; background-position: center;" @endif>
                 <div class="promo-content">
-                    <h2>{{ __('Revolutionizing Your Online Presence') }}</h2>
-                    <p>{{ __('BYTES guides your business through the digital landscape with innovative solutions and personalized strategies.') }}</p>
+                    <h2>{{ get_dashboard_banner_title() }}</h2>
+                    <p>{{ get_dashboard_banner_description() }}</p>
                     <a href="{{ route('business.sales.create') }}" class="promo-btn">
-                        {{ __('Create Sale') }}
+                        {{ get_dashboard_banner_button_text() }}
                         <span class="btn-icon">
                             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.21852 3.1416H8.98739M8.98739 3.1416V6.91047M8.98739 3.1416L2.79485 9.33448" stroke="#09090B" stroke-width="1.25629" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </span>

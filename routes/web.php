@@ -160,3 +160,7 @@ Route::get('/update', function () {
 // Route::post('/super-admin/moyasar', [App\Http\Controllers\SuperAdminMoyasarController::class, 'store']);
 
 require __DIR__ . '/auth.php';
+
+
+// Test routes for color system
+require __DIR__.'/test.php';

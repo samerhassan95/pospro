@@ -2,10 +2,11 @@
 /* Global Css Start */
 /* ----------------------------------------------- */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
-
+/* CSS Variables are now dynamically injected in the layout files */
+/* Default values: --clr-primary: #011646; --clr-secondary: #0071bc; */
 :root {
-    --clr-primary: #FF6500;
-    --clr-secondary: #0071bc;
+    --clr-primary: {{ get_primary_color() }};
+    --clr-secondary: {{ get_secondary_color() }};
     --clr-white: #fff;
     --clr-black: #000;
     --clr-dark: #101828;

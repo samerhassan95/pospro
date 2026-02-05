@@ -2,10 +2,7 @@
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-between" style="flex-wrap: nowrap;">
         <div class="bg-white d-flex align-items-center">
             <div class="sidebar-opner menu-opener"><i class="fal fa-bars" aria-hidden="true"></i></div>
-           <a href="{{ route('admin.dashboard.index') }}" class="pos-logo">
-            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img">
-            <span class="sidebar-logo-text"><span class="bytes-text">Bytes</span> Pos</span>
-        </a>        </div>
+         </div>
 
         <div class="header-right d-flex align-items-center">
             <a target="_blank" class="text-custom-primary view-website" href="{{ route('home') }}">

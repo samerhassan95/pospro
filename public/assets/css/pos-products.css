@@ -21,7 +21,7 @@
 }
 
 .pos-tab-btn.active {
-    background: #FF6500;
+    background: var(--clr-primary);
     color: #fff;
 }
 
@@ -95,13 +95,13 @@
 }
 
 .pos-category-item:hover {
-    border-color: #FF6500;
+    border-color: var(--clr-primary);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(255, 101, 0, 0.1);
 }
 
 .pos-category-item.active {
-    border-color: #FF6500;
+    border-color: var(--clr-primary);
     background: #fff;
 }
 
@@ -164,8 +164,8 @@
 }
 
 .pos-category-scroll-btn.active {
-    background: #FF6500 !important;
-    border-color: #FF6500 !important;
+    background: var(--clr-primary) !important;
+    border-color: var(--clr-primary) !important;
 }
 
 .pos-category-scroll-btn:not(.active) {
@@ -357,11 +357,11 @@
 }
 
 .pos-option-btn:hover {
-    border-color: #FF6500;
+    border-color: var(--clr-primary);
 }
 
 .pos-option-btn.active {
-    border-color: #FF6500;
+    border-color: var(--clr-primary);
     background: #fff;
 }
 
@@ -379,7 +379,7 @@
 .pos-add-to-cart-btn {
     width: 100%;
     padding: 12px;
-    background: #FF6500;
+    background: var(--clr-primary);
     color: #fff;
     border: none;
     border-radius: 100px;
@@ -390,7 +390,7 @@
 }
 
 .pos-add-to-cart-btn:hover {
-    background: #e55a00;
+    background: var(--clr-secondary);
     transform: scale(1.02);
 }
 
@@ -467,7 +467,7 @@
     width: 36px;
     height: 40px;
     border-radius: 8px;
-    background: #FF6500;
+    background: var(--clr-primary);
     border: none;
     display: flex;
     align-items: center;
@@ -480,7 +480,7 @@
 }
 
 .sidebar-add-customer-btn:hover {
-    background: #e55a00;
+    background: var(--clr-secondary);
 }
 
 .sidebar-add-customer-btn svg {
@@ -557,9 +557,9 @@
 }
 
 .delivery-tab-btn.active {
-    background: #FF6500;
+    background: var(--clr-primary);
     color: #fff;
-    border-color: #FF6500;
+    border-color: var(--clr-primary);
 }
 
 .delivery-tab-btn:hover:not(.active) {
@@ -592,7 +592,7 @@
 .sidebar-clear-all-btn {
     background: none;
     border: none;
-    color: #FF6500;
+    color: var(--clr-primary);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -601,7 +601,7 @@
 }
 
 .sidebar-clear-all-btn:hover {
-    color: #e55a00;
+    color: var(--clr-secondary);
     text-decoration: underline;
 }
 
@@ -663,7 +663,7 @@
 .sidebar-pay-btn {
     width: 100%;
     padding: 16px;
-    background: #FF6500;
+    background: var(--clr-primary);
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -674,7 +674,7 @@
 }
 
 .sidebar-pay-btn:hover {
-    background: #e55a00;
+    background: var(--clr-secondary);
     transform: scale(1.02);
 }
 
@@ -682,8 +682,8 @@
     width: 100%;
     padding: 16px;
     background: #fff;
-    color: #FF6500;
-    border: 2px solid #FF6500;
+    color: var(--clr-primary);
+    border: 2px solid var(--clr-primary);
     border-radius: 12px;
     font-size: 16px;
     font-weight: 700;
@@ -758,7 +758,7 @@
 .payment-order-total {
     font-size: 28px;
     font-weight: 700;
-    color: #FF6500;
+    color: var(--clr-primary);
 }
 
 /* Payment Tabs */
@@ -785,7 +785,7 @@
 }
 
 .payment-tab-btn.active {
-    background: #FF6500;
+    background: var(--clr-primary);
     color: #fff;
 }
 
@@ -821,11 +821,11 @@
 }
 
 .payment-method-btn:hover {
-    border-color: #FF6500;
+    border-color: var(--clr-primary);
 }
 
 .payment-method-btn.active {
-    border-color: #FF6500;
+    border-color: var(--clr-primary);
     background: #fff;
 }
 
@@ -879,7 +879,7 @@
 }
 
 .payment-amount-field input:focus {
-    border-color: #FF6500;
+    border-color: var(--clr-primary);
     background: transparent;
 }
 
@@ -915,11 +915,11 @@
 }
 
 .payment-summary-row:last-child span:first-child {
-    color: #FF6500;
+    color: var(--clr-primary);
 }
 
 .payment-summary-row:last-child span:last-child {
-    color: #FF6500;
+    color: var(--clr-primary);
 }
 
 /* Payment Numpad */
@@ -958,7 +958,7 @@
 .numpad-clear svg {
     width: 24px;
     height: 24px;
-    color: #FF6500;
+    color: var(--clr-primary);
 }
 
 /* Payment Modal Actions */
@@ -986,7 +986,7 @@
 
 .payment-complete-btn {
     padding: 16px;
-    background: #FF6500;
+    background: var(--clr-primary);
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -997,7 +997,7 @@
 }
 
 .payment-complete-btn:hover {
-    background: #e55a00;
+    background: var(--clr-secondary);
 }
 
 /* Responsive Payment Modal */
@@ -1078,7 +1078,7 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: #FF6500;
+    background: var(--clr-primary);
     border: none;
     display: flex;
     align-items: center;
@@ -1089,7 +1089,7 @@
 }
 
 .purchase-add-btn:hover {
-    background: #e55a00;
+    background: var(--clr-secondary);
     transform: scale(1.1);
 }
 

@@ -62,6 +62,61 @@
                                         </div>
                                     </div>
 
+                                    {{-- Color Settings --}}
+                                    <div class="col-lg-12 mt-4">
+                                        <h5 class="mb-3">{{ __('Color Settings') }}</h5>
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Primary Color') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" name="primary_color" id="primary_color_input" value="{{ $general->value['primary_color'] ?? '#011646' }}" class="form-control" placeholder="#011646" onkeyup="syncColorPicker('primary')">
+                                            <input type="color" id="primary_color_picker" value="{{ $general->value['primary_color'] ?? '#011646' }}" class="form-control" style="max-width: 60px; cursor: pointer;" onchange="syncColorInput('primary')" oninput="syncColorInput('primary')">
+                                        </div>
+                                        <small class="text-muted">{{ __('Default: #011646') }}</small>
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Secondary Color') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" name="secondary_color" id="secondary_color_input" value="{{ $general->value['secondary_color'] ?? '#0071bc' }}" class="form-control" placeholder="#0071bc" onkeyup="syncColorPicker('secondary')">
+                                            <input type="color" id="secondary_color_picker" value="{{ $general->value['secondary_color'] ?? '#0071bc' }}" class="form-control" style="max-width: 60px; cursor: pointer;" onchange="syncColorInput('secondary')" oninput="syncColorInput('secondary')">
+                                        </div>
+                                        <small class="text-muted">{{ __('Default: #0071bc') }}</small>
+                                    </div>
+
+                                    <script>
+                                    function syncColorInput(type) {
+                                        const picker = document.getElementById(type + '_color_picker');
+                                        const input = document.getElementById(type + '_color_input');
+                                        if (picker && input) {
+                                            input.value = picker.value.toUpperCase();
+                                        }
+                                    }
+                                    
+                                    function syncColorPicker(type) {
+                                        const picker = document.getElementById(type + '_color_picker');
+                                        const input = document.getElementById(type + '_color_input');
+                                        if (picker && input) {
+                                            let value = input.value.trim();
+                                            if (value && !value.startsWith('#')) {
+                                                value = '#' + value;
+                                                input.value = value;
+                                            }
+                                            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                                                picker.value = value.toLowerCase();
+                                            }
+                                        }
+                                    }
+                                    </script>
+
+                                    <div class="col-lg-12 mt-2">
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle"></i> 
+                                            <strong>{{ __('Note:') }}</strong> {{ __('After saving, press Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac) to hard refresh and see the new colors applied.') }}
+                                        </div>
+                                    </div>
+
                                     <div class="col-lg-6 settings-image-upload">
                                         <label class="title">{{ __('Main Header Logo') }}</label>
                                         <div class="upload-img-v2">
@@ -145,6 +200,38 @@
                                         </div>
                                     </div>
 
+                                    {{-- Dashboard Banner Settings --}}
+                                    <div class="col-lg-12 mt-4">
+                                        <h5 class="mb-3">{{ __('Dashboard Banner Settings') }}</h5>
+                                    </div>
+
+                                    <div class="col-lg-6 settings-image-upload">
+                                        <label class="title">{{ __('Dashboard Banner Image') }}</label>
+                                        <div class="upload-img-v2">
+                                            <label class="upload-v4 settings-upload-v4">
+                                                <div class="img-wrp">
+                                                    <img src="{{ asset($general->value['dashboard_banner_image'] ?? 'assets/images/icons/upload-icon.svg') }}" alt="banner" id="dashboard_banner_image">
+                                                </div>
+                                                <input type="file" name="dashboard_banner_image" class="d-none" accept="image/*" onchange="document.getElementById('dashboard_banner_image').src = window.URL.createObjectURL(this.files[0])" class="form-control">
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Dashboard Banner Title') }}</label>
+                                        <input type="text" name="dashboard_banner_title" value="{{ $general->value['dashboard_banner_title'] ?? '' }}" class="form-control" placeholder="{{ __('Enter Banner Title') }}">
+                                    </div>
+
+                                    <div class="col-lg-12 mt-2">
+                                        <label>{{ __('Dashboard Banner Description') }}</label>
+                                        <textarea name="dashboard_banner_description" class="form-control" rows="3" placeholder="{{ __('Enter Banner Description') }}">{{ $general->value['dashboard_banner_description'] ?? '' }}</textarea>
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Dashboard Banner Button Text') }}</label>
+                                        <input type="text" name="dashboard_banner_button_text" value="{{ $general->value['dashboard_banner_button_text'] ?? '' }}" class="form-control" placeholder="{{ __('Enter Button Text') }}">
+                                    </div>
+
                                     @can('settings-update')
                                         <div class="col-lg-12">
                                             <div class="text-end mt-5">
@@ -161,3 +248,96 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+<script>
+(function() {
+    'use strict';
+    
+    // Primary color sync
+    const primaryPicker = document.getElementById('primary_color_picker');
+    const primaryInput = document.getElementById('primary_color_input');
+    
+    if (primaryPicker && primaryInput) {
+        // Picker changes input
+        primaryPicker.addEventListener('input', function() {
+            primaryInput.value = this.value.toUpperCase();
+            console.log('Primary picker changed to:', this.value);
+        });
+        
+        primaryPicker.addEventListener('change', function() {
+            primaryInput.value = this.value.toUpperCase();
+            console.log('Primary picker changed to:', this.value);
+        });
+        
+        // Input changes picker
+        primaryInput.addEventListener('input', function() {
+            let value = this.value.trim();
+            if (value && !value.startsWith('#')) {
+                value = '#' + value;
+                this.value = value;
+            }
+            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                primaryPicker.value = value.toLowerCase();
+                console.log('Primary input changed to:', value);
+            }
+        });
+        
+        primaryInput.addEventListener('keyup', function() {
+            let value = this.value.trim();
+            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                primaryPicker.value = value.toLowerCase();
+            }
+        });
+    }
+    
+    // Secondary color sync
+    const secondaryPicker = document.getElementById('secondary_color_picker');
+    const secondaryInput = document.getElementById('secondary_color_input');
+    
+    if (secondaryPicker && secondaryInput) {
+        // Picker changes input
+        secondaryPicker.addEventListener('input', function() {
+            secondaryInput.value = this.value.toUpperCase();
+            console.log('Secondary picker changed to:', this.value);
+        });
+        
+        secondaryPicker.addEventListener('change', function() {
+            secondaryInput.value = this.value.toUpperCase();
+            console.log('Secondary picker changed to:', this.value);
+        });
+        
+        // Input changes picker
+        secondaryInput.addEventListener('input', function() {
+            let value = this.value.trim();
+            if (value && !value.startsWith('#')) {
+                value = '#' + value;
+                this.value = value;
+            }
+            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                secondaryPicker.value = value.toLowerCase();
+                console.log('Secondary input changed to:', value);
+            }
+        });
+        
+        secondaryInput.addEventListener('keyup', function() {
+            let value = this.value.trim();
+            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                secondaryPicker.value = value.toLowerCase();
+            }
+        });
+    }
+    
+    console.log('Color sync initialized');
+})();
+
+// Force hard reload after form submission
+$(document).ready(function() {
+    $('form.ajaxform_instant_reload').on('submit', function() {
+        setTimeout(function() {
+            location.reload(true);
+        }, 1000);
+    });
+});
+</script>
+@endpush

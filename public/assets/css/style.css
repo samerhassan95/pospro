@@ -10,7 +10,8 @@
 }
 
 :root {
-    --clr-primary: #FF6500;
+     --clr-primary: {{ get_primary_color() }};
+    --clr-secondary: {{ get_secondary_color() }};
     --clr-white: #fff;
     --clr-white2: #f9f9f9;
     --clr-white3: #f3f7ff;
@@ -29,9 +30,15 @@
     --clr-green-light: rgba(1, 184, 26, 0.12);
     --clr-orange: #ff6565;
     --clr-orange-light: rgba(255, 116, 62, 0.12);
-    --clr-red: #FF6500;
+    --clr-red: var(--clr-primary);
     --ff: "Cairo", sans-serif;
 }
+
+/* SVG color control - applies primary color to SVGs using currentColor */
+/* img[src*=".svg"],
+svg {
+    color: var(--clr-primary);
+} */
 
 .primary {
     color: var(--clr-primary);
@@ -255,7 +262,7 @@ svg {
 }
 
 .text-orange {
-    color: #ee6002 !important;
+    color: var(--clr-primary) !important;
 }
 
 .text-red {
@@ -438,6 +445,7 @@ svg {
 .side-bar-logo .logo-link {
     display: flex;
     align-items: center;
+    justify-content :center;
     gap: 10px;
     text-decoration: none;
     color: white !important;
@@ -464,7 +472,7 @@ svg {
     letter-spacing: 0px;
 }
 .side-bar-logo .sidebar-logo-text .bytes-text {
-    color: #FF6500;
+    color: var(--clr-primary);
 }
 
 .side-bar-logo img {
@@ -718,7 +726,7 @@ font-size: 14px;
 .bus-profit .loss {
     font-size: 14px !important;
     font-weight: 600 !important;
-    color: #ff3b30 !important;
+    color: var(--clr-primary) !important;
 }
 
 .dashboard-table-header {
@@ -807,8 +815,8 @@ font-size: 14px;
 
 .multiple-button-group .reset-btn,
 .button-group .reset-btn {
-    border: 1px solid #FF6500 !important;
-    color: #FF6500 !important;
+    border: 1px solid var(--clr-primary) !important;
+    color: var(--clr-primary) !important;
     min-width: 110px !important;
     font-size: 14px !important;
     padding: 9px 15px;
@@ -888,14 +896,41 @@ font-size: 14px;
 }
 
 .side-bar-manu li a .sidebar-icon img {
-    filter: brightness(0) saturate(100%) invert(41%) sepia(98%) saturate(2559%) hue-rotate(360deg) brightness(101%) contrast(106%);
     width: 20px;
     height: 20px;
+    object-fit: contain;
+    /* Default filter - will be overridden by JavaScript with dynamic color */
+    filter: brightness(0) saturate(100%) invert(7%) sepia(98%) saturate(4299%) hue-rotate(211deg) brightness(94%) contrast(105%);
+}
+
+/* Apply primary color to inline SVG icons using CSS variable */
+.side-bar-manu li a .sidebar-icon svg path {
+    fill: none !important;
+    stroke: var(--clr-primary) !important;
+    stroke-width: 1.5 !important;
+}
+
+.side-bar-manu li a .sidebar-icon svg {
+    color: var(--clr-primary) !important;
+}
+
+.side-bar-manu li a .sidebar-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .side-bar-manu li.active > a .sidebar-icon img,
 .side-bar-manu li:hover > a .sidebar-icon img {
-    filter: brightness(0) invert(1);
+    /* White icons on active and hover */
+    filter: brightness(0) invert(1) !important;
+}
+
+.side-bar-manu li.active > a .sidebar-icon svg path,
+.side-bar-manu li:hover > a .sidebar-icon svg path {
+    fill: none !important;
+    stroke: #fff !important;
+    stroke-width: 1.5 !important;
 }
 
 .side-bar-manu li a i {
@@ -1125,8 +1160,9 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
 }
 
 .side-bar-manu .sidebar-icon svg path {
-    fill: #FF6500 !important;
-    stroke: #FF6500 !important;
+    fill: none !important;
+    stroke: var(--clr-primary) !important;
+    stroke-width: 1.5 !important;
 }
 
 .side-bar-manu .sidebar-icon svg.subscription-icon {
@@ -1136,13 +1172,15 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
 
 .side-bar-manu .sidebar-icon svg.subscription-icon path {
     fill: none !important;
-    stroke: #FF6500 !important;
+    stroke: var(--clr-primary) !important;
 }
 
+/* White color on both active and hover */
 .side-bar-manu li.active > a .sidebar-icon svg path,
 .side-bar-manu li:hover > a .sidebar-icon svg path {
-    fill: #fff !important;
+    fill: none !important;
     stroke: #fff !important;
+    stroke-width: 1.5 !important;
 }
 
 .side-bar-manu li.active > a .sidebar-icon svg.subscription-icon path,
@@ -1953,7 +1991,7 @@ gap: 10px;
 
 .pending {
     background: rgba(255, 164, 28, 0.2) !important;
-    color: #ffa41c !important;
+    color: var(--clr-primary) !important;
 }
 
 .aproved {
@@ -2245,7 +2283,7 @@ gap: 10px;
 }
 
 .no-badge {
-    background-color: #ff3b30;
+    background-color: var(--clr-primary);
     color: white;
     padding: 6px;
     height: 24px;
@@ -2266,7 +2304,7 @@ gap: 10px;
                 align-items: center;
                 gap: 8px;
                 padding: 8px 24px;
-                background: #FF6500;
+                background: var(--clr-primary);
                 border: none;
                 border-radius: 100px;
                 color: #fff;
@@ -2277,7 +2315,7 @@ gap: 10px;
             }
 
             .pos-add-expense-btn:hover {
-                background: #e55a00;
+                background:  var(--clr-secondary);
                 color: #fff;
             }
 
@@ -2719,7 +2757,7 @@ gap: 10px;
     height: 10px;
     width: 10px;
     border-radius: 3px;
-    background-color: #ff9500;
+    background-color: var(--clr-primary);
 }
 
 .profit-bulet {
@@ -2733,7 +2771,7 @@ gap: 10px;
     height: 10px;
     width: 10px;
     border-radius: 3px;
-    background-color: #ff3b30;
+    background-color: var(--clr-primary);
 }
 
 .purchase-bulet {
@@ -2761,7 +2799,7 @@ gap: 10px;
     height: 10px;
     width: 10px;
     border-radius: 50%;
-    background-color: #ff3b30;
+    background-color: var(--clr-primary);
 }
 
 .gpt-dashboard-chart .top-five-country div {
@@ -2898,7 +2936,9 @@ gap: 10px;
     }
 
     .search-product {
-        grid-template-columns: 1fr;
+      -ms-grid-columns: 1fr; /* صيغة صحيحة */
+grid-template-columns: 1fr; /* grid الحديث */
+
     }
 }
 
@@ -3550,11 +3590,14 @@ label.upload-img-label {
 
 .table-title-three {
     background: #f4f4f4;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0 0;
+
     display: -ms-grid;
     display: grid;
-    -ms-grid-columns: (1fr) [3];
+
+    -ms-grid-columns: 1fr 1fr 1fr;
     grid-template-columns: repeat(3, 1fr);
+
     padding: 5px 15px;
     margin-top: 25px;
 }
@@ -4116,7 +4159,9 @@ input:checked + .slider:before {
 @media (max-width: 476px) {
     .login-button-list ul {
         display: grid;
-        grid-template-columns: repeat(1, 1fr);
+      -ms-grid-columns: 1fr; /* صيغة صحيحة */
+grid-template-columns: 1fr; /* grid الحديث */
+
     }
 
     .sup-addon {
@@ -4436,7 +4481,9 @@ input:checked + .slider:before {
 /* Mobile View (Max 480px) */
 @media (max-width: 480px) {
     .date-filters-container {
-        grid-template-columns: repeat(1, 1fr) !important;
+        -ms-grid-columns: 1 !important; /* صيغة صحيحة */
+grid-template-columns: 1fr !important; /* grid الحديث */
+
         /* 1 column */
     }
 }
@@ -5098,16 +5145,19 @@ tr.position-relative td {
 
 @media (max-width: 650px) {
     .gpt-dashboard-card.counter-grid-6 {
-        grid-template-columns: repeat(1, 1fr);
+        -ms-grid-columns: 1fr; /* صيغة صحيحة */
+grid-template-columns: 1fr; /* grid الحديث */
+
     }
 }
 
 @media (max-width: 1400px) {
     .erp-state-overview-wrapper {
-        -ms-grid-columns: (1fr) [3];
+        -ms-grid-columns: 1fr 1fr 1fr;
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
 
 @media (max-width: 1200px) {
     .mybazar-login-section {
@@ -5268,8 +5318,8 @@ tr.position-relative td {
     .total-count-area {
         display: -ms-grid;
         display: grid;
-        -ms-grid-columns: (1fr) [2];
-        grid-template-columns: repeat(2, 1fr);
+        -ms-grid-columns: 1fr 1fr; /* كل عمود على حدة */
+    grid-template-columns: repeat(2, 1fr);
     }
 
     /* .order-summary-tab {
@@ -5277,8 +5327,9 @@ tr.position-relative td {
     } */
 
     .grid-5 {
-        -ms-grid-columns: (1fr) [1];
-        grid-template-columns: repeat(1, 1fr);
+ -ms-grid-columns: 1fr; /* صيغة صحيحة */
+grid-template-columns: 1fr; /* grid الحديث */
+
     }
 
     .table-header .button-group {
@@ -5310,8 +5361,8 @@ tr.position-relative td {
     }
 
     .erp-state-overview-wrapper {
-        -ms-grid-columns: (1fr) [2];
-        grid-template-columns: repeat(2, 1fr);
+     -ms-grid-columns: 1fr 1fr; /* كل عمود على حدة */
+    grid-template-columns: repeat(2, 1fr);
     }
 
     .total-count-area .count-item {
@@ -5339,8 +5390,9 @@ tr.position-relative td {
     }
 
     .erp-state-overview-wrapper {
-        -ms-grid-columns: (1fr) [1];
-        grid-template-columns: repeat(1, 1fr);
+     -ms-grid-columns: 1fr; /* صيغة صحيحة */
+grid-template-columns: 1fr; /* grid الحديث */
+
     }
 
     .voucher-big-box-wrapper {
@@ -6539,7 +6591,7 @@ tr.position-relative td {
 }
 
 .unpaid-badge {
-    background-color: #ff9500;
+    background-color: var(--clr-primary);
     color: white;
     font-size: 14px;
     display: flex;
@@ -7405,7 +7457,7 @@ tr.position-relative td {
     justify-content: center;
     display: flex;
     border-radius: 12px;
-    background: #FFCB8B;
+    background: var(--clr-primary);
 }
 
 .color-1,
@@ -7416,13 +7468,25 @@ tr.position-relative td {
 .color-6,
 .color-7,
 .color-8 {
-    background: #FFCB8B;
+    background: var(--clr-primary);
 }
 
 .custom-image-bg img {
     width: 24px;
     height: 24px;
     opacity: 1 !important;
+    /* Make icons white */
+    filter: brightness(0) invert(1);
+}
+
+.custom-image-bg svg {
+    width: 24px;
+    height: 24px;
+}
+
+.custom-image-bg svg path {
+    fill: #fff !important;
+    stroke: #fff !important;
 }
 
 .custom-height {
@@ -7957,7 +8021,7 @@ tr.position-relative td {
 
 /* sidebar plan upgrade css start*/
 .sidebar-free-plan {
-    background-color: #FF6500 !important;
+    background-color: var(--clr-primary) !important;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -8170,7 +8234,7 @@ tr.position-relative td {
     margin: 28px 0;
     display: none;
     margin-top: 20px !important;
-    background-color: #FF6500 !important;
+    background-color: var(--clr-primary) !important;
     background-size: cover;
     background-repeat: no-repeat;
 }
@@ -10734,13 +10798,13 @@ tr.position-relative td {
 }
 
 .cal-day.today {
-    background: #FF6500;
+    background: var(--clr-primary);
     color: #fff;
     font-weight: 600;
 }
 
 .cal-day.selected {
-    background: #FF6500;
+    background: var(--clr-primary);
     color: #fff;
     font-weight: 600;
 }
