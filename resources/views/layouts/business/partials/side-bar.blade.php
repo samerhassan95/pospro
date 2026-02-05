@@ -876,9 +876,9 @@
             </li>
             @endif
 
-            @usercan('manage-settings.read')
-            <li class="{{ Request::routeIs('business.manage-settings.index', 'business.currencies.index', 'business.currencies.create', 'business.currencies.edit', 'business.notifications.index','business.settings.index', 'business.sms-gateway-settings.index') ? 'active' : '' }}">
-                <a href="{{ route('business.manage-settings.index') }}" class="active">
+            @usercanany(['manage-settings.read', 'zatca-settings-read'])
+            <li class="dropdown {{ Request::routeIs('business.manage-settings.index', 'business.currencies.index', 'business.currencies.create', 'business.currencies.edit', 'business.notifications.index','business.settings.index', 'business.sms-gateway-settings.index', 'business.zatca.index', 'business.moyasar.index') ? 'active' : '' }}">
+                <a href="#">
                     <span class="sidebar-icon">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M10 6.24997C7.93205 6.24997 6.25005 7.93197 6.25005 9.99997C6.25005 12.068 7.93205 13.75 10 13.75C12.068 13.75 13.75 12.068 13.75 9.99997C13.75 7.93197 12.068 6.24997 10 6.24997ZM10 12.25C8.75905 12.25 7.75005 11.241 7.75005 9.99997C7.75005 8.75897 8.75905 7.74997 10 7.74997C11.241 7.74997 12.25 8.75897 12.25 9.99997C12.25 11.241 11.241 12.25 10 12.25ZM19.2081 11.953C18.5141 11.551 18.082 10.803 18.081 9.99997C18.08 9.19897 18.5091 8.45198 19.2121 8.04498C19.7271 7.74598 19.9031 7.08296 19.6051 6.56696L17.9331 3.68097C17.6351 3.16597 16.972 2.98898 16.456 3.28598C15.757 3.68898 14.8881 3.68898 14.1871 3.28198C13.4961 2.88098 13.0661 2.13598 13.0661 1.33698C13.0661 0.737975 12.578 0.250977 11.979 0.250977H8.02403C7.42403 0.250977 6.93706 0.737975 6.93706 1.33698C6.93706 2.13598 6.50704 2.88097 5.81404 3.28397C5.11504 3.68897 4.24705 3.68996 3.54805 3.28696C3.03105 2.98896 2.36906 3.16698 2.07106 3.68198L0.397049 6.57098C0.0990486 7.08598 0.276035 7.74796 0.796035 8.04996C1.48904 8.45096 1.92105 9.19796 1.92305 9.99896C1.92505 10.801 1.49504 11.55 0.793045 11.957C0.543045 12.102 0.363047 12.335 0.289047 12.615C0.215047 12.894 0.253056 13.185 0.398056 13.436L2.06905 16.32C2.36705 16.836 3.03005 17.015 3.54805 16.716C4.24705 16.313 5.11405 16.314 5.80305 16.713L5.80504 16.714C5.80804 16.716 5.81105 16.718 5.81505 16.72C6.50605 17.121 6.93504 17.866 6.93404 18.666C6.93404 19.265 7.42103 19.752 8.02003 19.752H11.979C12.578 19.752 13.065 19.265 13.065 18.667C13.065 17.867 13.495 17.122 14.189 16.719C14.887 16.314 15.755 16.312 16.455 16.716C16.971 17.014 17.6331 16.837 17.9321 16.322L19.606 13.433C19.903 12.916 19.7261 12.253 19.2081 11.953ZM16.831 15.227C15.741 14.752 14.476 14.817 13.434 15.42C12.401 16.019 11.7191 17.078 11.5871 18.25H8.41005C8.28005 17.078 7.59603 16.017 6.56303 15.419C5.52303 14.816 4.25605 14.752 3.16905 15.227L1.89305 13.024C2.84805 12.321 3.42504 11.193 3.42104 9.99298C3.41804 8.80098 2.84204 7.68097 1.89204 6.97797L3.16905 4.77396C4.25705 5.24796 5.52405 5.18396 6.56605 4.57996C7.59805 3.98196 8.28003 2.92198 8.41203 1.75098H11.5871C11.7181 2.92298 12.4011 3.98197 13.4361 4.58197C14.475 5.18497 15.742 5.24896 16.831 4.77496L18.108 6.97797C17.155 7.67997 16.579 8.80597 16.581 10.004C16.582 11.198 17.1581 12.32 18.1091 13.025L16.831 15.227Z" fill="white" />
@@ -886,8 +886,31 @@
                     </span>
                     {{ __('Settings') }}
                 </a>
+                <ul>
+                    @usercan('manage-settings.read')
+                    <li>
+                        <a class="{{ Request::routeIs('business.manage-settings.index') ? 'active' : '' }}" href="{{ route('business.manage-settings.index') }}">{{ __('General Settings') }}</a>
+                    </li>
+                    @endusercan
+                    
+                    @usercan('zatca-settings-read')
+                    <li>
+                        <a class="{{ Request::routeIs('business.zatca.index') ? 'active' : '' }}" href="{{ route('business.zatca.index') }}">
+                            <i class="fas fa-file-invoice-dollar me-2"></i>{{ __('ZATCA Settings') }}
+                        </a>
+                    </li>
+                    @endusercan
+                    
+                    @usercan('moyasar-settings-read')
+                    <li>
+                        <a class="{{ Request::routeIs('business.moyasar.index') ? 'active' : '' }}" href="{{ route('business.moyasar.index') }}">
+                            <i class="fas fa-credit-card me-2"></i>{{ __('Moyasar Settings') }}
+                        </a>
+                    </li>
+                    @endusercan
+                </ul>
             </li>
-            @endusercan
+            @endusercanany
 
             @usercan('download-apk.read')
             <li>

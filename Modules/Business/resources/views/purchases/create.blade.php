@@ -88,13 +88,13 @@
         .choices__list--single { padding: 0; }
         .choices[data-type*=select-one] .choices__input { background-color: #f9fafb; border-radius: 8px; padding: 8px; }
         .hidden-cart-inputs { display: none; }
-        
+
         /* Tabs */
         .pos-tabs-wrapper { display: flex; gap: 12px; padding-bottom: 24px;  border-bottom:2px solid #f0f0f0; }
         .pos-tab-btn {    background: transparent; padding: 10px 24px; border:2px solid #f0f0f0; color: #666; border-radius: 100px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; }
         .pos-tab-btn.active { background: #FF6500; color: #fff; }
         .pos-tab-btn:hover:not(.active) {   background: transparent; }
-        
+
         /* Category Section */
         .pos-category-section { margin-bottom: 30px; }
         .pos-category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
@@ -102,17 +102,17 @@
         .pos-category-scroll-wrapper { position: relative; }
         .pos-category-list, #purchase-category-list { display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; padding: 8px 0; scrollbar-width: none; -ms-overflow-style: none; }
         .pos-category-list::-webkit-scrollbar, #purchase-category-list::-webkit-scrollbar { display: none; }
-        
+
         /* Limit visible categories on small screens - show 2.25 items */
         @media (max-width: 768px) {
             .pos-category-scroll-wrapper { max-width: 100%; overflow: hidden; }
             .pos-category-list, #purchase-category-list { max-width: calc((100px * 2.25) + (16px * 2.25) + 24px); } /* 2.25 items + gaps + padding */
         }
-        
+
         @media (max-width: 576px) {
             .pos-category-list, #purchase-category-list { max-width: calc((100px * 2.25) + (16px * 2.25) + 24px); } /* 2.25 items visible */
         }
-        
+
         .pos-category-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 100px; padding: 12px; border: 2px solid #f0f0f0; background: #fff; border-radius: 12px; cursor: pointer; transition: all 0.3s; flex-shrink: 0; }
         .pos-category-item:hover { border-color: #FF6500; transform: translateY(-2px); }
         .pos-category-item.active { border-color: #FF6500; background: #fff5f0; }
@@ -129,7 +129,7 @@
         .pos-category-scroll-btn.disabled { opacity: 0.3 !important; cursor: not-allowed !important; pointer-events: none !important; }
         .pos-category-scroll-btn svg { color: #666 !important; width: 18px !important; height: 18px !important; }
         .pos-category-scroll-btn.active svg { color: #fff !important; }
-        
+
         /* Table Reservation System */
         .tables-reservation-section { padding: 20px 0; }
         .table-management-buttons { display: flex; flex-wrap:wrap; gap: 15px; margin-bottom: 20px; }
@@ -144,14 +144,14 @@
         .legend-color.free { background: #48f045; }
         .legend-color.blocked { background: #fff301; }
         .legend-text { font-size: 14px; color: #666; }
-        
+
         /* Floor plan wrapper - allows cutout to extend outside */
-        .floor-plan-wrapper { 
-            position: relative; 
-            width: 100%; 
-            margin-bottom: 30px; 
+        .floor-plan-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 30px;
         }
-        
+
         /* Make floor plan scrollable on small screens */
         @media (max-width: 768px) {
             .floor-plan-wrapper {
@@ -162,49 +162,49 @@
                 border: 1px solid #e0e0e0;
                 border-radius: 8px;
             }
-            
+
             .restaurant-floor-plan {
                 min-width: 800px; /* Ensure floor plan doesn't shrink too much */
                 min-height: 700px;
                 position: relative; /* Ensure absolute positioned items stay in place */
             }
-            
+
             /* Ensure draggable items maintain position */
             .table-item, .area-item {
                 position: absolute !important;
             }
         }
-        
+
         @media (max-width: 576px) {
             .floor-plan-wrapper {
                 max-height: 70vh;
             }
-            
+
             .restaurant-floor-plan {
                 min-width: 600px;
             }
         }
-        
+
         .restaurant-floor-plan { position: relative; width: 100%; height: 700px; border: 3px solid #000; border-radius: 8px; background: #fff; overflow: hidden; }
-        
+
         /* Entrance cut-out cover - positioned relative to wrapper */
         .entrance-cutout-cover { position: absolute; background: #fff; z-index: 6; pointer-events: none; }
-        
+
         .floor-area { position: absolute; border: 2px solid #000; background: #fff; z-index: 1; cursor: move; }
         .bar-area { top: 20px; left: 20px; width: 180px; height: 140px; display: flex; align-items: center; justify-content: center; }
         .area-label { font-size: 14px; color: #666; text-align: center; pointer-events: none; }
         .toilets-wall { top: 180px; left: 20px; width: 60px; height: 180px; display: flex; align-items: center; justify-content: center; }
         .toilets-label { font-size: 12px; color: #666; z-index: 2; pointer-events: none; }
-        
+
         .center-square { position: absolute; top: 35%; left: 45%; transform: translate(-50%, -50%); width: 100px; height: 100px; border: 2px solid #000; background: #fff; z-index: 1; cursor: move; }
-        
+
         .entrance-area { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 7; cursor: move; }
         .entrance-label { font-size: 14px; color: #666; pointer-events: none; }
         .entrance-arrow { display: none; }
-        
+
         .table-item { position: absolute; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; z-index: 10; }
         .table-item:hover { transform: scale(1.05); }
-        
+
         /* Table rotation support */
         .table-item[data-rotation="90"] { transform: rotate(90deg); }
         .table-item[data-rotation="180"] { transform: rotate(180deg); }
@@ -212,35 +212,35 @@
         .table-item[data-rotation="90"]:hover { transform: rotate(90deg) scale(1.05); }
         .table-item[data-rotation="180"]:hover { transform: rotate(180deg) scale(1.05); }
         .table-item[data-rotation="270"]:hover { transform: rotate(270deg) scale(1.05); }
-        
+
         .table-circle { width: 80px; height: 80px; border-radius: 50%; }
         .table-rounded { width: 140px; height: 80px; border-radius: 12px; }
-        
+
         .table-item.utilized { background: #ef4e44; }
         .table-item.free { background: #48f045; }
         .table-item.blocked { background: #fff301; }
-        
+
         .table-name { position: absolute; font-size: 14px; font-weight: 600; color: #000; z-index: 2; }
-        
+
         /* Counter-rotate table name to keep it horizontal */
         .table-item[data-rotation="90"] .table-name { transform: rotate(-90deg); }
         .table-item[data-rotation="180"] .table-name { transform: rotate(-180deg); }
         .table-item[data-rotation="270"] .table-name { transform: rotate(-270deg); }
-        
+
         /* Counter-rotate complete order button to keep it upright */
         .table-item[data-rotation="90"] .complete-order-btn { transform: rotate(-90deg); }
         .table-item[data-rotation="180"] .complete-order-btn { transform: rotate(-180deg); }
         .table-item[data-rotation="270"] .complete-order-btn { transform: rotate(-270deg); }
-        
+
         /* Counter-rotate reservation badge to keep it upright */
         .table-item[data-rotation="90"] .reservation-badge { transform: rotate(-90deg); }
         .table-item[data-rotation="180"] .reservation-badge { transform: rotate(-180deg); }
         .table-item[data-rotation="270"] .reservation-badge { transform: rotate(-270deg); }
-        
+
         /* Reservation info badge on table */
         .reservation-badge { position: absolute; top: -10px; right: -10px; background: #fff301; color: #000; border: 2px solid #000; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; z-index: 3; cursor: pointer; }
         .reservation-badge:hover { transform: scale(1.2); }
-        
+
         /* Complete order button on utilized tables */
         .complete-order-btn {
             position: absolute;
@@ -271,15 +271,15 @@
             width: 18px;
             height: 18px;
         }
-        
+
         .chair-wrapper { position: absolute; width: 100%; height: 100%; }
         .chair { position: absolute; width: 30px; height: 15px; border-radius: 4px; }
-        
+
         .table-circle .chair.chair-top { top: -20px; left: 50%; transform: translateX(-50%); }
         .table-circle .chair.chair-right { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
         .table-circle .chair.chair-bottom { bottom: -20px; left: 50%; transform: translateX(-50%); }
         .table-circle .chair.chair-left { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        
+
         /* Horizontal rectangle table for 10 chairs */
         .table-rectangle-h10 { width: 280px; height: 100px; border-radius: 20px; }
         .table-rectangle-h10 .chair.chair-top-1 { top: -20px; left: 12%; }
@@ -292,7 +292,7 @@
         .table-rectangle-h10 .chair.chair-bottom-4 { bottom: -20px; left: 78%; }
         .table-rectangle-h10 .chair.chair-left { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
         .table-rectangle-h10 .chair.chair-right { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        
+
         /* Horizontal rectangle table for 8 chairs */
         .table-rectangle-h { width: 220px; height: 100px; border-radius: 20px; }
         .table-rectangle-h .chair.chair-top-1 { top: -20px; left: 15%; }
@@ -317,7 +317,7 @@
         .table-rectangle .chair.chair-left-3 { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
         .table-rectangle .chair.chair-left-4 { left: -35px; top: 75%; transform: rotate(90deg); }
         .table-rectangle .chair.chair-left-5 { left: -35px; top: 90%; transform: rotate(90deg); }
-        
+
         .table-rounded .chair.chair-top-left { top: -20px; left: 15%; }
         .table-rounded .chair.chair-top-right { top: -20px; right: 15%; }
         .table-rounded .chair.chair-top { top: -20px; left: 50%; transform: translateX(-50%); }
@@ -325,18 +325,18 @@
         .table-rounded .chair.chair-bottom-right { bottom: -20px; right: 15%; }
         .table-rounded .chair.chair-bottom-left { bottom: -20px; left: 15%; }
         .table-rounded .chair.chair-left { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        
+
         .table-item.utilized .chair { background: #ef4e44; border: 2px solid #000; }
         .table-item.free .chair { background: #48f045; border: 2px solid #000; }
         .table-item.blocked .chair { background: #fff301; border: 2px solid #000; }
-        
+
         /* Individual chair status classes - higher priority */
         .table-item .chair.chair-utilized { background: #ef4e44 !important; }
         .table-item .chair.chair-free { background: #48f045 !important; }
         .table-item .chair.chair-blocked { background: #fff301 !important; }
-        
+
         .table-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
-        
+
         /* Make table controls single column on small screens */
         @media (max-width: 768px) {
             .table-controls { grid-template-columns: 1fr; gap: 20px; }
@@ -351,17 +351,17 @@
         .toggle-input:checked + .toggle-slider { background: #FF6500; }
         .toggle-input:checked + .toggle-slider::before { transform: translateX(22px); }
         .toggle-label { font-size: 14px; color: #333; }
-        
+
         /* Pulse animation for recommendations */
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        
+
         /* Make tables draggable */
         .table-item { cursor: move; user-select: none; }
         .table-item:active { cursor: grabbing; }
-        
+
         /* Modal styling improvements - Match Payment Modal Style */
         .modal-header { background: #f8f9fa; border-bottom: 2px solid #e5e7eb; padding: 20px 24px; }
         .modal-title { font-weight: 600; color: #1a1a1a; font-size: 20px; }
@@ -382,10 +382,10 @@
         .complete-order:hover { background: #157347; border-color: #3dd93a; color: #000; transform: translateY(-1px); }
         .btn-close { opacity: 0.5; transition: opacity 0.2s; }
         .btn-close:hover { opacity: 1; }
-        
+
         /* Table order info styling */
         .table-order-info { }
-        
+
         /* Corner shape for L-shaped table */
         .corner-shape { width: 180px; height: 160px; border-radius: 40px 40px 0 40px; }
         .corner-shape::after { content: ''; position: absolute; bottom: 0; right: 0; width: 90px; height: 90px; background: #F7F7F7; border-radius: 0 0 0 40px; }
@@ -399,7 +399,7 @@
 @section('main_content')
     <form id="purchase-form" action="{{ route('business.purchases.store') }}" method="post" enctype="multipart/form-data" class="ajaxform pos-fullscreen-form">
         @csrf
-        
+
         <!-- Top Header Bar -->
         <div class="pos-top-header">
             <div class="pos-brand">
@@ -501,7 +501,7 @@
                             {{ __('Manage Orders') }}
                         </button>
                     </div>
-                    
+
                     <!-- Legend -->
                     <div class="table-legend">
                         <div class="legend-item">
@@ -527,7 +527,7 @@
                                 <span class="entrance-label">{{ __('Entrance') }}</span>
                                 <div class="entrance-arrow"></div>
                             </div>
-                            
+
                             <!-- Bar Area -->
                             <div class="floor-area bar-area" data-area="bar-area">
                                 <span class="area-label">{{ __('Bar Area') }}</span>
@@ -669,7 +669,7 @@
                         <!-- Center Square (decoration/pillar) -->
                         <div class="center-square" data-area="center-square"></div>
                     </div>
-                    
+
                     <!-- Entrance cut-out cover only (no arrow) -->
                     <div class="entrance-cutout-cover"></div>
                     </div>
@@ -776,7 +776,7 @@
                 <!-- Search Supplier Section -->
                 <div class="sidebar-search-customer">
                     <div class="search-customer-wrapper">
-             
+
                         <select required name="party_id" id="supplier_id" class="sidebar-customer-select choices-select">
                             <option value="">{{ __('Search Supplier') }}</option>
                             @foreach ($suppliers as $supplier)
@@ -1300,17 +1300,17 @@
                                 <td id="complete-order-time"></td>
                             </tr>
                         </table>
-                        
+
                         <div style="background: #f3f4f6; padding: 12px; border-radius: 8px; margin-top: 15px;">
                             <strong>{{ __('Order Items') }}:</strong>
                             <div id="complete-order-items" style="margin-top: 8px; white-space: pre-wrap;"></div>
                         </div>
-                        
+
                         <div id="complete-notes-section" style="margin-top: 15px; display: none;">
                             <strong>{{ __('Notes') }}:</strong>
                             <div id="complete-order-notes" style="margin-top: 8px; color: #666; font-style: italic;"></div>
                         </div>
-                        
+
                         <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin-top: 20px; border-radius: 4px;">
                             <strong style="color: #92400e;">⚠️ {{ __('Confirm Completion') }}</strong>
                             <p style="margin: 8px 0 0 0; color: #78350f; font-size: 14px;">
@@ -1348,17 +1348,17 @@
             const tablesSection = document.getElementById('tables-section');
             const productsSection = document.getElementById('products-section');
             const productsGridSection = document.querySelector('.pos-products-section');
-            
+
             tabButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const tab = this.getAttribute('data-tab');
-                    
+
                     // Remove active class from all buttons
                     tabButtons.forEach(btn => btn.classList.remove('active'));
-                    
+
                     // Add active class to clicked button
                     this.classList.add('active');
-                    
+
                     // Show/hide sections
                     if (tab === 'tables') {
                         tablesSection.style.display = 'block';
@@ -1371,11 +1371,11 @@
                     }
                 });
             });
-            
+
             // Table click functionality - open order modal on click
             const tables = document.querySelectorAll('.table-item');
             let selectedTable = null;
-            
+
             tables.forEach(table => {
                 // Single click to open order modal
                 table.addEventListener('click', function(e) {
@@ -1383,16 +1383,16 @@
                     if (e.target.classList.contains('chair')) {
                         return;
                     }
-                    
+
                     // Check table status
                     const tableName = this.getAttribute('data-table');
-                    
+
                     if (this.classList.contains('blocked')) {
                         // Table is reserved - show reservation details in modal
                         const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
                         let reservationInfo = null;
                         let reservationKey = null;
-                        
+
                         // Find reservation for this table
                         for (const [key, reservation] of Object.entries(reservations)) {
                             if (reservation.table === tableName) {
@@ -1401,7 +1401,7 @@
                                 break;
                             }
                         }
-                        
+
                         if (reservationInfo) {
                             // Show reservation details in modal
                             showReservationDetails(reservationInfo, reservationKey);
@@ -1410,12 +1410,12 @@
                         }
                         return;
                     }
-                    
+
                     if (this.classList.contains('utilized')) {
                         // Table is occupied - open order modal to view/edit
                         selectedTable = this;
                         document.getElementById('order-table-name').textContent = tableName;
-                        
+
                         // Load existing order data if available
                         const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
                         if (tableOrders[tableName]) {
@@ -1424,34 +1424,34 @@
                             document.getElementById('order-items').value = tableOrders[tableName].items || '';
                             document.getElementById('order-notes').value = tableOrders[tableName].notes || '';
                         }
-                        
+
                         const orderModal = new bootstrap.Modal(document.getElementById('tableOrderModal'));
                         orderModal.show();
                         return;
                     }
-                    
+
                     // Table is free - open reservation modal and pre-select it
                     const chairCount = this.querySelectorAll('.chair').length;
-                    
+
                     // Pre-fill the reservation form
                     document.getElementById('reservation-guests').value = Math.min(chairCount, 4);
-                    
+
                     // Store the clicked table as pre-selected
                     selectedTableForReservation = {
                         name: tableName,
                         chairs: chairCount,
                         element: this
                     };
-                    
+
                     // Open Make Reservation modal
                     const reservationModal = new bootstrap.Modal(document.getElementById('makeReservationModal'));
                     reservationModal.show();
-                    
+
                     // Show the clicked table as pre-selected, but allow changing
                     setTimeout(() => {
                         const container = document.getElementById('available-tables-container');
                         container.innerHTML = '';
-                        
+
                         // Show pre-selected table
                         const tableBtn = document.createElement('button');
                         tableBtn.className = 'btn btn-success';
@@ -1460,25 +1460,25 @@
                             // Already selected, do nothing
                         };
                         container.appendChild(tableBtn);
-                        
+
                         // Add message to search for other tables
                         const searchMsg = document.createElement('p');
                         searchMsg.className = 'mt-2 text-muted';
                         searchMsg.innerHTML = '{{ __("Click") }} <strong>{{ __("Search Available Tables") }}</strong> {{ __("to see other options") }}';
                         container.appendChild(searchMsg);
-                        
+
                         document.getElementById('available-tables-list').style.display = 'block';
                         document.getElementById('confirm-reservation').disabled = false;
                     }, 300);
                 });
             });
-            
+
             // Chair click functionality - each chair can have different status
             const chairs = document.querySelectorAll('.chair');
             chairs.forEach(chair => {
                 chair.addEventListener('click', function(e) {
                     e.stopPropagation(); // Prevent table click
-                    
+
                     // Cycle through chair statuses
                     if (this.classList.contains('chair-utilized')) {
                         this.classList.remove('chair-utilized');
@@ -1495,13 +1495,13 @@
                     }
                 });
             });
-            
+
             // Live Views & Integration toggles functionality
             const showUtilization = document.getElementById('show-utilization');
             const showOrdered = document.getElementById('show-ordered');
             const showRecommendations = document.getElementById('show-recommendations');
             const showReservations = document.getElementById('show-reservations');
-            
+
             // Show Utilization - toggle visibility of table/chair colors
             if (showUtilization) {
                 showUtilization.addEventListener('change', function() {
@@ -1519,7 +1519,7 @@
                     }
                 });
             }
-            
+
             // Show Ordered - highlight tables with orders
             if (showOrdered) {
                 showOrdered.addEventListener('change', function() {
@@ -1537,7 +1537,7 @@
                     }
                 });
             }
-            
+
             // Show Recommendations - suggest available tables
             if (showRecommendations) {
                 showRecommendations.addEventListener('change', function() {
@@ -1557,7 +1557,7 @@
                     }
                 });
             }
-            
+
             // Show Reservations - highlight blocked/reserved tables
             if (showReservations) {
                 showReservations.addEventListener('change', function() {
@@ -1578,7 +1578,7 @@
                     }
                 });
             }
-            
+
             // Add Table button functionality
             const btnAddTable = document.getElementById('btn-add-table');
             if (btnAddTable) {
@@ -1587,7 +1587,7 @@
                     addTableModal.show();
                 });
             }
-            
+
             // Save new table functionality
             const saveNewTableBtn = document.getElementById('save-new-table');
             if (saveNewTableBtn) {
@@ -1595,12 +1595,12 @@
                     const tableName = document.getElementById('new-table-name').value.trim();
                     const chairCount = parseInt(document.getElementById('new-table-chairs').value);
                     const tableStatus = 'free'; // Always default to free
-                    
+
                     if (!tableName) {
                         alert('{{ __("Please enter a table number") }}');
                         return;
                     }
-                    
+
                     // Auto-determine table type based on chair count
                     let tableType = 'circle';
                     if (chairCount === 6) {
@@ -1612,7 +1612,7 @@
                     } else if (chairCount === 12) {
                         tableType = 'rectangle';
                     }
-                    
+
                     // Create new table element
                     const floorPlan = document.querySelector('.restaurant-floor-plan');
                     const newTable = document.createElement('div');
@@ -1620,7 +1620,7 @@
                     newTable.setAttribute('data-table', tableName);
                     newTable.style.opacity = '0.7';
                     newTable.style.border = '3px dashed #FF6500';
-                    
+
                     // Add table type class based on chair count
                     if (chairCount === 12) {
                         newTable.classList.add('table-rectangle');
@@ -1633,21 +1633,21 @@
                     } else {
                         newTable.classList.add('table-circle');
                     }
-                    
+
                     // Position new table (center of floor plan)
                     newTable.style.top = '300px';
                     newTable.style.left = '300px';
-                    
+
                     // Add table name
                     const nameSpan = document.createElement('span');
                     nameSpan.className = 'table-name';
                     nameSpan.textContent = tableName;
                     newTable.appendChild(nameSpan);
-                    
+
                     // Add chairs based on count
                     const chairWrapper = document.createElement('div');
                     chairWrapper.className = 'chair-wrapper';
-                    
+
                     if (chairCount === 12) {
                         // 12 chairs: 1 top, 5 right, 1 bottom, 5 left (vertical rectangle table)
                         ['top', 'right-1', 'right-2', 'right-3', 'right-4', 'right-5', 'bottom', 'left-1', 'left-2', 'left-3', 'left-4', 'left-5'].forEach(pos => {
@@ -1691,14 +1691,14 @@
                             chairWrapper.appendChild(chair);
                         });
                     }
-                    
+
                     newTable.appendChild(chairWrapper);
                     floorPlan.appendChild(newTable);
-                    
+
                     // Close modal first
                     const modal = bootstrap.Modal.getInstance(document.getElementById('addTableModal'));
                     modal.hide();
-                    
+
                     // Show instruction
                     const instruction = document.createElement('div');
                     instruction.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); color: white; padding: 30px 50px; border-radius: 12px; z-index: 10000; font-size: 18px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3);';
@@ -1709,50 +1709,50 @@
                         <button id="cancel-position-btn" style="background: #E6E6E6; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-left: 10px;">{{ __("Cancel") }}</button>
                     `;
                     document.body.appendChild(instruction);
-                    
+
                     // Enable immediate dragging
                     let isPositioning = true;
                     let positioningTable = newTable;
                     let isDraggingNew = false;
                     let dragOffsetX = 0;
                     let dragOffsetY = 0;
-                    
+
                     // Mouse down on table to start dragging
                     positioningTable.addEventListener('mousedown', function(e) {
                         if (!isPositioning) return;
                         isDraggingNew = true;
-                        
+
                         const rect = positioningTable.getBoundingClientRect();
                         const floorRect = floorPlan.getBoundingClientRect();
-                        
+
                         dragOffsetX = e.clientX - rect.left;
                         dragOffsetY = e.clientY - rect.top;
-                        
+
                         positioningTable.style.cursor = 'grabbing';
                         e.preventDefault();
                     });
-                    
+
                     // Mouse move to drag table
                     function positionMouseMove(e) {
                         if (!isPositioning || !isDraggingNew) return;
-                        
+
                         const floorRect = floorPlan.getBoundingClientRect();
                         const tableWidth = positioningTable.offsetWidth;
                         const tableHeight = positioningTable.offsetHeight;
-                        
+
                         let newX = e.clientX - floorRect.left - dragOffsetX;
                         let newY = e.clientY - floorRect.top - dragOffsetY;
-                        
+
                         // Keep within bounds
                         newX = Math.max(0, Math.min(newX, floorPlan.offsetWidth - tableWidth));
                         newY = Math.max(0, Math.min(newY, floorPlan.offsetHeight - tableHeight));
-                        
+
                         positioningTable.style.left = newX + 'px';
                         positioningTable.style.top = newY + 'px';
                         positioningTable.style.right = 'auto';
                         positioningTable.style.bottom = 'auto';
                     }
-                    
+
                     // Mouse up to stop dragging
                     function positionMouseUp() {
                         if (isDraggingNew) {
@@ -1760,39 +1760,39 @@
                             positioningTable.style.cursor = 'move';
                         }
                     }
-                    
+
                     document.addEventListener('mousemove', positionMouseMove);
                     document.addEventListener('mouseup', positionMouseUp);
-                    
+
                     // Confirm position
                     document.getElementById('confirm-position-btn').addEventListener('click', function() {
                         isPositioning = false;
                         isDraggingNew = false;
                         document.removeEventListener('mousemove', positionMouseMove);
                         document.removeEventListener('mouseup', positionMouseUp);
-                        
+
                         // Finalize table
                         newTable.style.opacity = '1';
                         newTable.style.border = 'none';
                         newTable.style.cursor = 'move';
-                        
+
                         // Add event listeners
                         addTableEventListeners(newTable);
                         makeDraggable(newTable);
-                        
+
                         // Save to localStorage
                         saveCustomTable(newTable);
-                        
+
                         // Remove instruction
                         instruction.remove();
-                        
+
                         // Reset form
                         document.getElementById('new-table-name').value = '';
                         document.getElementById('new-table-chairs').value = '4';
-                        
+
                         alert('{{ __("Table added successfully!") }}');
                     });
-                    
+
                     // Cancel
                     document.getElementById('cancel-position-btn').addEventListener('click', function() {
                         isPositioning = false;
@@ -1804,7 +1804,7 @@
                     });
                 });
             }
-            
+
             // Function to add event listeners to tables
             function addTableEventListeners(table) {
                 // Single click to check status and open appropriate modal
@@ -1813,16 +1813,16 @@
                     if (e.target.classList.contains('chair')) {
                         return;
                     }
-                    
+
                     // Check table status
                     const tableName = this.getAttribute('data-table');
-                    
+
                     if (this.classList.contains('blocked')) {
                         // Table is reserved - show reservation details in modal
                         const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
                         let reservationInfo = null;
                         let reservationKey = null;
-                        
+
                         // Find reservation for this table
                         for (const [key, reservation] of Object.entries(reservations)) {
                             if (reservation.table === tableName) {
@@ -1831,7 +1831,7 @@
                                 break;
                             }
                         }
-                        
+
                         if (reservationInfo) {
                             // Show reservation details in modal
                             showReservationDetails(reservationInfo, reservationKey);
@@ -1840,12 +1840,12 @@
                         }
                         return;
                     }
-                    
+
                     if (this.classList.contains('utilized')) {
                         // Table is occupied - open order modal to view/edit
                         selectedTable = this;
                         document.getElementById('order-table-name').textContent = tableName;
-                        
+
                         // Load existing order data if available
                         const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
                         if (tableOrders[tableName]) {
@@ -1854,34 +1854,34 @@
                             document.getElementById('order-items').value = tableOrders[tableName].items || '';
                             document.getElementById('order-notes').value = tableOrders[tableName].notes || '';
                         }
-                        
+
                         const orderModal = new bootstrap.Modal(document.getElementById('tableOrderModal'));
                         orderModal.show();
                         return;
                     }
-                    
+
                     // Table is free - open reservation modal and pre-select it
                     const chairCount = this.querySelectorAll('.chair').length;
-                    
+
                     // Pre-fill the reservation form
                     document.getElementById('reservation-guests').value = Math.min(chairCount, 4);
-                    
+
                     // Store the clicked table as pre-selected
                     selectedTableForReservation = {
                         name: tableName,
                         chairs: chairCount,
                         element: this
                     };
-                    
+
                     // Open Make Reservation modal
                     const reservationModal = new bootstrap.Modal(document.getElementById('makeReservationModal'));
                     reservationModal.show();
-                    
+
                     // Show the clicked table as pre-selected, but allow changing
                     setTimeout(() => {
                         const container = document.getElementById('available-tables-container');
                         container.innerHTML = '';
-                        
+
                         // Show pre-selected table
                         const tableBtn = document.createElement('button');
                         tableBtn.className = 'btn btn-success';
@@ -1890,24 +1890,24 @@
                             // Already selected, do nothing
                         };
                         container.appendChild(tableBtn);
-                        
+
                         // Add message to search for other tables
                         const searchMsg = document.createElement('p');
                         searchMsg.className = 'mt-2 text-muted';
                         searchMsg.innerHTML = '{{ __("Click") }} <strong>{{ __("Search Available Tables") }}</strong> {{ __("to see other options") }}';
                         container.appendChild(searchMsg);
-                        
+
                         document.getElementById('available-tables-list').style.display = 'block';
                         document.getElementById('confirm-reservation').disabled = false;
                     }, 300);
                 });
-                
+
                 // Add chair event listeners
                 const chairs = table.querySelectorAll('.chair');
                 chairs.forEach(chair => {
                     chair.addEventListener('click', function(e) {
                         e.stopPropagation();
-                        
+
                         if (this.classList.contains('chair-utilized')) {
                             this.classList.remove('chair-utilized');
                             this.classList.add('chair-free');
@@ -1923,44 +1923,44 @@
                     });
                 });
             }
-            
+
             // ========== TABLE ROTATION FEATURE ==========
-            
+
             // Rotate table by 90 degrees
             function rotateTable(table) {
                 const currentRotation = parseInt(table.getAttribute('data-rotation') || '0');
                 const newRotation = (currentRotation + 90) % 360;
-                
+
                 table.setAttribute('data-rotation', newRotation);
-                
+
                 // Save rotation
                 const tableName = table.getAttribute('data-table');
                 saveTablePosition(tableName, table);
-                
+
                 console.log(`Table ${tableName} rotated to ${newRotation}°`);
             }
-            
+
             // Reset table rotation to 0
             function resetTableRotation(table) {
                 table.setAttribute('data-rotation', '0');
-                
+
                 const tableName = table.getAttribute('data-table');
                 saveTablePosition(tableName, table);
-                
+
                 console.log(`Table ${tableName} rotation reset`);
             }
-            
+
             // Add right-click context menu for rotation
             document.addEventListener('contextmenu', function(e) {
                 const table = e.target.closest('.table-item');
                 if (!table) return;
-                
+
                 e.preventDefault();
-                
+
                 // Remove existing context menu
                 const existingMenu = document.getElementById('table-context-menu');
                 if (existingMenu) existingMenu.remove();
-                
+
                 // Create context menu
                 const menu = document.createElement('div');
                 menu.id = 'table-context-menu';
@@ -1976,10 +1976,10 @@
                     min-width: 180px;
                     padding: 8px 0;
                 `;
-                
+
                 const currentRotation = parseInt(table.getAttribute('data-rotation') || '0');
                 const tableName = table.getAttribute('data-table');
-                
+
                 menu.innerHTML = `
                     <div style="padding: 8px 16px; font-weight: bold; border-bottom: 1px solid #eee; color: #666;">
                         ${tableName}
@@ -1998,9 +1998,9 @@
                         Reset Rotation
                     </div>
                 `;
-                
+
                 document.body.appendChild(menu);
-                
+
                 // Add hover effects
                 menu.querySelectorAll('.menu-item').forEach(item => {
                     item.addEventListener('mouseenter', function() {
@@ -2010,18 +2010,18 @@
                         this.style.background = 'transparent';
                     });
                 });
-                
+
                 // Handle menu actions
                 menu.querySelector('[data-action="rotate"]').addEventListener('click', function() {
                     rotateTable(table);
                     menu.remove();
                 });
-                
+
                 menu.querySelector('[data-action="reset"]').addEventListener('click', function() {
                     resetTableRotation(table);
                     menu.remove();
                 });
-                
+
                 // Close menu on click outside
                 setTimeout(() => {
                     document.addEventListener('click', function closeMenu() {
@@ -2030,9 +2030,9 @@
                     });
                 }, 10);
             });
-            
+
             // ========== END TABLE ROTATION FEATURE ==========
-            
+
             // Make tables draggable function
             function makeDraggable(table) {
                 table.addEventListener('mousedown', function(e) {
@@ -2040,27 +2040,27 @@
                     if (e.target.classList.contains('chair') || e.detail === 2) {
                         return;
                     }
-                    
+
                     isDragging = true;
                     currentTable = this;
-                    
+
                     const rect = this.getBoundingClientRect();
                     const parent = this.offsetParent.getBoundingClientRect();
-                    
+
                     offsetX = e.clientX - rect.left;
                     offsetY = e.clientY - rect.top;
-                    
+
                     this.style.cursor = 'grabbing';
                     e.preventDefault();
                 });
             }
-            
+
             // Dragging variables
             let isDragging = false;
             let currentTable = null;
             let offsetX = 0;
             let offsetY = 0;
-            
+
             // Save table order functionality
             const saveTableOrderBtn = document.getElementById('save-table-order');
             if (saveTableOrderBtn) {
@@ -2071,24 +2071,24 @@
                     const notes = document.getElementById('order-notes').value;
                     const time = document.getElementById('order-time').value;
                     const status = document.getElementById('order-table-status').value;
-                    
+
                     if (!customerName) {
                         alert('{{ __("Please enter customer name") }}');
                         return;
                     }
-                    
+
                     // Update table status based on order status
                     if (selectedTable) {
                         const tableName = selectedTable.getAttribute('data-table');
-                        
+
                         // Remove all status classes
                         selectedTable.classList.remove('utilized', 'free', 'blocked');
-                        
+
                         // Add new status
                         if (status === 'completed') {
                             // Order completed - table becomes free
                             selectedTable.classList.add('free');
-                            
+
                             // Remove from table orders
                             const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
                             delete tableOrders[tableName];
@@ -2096,10 +2096,10 @@
                         } else if (status === 'utilized') {
                             // Order in progress
                             selectedTable.classList.add('utilized');
-                            
+
                             // Add complete order button
                             addCompleteOrderButton(selectedTable);
-                            
+
                             // Store order data
                             const orderData = {
                                 table: tableName,
@@ -2111,7 +2111,7 @@
                                 status: status,
                                 timestamp: new Date().toISOString()
                             };
-                            
+
                             const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
                             tableOrders[tableName] = orderData;
                             localStorage.setItem('tableOrders', JSON.stringify(tableOrders));
@@ -2119,21 +2119,21 @@
                             // Free or blocked
                             selectedTable.classList.add(status);
                         }
-                        
+
                         console.log('Order saved:', {table: tableName, customer: customerName, status: status});
                     }
-                    
+
                     // Close modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById('tableOrderModal'));
                     modal.hide();
-                    
+
                     // Reset form
                     document.getElementById('order-customer-name').value = '';
                     document.getElementById('order-guests').value = '1';
                     document.getElementById('order-items').value = '';
                     document.getElementById('order-notes').value = '';
                     document.getElementById('order-table-status').value = 'utilized';
-                    
+
                     if (status === 'completed') {
                         alert('{{ __("Order completed! Table is now free.") }}');
                     } else {
@@ -2141,36 +2141,36 @@
                     }
                 });
             }
-            
+
             // Manage Tables button functionality (both buttons do the same thing)
             const btnManageTables = document.getElementById('btn-manage-tables');
             const btnManageAllTables = document.getElementById('btn-manage-all-tables');
-            
+
             console.log('Manage Tables button found:', btnManageTables);
             console.log('Manage All Tables button found:', btnManageAllTables);
-            
+
             function openManageReservationsModal() {
                 console.log('📋 Opening Manage Reservations modal...');
-                
+
                 // Load and display all reservations in modal
                 const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
                 console.log('📋 Reservations from localStorage:', reservations);
                 console.log('📋 Number of reservations:', Object.keys(reservations).length);
                 const tbody = document.getElementById('reservations-table-body');
                 const noReservationsMsg = document.getElementById('no-reservations-message');
-                
+
                 console.log('Reservations:', reservations);
                 console.log('Table body element:', tbody);
                 console.log('No reservations message element:', noReservationsMsg);
-                
+
                 if (!tbody) {
                     console.error('reservations-table-body element not found!');
                     alert('Error: Table body element not found. Please refresh the page.');
                     return;
                 }
-                
+
                 tbody.innerHTML = '';
-                
+
                 if (Object.keys(reservations).length === 0) {
                     if (tbody.closest('.table-responsive')) {
                         tbody.closest('.table-responsive').style.display = 'none';
@@ -2185,26 +2185,26 @@
                     if (noReservationsMsg) {
                         noReservationsMsg.style.display = 'none';
                     }
-                    
+
                     // Get current date/time for status check
                     const now = new Date();
                     const currentDate = now.toISOString().split('T')[0];
                     const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-                    
+
                     for (const [key, reservation] of Object.entries(reservations)) {
                         const row = document.createElement('tr');
-                        
+
                         // Determine status
                         let status = '🟡 Reserved';
                         let statusClass = 'text-warning';
                         const reservationDateTime = new Date(reservation.date + ' ' + reservation.time);
                         const currentDateTime = new Date(currentDate + ' ' + currentTime);
-                        
+
                         if (currentDateTime >= reservationDateTime) {
                             status = '⏰ Time Arrived';
                             statusClass = 'text-success';
                         }
-                        
+
                         row.innerHTML = `
                             <td><strong>${reservation.table}</strong></td>
                             <td>${reservation.customerName}</td>
@@ -2222,38 +2222,38 @@
                         `;
                         tbody.appendChild(row);
                     }
-                    
+
                     // Add delete functionality
                     document.querySelectorAll('.delete-reservation').forEach(btn => {
                         btn.addEventListener('click', function() {
                             const key = this.getAttribute('data-key');
                             const tableName = this.getAttribute('data-table');
-                            
+
                             if (confirm('{{ __("Are you sure you want to cancel this reservation?") }}')) {
                                 // Remove reservation
                                 delete reservations[key];
                                 localStorage.setItem('tableReservations', JSON.stringify(reservations));
-                                
+
                                 // Update table status to free
                                 const table = document.querySelector(`[data-table="${tableName}"]`);
                                 if (table && table.classList.contains('blocked')) {
                                     table.classList.remove('blocked');
                                     table.classList.add('free');
                                 }
-                                
+
                                 // Reload modal
                                 openManageReservationsModal();
                             }
                         });
                     });
                 }
-                
+
                 // Open modal
                 console.log('Opening manage reservations modal...');
                 const manageModal = new bootstrap.Modal(document.getElementById('manageReservationsModal'));
                 manageModal.show();
             }
-            
+
             // Only add event listener to the button that exists
             if (btnManageAllTables) {
                 btnManageAllTables.addEventListener('click', openManageReservationsModal);
@@ -2262,29 +2262,29 @@
             } else {
                 console.error('No manage reservations button found in DOM!');
             }
-            
+
             // Manage Orders button functionality
             const btnManageOrders = document.getElementById('btn-manage-orders');
             console.log('Manage Orders button found:', btnManageOrders);
-            
+
             function openManageOrdersModal() {
                 console.log('📦 Opening Manage Orders modal...');
-                
+
                 // Load and display all orders in modal
                 const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
                 console.log('📦 Orders from localStorage:', tableOrders);
                 console.log('📦 Number of orders:', Object.keys(tableOrders).length);
                 const tbody = document.getElementById('orders-table-body');
                 const noOrdersMsg = document.getElementById('no-orders-message');
-                
+
                 if (!tbody) {
                     console.error('orders-table-body element not found!');
                     alert('Error: Table body element not found. Please refresh the page.');
                     return;
                 }
-                
+
                 tbody.innerHTML = '';
-                
+
                 if (Object.keys(tableOrders).length === 0) {
                     if (tbody.closest('.table-responsive')) {
                         tbody.closest('.table-responsive').style.display = 'none';
@@ -2299,13 +2299,13 @@
                     if (noOrdersMsg) {
                         noOrdersMsg.style.display = 'none';
                     }
-                    
+
                     for (const [tableName, order] of Object.entries(tableOrders)) {
                         const row = document.createElement('tr');
-                        
+
                         // Format timestamp
                         const startedAt = new Date(order.timestamp).toLocaleString();
-                        
+
                         row.innerHTML = `
                             <td><strong>${tableName}</strong></td>
                             <td>${order.customer || 'N/A'}</td>
@@ -2324,18 +2324,18 @@
                         `;
                         tbody.appendChild(row);
                     }
-                    
+
                     // Add view/edit functionality
                     document.querySelectorAll('.view-order').forEach(btn => {
                         btn.addEventListener('click', function() {
                             const tableName = this.getAttribute('data-table');
                             const order = tableOrders[tableName];
                             const table = document.querySelector(`[data-table="${tableName}"]`);
-                            
+
                             if (table && order) {
                                 // Close manage orders modal
                                 bootstrap.Modal.getInstance(document.getElementById('manageOrdersModal')).hide();
-                                
+
                                 // Open order modal with existing data
                                 selectedTable = table;
                                 document.getElementById('order-table-name').textContent = tableName;
@@ -2344,48 +2344,48 @@
                                 document.getElementById('order-items').value = order.items || '';
                                 document.getElementById('order-notes').value = order.notes || '';
                                 document.getElementById('order-table-status').value = 'utilized';
-                                
+
                                 const orderModal = new bootstrap.Modal(document.getElementById('tableOrderModal'));
                                 orderModal.show();
                             }
                         });
                     });
-                    
+
                     // Add complete functionality
                     document.querySelectorAll('.complete-order').forEach(btn => {
                         btn.addEventListener('click', function() {
                             const tableName = this.getAttribute('data-table');
-                            
+
                             if (confirm(`{{ __("Complete order for table") }} ${tableName}?`)) {
                                 // Remove order from localStorage
                                 delete tableOrders[tableName];
                                 localStorage.setItem('tableOrders', JSON.stringify(tableOrders));
-                                
+
                                 // Update table status to free
                                 const table = document.querySelector(`[data-table="${tableName}"]`);
                                 if (table) {
                                     table.classList.remove('utilized', 'blocked');
                                     table.classList.add('free');
                                 }
-                                
+
                                 // Refresh the modal
                                 openManageOrdersModal();
-                                
+
                                 alert(`{{ __("Order completed! Table") }} ${tableName} {{ __("is now free.") }}`);
                             }
                         });
                     });
                 }
-                
+
                 // Show the modal
                 const modal = new bootstrap.Modal(document.getElementById('manageOrdersModal'));
                 modal.show();
             }
-            
+
             if (btnManageOrders) {
                 btnManageOrders.addEventListener('click', openManageOrdersModal);
             }
-            
+
             // Auto-check reservations and update table status
             function checkReservationTimes() {
                 console.log('⏰ checkReservationTimes called');
@@ -2395,10 +2395,10 @@
                 const currentDate = now.toISOString().split('T')[0];
                 const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
                 console.log('⏰ Current date/time:', currentDate, currentTime);
-                
+
                 // First, remove all existing badges
                 document.querySelectorAll('.reservation-badge').forEach(badge => badge.remove());
-                
+
                 let needsUpdate = false;
                 for (const [key, reservation] of Object.entries(reservations)) {
                     console.log('⏰ Checking reservation:', key, reservation);
@@ -2407,7 +2407,7 @@
                         console.log('⏰ Table not found:', reservation.table);
                         continue;
                     }
-                    
+
                     // Add reservation badge to table
                     if (table.classList.contains('blocked')) {
                         console.log('⏰ Adding badge to table:', reservation.table);
@@ -2421,7 +2421,7 @@
                         };
                         table.appendChild(badge);
                     }
-                    
+
                     // Just mark that time has arrived, but don't change status automatically
                     // Status will change when user clicks on the table
                     if (reservation.date === currentDate && reservation.time <= currentTime && !reservation.timeArrived) {
@@ -2431,7 +2431,7 @@
                         needsUpdate = true;
                     }
                 }
-                
+
                 // Only update localStorage if needed
                 if (needsUpdate) {
                     console.log('⏰ Updating localStorage with timeArrived flags');
@@ -2439,12 +2439,12 @@
                 }
                 console.log('⏰ checkReservationTimes completed');
             }
-            
+
             // Show reservation details in modal
             function showReservationDetails(reservation, reservationKey) {
                 console.log('🔍 showReservationDetails called for:', reservation.table, reservationKey);
                 console.log('🔍 Reservation data:', reservation);
-                
+
                 document.getElementById('detail-table').textContent = reservation.table;
                 document.getElementById('detail-customer').textContent = reservation.customerName;
                 document.getElementById('detail-phone').textContent = reservation.phone || 'N/A';
@@ -2452,12 +2452,12 @@
                 document.getElementById('detail-time').textContent = reservation.time;
                 document.getElementById('detail-guests').textContent = reservation.guests;
                 document.getElementById('detail-notes').textContent = reservation.notes || '-';
-                
+
                 // Check table current status
                 const table = document.querySelector(`[data-table="${reservation.table}"]`);
                 let statusText = '🟡 Reserved';
                 let showGuestArrivedBtn = true;
-                
+
                 if (table && table.classList.contains('utilized')) {
                     // Table is already utilized (guest has arrived)
                     statusText = '� Utilized - Guest Arrived';
@@ -2469,52 +2469,52 @@
                     const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
                     const reservationDateTime = new Date(reservation.date + ' ' + reservation.time);
                     const currentDateTime = new Date(currentDate + ' ' + currentTime);
-                    
+
                     if (currentDateTime >= reservationDateTime) {
                         statusText = '⏰ Time Arrived - Waiting for Guest';
                     }
                 }
-                
+
                 document.getElementById('detail-status').textContent = statusText;
-                
+
                 // Show/hide Guest Arrived button based on status
                 const guestArrivedBtn = document.getElementById('guest-arrived-btn');
                 if (guestArrivedBtn) {
                     guestArrivedBtn.style.display = showGuestArrivedBtn ? 'inline-block' : 'none';
                 }
-                
+
                 // Cancel reservation button
                 document.getElementById('cancel-reservation-btn').onclick = function() {
                     if (confirm('{{ __("Are you sure you want to cancel this reservation?") }}')) {
                         const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
                         delete reservations[reservationKey];
                         localStorage.setItem('tableReservations', JSON.stringify(reservations));
-                        
+
                         // Update table status
                         const table = document.querySelector(`[data-table="${reservation.table}"]`);
                         if (table) {
                             table.classList.remove('blocked');
                             table.classList.add('free');
                         }
-                        
+
                         // Close modal and refresh
                         bootstrap.Modal.getInstance(document.getElementById('reservationDetailsModal')).hide();
                         checkReservationTimes();
                         alert('{{ __("Reservation cancelled successfully") }}');
                     }
                 };
-                
+
                 // Guest arrived button
                 document.getElementById('guest-arrived-btn').onclick = function() {
                     console.log('🚨 Guest Arrived button clicked!');
                     console.log('🚨 Reservation key:', reservationKey);
                     console.log('🚨 Table:', reservation.table);
-                    
+
                     const table = document.querySelector(`[data-table="${reservation.table}"]`);
                     if (table) {
                         table.classList.remove('blocked');
                         table.classList.add('utilized');
-                        
+
                         // Remove reservation from localStorage (guest has arrived)
                         const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
                         console.log('🚨 Before delete:', reservations);
@@ -2522,35 +2522,35 @@
                         console.log('🚨 After delete:', reservations);
                         localStorage.setItem('tableReservations', JSON.stringify(reservations));
                         console.log('🚨 Saved to localStorage');
-                        
+
                         // Remove reservation badge
                         const badge = table.querySelector('.reservation-badge');
                         if (badge) badge.remove();
-                        
+
                         // Open order modal
                         selectedTable = table;
                         document.getElementById('order-table-name').textContent = reservation.table;
                         document.getElementById('order-customer-name').value = reservation.customerName;
                         document.getElementById('order-guests').value = reservation.guests;
                         document.getElementById('order-notes').value = reservation.notes || '';
-                        
+
                         bootstrap.Modal.getInstance(document.getElementById('reservationDetailsModal')).hide();
                         const orderModal = new bootstrap.Modal(document.getElementById('tableOrderModal'));
                         orderModal.show();
                     }
                 };
-                
+
                 // Open modal
                 const detailsModal = new bootstrap.Modal(document.getElementById('reservationDetailsModal'));
                 detailsModal.show();
             }
-            
+
             // Add complete order button to utilized tables
             function addCompleteOrderButton(table) {
                 // Remove existing button if any
                 const existingBtn = table.querySelector('.complete-order-btn');
                 if (existingBtn) existingBtn.remove();
-                
+
                 // Create complete order button
                 const completeBtn = document.createElement('div');
                 completeBtn.className = 'complete-order-btn';
@@ -2560,15 +2560,15 @@
                         <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 `;
-                
+
                 // Add click handler to open modal
                 completeBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    
+
                     const tableName = table.getAttribute('data-table');
                     const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
                     const orderData = tableOrders[tableName];
-                    
+
                     if (orderData) {
                         // Populate modal with order details
                         document.getElementById('complete-table-name').textContent = tableName;
@@ -2576,7 +2576,7 @@
                         document.getElementById('complete-guests').textContent = orderData.guests || '1';
                         document.getElementById('complete-order-time').textContent = orderData.time || '-';
                         document.getElementById('complete-order-items').textContent = orderData.items || '{{ __("No items") }}';
-                        
+
                         // Show/hide notes section
                         const notesSection = document.getElementById('complete-notes-section');
                         const notesContent = document.getElementById('complete-order-notes');
@@ -2586,19 +2586,19 @@
                         } else {
                             notesSection.style.display = 'none';
                         }
-                        
+
                         // Store table reference for completion
                         window.currentCompleteTable = table;
-                        
+
                         // Open modal
                         const modal = new bootstrap.Modal(document.getElementById('completeOrderModal'));
                         modal.show();
                     }
                 });
-                
+
                 table.appendChild(completeBtn);
             }
-            
+
             // Handle complete order confirmation - use setTimeout to ensure DOM is ready
             setTimeout(function() {
                 const confirmCompleteBtn = document.getElementById('confirm-complete-order');
@@ -2606,7 +2606,7 @@
                     // Remove any existing listeners
                     const newBtn = confirmCompleteBtn.cloneNode(true);
                     confirmCompleteBtn.parentNode.replaceChild(newBtn, confirmCompleteBtn);
-                    
+
                     // Add new listener
                     newBtn.addEventListener('click', function() {
                         const table = window.currentCompleteTable;
@@ -2614,54 +2614,54 @@
                             console.error('No table reference found');
                             return;
                         }
-                        
+
                         const tableName = table.getAttribute('data-table');
                         console.log('Completing order for:', tableName);
-                        
+
                         // Remove order from localStorage
                         const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
                         delete tableOrders[tableName];
                         localStorage.setItem('tableOrders', JSON.stringify(tableOrders));
-                        
+
                         // Update table status to free
                         table.classList.remove('utilized', 'blocked');
                         table.classList.add('free');
-                        
+
                         // Remove the complete button
                         const completeBtn = table.querySelector('.complete-order-btn');
                         if (completeBtn) completeBtn.remove();
-                        
+
                         // Close modal
                         const modal = bootstrap.Modal.getInstance(document.getElementById('completeOrderModal'));
                         if (modal) modal.hide();
-                        
+
                         console.log(`Order completed for ${tableName}, table is now free`);
-                        
+
                         // Show success message
                         setTimeout(() => {
                             alert(`✅ Order completed! ${tableName} is now free.`);
                         }, 300);
                     });
-                    
+
                     console.log('Complete order button listener attached');
                 } else {
                     console.error('confirm-complete-order button not found');
                 }
             }, 500);
-            
+
             // Restore table statuses from localStorage on page load
             function restoreTableStatuses() {
                 const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
                 const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
-                
+
                 console.log('Restoring table statuses...');
                 console.log('Reservations:', reservations);
                 console.log('Table Orders:', tableOrders);
-                
+
                 // First, reset all tables to free
                 document.querySelectorAll('.table-item').forEach(table => {
                     const tableName = table.getAttribute('data-table');
-                    
+
                     // Check if table has a reservation
                     let hasReservation = false;
                     for (const [key, reservation] of Object.entries(reservations)) {
@@ -2674,7 +2674,7 @@
                             break;
                         }
                     }
-                    
+
                     // If no reservation, check if table has an active order
                     if (!hasReservation && tableOrders[tableName]) {
                         table.classList.remove('free', 'blocked');
@@ -2683,7 +2683,7 @@
                         addCompleteOrderButton(table);
                         console.log(`${tableName}: Has active order (utilized)`);
                     }
-                    
+
                     // If neither reservation nor order, ensure it's free
                     if (!hasReservation && !tableOrders[tableName]) {
                         table.classList.remove('blocked', 'utilized');
@@ -2691,17 +2691,17 @@
                         console.log(`${tableName}: No reservation or order (free)`);
                     }
                 });
-                
+
                 console.log('Table statuses restored from localStorage');
             }
-            
+
             // Restore custom tables from localStorage
             function restoreCustomTables() {
                 const customTables = JSON.parse(localStorage.getItem('customTables') || '[]');
                 const floorPlan = document.querySelector('.restaurant-floor-plan');
-                
+
                 console.log('Restoring custom tables:', customTables);
-                
+
                 customTables.forEach(tableData => {
                     // Create table element
                     const newTable = document.createElement('div');
@@ -2709,42 +2709,42 @@
                     newTable.setAttribute('data-table', tableData.name);
                     newTable.style.top = tableData.top;
                     newTable.style.left = tableData.left;
-                    
+
                     // Add table type class
                     newTable.classList.add(tableData.tableClass);
-                    
+
                     // Add table name
                     const nameSpan = document.createElement('span');
                     nameSpan.className = 'table-name';
                     nameSpan.textContent = tableData.name;
                     newTable.appendChild(nameSpan);
-                    
+
                     // Add chairs
                     const chairWrapper = document.createElement('div');
                     chairWrapper.className = 'chair-wrapper';
-                    
+
                     tableData.chairs.forEach(chairClass => {
                         const chair = document.createElement('div');
                         chair.className = `chair ${chairClass}`;
                         chairWrapper.appendChild(chair);
                     });
-                    
+
                     newTable.appendChild(chairWrapper);
                     floorPlan.appendChild(newTable);
-                    
+
                     // Add event listeners
                     addTableEventListeners(newTable);
                     makeDraggable(newTable);
                 });
-                
+
                 console.log(`Restored ${customTables.length} custom tables`);
             }
-            
+
             // Save custom table to localStorage
             function saveCustomTable(tableElement) {
                 const customTables = JSON.parse(localStorage.getItem('customTables') || '[]');
                 const tableName = tableElement.getAttribute('data-table');
-                
+
                 // Get table class (type)
                 let tableClass = '';
                 if (tableElement.classList.contains('table-rectangle')) tableClass = 'table-rectangle';
@@ -2752,7 +2752,7 @@
                 else if (tableElement.classList.contains('table-rectangle-h')) tableClass = 'table-rectangle-h';
                 else if (tableElement.classList.contains('table-rounded')) tableClass = 'table-rounded';
                 else if (tableElement.classList.contains('table-circle')) tableClass = 'table-circle';
-                
+
                 // Get chair classes
                 const chairs = [];
                 tableElement.querySelectorAll('.chair').forEach(chair => {
@@ -2760,12 +2760,12 @@
                     const chairClass = classList.find(c => c.startsWith('chair-'));
                     if (chairClass) chairs.push(chairClass);
                 });
-                
+
                 // Get status
                 let status = 'free';
                 if (tableElement.classList.contains('utilized')) status = 'utilized';
                 else if (tableElement.classList.contains('blocked')) status = 'blocked';
-                
+
                 const tableData = {
                     name: tableName,
                     tableClass: tableClass,
@@ -2774,7 +2774,7 @@
                     left: tableElement.style.left,
                     status: status
                 };
-                
+
                 // Check if table already exists
                 const existingIndex = customTables.findIndex(t => t.name === tableName);
                 if (existingIndex >= 0) {
@@ -2782,15 +2782,15 @@
                 } else {
                     customTables.push(tableData);
                 }
-                
+
                 localStorage.setItem('customTables', JSON.stringify(customTables));
                 console.log('Custom table saved:', tableData);
             }
-            
+
             // Save table position to localStorage (for all tables)
             function saveTablePosition(tableName, tableElement) {
                 const tablePositions = JSON.parse(localStorage.getItem('tablePositions') || '{}');
-                
+
                 tablePositions[tableName] = {
                     top: tableElement.style.top,
                     left: tableElement.style.left,
@@ -2798,66 +2798,66 @@
                     bottom: tableElement.style.bottom,
                     rotation: tableElement.getAttribute('data-rotation') || '0'
                 };
-                
+
                 localStorage.setItem('tablePositions', JSON.stringify(tablePositions));
             }
-            
+
             // Restore table positions from localStorage
             function restoreTablePositions() {
                 const tablePositions = JSON.parse(localStorage.getItem('tablePositions') || '{}');
-                
+
                 console.log('Restoring table positions:', tablePositions);
-                
+
                 document.querySelectorAll('.table-item').forEach(table => {
                     const tableName = table.getAttribute('data-table');
-                    
+
                     if (tablePositions[tableName]) {
                         const position = tablePositions[tableName];
                         if (position.top) table.style.top = position.top;
                         if (position.left) table.style.left = position.left;
                         if (position.right) table.style.right = position.right;
                         if (position.bottom) table.style.bottom = position.bottom;
-                        
+
                         // Restore rotation
                         if (position.rotation && position.rotation !== '0') {
                             table.setAttribute('data-rotation', position.rotation);
                         }
-                        
+
                         console.log(`Position restored for ${tableName}:`, position);
                     }
                 });
-                
+
                 console.log('All table positions restored');
             }
-            
+
             // Save area position to localStorage (for Bar, Toilets, Entrance)
             function saveAreaPosition(areaName, areaElement) {
                 const areaPositions = JSON.parse(localStorage.getItem('areaPositions') || '{}');
-                
+
                 areaPositions[areaName] = {
                     top: areaElement.style.top,
                     left: areaElement.style.left,
                     right: areaElement.style.right,
                     bottom: areaElement.style.bottom
                 };
-                
+
                 // Save entrance side if it's the entrance
                 if (areaName === 'entrance') {
                     areaPositions[areaName].entranceSide = areaElement.getAttribute('data-entrance-side');
                 }
-                
+
                 localStorage.setItem('areaPositions', JSON.stringify(areaPositions));
             }
-            
+
             // Restore area positions from localStorage
             function restoreAreaPositions() {
                 const areaPositions = JSON.parse(localStorage.getItem('areaPositions') || '{}');
-                
+
                 console.log('Restoring area positions:', areaPositions);
-                
+
                 document.querySelectorAll('[data-area]').forEach(area => {
                     const areaName = area.getAttribute('data-area');
-                    
+
                     if (areaPositions[areaName]) {
                         const position = areaPositions[areaName];
                         if (position.top) area.style.top = position.top;
@@ -2868,32 +2868,32 @@
                             area.setAttribute('data-entrance-side', position.entranceSide);
                             // Don't call updateEntranceCutout here - will be called in setTimeout
                         }
-                        
+
                         console.log(`Position restored for ${areaName}:`, position);
                     }
                 });
-                
+
                 console.log('All area positions restored');
             }
-            
+
             // Update entrance cutout position based on entrance location
             function updateEntranceCutout(entranceElement, side) {
                 const wrapper = entranceElement.closest('.floor-plan-wrapper');
                 const floorPlan = entranceElement.closest('.restaurant-floor-plan');
                 const cutoutCover = wrapper.querySelector('.entrance-cutout-cover');
-                
+
                 if (!cutoutCover) return;
-                
+
                 // Always use getBoundingClientRect for accurate positioning
                 const entranceRect = entranceElement.getBoundingClientRect();
                 const floorPlanRect = floorPlan.getBoundingClientRect();
-                
+
                 // Calculate entrance position relative to floor plan
                 const entranceTop = entranceRect.top - floorPlanRect.top;
                 const entranceLeft = entranceRect.left - floorPlanRect.left;
                 const entranceWidth = entranceRect.width;
                 const entranceHeight = entranceRect.height;
-                
+
                 console.log('Cutout calculation:', {
                     side,
                     entranceTop,
@@ -2901,7 +2901,7 @@
                     entranceWidth,
                     entranceHeight
                 });
-                
+
                 if (side === 'right') {
                     // Cover the border line on right side
                     cutoutCover.style.width = '6px';
@@ -2935,7 +2935,7 @@
                     cutoutCover.style.left = (entranceLeft + entranceWidth / 2 - 60) + 'px';
                     cutoutCover.style.right = 'auto';
                 }
-                
+
                 console.log('Cutout positioned:', {
                     top: cutoutCover.style.top,
                     left: cutoutCover.style.left,
@@ -2943,7 +2943,7 @@
                     bottom: cutoutCover.style.bottom
                 });
             }
-            
+
             // Delete custom table from localStorage
             function deleteCustomTable(tableName) {
                 const customTables = JSON.parse(localStorage.getItem('customTables') || '[]');
@@ -2951,7 +2951,7 @@
                 localStorage.setItem('customTables', JSON.stringify(filtered));
                 console.log('Custom table deleted:', tableName);
             }
-            
+
             // Clear all data button - now "Manage Tables" button
             const btnClearAllData = document.getElementById('btn-clear-all-data');
             if (btnClearAllData) {
@@ -2959,21 +2959,21 @@
                     // Show modal with all tables (default + custom)
                     const customTables = JSON.parse(localStorage.getItem('customTables') || '[]');
                     const allTables = document.querySelectorAll('.table-item');
-                    
+
                     let tablesList = '<div style="max-height: 400px; overflow-y: auto;"><table class="table table-striped"><thead><tr><th>Table Name</th><th>Chairs</th><th>Status</th><th>Type</th><th>Actions</th></tr></thead><tbody>';
-                    
+
                     allTables.forEach(table => {
                         const tableName = table.getAttribute('data-table');
                         const chairCount = table.querySelectorAll('.chair').length;
                         let status = 'Free';
                         if (table.classList.contains('utilized')) status = 'Utilized';
                         else if (table.classList.contains('blocked')) status = 'Reserved';
-                        
+
                         const isCustom = customTables.some(t => t.name === tableName);
                         const tableType = isCustom ? 'Custom' : 'Default';
-                        
+
                         const deleteBtn = isCustom ? `<button class="btn btn-sm btn-danger delete-table-btn" data-table="${tableName}">Delete</button>` : '<span class="text-muted">-</span>';
-                        
+
                         tablesList += `<tr>
                             <td><strong>${tableName}</strong></td>
                             <td>${chairCount} chairs</td>
@@ -2982,9 +2982,9 @@
                             <td>${deleteBtn}</td>
                         </tr>`;
                     });
-                    
+
                     tablesList += '</tbody></table></div>';
-                    
+
                     // Create custom modal
                     const modalHtml = `
                         <div class="modal fade" id="manageTablesModal" tabindex="-1">
@@ -2996,7 +2996,7 @@
                                     </div>
                                     <div class="modal-body">
                                         ${tablesList}
-                             
+
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -3005,18 +3005,18 @@
                             </div>
                         </div>
                     `;
-                    
+
                     // Remove old modal if exists
                     const oldModal = document.getElementById('manageTablesModal');
                     if (oldModal) oldModal.remove();
-                    
+
                     // Add new modal
                     document.body.insertAdjacentHTML('beforeend', modalHtml);
-                    
+
                     // Open modal
                     const manageTablesModal = new bootstrap.Modal(document.getElementById('manageTablesModal'));
                     manageTablesModal.show();
-                    
+
                     // Add delete table functionality
                     document.querySelectorAll('.delete-table-btn').forEach(btn => {
                         btn.addEventListener('click', function() {
@@ -3025,17 +3025,17 @@
                                 // Remove from DOM
                                 const tableElement = document.querySelector(`[data-table="${tableName}"]`);
                                 if (tableElement) tableElement.remove();
-                                
+
                                 // Remove from localStorage
                                 deleteCustomTable(tableName);
-                                
+
                                 // Close and reopen modal to refresh
                                 manageTablesModal.hide();
                                 setTimeout(() => btnClearAllData.click(), 300);
                             }
                         });
                     });
-                    
+
                     // Clear all reservations & orders
                     document.getElementById('clear-all-data-btn').addEventListener('click', function() {
                         if (confirm('Are you sure you want to clear all reservations, orders, and positions? This cannot be undone.')) {
@@ -3043,19 +3043,19 @@
                             localStorage.removeItem('tableOrders');
                             localStorage.removeItem('tablePositions');
                             localStorage.removeItem('areaPositions');
-                            
+
                             document.querySelectorAll('.table-item').forEach(table => {
                                 table.classList.remove('blocked', 'utilized');
                                 table.classList.add('free');
                             });
-                            
+
                             document.querySelectorAll('.reservation-badge').forEach(badge => badge.remove());
-                            
+
                             alert('All reservations, orders, and positions cleared! Refresh the page to reset positions.');
                             manageTablesModal.hide();
                         }
                     });
-                    
+
                     // Clear all custom tables
                     document.getElementById('clear-custom-tables-btn').addEventListener('click', function() {
                         if (confirm('Are you sure you want to delete all custom tables? This cannot be undone.')) {
@@ -3063,7 +3063,7 @@
                                 const tableElement = document.querySelector(`[data-table="${tableData.name}"]`);
                                 if (tableElement) tableElement.remove();
                             });
-                            
+
                             localStorage.removeItem('customTables');
                             alert('All custom tables deleted!');
                             manageTablesModal.hide();
@@ -3071,19 +3071,19 @@
                     });
                 });
             }
-            
+
             // Restore custom tables first (before restoring statuses)
             restoreCustomTables();
-            
+
             // Restore table statuses on page load
             restoreTableStatuses();
-            
+
             // Restore table positions after tables are loaded
             restoreTablePositions();
-            
+
             // Restore area positions (Bar, Toilets, Entrance)
             restoreAreaPositions();
-            
+
             // Wait for DOM to be fully ready, then update entrance cutout
             // Use window.load event AND font loading to ensure all elements are fully rendered
             function initializeEntranceCutout() {
@@ -3092,26 +3092,26 @@
                     console.error('❌ Entrance area not found');
                     return;
                 }
-                
+
                 const entranceSide = entranceArea.getAttribute('data-entrance-side') || 'right';
-                
+
                 // Retry logic with multiple attempts
                 let retryCount = 0;
                 const maxRetries = 10;
-                
+
                 function attemptUpdate() {
                     // Force a reflow
                     entranceArea.offsetHeight;
-                    
+
                     const rect = entranceArea.getBoundingClientRect();
                     const computedStyle = window.getComputedStyle(entranceArea);
                     const isVisible = computedStyle.display !== 'none' && computedStyle.visibility !== 'hidden';
-                    
+
                     console.log(`=== Entrance Cutout Attempt ${retryCount + 1} ===`);
                     console.log('Side:', entranceSide);
                     console.log('Rect:', rect.width, 'x', rect.height);
                     console.log('Display:', computedStyle.display, 'Visibility:', computedStyle.visibility);
-                    
+
                     // Check if element has dimensions OR if we've exhausted retries
                     if ((rect.width === 0 || rect.height === 0) && retryCount < maxRetries && isVisible) {
                         retryCount++;
@@ -3127,10 +3127,10 @@
                         console.log('✅ Cutout forced update completed');
                     }
                 }
-                
+
                 attemptUpdate();
             }
-            
+
             // Wait for fonts to load before initializing
             function startInitialization() {
                 if (document.fonts && document.fonts.ready) {
@@ -3143,23 +3143,23 @@
                     setTimeout(initializeEntranceCutout, 500);
                 }
             }
-            
+
             // Initialize on window load (ensures all resources loaded)
             if (document.readyState === 'complete') {
                 startInitialization();
             } else {
                 window.addEventListener('load', startInitialization);
             }
-            
+
             // Also run initial checks
             setTimeout(() => {
                 checkReservationTimes();
                 console.log('Initial reservation check completed');
             }, 500);
-            
+
             // Check reservation times every minute
             setInterval(checkReservationTimes, 60000); // Check every 60 seconds
-            
+
             // Make Reservation button functionality
             const btnMakeReservation = document.getElementById('btn-make-reservation');
             if (btnMakeReservation) {
@@ -3171,23 +3171,23 @@
                     document.getElementById('reservation-notes').value = '';
                     document.getElementById('available-tables-list').style.display = 'none';
                     document.getElementById('confirm-reservation').disabled = true;
-                    
+
                     // Set default date to today
                     const today = new Date().toISOString().split('T')[0];
                     document.getElementById('reservation-date').value = today;
                     document.getElementById('reservation-date').min = today;
-                    
+
                     // Set default time to current time (always fresh)
                     const now = new Date();
                     const hours = String(now.getHours()).padStart(2, '0');
                     const minutes = String(now.getMinutes()).padStart(2, '0');
                     document.getElementById('reservation-time').value = `${hours}:${minutes}`;
-                    
+
                     const reservationModal = new bootstrap.Modal(document.getElementById('makeReservationModal'));
                     reservationModal.show();
                 });
             }
-            
+
             // Search available tables
             let selectedTableForReservation = null;
             const searchAvailableBtn = document.getElementById('search-available-tables');
@@ -3197,21 +3197,21 @@
                     const date = document.getElementById('reservation-date').value;
                     const time = document.getElementById('reservation-time').value;
                     const customerName = document.getElementById('reservation-customer-name').value;
-                    
+
                     if (!customerName || !date || !time) {
                         alert('{{ __("Please fill in customer name, date and time") }}');
                         return;
                     }
-                    
+
                     // Get all tables
                     const allTables = document.querySelectorAll('.table-item');
                     const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
                     const availableTables = [];
-                    
+
                     allTables.forEach(table => {
                         const tableName = table.getAttribute('data-table');
                         const chairCount = table.querySelectorAll('.chair').length;
-                        
+
                         // Check if table has enough chairs
                         if (chairCount >= guests) {
                             // Check if table is not reserved at this time
@@ -3225,17 +3225,17 @@
                             }
                         }
                     });
-                    
+
                     // Display available tables
                     const container = document.getElementById('available-tables-container');
                     container.innerHTML = '';
-                    
+
                     if (availableTables.length === 0) {
                         container.innerHTML = '<p class="text-danger">{{ __("No available tables found for this time and guest count") }}</p>';
                         document.getElementById('available-tables-list').style.display = 'block';
                         return;
                     }
-                    
+
                     availableTables.forEach(table => {
                         const tableBtn = document.createElement('button');
                         tableBtn.className = 'btn btn-outline-success';
@@ -3254,54 +3254,54 @@
                         };
                         container.appendChild(tableBtn);
                     });
-                    
+
                     document.getElementById('available-tables-list').style.display = 'block';
                 });
             }
-            
+
             // Confirm reservation
             const confirmReservationBtn = document.getElementById('confirm-reservation');
             console.log('Confirm reservation button found:', confirmReservationBtn);
             console.log('Button exists?', confirmReservationBtn !== null);
-            
+
             if (confirmReservationBtn) {
                 console.log('Adding click event listener to confirm reservation button...');
                 confirmReservationBtn.addEventListener('click', function() {
                     console.log('✅ Confirm reservation clicked!');
                     console.log('Selected table:', selectedTableForReservation);
-                    
+
                     if (!selectedTableForReservation) {
                         alert('{{ __("Please select a table") }}');
                         return;
                     }
-                    
+
                     const customerName = document.getElementById('reservation-customer-name').value;
                     const phone = document.getElementById('reservation-phone').value;
                     const date = document.getElementById('reservation-date').value;
                     const time = document.getElementById('reservation-time').value;
                     const guests = parseInt(document.getElementById('reservation-guests').value);
                     const notes = document.getElementById('reservation-notes').value;
-                    
+
                     console.log('Reservation data:', {customerName, phone, date, time, guests, notes});
-                    
+
                     // Validate required fields
                     if (!customerName || !date || !time) {
                         alert('{{ __("Please fill in customer name, date and time") }}');
                         return;
                     }
-                    
+
                     // Validate: guests cannot exceed table chairs
                     if (guests > selectedTableForReservation.chairs) {
                         alert(`{{ __("Number of guests") }} (${guests}) {{ __("cannot exceed table capacity") }} (${selectedTableForReservation.chairs} {{ __("chairs") }}). {{ __("Please select a larger table or reduce guests.") }}`);
                         return;
                     }
-                    
+
                     // Save reservation
                     const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
                     const reservationKey = `${selectedTableForReservation.name}_${date}_${time}`;
-                    
+
                     console.log('Reservation key:', reservationKey);
-                    
+
                     reservations[reservationKey] = {
                         table: selectedTableForReservation.name,
                         customerName: customerName,
@@ -3312,29 +3312,29 @@
                         notes: notes,
                         timestamp: new Date().toISOString()
                     };
-                    
+
                     console.log('Saving to localStorage:', reservations);
                     localStorage.setItem('tableReservations', JSON.stringify(reservations));
-                    
+
                     // Verify save
                     const savedData = localStorage.getItem('tableReservations');
                     console.log('✅ Saved! Verifying:', savedData);
                     console.log('✅ Parsed saved data:', JSON.parse(savedData));
-                    
+
                     // Change table status to blocked (reserved)
                     selectedTableForReservation.element.classList.remove('free', 'utilized');
                     selectedTableForReservation.element.classList.add('blocked');
                     console.log('Table status changed to blocked');
-                    
+
                     // Immediately add reservation badge to the table
                     console.log('✅ Calling checkReservationTimes to add badge...');
                     checkReservationTimes();
                     console.log('✅ Badge added, now closing modal...');
-                    
+
                     // Close modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById('makeReservationModal'));
                     modal.hide();
-                    
+
                     // Reset form
                     document.getElementById('reservation-customer-name').value = '';
                     document.getElementById('reservation-phone').value = '';
@@ -3344,49 +3344,49 @@
                     document.getElementById('available-tables-list').style.display = 'none';
                     document.getElementById('confirm-reservation').disabled = true;
                     selectedTableForReservation = null;
-                    
+
                     alert(`{{ __("Reservation confirmed for") }} ${customerName} {{ __("at table") }} ${reservations[reservationKey].table}`);
                 });
             }
-            
+
             // Add draggable to all existing tables
             document.querySelectorAll('.table-item').forEach(table => {
                 makeDraggable(table);
             });
-            
+
             // Add draggable to static areas (Bar, Toilets, Entrance)
             document.querySelectorAll('[data-area]').forEach(area => {
                 makeDraggable(area);
             });
-            
+
             document.addEventListener('mousemove', function(e) {
                 if (!isDragging || !currentTable) return;
-                
+
                 const parent = currentTable.offsetParent;
                 const parentRect = parent.getBoundingClientRect();
-                
+
                 let newX = e.clientX - parentRect.left - offsetX;
                 let newY = e.clientY - parentRect.top - offsetY;
-                
+
                 // Check if this is the entrance area
                 const isEntrance = currentTable.getAttribute('data-area') === 'entrance';
-                
+
                 if (isEntrance) {
                     // Entrance can move freely, but snap to nearest edge
                     const tableWidth = currentTable.offsetWidth;
                     const tableHeight = currentTable.offsetHeight;
-                    
+
                     // Calculate distances to each edge
                     const distToLeft = newX;
                     const distToRight = parent.offsetWidth - (newX + tableWidth);
                     const distToTop = newY;
                     const distToBottom = parent.offsetHeight - (newY + tableHeight);
-                    
+
                     // Find nearest edge
                     const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
-                    
+
                     let entranceSide = 'right';
-                    
+
                     if (minDist === distToLeft) {
                         // Snap to left edge
                         entranceSide = 'left';
@@ -3420,43 +3420,43 @@
                         currentTable.style.left = newX + 'px';
                         currentTable.style.right = 'auto';
                     }
-                    
+
                     // Update entrance side attribute
                     currentTable.setAttribute('data-entrance-side', entranceSide);
-                    
+
                     // Update cutout position in real-time
                     updateEntranceCutout(currentTable, entranceSide);
                 } else {
                     // Normal dragging for tables and other areas
                     const tableWidth = currentTable.offsetWidth;
                     const tableHeight = currentTable.offsetHeight;
-                    
+
                     newX = Math.max(0, Math.min(newX, parent.offsetWidth - tableWidth));
                     newY = Math.max(0, Math.min(newY, parent.offsetHeight - tableHeight));
-                    
+
                     currentTable.style.left = newX + 'px';
                     currentTable.style.top = newY + 'px';
                     currentTable.style.right = 'auto';
                     currentTable.style.bottom = 'auto';
                 }
             });
-            
+
             document.addEventListener('mouseup', function() {
                 if (isDragging && currentTable) {
                     currentTable.style.cursor = 'move';
-                    
+
                     // Check if it's a table or an area
                     const tableName = currentTable.getAttribute('data-table');
                     const areaName = currentTable.getAttribute('data-area');
-                    
+
                     if (tableName) {
                         // Save position for tables
                         saveTablePosition(tableName, currentTable);
-                        
+
                         // Check if this is a custom table and save its full data
                         const customTables = JSON.parse(localStorage.getItem('customTables') || '[]');
                         const isCustomTable = customTables.some(t => t.name === tableName);
-                        
+
                         if (isCustomTable) {
                             saveCustomTable(currentTable);
                             console.log('Custom table position updated:', tableName);
@@ -3468,22 +3468,22 @@
                         saveAreaPosition(areaName, currentTable);
                         console.log('Area position saved:', areaName);
                     }
-                    
+
                     isDragging = false;
                     currentTable = null;
                 }
             });
         });
-        
+
         // Position sidebar to start from pos-main-container and stick on scroll
         function positionSidebar() {
             const mainContainer = document.querySelector('.pos-main-container');
             const sidebar = document.querySelector('.order-sidebar');
-            
+
             if (mainContainer && sidebar && window.innerWidth > 992) {
                 const containerTop = mainContainer.offsetTop;
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                
+
                 if (scrollTop >= containerTop) {
                     // When scrolled past container, stick to top
                     sidebar.style.top = '0px';
@@ -3492,7 +3492,7 @@
                 }
             }
         }
-        
+
         // Run on load, scroll, and resize
         window.addEventListener('load', positionSidebar);
         window.addEventListener('scroll', positionSidebar);

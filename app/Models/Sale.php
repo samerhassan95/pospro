@@ -19,6 +19,7 @@ class Sale extends Model
     protected $fillable = [
         'business_id',
         'party_id',
+        'table_id',
         'branch_id',
         'user_id',
         'discountAmount',
@@ -76,6 +77,11 @@ class Sale extends Model
     public function party(): BelongsTo
     {
         return $this->belongsTo(Party::class);
+    }
+
+    public function table(): BelongsTo
+    {
+        return $this->belongsTo(RestaurantTable::class, 'table_id');
     }
 
     public function user(): BelongsTo

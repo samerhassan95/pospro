@@ -15,7 +15,13 @@ class MoyasarSettingController extends Controller
     {
         $business = Business::find(auth()->user()->business_id);
         $moyasar_setting = $business->moyasar_setting ?? [];
-        return view('business::settings.moyasar', compact('business', 'moyasar_setting'));
+        
+        // فحص إذا كان السوبر أدمن فعل ميسر
+        $superAdminSettings = \App\Models\Setting::where('key', 'moyasar_settings')->first();
+        $globalSettings = $superAdminSettings ? json_decode($superAdminSettings->value, true) : [];
+        $moyasarEnabled = $globalSettings['is_active'] ?? false;
+        
+        return view('business::settings.moyasar', compact('business', 'moyasar_setting', 'moyasarEnabled'));
     }
 
     /**
@@ -23,21 +29,21 @@ class MoyasarSettingController extends Controller
      */
     public function update(Request $request)
     {
+        // التاجر يحدد البيئة فقط (اختبار أم إنتاج)
         $request->validate([
-            'api_key' => 'required|string',
-            'publishable_key' => 'required|string',
+            'environment' => 'required|in:test,live'
         ]);
 
         $business = Business::find(auth()->user()->business_id);
 
         $moyasar_setting = [
-            'api_key' => $request->api_key,
-            'publishable_key' => $request->publishable_key,
+            'environment' => $request->environment,
+            'updated_at' => now()
         ];
 
         $business->moyasar_setting = $moyasar_setting;
         $business->save();
 
-        return redirect()->back()->with('success', __('Moyasar Settings updated successfully'));
+        return redirect()->back()->with('success', __('Moyasar environment updated successfully'));
     }
 }

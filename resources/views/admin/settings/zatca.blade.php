@@ -56,6 +56,21 @@
                                     <label>{{ __('VAT Registration Number (Organization Identifier)') }}</label>
                                     <input type="text" name="csr_organization_identifier" class="form-control" 
                                            value="{{ $zatcaSettings['csr_config']['organization_identifier'] ?? '300000000000003' }}" required>
+                                    <small class="text-muted">15 digits</small>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>{{ __('Commercial Registration Number') }} (رقم السجل التجاري)</label>
+                                    <input type="text" name="commercial_registration" class="form-control" 
+                                           value="{{ $zatcaSettings['commercial_registration'] ?? '1234567890' }}">
+                                    <small class="text-muted">10 digits</small>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>{{ __('Additional ID') }} (معرف إضافي)</label>
+                                    <input type="text" name="additional_id" class="form-control" 
+                                           value="{{ $zatcaSettings['additional_id'] ?? '152034' }}">
+                                    <small class="text-muted">Optional - 6 digits</small>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
@@ -89,9 +104,34 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
+                                    <label>{{ __('Country Code') }} (رمز الدولة)</label>
+                                    <input type="text" name="country_code" class="form-control" 
+                                           value="{{ $zatcaSettings['country_code'] ?? 'SA' }}" maxlength="2">
+                                    <small class="text-muted">2 letters (e.g., SA)</small>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
                                     <label>{{ __('Industry') }}</label>
                                     <input type="text" name="csr_industry" class="form-control" 
                                            value="{{ $zatcaSettings['csr_config']['business_category'] ?? 'Software' }}" required>
+                                </div>
+
+                                <div class="col-md-12 mb-3 mt-3">
+                                    <h6 class="text-primary border-bottom pb-2">{{ __('Bank Information') }} (معلومات البنك)</h6>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>{{ __('Bank Name') }} (اسم البنك)</label>
+                                    <input type="text" name="bank_name" class="form-control" 
+                                           value="{{ $zatcaSettings['bank_name'] ?? 'البنك الأهلي السعودي' }}">
+                                    <small class="text-muted">Optional</small>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>{{ __('Bank Account Number') }} (رقم الحساب البنكي)</label>
+                                    <input type="text" name="bank_account_number" class="form-control" 
+                                           value="{{ $zatcaSettings['bank_account_number'] ?? 'SA1234567890123456789012' }}">
+                                    <small class="text-muted">IBAN format (Optional)</small>
                                 </div>
 
                                 <div class="col-md-12 mb-3 mt-4">

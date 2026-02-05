@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             BusinessCategorySeeder::class,
             BusinessSeeder::class,
             PermissionSeeder::class,
+            BusinessPermissionSeeder::class,
             OptionTableSeeder::class,
             BlogSeeder::class,
             UserSeeder::class,

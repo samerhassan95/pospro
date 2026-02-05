@@ -290,14 +290,21 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::resource('manage-settings', Business\AcnooSettingsManagerController::class);
 
     // ZATCA Settings
-    Route::get('zatca-settings', [Business\ZatcaSettingController::class, 'index'])->name('zatca.index');
-    Route::post('zatca-settings', [Business\ZatcaSettingController::class, 'update'])->name('zatca.update');
-    Route::post('zatca-test-invoice/{id}', [Business\ZatcaSettingController::class, 'testInvoice'])->name('zatca.test-invoice');
-    Route::post('zatca-production-csid', [Business\ZatcaSettingController::class, 'getProductionCsid'])->name('zatca.production-csid');
+    Route::get('zatca-settings', [Business\ZatcaSettingController::class, 'index'])->name('zatca.index')->middleware('check.permission:zatca-settings.read');
+    Route::post('zatca-settings', [Business\ZatcaSettingController::class, 'update'])->name('zatca.update')->middleware('check.permission:zatca-settings.update');
+    Route::post('zatca-test-invoice/{id}', [Business\ZatcaSettingController::class, 'testInvoice'])->name('zatca.test-invoice')->middleware('check.permission:zatca-settings.read');
+    Route::post('zatca-production-csid', [Business\ZatcaSettingController::class, 'getProductionCsid'])->name('zatca.production-csid')->middleware('check.permission:zatca-settings.update');
 
     // Moyasar Settings
-    Route::get('moyasar-settings', [Business\MoyasarSettingController::class, 'index'])->name('moyasar.index');
-    Route::post('moyasar-settings', [Business\MoyasarSettingController::class, 'update'])->name('moyasar.update');
+    Route::get('moyasar-settings', [Business\MoyasarSettingController::class, 'index'])->name('moyasar.index')->middleware('check.permission:moyasar-settings.read');
+    Route::post('moyasar-settings', [Business\MoyasarSettingController::class, 'update'])->name('moyasar.update')->middleware('check.permission:moyasar-settings.update');
+
+    // Moyasar Payments
+    Route::post('moyasar/pay-sale-due/{sale_id}', [Business\MoyasarPaymentController::class, 'paySaleDue'])->name('moyasar.pay-sale-due');
+    Route::post('moyasar/pay-purchase-due/{purchase_id}', [Business\MoyasarPaymentController::class, 'payPurchaseDue'])->name('moyasar.pay-purchase-due');
+    Route::post('moyasar/pay-due-collection', [Business\MoyasarPaymentController::class, 'payDueCollection'])->name('moyasar.pay-due-collection');
+    Route::post('moyasar/process-sale-payment', [Business\MoyasarPaymentController::class, 'processSalePayment'])->name('moyasar.process-sale-payment');
+    Route::post('moyasar/process-purchase-payment', [Business\MoyasarPaymentController::class, 'processPurchasePayment'])->name('moyasar.process-purchase-payment');
 
     Route::post('/invoice-settings', [Business\AcnooSettingsManagerController::class, 'updateInvoice'])->name('invoice.update');
     Route::post('/product-settings', [Business\AcnooSettingsManagerController::class, 'updateProductSetting'])->name('product.settings.update');
@@ -317,5 +324,21 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
         Route::post('/filter', 'maanFilter')->name('filter');
         Route::get('/{id}', 'mtView')->name('mtView');
         Route::get('view/all/', 'mtReadAll')->name('mtReadAll');
+    });
+
+    // Table Reservation System API Routes
+    Route::prefix('api')->group(function () {
+        Route::apiResource('tables', Business\AcnooRestaurantTableController::class);
+        Route::post('tables/{table}/position', [Business\AcnooRestaurantTableController::class, 'updatePosition']);
+        Route::post('tables/{table}/rotate', [Business\AcnooRestaurantTableController::class, 'rotate']);
+        
+        // Reservation custom actions
+        Route::post('reservations/{reservation}/cancel', [Business\AcnooTableReservationController::class, 'cancel']);
+        Route::post('reservations/{reservation}/complete', [Business\AcnooTableReservationController::class, 'complete']);
+        Route::post('reservations/{reservation}/arrived', [Business\AcnooTableReservationController::class, 'guestArrived']);
+        
+        Route::apiResource('reservations', Business\AcnooTableReservationController::class);
+        Route::post('table-orders/{order}/complete', [Business\AcnooTableOrderController::class, 'complete']);
+        Route::apiResource('table-orders', Business\AcnooTableOrderController::class);
     });
 });

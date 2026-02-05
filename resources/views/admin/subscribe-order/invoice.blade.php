@@ -3,286 +3,818 @@
     $zatcaSettings = $zatcaOption ? $zatcaOption->value : null;
     $sellerName = $zatcaSettings['csr_config']['common_name'] ?? config('app.name');
     $sellerVat = $zatcaSettings['csr_config']['organization_identifier'] ?? '---';
+    
+    // السعر الأساسي من جدول plans (قبل الضريبة)
+    $taxableAmount = $subscriber->plan->subscriptionPrice ?? 0;
+    
+    // حساب الضريبة 15%
+    $vatTotal = $taxableAmount * 0.15;
+    
+    // المجموع شامل الضريبة
+    $totalAmount = $taxableAmount + $vatTotal;
 @endphp
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>{{ __('Invoice') }} #{{ $subscriber->invoice_number }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فاتورة ضريبية #{{ $subscriber->invoice_number }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
-        
         * {
+            font-family: 'Cairo', sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        body {
-            background: #f0f2f5;
-            padding: 20px;
+        body { 
+            background-color: #f5f5f5; 
+            direction: rtl;
+            padding: 20px 0;
         }
-
-        .b2b-invoice {
-            max-width: 210mm;
-            min-height: 290mm; /* A4 height approx */
+        
+        .invoice-wrapper {
+            max-width: 900px;
             margin: 0 auto;
-            padding: 8mm; /* Reduced padding */
             background: white;
-            color: #333;
-            font-size: 11px; /* Slightly smaller font */
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        /* Header Section */
+        .invoice-header {
+            padding: 30px 40px;
+            background: white;
+            border-bottom: 3px solid #e9ecef;
+        }
+        
+        .header-top {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
         }
-
-        .b2b-header {
-            text-align: center;
-            border-bottom: 3px solid #1565C0;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
-            background: linear-gradient(to bottom, #E3F2FD 0%, #ffffff 100%);
-            padding-top: 8px;
-            border-radius: 8px 8px 0 0;
+        
+        .company-section {
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
-
-        .b2b-header h1 {
-            color: #1565C0;
-            font-size: 20px; /* Smaller header */
+        
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+        
+        .company-details h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .company-info-text {
+            font-size: 11px;
+            color: #6c757d;
+            line-height: 1.6;
             margin: 0;
-            font-weight: bold;
         }
-
-        .b2b-parties {
+        
+        .invoice-title-section {
+            text-align: left;
+        }
+        
+        .invoice-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        
+        .invoice-subtitle {
+            font-size: 11px;
+            color: #95a5a6;
+            text-align: left;
+        }
+        
+        .header-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 18px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .info-label {
+            font-size: 11px;
+            color: #6c757d;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+        
+        .info-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* Business Info Section */
+        .business-info-section {
+            padding: 25px 40px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .business-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .business-info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .business-info-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .business-info-row {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            gap: 12px;
-        }
-
-        .b2b-party-box {
-            flex: 1;
-            border: 1px solid #1565C0;
-            padding: 8px;
-            border-radius: 6px;
-            background: #F9F9F9;
-        }
-
-        .b2b-party-box h3 {
-            color: #ffffff;
-            background: #1565C0;
+            margin-bottom: 10px;
             font-size: 12px;
-            margin: -8px -8px 8px -8px;
-            padding: 4px 8px;
-            border-radius: 5px 5px 0 0;
-            font-weight: bold;
+        }
+        
+        .business-info-label {
+            font-weight: 600;
+            color: #6c757d;
+            min-width: 140px;
+        }
+        
+        .business-info-value {
+            color: #2c3e50;
+            flex: 1;
+        }
+        
+        /* Products Table */
+        .products-section {
+            padding: 30px 40px;
+        }
+        
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .products-table thead {
+            background: #2c3e50;
+            color: white;
+        }
+        
+        .products-table th {
+            padding: 12px 10px;
             text-align: center;
+            font-size: 12px;
+            font-weight: 600;
         }
-
-        .b2b-party-box p {
-            margin: 2px 0; /* Tighter margins */
-            font-size: 10px;
-            line-height: 1.4;
+        
+        .products-table td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 13px;
         }
-
-        .b2b-invoice-details {
+        
+        .products-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .text-right {
+            text-align: right !important;
+        }
+        
+        .text-left {
+            text-align: left !important;
+        }
+        
+        /* Summary Section */
+        .summary-section {
+            padding: 0 40px 30px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+        
+        .summary-notes {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .summary-table {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .summary-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            padding: 8px 12px;
-            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-            border-radius: 6px;
-            border-right: 4px solid #1565C0;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 13px;
         }
-
-        .b2b-table th {
-            padding: 8px 5px;
+        
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            font-weight: 600;
+            color: #6c757d;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .summary-total {
+            background: #28a745 !important;
+            color: white !important;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .summary-total .summary-label,
+        .summary-total .summary-value {
+            color: white !important;
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .status-cleared {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        /* Footer */
+        .invoice-footer {
+            padding: 20px 40px;
+            background: #f8f9fa;
             text-align: center;
-            font-size: 11px;
+            border-top: 2px solid #e9ecef;
         }
-
-        .b2b-table td {
-            padding: 8px 5px;
-            font-size: 11px;
+        
+        .qr-section {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
         }
-
-        .b2b-totals {
-            margin-right: auto;
-            width: 250px;
-            margin-top: 5px;
+        
+        .qr-code {
+            max-width: 180px;
+            height: auto;
+            margin: 0 auto;
+            border: 3px solid #2c3e50;
+            border-radius: 8px;
+            padding: 10px;
+            background: white;
         }
-
-        .b2b-footer {
-            margin-top: auto; /* Push to bottom */
-            padding-top: 10px;
-            border-top: 2px solid #E0E0E0;
-        }
-
+        
         @media print {
-            body { background: white; padding: 0; margin: 0; }
-            .b2b-invoice { 
-                box-shadow: none; 
-                max-width: 100%; 
-                border: none; 
+            body { 
+                background: white;
                 padding: 0;
-                min-height: auto;
-                height: 100vh;
+                margin: 0;
             }
-            .no-print { display: none !important; }
+            .invoice-wrapper {
+                box-shadow: none;
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            .action-buttons {
+                display: none !important;
+            }
+            .invoice-header {
+                padding: 10px 20px;
+                margin-bottom: 0;
+            }
+            .header-top {
+                margin-bottom: 10px;
+            }
+            .header-info-grid {
+                gap: 8px;
+            }
+            .info-box {
+                padding: 8px;
+            }
+            .business-info-section {
+                padding: 10px 20px;
+            }
+            .business-info-grid {
+                gap: 15px;
+            }
+            .business-info-card {
+                padding: 10px;
+            }
+            .business-info-title {
+                font-size: 12px;
+                margin-bottom: 8px;
+                padding-bottom: 5px;
+            }
+            .business-info-row {
+                margin-bottom: 5px;
+                font-size: 10px;
+            }
+            .products-section {
+                padding: 10px 20px;
+            }
+            .products-table {
+                margin-bottom: 10px;
+            }
+            .products-table th,
+            .products-table td {
+                padding: 4px 6px;
+                font-size: 9px;
+            }
+            .summary-section {
+                padding: 0 20px 10px;
+                gap: 15px;
+            }
+            .summary-notes {
+                padding: 10px;
+            }
+            .summary-row {
+                padding: 6px 12px;
+                font-size: 10px;
+            }
+            .summary-total {
+                font-size: 13px !important;
+            }
+            .qr-section {
+                margin: 5px 0;
+                padding: 8px;
+                page-break-inside: avoid;
+            }
+            .qr-code {
+                max-width: 100px !important;
+                height: auto;
+                padding: 5px;
+            }
+            .invoice-footer {
+                padding: 8px 20px;
+            }
             @page {
                 size: A4;
-                margin: 10mm;
+                margin: 8mm;
+            }
+            .business-info-card,
+            .products-table,
+            .summary-section,
+            .qr-section {
+                page-break-inside: avoid;
+            }
+            body {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+            .company-details h2 {
+                font-size: 16px;
+                margin-bottom: 4px;
+            }
+            .company-info-text {
+                font-size: 9px;
+                line-height: 1.3;
+            }
+            .invoice-title {
+                font-size: 20px;
+                margin-bottom: 3px;
+            }
+            .invoice-subtitle {
+                font-size: 9px;
+            }
+            .info-label {
+                font-size: 9px;
+            }
+            .info-value {
+                font-size: 11px;
+            }
+            .business-info-label {
+                min-width: 100px;
+                font-size: 9px;
+            }
+            .company-logo {
+                width: 60px;
+                height: 60px;
             }
         }
-
-        .print-btn {
-            background: #1565C0;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-bottom: 20px;
-            display: inline-block;
+        
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .action-btn {
+            background: white;
+            color: #2c3e50;
+            border: 2px solid #e9ecef;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        
+        .action-btn.print-btn {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .action-btn.print-btn:hover {
+            background: #218838;
+            border-color: #218838;
         }
     </style>
 </head>
 <body>
-
-    <div class="no-print" style="text-align: center;">
-        <button onclick="window.print()" class="print-btn">طباعة الفاتورة / Print Invoice</button>
+    
+    {{-- Action Buttons --}}
+    <div class="action-buttons">
+        <button onclick="window.print()" class="action-btn print-btn">
+            <i class="fas fa-print"></i>
+            طباعة / Print
+        </button>
     </div>
 
-    <div class="b2b-invoice">
+    <div class="invoice-wrapper">
+        
         {{-- Header --}}
-        <div class="b2b-header">
-            <h1>{{ __('TAX INVOICE') }} / فاتورة ضريبية</h1>
-            <p>{{ __('Standard Tax Invoice (B2B)') }} / فاتورة ضريبية خاضعة لضريبة القيمة المضافة</p>
-        </div>
-
-        {{-- Parties --}}
-        <div class="b2b-parties">
-            {{-- Seller --}}
-            <div class="b2b-party-box">
-                <h3>{{ __('Supplier') }} / المورد</h3>
-                <p><strong>اسم المنشأة:</strong> <span>{{ $sellerName }}</span></p>
-                <p><strong>الرقم الضريبي:</strong> <span>{{ $sellerVat }}</span></p>
-                <p><strong>العنوان:</strong> <span>{{ $zatcaSettings['csr_config']['registered_address'] ?? '---' }}</span></p>
-                <p><strong>المدينة/الحي:</strong> <span>{{ $zatcaSettings['csr_config']['location'] ?? '---' }} / {{ $zatcaSettings['csr_config']['organization_unit_name'] ?? '---' }}</span></p>
+        <div class="invoice-header">
+            <div class="header-top">
+                <div class="company-section">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="company-logo" onerror="this.src='{{ asset('assets/images/default.svg') }}'">
+                    <div class="company-details">
+                        <h2>{{ $sellerName }}</h2>
+                        <p class="company-info-text">
+                            {{ $zatcaSettings['csr_config']['registered_address'] ?? '---' }}<br>
+                            {{ $zatcaSettings['csr_config']['location'] ?? '---' }} / {{ $zatcaSettings['csr_config']['organization_unit_name'] ?? '---' }}
+                        </p>
+                    </div>
+                </div>
+                <div class="invoice-title-section">
+                    <h1 class="invoice-title">فاتورة ضريبية</h1>
+                    <p class="invoice-subtitle">TAX INVOICE - B2B</p>
+                </div>
             </div>
-
-            {{-- Buyer --}}
-            <div class="b2b-party-box">
-                <h3>{{ __('Customer') }} / العميل (المشترك)</h3>
-                <p><strong>اسم الشركة:</strong> <span>{{ $subscriber->business->companyName }}</span></p>
-                <p><strong>الرقم الضريبي:</strong> <span>{{ $subscriber->business->vat_no ?? '---' }}</span></p>
-                <p><strong>رقم المبنى:</strong> <span>{{ $subscriber->business->building_number ?? '---' }}</span></p>
-                <p><strong>الشارع:</strong> <span>{{ $subscriber->business->street_name ?? '---' }}</span></p>
-                <p><strong>الحي/المدينة:</strong> <span>{{ $subscriber->business->district ?? '---' }} / {{ $subscriber->business->city ?? '---' }}</span></p>
-                <p><strong>الرمز البريدي:</strong> <span>{{ $subscriber->business->postal_code ?? '---' }}</span></p>
-            </div>
-        </div>
-
-        {{-- Invoice Info --}}
-        <div class="b2b-invoice-details">
-            <div>
-                <p><strong>رقم الفاتورة:</strong> {{ $subscriber->invoice_number }}</p>
-                <p><strong>تاريخ الإصدار:</strong> {{ $subscriber->created_at->format('Y-m-d') }}</p>
-            </div>
-            <div style="text-align: left;">
-                <p><strong>طريقة الدفع:</strong> {{ $subscriber->gateway->name ?? 'تحويل بنكي' }}</p>
-                <p><strong>حالة الربط:</strong> 
-                    <span class="status-badge {{ $subscriber->zatca_status == 'CLEARED' ? 'status-cleared' : 'status-pending' }}">
-                        {{ $subscriber->zatca_status ?? 'PENDING' }}
-                    </span>
-                </p>
+            
+            <div class="header-info-grid">
+                <div class="info-box">
+                    <div class="info-label">رقم الفاتورة / Invoice No</div>
+                    <div class="info-value large">{{ $subscriber->invoice_number }}</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">التاريخ / Date</div>
+                    <div class="info-value">{{ $subscriber->created_at->format('d/m/Y') }}</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">طريقة الدفع / Payment Method</div>
+                    <div class="info-value">{{ $subscriber->gateway->name ?? 'تحويل بنكي' }}</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">حالة الربط / ZATCA Status</div>
+                    <div class="info-value">
+                        <span class="status-badge {{ $subscriber->zatca_status == 'CLEARED' ? 'status-cleared' : 'status-pending' }}">
+                            {{ $subscriber->zatca_status ?? 'PENDING' }}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        {{-- Items --}}
-        <table class="b2b-table">
-            <thead>
-                <tr>
-                    <th style="width: 50px;">#</th>
-                    <th>وصف الخدمة / Service Description</th>
-                    <th>الكمية / Qty</th>
-                    <th>سعر الوحدة / Unit Price</th>
-                    <th>الضريبة 15% / VAT</th>
-                    <th>الإجمالي الشامل / Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>
-                        <strong>{{ $subscriber->plan->subscriptionName }}</strong><br>
-                        <small>دورة الاشتراك: {{ $subscriber->duration }} يوم</small>
-                    </td>
-                    <td>1</td>
-                    <td>{{ number_format($taxableAmount, 2) }} SAR</td>
-                    <td>{{ number_format($vatTotal, 2) }} SAR</td>
-                    <td>{{ number_format($totalAmount, 2) }} SAR</td>
-                </tr>
-            </tbody>
-        </table>
+        {{-- Business Information --}}
+        <div class="business-info-section">
+            <div class="business-info-grid">
+                {{-- Seller Info --}}
+                <div class="business-info-card">
+                    <h3 class="business-info-title">بيانات المورد / Supplier Information</h3>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">اسم الشركة / Company:</span>
+                        <span class="business-info-value">{{ $sellerName }}</span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">رقم ض.ق.م / VAT Number:</span>
+                        <span class="business-info-value">{{ $sellerVat }}</span>
+                    </div>
+                    
+                    @if(isset($zatcaSettings['csr_config']['commercial_registration']))
+                    <div class="business-info-row">
+                        <span class="business-info-label">السجل التجاري / CR:</span>
+                        <span class="business-info-value">{{ $zatcaSettings['csr_config']['commercial_registration'] }}</span>
+                    </div>
+                    @endif
+                    
+                    @if(isset($zatcaSettings['csr_config']['serial_number']))
+                    <div class="business-info-row">
+                        <span class="business-info-label">الرقم التسلسلي / Serial No:</span>
+                        <span class="business-info-value">{{ $zatcaSettings['csr_config']['serial_number'] }}</span>
+                    </div>
+                    @endif
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">العنوان / Address:</span>
+                        <span class="business-info-value">{{ $zatcaSettings['csr_config']['registered_address'] ?? '---' }}</span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">المدينة / City:</span>
+                        <span class="business-info-value">{{ $zatcaSettings['csr_config']['location'] ?? '---' }}</span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">الحي / District:</span>
+                        <span class="business-info-value">{{ $zatcaSettings['csr_config']['organization_unit_name'] ?? '---' }}</span>
+                    </div>
+                    
+                    @if(isset($zatcaSettings['csr_config']['country_name']))
+                    <div class="business-info-row">
+                        <span class="business-info-label">الدولة / Country:</span>
+                        <span class="business-info-value">{{ $zatcaSettings['csr_config']['country_name'] }}</span>
+                    </div>
+                    @endif
+                </div>
 
-        {{-- Totals --}}
-        <div class="b2b-totals">
-            <table>
-                <tr>
-                    <td>الإجمالي غير شامل الضريبة (Subtotal):</td>
-                    <td>{{ number_format($taxableAmount, 2) }} SAR</td>
-                </tr>
-                <tr>
-                    <td>مجموع ضريبة القيمة المضافة (Total VAT):</td>
-                    <td>{{ number_format($vatTotal, 2) }} SAR</td>
-                </tr>
-                <tr class="total-row">
-                    <td>الإجمالي شامل الضريبة (Total Payable):</td>
-                    <td>{{ number_format($totalAmount, 2) }} SAR</td>
-                </tr>
+                {{-- Buyer Info --}}
+                <div class="business-info-card">
+                    <h3 class="business-info-title">بيانات المشترك / Subscriber Information</h3>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">اسم الشركة / Company:</span>
+                        <span class="business-info-value">{{ $subscriber->business->companyName ?? 'N/A' }}</span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">رقم ض.ق.م / VAT Number:</span>
+                        <span class="business-info-value">{{ $subscriber->business->vat_no ?? '---' }}</span>
+                    </div>
+                    
+                    @if($subscriber->business->commercial_registration)
+                    <div class="business-info-row">
+                        <span class="business-info-label">السجل التجاري / CR:</span>
+                        <span class="business-info-value">{{ $subscriber->business->commercial_registration }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($subscriber->business->additional_id)
+                    <div class="business-info-row">
+                        <span class="business-info-label">معرف إضافي / Additional ID:</span>
+                        <span class="business-info-value">{{ $subscriber->business->additional_id }}</span>
+                    </div>
+                    @endif
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">رقم المبنى / Building No:</span>
+                        <span class="business-info-value">{{ $subscriber->business->building_number ?? '---' }}</span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">الشارع / Street:</span>
+                        <span class="business-info-value">{{ $subscriber->business->street_name ?? '---' }}</span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">الحي / District:</span>
+                        <span class="business-info-value">{{ $subscriber->business->district ?? '---' }}</span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">المدينة / City:</span>
+                        <span class="business-info-value">{{ $subscriber->business->city ?? '---' }}</span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">الرمز البريدي / Postal Code:</span>
+                        <span class="business-info-value">{{ $subscriber->business->postal_code ?? '---' }}</span>
+                    </div>
+                    
+                    @if($subscriber->business->country_code)
+                    <div class="business-info-row">
+                        <span class="business-info-label">الدولة / Country:</span>
+                        <span class="business-info-value">{{ $subscriber->business->country_code }}</span>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        
+        {{-- Additional Subscription Info --}}
+        @if($subscriber->notes || $subscriber->payment_method)
+        <div class="business-info-section" style="padding-top: 15px; padding-bottom: 15px;">
+            <div class="business-info-card">
+                <h3 class="business-info-title">معلومات إضافية / Additional Information</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    @if($subscriber->payment_method)
+                    <div class="business-info-row">
+                        <span class="business-info-label">طريقة الدفع / Payment Method:</span>
+                        <span class="business-info-value">{{ $subscriber->payment_method }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($subscriber->gateway)
+                    <div class="business-info-row">
+                        <span class="business-info-label">بوابة الدفع / Payment Gateway:</span>
+                        <span class="business-info-value">{{ $subscriber->gateway->name }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($subscriber->notes)
+                    <div class="business-info-row" style="grid-column: 1 / -1;">
+                        <span class="business-info-label">ملاحظات / Notes:</span>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        @endif
+
+        {{-- Products Table --}}
+        <div class="products-section">
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">#</th>
+                        <th style="width: 35%;" class="text-right">اسم المنتج / Product</th>
+                        <th style="width: 10%;">الكمية / Qty</th>
+                        <th style="width: 12%;">سعر الوحدة / Unit Price</th>
+                        <th style="width: 12%;">المجموع / Subtotal</th>
+                        <th style="width: 8%;">الضريبة / VAT %</th>
+                        <th style="width: 12%;">قيمة الضريبة / VAT Amount</th>
+                        <th style="width: 12%;">الإجمالي / Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="text-right">
+                            <strong>{{ $subscriber->plan->subscriptionName ?? 'اشتراك في النظام' }}</strong><br>
+                            <small style="color: #6c757d;">System Subscription / مدة {{ $subscriber->duration ?? 30 }} يوم</small>
+                        </td>
+                        <td>1</td>
+                        <td>{{ number_format($taxableAmount, 2) }} SAR</td>
+                        <td>{{ number_format($taxableAmount, 2) }} SAR</td>
+                        <td>15%</td>
+                        <td>{{ number_format($vatTotal, 2) }} SAR</td>
+                        <td>{{ number_format($totalAmount, 2) }} SAR</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
-        {{-- Footer --}}
-        <div class="b2b-footer">
-            <div class="qr-section">
-                @if($qrCode)
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($qrCode) }}" alt="ZATCA QR">
-                @else
-                    <div style="width:120px; height:120px; background:#eee; display:flex; align-items:center; justify-content:center; font-size:10px; color:#999; border:1px dashed #ccc;">
-                        QR PENDING COMPLIANCE
-                    </div>
-                @endif
-                <p>امسح للتحقق من الفاتورة</p>
-            </div>
-
-            <div style="flex:1; padding-right:30px; font-size:10px; color:#777; line-height:1.6;">
-                <p><strong>ملاحظة:</strong> هذه الفاتورة صدرت إلكترونياً وهي خاضعة لأنظمة هيئة الزكاة والضريبة والجمارك (المرحلة الثانية). أي تعديل يدوي على هذه الفاتورة يلغي صلاحيتها.</p>
-                <p style="margin-top:10px;">ID: {{ $subscriber->uuid }}</p>
+        {{-- Summary --}}
+        <div class="summary-section">
+            <div class="summary-notes">
+                <strong style="font-size: 13px; color: #2c3e50;">معلومات الاشتراك / Subscription Info:</strong>
+                <p style="margin-top: 10px; font-size: 12px; color: #6c757d; line-height: 1.8;">
+                    <strong>رقم المعاملة / Transaction ID:</strong><br>
+                    <span style="word-break: break-all; font-size: 11px;">{{ $subscriber->uuid }}</span>
+                </p>
                 @if($subscriber->invoice_hash)
-                    <p style="word-break: break-all;">HASH: {{ $subscriber->invoice_hash }}</p>
+                <p style="margin-top: 10px; font-size: 12px; color: #6c757d; line-height: 1.8;">
+                    <strong>التجزئة / Hash:</strong><br>
+                    <span style="word-break: break-all; font-size: 10px; font-family: monospace;">{{ $subscriber->invoice_hash }}</span>
+                </p>
                 @endif
+                <p style="margin-top: 15px; font-size: 11px; color: #95a5a6; font-style: italic; line-height: 1.6;">
+                    هذه الفاتورة صدرت إلكترونياً وهي خاضعة لأنظمة هيئة الزكاة والضريبة والجمارك (المرحلة الثانية). أي تعديل يدوي على هذه الفاتورة يلغي صلاحيتها.
+                </p>
+            </div>
+            
+            <div class="summary-table">
+                <div class="summary-row">
+                    <span class="summary-label">السعر / Price:</span>
+                    <span class="summary-value">{{ number_format($taxableAmount, 2) }} SAR</span>
+                </div>
+                
+                @if(isset($subscriber->discount) && $subscriber->discount > 0)
+                <div class="summary-row">
+                    <span class="summary-label">الخصم / Discount:</span>
+                    <span class="summary-value">-{{ number_format($subscriber->discount, 2) }} SAR</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">السعر بعد الخصم / After Discount:</span>
+                    <span class="summary-value">{{ number_format($taxableAmount - $subscriber->discount, 2) }} SAR</span>
+                </div>
+                @endif
+                
+                @if(isset($subscriber->shipping) && $subscriber->shipping > 0)
+                <div class="summary-row">
+                    <span class="summary-label">قيمة الشحن / Shipping:</span>
+                    <span class="summary-value">{{ number_format($subscriber->shipping, 2) }} SAR</span>
+                </div>
+                @endif
+                
+                <div class="summary-row">
+                    <span class="summary-label">ضريبة القيمة المضافة (15%) / VAT (15%):</span>
+                    <span class="summary-value">{{ number_format($vatTotal, 2) }} SAR</span>
+                </div>
+                
+                <div class="summary-row summary-total">
+                    <span class="summary-label">الإجمالي شامل الضريبة / Total Including VAT:</span>
+                    <span class="summary-value">{{ number_format($totalAmount, 2) }} SAR</span>
+                </div>
             </div>
         </div>
 
-        {{-- Signatures --}}
-        <div style="display:flex; justify-content:space-between; margin-top:40px; border-top:1px solid #eee; pt-20">
-            <div style="text-align:center; width:200px;">
-                <div style="border-top:1px solid #333; margin-bottom:5px; margin-top:20px;"></div>
-                <p>ختم وتوقيع المورد</p>
-            </div>
-            <div style="text-align:center; width:200px;">
-                <div style="border-top:1px solid #333; margin-bottom:5px; margin-top:20px;"></div>
-                <p>توقيع العميل</p>
-            </div>
+        {{-- QR Code --}}
+        <div class="qr-section">
+            @php
+                try {
+                    // Create TLV format for ZATCA QR Code
+                    $timestamp = $subscriber->created_at->toIso8601String();
+                    $total = number_format($totalAmount, 2, '.', '');
+                    $vatAmount = number_format($vatTotal, 2, '.', '');
+                    
+                    // TLV encoding
+                    $tlv = '';
+                    $tlv .= pack('C', 1) . pack('C', strlen($sellerName)) . $sellerName;
+                    $tlv .= pack('C', 2) . pack('C', strlen($sellerVat)) . $sellerVat;
+                    $tlv .= pack('C', 3) . pack('C', strlen($timestamp)) . $timestamp;
+                    $tlv .= pack('C', 4) . pack('C', strlen($total)) . $total;
+                    $tlv .= pack('C', 5) . pack('C', strlen($vatAmount)) . $vatAmount;
+                    
+                    $qrCodeData = base64_encode($tlv);
+                    $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . urlencode($qrCodeData);
+                } catch (\Exception $e) {
+                    $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . urlencode($subscriber->invoice_number);
+                }
+            @endphp
+            <img src="{{ $qrCodeUrl }}" alt="QR Code" class="qr-code" onerror="this.style.display='none'">
+            <p style="margin-top: 10px; font-size: 11px; color: #6c757d;">امسح للتحقق من الفاتورة / Scan for verification</p>
         </div>
+
+        {{-- Footer --}}
+        <div class="invoice-footer">
+            <p style="font-size: 11px; color: #6c757d; margin-bottom: 5px;">هذه فاتورة إلكترونية ولا تحتاج إلى توقيع</p>
+            <p style="font-size: 11px; color: #6c757d;">This is a computer-generated invoice and does not require a signature</p>
+            <p style="font-size: 12px; color: #2c3e50; margin-top: 10px; font-weight: 600;">شكراً لثقتكم بنا / Thank you for your trust!</p>
+        </div>
+
     </div>
-
 </body>
 </html>

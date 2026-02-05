@@ -155,4 +155,8 @@ Route::get('/update', function () {
     return redirect('/')->with('message', __('System updated successfully.'));
 });
 
+
+// Route::get('/super-admin/moyasar', [App\Http\Controllers\SuperAdminMoyasarController::class, 'index']);
+// Route::post('/super-admin/moyasar', [App\Http\Controllers\SuperAdminMoyasarController::class, 'store']);
+
 require __DIR__ . '/auth.php';

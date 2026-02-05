@@ -8,7 +8,6 @@ use Illuminate\Support\ServiceProvider;
 class CustomDomainAddonServiceProvider extends ServiceProvider
 {
     protected string $moduleName = 'CustomDomainAddon';
-
     protected string $moduleNameLower = 'customdomainaddon';
 
     /**
@@ -16,6 +15,11 @@ class CustomDomainAddonServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Only boot if module is enabled
+        if (!isModuleEnabled($this->moduleName)) {
+            return;
+        }
+        
         $this->registerCommands();
         $this->registerCommandSchedules();
         $this->registerTranslations();
@@ -29,6 +33,11 @@ class CustomDomainAddonServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // Only register if module is enabled
+        if (!isModuleEnabled($this->moduleName)) {
+            return;
+        }
+        
         $this->app->register(RouteServiceProvider::class);
     }
 

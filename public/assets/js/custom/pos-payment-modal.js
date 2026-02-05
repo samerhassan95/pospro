@@ -10,13 +10,13 @@
     const completePaymentBtn = document.getElementById('complete-payment-btn');
     
     // Payment method buttons
-    const paymentMethodBtns = document.querySelectorAll('.payment-method-btn');
+    const paymentMethodBtns = document.querySelectorAll('.payment-modal .payment-method-btn');
     
     // Payment tab buttons
-    const paymentTabBtns = document.querySelectorAll('.payment-tab-btn');
+    const paymentTabBtns = document.querySelectorAll('.payment-modal .payment-tab-btn');
     
     // Numpad buttons
-    const numpadBtns = document.querySelectorAll('.numpad-btn');
+    const numpadBtns = document.querySelectorAll('.payment-modal .numpad-btn');
     const receiveAmountInput = document.getElementById('modal-receive-amount');
     
     // Customer select
@@ -177,7 +177,7 @@
     }
 
     // Delivery tab functionality (optional - add your logic)
-    const deliveryTabBtns = document.querySelectorAll('.delivery-tab-btn');
+    const deliveryTabBtns = document.querySelectorAll('.sidebar-delivery-tabs .delivery-tab-btn');
     deliveryTabBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             deliveryTabBtns.forEach(b => b.classList.remove('active'));

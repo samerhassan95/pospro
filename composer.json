@@ -63,7 +63,8 @@
             "Modules\\": "Modules/"
         },
         "files": [
-            "app/Helpers/Helper.php"
+            "app/Helpers/Helper.php",
+            "app/Helpers/ModuleHelper.php"
         ]
     },
     "autoload-dev": {
