@@ -4,9 +4,9 @@
         <div class="row mt-5">
             <div class="col-md-6 col-lg-5">
      
-                        <a href="{{ route('home') }}" class="logo-link">
-            <img src="{{ asset(get_footer_logo()) }}" alt="Logo" class="sidebar-logo-img">
-            <span class="sidebar-logo-text !text-white" style="color: white !important;">
+                        <a href="{{ route('home') }}" class="logo-link" style="gap:10px;">
+            <img src="{{ asset(get_footer_logo()) }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]" style="width:100px;">
+            <span class="sidebar-logo-text !text-white" style="color: white !important;  padding: 0 10px 0 10px ;">
                 <span class="bytes-text">{{ get_system_title() }}</span>
             </span>
         </a>
@@ -51,9 +51,9 @@
                         <li>
                             <a href="{{ $page_data['headings']['right_footer_link_three'] ?? '' }}" target="_blank">{{ $page_data['headings']['right_footer_three'] ?? '' }}</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="{{ $page_data['headings']['right_footer_link_four'] ?? '' }}" target="_blank">{{ $page_data['headings']['right_footer_four'] ?? '' }}</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="{{ $page_data['headings']['right_footer_link_five'] ?? '' }}" target="_blank">{{ $page_data['headings']['right_footer_five'] ?? '' }}</a>
                         </li>

@@ -2,7 +2,8 @@
 [dir="rtl"] :root {
     --sidebar-width: 240px;
     --sidebar-collapsed-width: 60px;
-    --clr-primary: #FF6500;
+   --clr-primary: {{ get_primary_color() }};
+    --clr-secondary: {{ get_secondary_color() }};
 }
 
 /* RTL CSS Reset for sidebar - Force override */
@@ -68,6 +69,33 @@ a {
     transform: scaleX(1) !important;
 }
 
+/* RTL - Custom image background with primary color and white icons */
+[dir="rtl"] .custom-image-bg {
+    background: var(--clr-primary);
+}
+
+[dir="rtl"] .custom-image-bg img {
+    filter: brightness(0) invert(1);
+}
+
+[dir="rtl"] .custom-image-bg svg path {
+    fill: #fff !important;
+    stroke: #fff !important;
+}
+
+html[dir="rtl"] body .custom-image-bg {
+    background: var(--clr-primary);
+}
+
+html[dir="rtl"] body .custom-image-bg img {
+    filter: brightness(0) invert(1);
+}
+
+html[dir="rtl"] body .custom-image-bg svg path {
+    fill: #fff !important;
+    stroke: #fff !important;
+}
+
 [dir="rtl"] a,
 [dir="rtl"] button,
 [dir="rtl"] .btn,
@@ -80,14 +108,14 @@ a {
 [dir="rtl"] .nav-pills .nav-link.active,
 [dir="rtl"] .nav-pills .show > .nav-link,
 [dir="rtl"] .btn-primary {
-    background-color: #FF6500 !important;
-    border-color: #FF6500 !important;
+    background-color: var(--clr-primary) !important;
+    border-color: var(--clr-primary) !important;
 }
 
 [dir="rtl"] .text-primary,
 [dir="rtl"] .arabic-primary-clr,
 [dir="rtl"] .nav-link {
-    color: #FF6500 !important;
+    color: var(--clr-primary) !important;
 }
 
 /* [dir="rtl"] p {
@@ -105,16 +133,16 @@ a {
 }
 
 [dir="rtl"] .btn-custom-warning {
-    background-color: #FF6500 !important;
+    background-color: var(--clr-primary) !important;
     color: #fff;
     border: none !important;
 }
-}
+
 
 [dir="rtl"] .role-reset-btn {
     font-weight: bold;
-    color: #FF6500;
-    border: 1px solid #FF6500;
+    color: var(--clr-primary);
+    border: 1px solid var(--clr-primary);
     padding: 0.2rem 0.5rem !important;
 }
 
@@ -155,7 +183,7 @@ a {
     order: 2 !important;
 }
 [dir="rtl"] .btn-category {
-    background-color: #f8961e;
+    background-color: var(--clr-primary);
     color: white;
     padding-top: 9px;
     padding-bottom: 9px;
@@ -251,12 +279,15 @@ a {
 [dir="rtl"] .side-bar-logo {
     display: flex !important;
     padding: 16px 12px !important;
+        justify-content :center;
+
     background-color: white !important;
 }
 
 [dir="rtl"] .side-bar-logo .logo-link {
     display: flex !important;
     align-items: center !important;
+    justify-content :center;
     gap: 10px !important;
     text-decoration: none !important;
     color: #000 !important;
@@ -278,7 +309,7 @@ a {
 }
 
 [dir="rtl"] .side-bar-logo .sidebar-logo-text .bytes-text {
-    color: #FF6500 !important;
+    color: var(--clr-primary) !important;
 }
 [dir="rtl"] .container-fluid {
     padding: 1.5%;
@@ -327,14 +358,32 @@ a {
 }
 
 [dir="rtl"] .side-bar-manu li a .sidebar-icon img {
-    filter: brightness(0) saturate(100%) invert(41%) sepia(98%) saturate(2559%) hue-rotate(360deg) brightness(101%) contrast(106%) !important;
     width: 20px !important;
     height: 20px !important;
+    object-fit: contain;
+}
+
+[dir="rtl"] .side-bar-manu li a .sidebar-icon svg path {
+    fill: none !important;
+    stroke: var(--clr-primary) !important;
+    stroke-width: 1.5 !important;
+}
+
+[dir="rtl"] .side-bar-manu li a .sidebar-icon svg {
+    color: var(--clr-primary) !important;
 }
 
 [dir="rtl"] .side-bar-manu li.active > a .sidebar-icon img,
 [dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon img {
+    /* White icons on active and hover */
     filter: brightness(0) invert(1) !important;
+}
+
+[dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg path,
+[dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon svg path {
+    fill: none !important;
+    stroke: #fff !important;
+    stroke-width: 1.5 !important;
 }
 
 [dir="rtl"] .side-bar-manu li:hover > a,
@@ -349,8 +398,8 @@ a {
 }
 
 [dir="rtl"] .side-bar-manu .sidebar-icon svg path {
-    fill: #FF6500 !important;
-    stroke: #FF6500 !important;
+    fill: none !important;
+    stroke: var(--clr-primary) !important;
 }
 
 [dir="rtl"] .side-bar-manu .sidebar-icon svg.subscription-icon {
@@ -360,13 +409,15 @@ a {
 
 [dir="rtl"] .side-bar-manu .sidebar-icon svg.subscription-icon path {
     fill: none !important;
-    stroke: #FF6500 !important;
+    stroke: var(--clr-primary) !important;
 }
 
+/* White color on both active and hover */
 [dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg path,
 [dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon svg path {
-    fill: #fff !important;
+    fill: none !important;
     stroke: #fff !important;
+    stroke-width: 1.5 !important;
 }
 
 [dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg.subscription-icon path,
@@ -381,7 +432,7 @@ a {
 [dir="rtl"] .side-bar.active .side-bar-manu .dropdown::before {
     opacity: 0;
 }
-}
+
 
 [dir="rtl"] .side-bar.active .side-bar-manu li a .sidebar-icon {
     margin-right: 0;
@@ -658,7 +709,7 @@ a {
     background-color: green !important;
 }
 [dir="rtl"] .toast.toast-error {
-    background-color: #FF6500 !important;
+    background-color: var(--clr-primary) !important;
 }
 /* notification style css end */
 
@@ -1082,7 +1133,7 @@ html[dir="rtl"] body .side-bar-logo .sidebar-logo-text {
 }
 
 html[dir="rtl"] body .side-bar-logo .sidebar-logo-text .bytes-text {
-    color: #FF6500 !important;
+    color: var(--clr-primary) !important;
 }
 
 html[dir="rtl"] body .side-bar-manu li a {
@@ -1100,30 +1151,51 @@ html[dir="rtl"] body .side-bar-manu li a .sidebar-icon {
 
 html[dir="rtl"] body .side-bar-manu li:hover > a,
 html[dir="rtl"] body .side-bar-manu li.active > a {
-    background-color: #FF6500 !important;
+    background-color: var(--clr-primary) !important;
     color: #fff !important;
 }
 
 html[dir="rtl"] body .side-bar-manu .sidebar-icon svg path {
-    fill: #FF6500 !important;
-    stroke: #FF6500 !important;
+    fill: none !important;
+    stroke: var(--clr-primary) !important;
+    stroke-width: 1.5 !important;
 }
 
+/* White color on both active and hover */
 html[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon svg path,
 html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg path {
-    fill: #fff !important;
+    fill: none !important;
     stroke: #fff !important;
+    stroke-width: 1.5 !important;
 }
 
 html[dir="rtl"] body .side-bar-manu li a .sidebar-icon img {
-    filter: brightness(0) saturate(100%) invert(41%) sepia(98%) saturate(2559%) hue-rotate(360deg) brightness(101%) contrast(106%) !important;
     width: 20px !important;
     height: 20px !important;
+    object-fit: contain;
+}
+
+html[dir="rtl"] body .side-bar-manu li a .sidebar-icon svg path {
+    fill: none !important;
+    stroke: var(--clr-primary) !important;
+    stroke-width: 1.5 !important;
+}
+
+html[dir="rtl"] body .side-bar-manu li a .sidebar-icon svg {
+    color: var(--clr-primary) !important;
 }
 
 html[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon img,
 html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon img {
+    /* White icons on active and hover */
     filter: brightness(0) invert(1) !important;
+}
+
+html[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon svg path,
+html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg path {
+    fill: none !important;
+    stroke: #fff !important;
+    stroke-width: 1.5 !important;
 }
 
 /* RTL Dropdown menu styling */
@@ -1137,7 +1209,7 @@ html[dir="rtl"] body .side-bar-manu li .dropdown-menu {
 
 html[dir="rtl"] body .side-bar-manu li .dropdown-menu li a:hover,
 html[dir="rtl"] body .side-bar-manu li .dropdown-menu li a.active {
-    background-color: #FF6500 !important;
+    background-color: var(--clr-primary) !important;
     color: #fff !important;
 }
 
@@ -1179,6 +1251,8 @@ html[dir="rtl"] body .side-bar-logo,
     background-color: white !important;
     padding: 16px 12px !important;
     display: flex !important;
+        justify-content :center;
+
 }
 
 html[dir="rtl"] body.rtl .side-bar-logo .sidebar-logo-text,
@@ -1195,7 +1269,7 @@ html[dir="rtl"] body.rtl .side-bar-logo .sidebar-logo-text .bytes-text,
 html[dir="rtl"] body .side-bar-logo .sidebar-logo-text .bytes-text,
 [dir="rtl"] body .side-bar-logo .sidebar-logo-text .bytes-text,
 [dir="rtl"] .side-bar-logo .sidebar-logo-text .bytes-text {
-    color: #FF6500 !important;
+    color: var(--clr-primary) !important;
 }
 
 html[dir="rtl"] body.rtl .side-bar-manu li a,
@@ -1229,7 +1303,7 @@ html[dir="rtl"] body .side-bar-manu li.active > a,
 [dir="rtl"] body .side-bar-manu li.active > a,
 [dir="rtl"] .side-bar-manu li:hover > a,
 [dir="rtl"] .side-bar-manu li.active > a {
-    background-color: #FF6500 !important;
+    background-color: var(--clr-primary) !important;
     color: #fff !important;
 }
 
@@ -1237,8 +1311,27 @@ html[dir="rtl"] body.rtl .side-bar-manu .sidebar-icon svg path,
 html[dir="rtl"] body .side-bar-manu .sidebar-icon svg path,
 [dir="rtl"] body .side-bar-manu .sidebar-icon svg path,
 [dir="rtl"] .side-bar-manu .sidebar-icon svg path {
-    fill: #FF6500 !important;
-    stroke: #FF6500 !important;
+    fill: none !important;
+    stroke: var(--clr-primary) !important;
+    stroke-width: 1.5 !important;
+}
+
+/* White color on both active and hover */
+html[dir="rtl"] body.rtl .side-bar-manu li.active > a .sidebar-icon svg path,
+html[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon svg path,
+[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon svg path,
+[dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg path,
+html[dir="rtl"] body.rtl .side-bar-manu li:hover > a .sidebar-icon svg path,
+html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg path,
+[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg path,
+[dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon svg path {
+    fill: none !important;
+    stroke: #fff !important;
+    stroke-width: 1.5 !important;
+}
+[dir="rtl"] .side-bar-manu .sidebar-icon svg path {
+    fill: none !important;
+    stroke: var(--clr-primary) !important;
 }
 
 html[dir="rtl"] body.rtl .side-bar-manu li.active > a .sidebar-icon svg path,
@@ -1249,7 +1342,7 @@ html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg path,
 [dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg path,
 [dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg path,
 [dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon svg path {
-    fill: #fff !important;
+    fill: none !important;
     stroke: #fff !important;
 }
 
@@ -1257,7 +1350,7 @@ html[dir="rtl"] body.rtl .side-bar-manu li a .sidebar-icon img,
 html[dir="rtl"] body .side-bar-manu li a .sidebar-icon img,
 [dir="rtl"] body .side-bar-manu li a .sidebar-icon img,
 [dir="rtl"] .side-bar-manu li a .sidebar-icon img {
-    filter: brightness(0) saturate(100%) invert(41%) sepia(98%) saturate(2559%) hue-rotate(360deg) brightness(101%) contrast(106%) !important;
+    /* Removed hardcoded filter - now uses CSS variable via SVG fill */
     width: 20px !important;
     height: 20px !important;
 }
@@ -1270,6 +1363,7 @@ html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon img,
 [dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon img,
 [dir="rtl"] .side-bar-manu li.active > a .sidebar-icon img,
 [dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon img {
+    /* White icons on hover/active */
     filter: brightness(0) invert(1) !important;
 }
 

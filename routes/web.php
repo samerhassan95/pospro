@@ -156,3 +156,7 @@ Route::get('/update', function () {
 });
 
 require __DIR__ . '/auth.php';
+
+
+// Test routes for color system
+require __DIR__.'/test.php';

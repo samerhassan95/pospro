@@ -2,6 +2,8 @@
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/theme.js') }}"></script>
 <script src="{{ asset('assets/js/math.js') }}"></script>
+{{-- Sidebar Icon Color --}}
+<script src="{{ asset('assets/js/sidebar-icon-color.js') }}?v={{ time() }}"></script>
 {{-- jquery confirm --}}
 <script src="{{asset('assets/plugins/jquery-confirm/jquery-confirm.min.js')}}"></script>
 {{-- jquery validation --}}

@@ -7,8 +7,8 @@
 @section('main_content')
     <div class="footer">
         <div class="side-bar-logo "  style="margin:0 50px 0px 50px;">
-             <a  href="{{ route('home') }}" class="logo-link">
-            <img src="{{ asset(get_login_page_logo()) }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
+             <a  href="{{ route('home') }}" class="logo-link" style="justify-content:start; gap:10px;" >
+            <img src="{{ asset(get_login_page_logo()) }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]" >
             <span class="sidebar-logo-text"><span class="bytes-text">{{ get_system_title() }}</span></span>
         </a>        </div>
         <div class="mybazar-login-section">

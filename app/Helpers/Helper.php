@@ -1036,3 +1036,25 @@ if (!function_exists('get_favicon')) {
         return $general['favicon'] ?? 'assets/images/favicon.ico';
     }
 }
+
+/**
+ * Get primary color from settings with fallback
+ */
+if (!function_exists('get_primary_color')) {
+    function get_primary_color(): string
+    {
+        $general = get_option('general');
+        return $general['primary_color'] ?? '#011646';
+    }
+}
+
+/**
+ * Get secondary color from settings with fallback
+ */
+if (!function_exists('get_secondary_color')) {
+    function get_secondary_color(): string
+    {
+        $general = get_option('general');
+        return $general['secondary_color'] ?? '#0071bc';
+    }
+}

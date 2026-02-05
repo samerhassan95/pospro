@@ -3,9 +3,9 @@
         <div class="container footer">
   
           <div class="side-bar-logo ">
-             <a  href="{{ route('home') }}" class="logo-link">
-            <img src="{{ asset(get_login_page_logo()) }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
-            <span class="sidebar-logo-text"><span class="bytes-text">{{ get_system_title() }}</span></span>
+             <a  href="{{ route('home') }}" class="logo-link" style="gap:10px;">
+            <img src="{{ asset(get_main_header_logo()) }}?v={{ time() }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]" style="width:60px; ">
+            <span class="sidebar-logo-text"><span class="bytes-text" style="color: white !important;  padding: 0 10px 0 10px ;">{{ get_system_title() }}</span></span>
         </a>        </div>
 
 
@@ -14,7 +14,7 @@
                 id="staticBackdrop" aria-labelledby="staticBackdropLabel">
                 <div class="offcanvas-header home-offcanvas-header">
                     <a href="{{ route('home') }}" class="header-logo"><img
-                            src="{{ asset(get_main_header_logo()) }}"
+                            src="{{ asset(get_main_header_logo()) }}?v={{ time() }}"
                             alt="header-logo" /></a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
                         <i class="fa-solid fa-xmark"></i>
