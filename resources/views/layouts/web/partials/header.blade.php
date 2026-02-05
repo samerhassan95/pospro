@@ -1,15 +1,12 @@
 <header class="header-section home-header">
     <nav class="navbar navbar-expand-lg p-0">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
-                aria-controls="staticBackdrop">
-                <i class="fa fa-bars" aria-hidden="true"></i>
-            </button>
-              <a  href="{{ route('home') }}" class="logo-link">
-            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img">
-            <span class="sidebar-logo-text !text-2xl"><span class="bytes-text">Bytes</span> Pos</span>
-        </a>
-
+        <div class="container footer">
+  
+          <div class="side-bar-logo ">
+             <a  href="{{ route('home') }}" class="logo-link">
+            <img src="{{ asset(get_login_page_logo()) }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
+            <span class="sidebar-logo-text"><span class="bytes-text">{{ get_system_title() }}</span></span>
+        </a>        </div>
 
 
             <!-- Mobile Menu -->
@@ -17,7 +14,7 @@
                 id="staticBackdrop" aria-labelledby="staticBackdropLabel">
                 <div class="offcanvas-header home-offcanvas-header">
                     <a href="{{ route('home') }}" class="header-logo"><img
-                            src="{{ asset($general->value['logo'] ?? 'assets/images/icons/upload-icon.svg') }}"
+                            src="{{ asset(get_main_header_logo()) }}"
                             alt="header-logo" /></a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
                         <i class="fa-solid fa-xmark"></i>

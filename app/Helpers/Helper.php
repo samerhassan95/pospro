@@ -905,3 +905,134 @@ if (!function_exists('checkZatcaComplianceIssues')) {
         return $issues;
     }
 }
+
+/**
+ * Get admin logo from settings with fallback
+ */
+if (!function_exists('get_admin_logo')) {
+    function get_admin_logo(): string
+    {
+        $general = get_option('general');
+        return $general['admin_logo'] ?? 'assets/images/Logo.png';
+    }
+}
+
+/**
+ * Get login page logo from settings with fallback
+ */
+if (!function_exists('get_login_page_logo')) {
+    function get_login_page_logo(): string
+    {
+        $general = get_option('general');
+        return $general['login_page_logo'] ?? 'assets/images/Logo.png';
+    }
+}
+
+/**
+ * Get login page image from settings with fallback
+ */
+if (!function_exists('get_login_page_image')) {
+    function get_login_page_image(): string
+    {
+        $general = get_option('general');
+        return $general['login_page_image'] ?? 'assets/images/login.png';
+    }
+}
+
+/**
+ * Get main header logo from settings with fallback
+ */
+if (!function_exists('get_main_header_logo')) {
+    function get_main_header_logo(): string
+    {
+        $general = get_option('general');
+        return $general['logo'] ?? 'assets/images/Logo.png';
+    }
+}
+
+/**
+ * Get common header logo from settings with fallback
+ */
+if (!function_exists('get_common_header_logo')) {
+    function get_common_header_logo(): string
+    {
+        $general = get_option('general');
+        return $general['common_header_logo'] ?? 'assets/images/Logo.png';
+    }
+}
+
+/**
+ * Get footer logo from settings with fallback
+ */
+if (!function_exists('get_footer_logo')) {
+    function get_footer_logo(): string
+    {
+        $general = get_option('general');
+        return $general['footer_logo'] ?? 'assets/images/Logo.png';
+    }
+}
+/**
+ * Get system title from settings with fallback
+ */
+if (!function_exists('get_system_title')) {
+    function get_system_title(): string
+    {
+        $general = get_option('general');
+        return $general['title'] ?? config('app.name', 'BytesPos');
+    }
+}
+
+/**
+ * Get dashboard banner image from settings with fallback
+ */
+if (!function_exists('get_dashboard_banner_image')) {
+    function get_dashboard_banner_image(): string
+    {
+        $general = get_option('general');
+        return $general['dashboard_banner_image'] ?? 'assets/images/dashboard/banner-bg.jpg';
+    }
+}
+
+/**
+ * Get dashboard banner title from settings with fallback
+ */
+if (!function_exists('get_dashboard_banner_title')) {
+    function get_dashboard_banner_title(): string
+    {
+        $general = get_option('general');
+        return $general['dashboard_banner_title'] ?? __('Revolutionizing Your Online Presence');
+    }
+}
+
+/**
+ * Get dashboard banner description from settings with fallback
+ */
+if (!function_exists('get_dashboard_banner_description')) {
+    function get_dashboard_banner_description(): string
+    {
+        $general = get_option('general');
+        return $general['dashboard_banner_description'] ?? __('BYTES guides your business through the digital landscape with innovative solutions and personalized strategies.');
+    }
+}
+
+/**
+ * Get dashboard banner button text from settings with fallback
+ */
+if (!function_exists('get_dashboard_banner_button_text')) {
+    function get_dashboard_banner_button_text(): string
+    {
+        $general = get_option('general');
+        return $general['dashboard_banner_button_text'] ?? __('Create Sale');
+    }
+}
+
+/**
+ * Get favicon from settings with fallback
+ */
+if (!function_exists('get_favicon')) {
+    function get_favicon(): string
+    {
+        $general = get_option('general');
+        return $general['favicon'] ?? 'assets/images/favicon.ico';
+    }
+}

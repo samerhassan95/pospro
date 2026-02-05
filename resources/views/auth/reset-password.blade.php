@@ -4,14 +4,14 @@
 
 @section('main_content')
     <div class="footer">
-        <div class="footer-logo">
+       <div class="side-bar-logo "  style="margin:0 50px 0px 50px;">
              <a  href="{{ route('home') }}" class="logo-link">
-            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
-            <span class="sidebar-logo-text "><span class="bytes-text">Bytes</span> Pos</span>
+            <img src="{{ asset(get_login_page_logo()) }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
+            <span class="sidebar-logo-text"><span class="bytes-text">{{ get_system_title() }}</span></span>
         </a>        </div>
         <div class="mybazar-login-section">
             <div class="mybazar-login-avatar">
-                         <img src="{{ asset('assets/images/login.png') }}" alt="Logo" class="sidebar-logo-img w-[32x] h-[32px]">
+                         <img src="{{ asset(get_login_page_image()) }}" alt="Login Image" class="sidebar-logo-img w-[32x] h-[32px]">
             </div>
             <div class="mybazar-login-wrapper">
                 <div class="login-wrapper">

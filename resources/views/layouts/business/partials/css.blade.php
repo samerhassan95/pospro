@@ -1,8 +1,8 @@
 
-<link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/logo/favicon.svg') }}">
-<link rel="icon" type="image/svg+xml" sizes="32x32" href="{{ asset('assets/images/logo/favicon.svg') }}">
-<link rel="icon" type="image/svg+xml" sizes="96x96" href="{{ asset('assets/images/logo/favicon.svg') }}">
-<link rel="apple-touch-icon" href="{{ asset('assets/images/logo/favicon.svg') }}">
+<link rel="icon" type="image/svg+xml" href="{{ asset(get_favicon()) }}">
+<link rel="icon" type="image/svg+xml" sizes="32x32" href="{{ asset(get_favicon()) }}">
+<link rel="icon" type="image/svg+xml" sizes="96x96" href="{{ asset(get_favicon()) }}">
+<link rel="apple-touch-icon" href="{{ asset(get_favicon()) }}">
 <!-- Bootstrap -->
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 <!-- Fontawesome -->

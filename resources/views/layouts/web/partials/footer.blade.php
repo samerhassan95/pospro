@@ -5,10 +5,10 @@
             <div class="col-md-6 col-lg-5">
      
                         <a href="{{ route('home') }}" class="logo-link">
-            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img">
-            <span class="sidebar-logo-text !text-white" style="
-    color: white !important;
-"><span class="bytes-text">Bytes</span> Pos</span>
+            <img src="{{ asset(get_footer_logo()) }}" alt="Logo" class="sidebar-logo-img">
+            <span class="sidebar-logo-text !text-white" style="color: white !important;">
+                <span class="bytes-text">{{ get_system_title() }}</span>
+            </span>
         </a>
                 <p class="mt-3 footer-details">
                     {{ $page_data['headings']['footer_short_title'] ?? '' }}

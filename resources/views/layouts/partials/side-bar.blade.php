@@ -1,8 +1,8 @@
 <nav class="side-bar relative">
     <div class="side-bar-logo">
         <a href="{{ route('admin.dashboard.index') }}" class="logo-link">
-            <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo" class="sidebar-logo-img">
-            <span class="sidebar-logo-text"><span class="bytes-text">Bytes</span> Pos</span>
+            <img src="{{ asset(get_admin_logo()) }}" alt="Logo" class="sidebar-logo-img">
+            <span class="sidebar-logo-text"><span class="bytes-text">{{ get_system_title() }}</span></span>
         </a>
         <button class="close-btn"><i class="fal fa-times"></i></button>
     </div>

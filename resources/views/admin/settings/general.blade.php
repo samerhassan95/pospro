@@ -145,6 +145,38 @@
                                         </div>
                                     </div>
 
+                                    {{-- Dashboard Banner Settings --}}
+                                    <div class="col-lg-12 mt-4">
+                                        <h5 class="mb-3">{{ __('Dashboard Banner Settings') }}</h5>
+                                    </div>
+
+                                    <div class="col-lg-6 settings-image-upload">
+                                        <label class="title">{{ __('Dashboard Banner Image') }}</label>
+                                        <div class="upload-img-v2">
+                                            <label class="upload-v4 settings-upload-v4">
+                                                <div class="img-wrp">
+                                                    <img src="{{ asset($general->value['dashboard_banner_image'] ?? 'assets/images/icons/upload-icon.svg') }}" alt="banner" id="dashboard_banner_image">
+                                                </div>
+                                                <input type="file" name="dashboard_banner_image" class="d-none" accept="image/*" onchange="document.getElementById('dashboard_banner_image').src = window.URL.createObjectURL(this.files[0])" class="form-control">
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Dashboard Banner Title') }}</label>
+                                        <input type="text" name="dashboard_banner_title" value="{{ $general->value['dashboard_banner_title'] ?? '' }}" class="form-control" placeholder="{{ __('Enter Banner Title') }}">
+                                    </div>
+
+                                    <div class="col-lg-12 mt-2">
+                                        <label>{{ __('Dashboard Banner Description') }}</label>
+                                        <textarea name="dashboard_banner_description" class="form-control" rows="3" placeholder="{{ __('Enter Banner Description') }}">{{ $general->value['dashboard_banner_description'] ?? '' }}</textarea>
+                                    </div>
+
+                                    <div class="col-lg-6 mt-2">
+                                        <label>{{ __('Dashboard Banner Button Text') }}</label>
+                                        <input type="text" name="dashboard_banner_button_text" value="{{ $general->value['dashboard_banner_button_text'] ?? '' }}" class="form-control" placeholder="{{ __('Enter Button Text') }}">
+                                    </div>
+
                                     @can('settings-update')
                                         <div class="col-lg-12">
                                             <div class="text-end mt-5">
