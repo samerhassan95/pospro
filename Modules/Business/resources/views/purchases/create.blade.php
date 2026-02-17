@@ -1619,13 +1619,8 @@
                     newTable.className = `table-item ${tableStatus}`;
                     newTable.setAttribute('data-table', tableName);
                     newTable.style.opacity = '0.7';
-<<<<<<< HEAD
-                    newTable.style.border = '3px dashed #FF6500';
-
-=======
                     newTable.style.border = '3px dashed var(--clr-primary)';
-                    
->>>>>>> 14198ebcb187a5cfff7359d019a29fda0511dd1a
+
                     // Add table type class based on chair count
                     if (chairCount === 12) {
                         newTable.classList.add('table-rectangle');

@@ -108,18 +108,36 @@ class DomainController extends Controller
 
             // Check domain availability + HTTP/HTTPS
             if ($automatic_approve === 'on') {
-                $domainCheck = checkDomainStatus($request->domain_type === 'addon' ? $request->domain : get_root_domain());
+                try {
+                    $domainCheck = checkDomainStatus($request->domain_type === 'addon' ? $request->domain : get_root_domain());
 
-                if ($domainCheck['exists']) {
-                    $domain_status = 1;
-                }
+                    if ($domainCheck['exists']) {
+                        $domain_status = 1;
+                    }
 
-                if ($domainCheck['https']) {
-                    $is_ssl_enabled = 1;
-                }
+                    if ($domainCheck['https']) {
+                        $is_ssl_enabled = 1;
+                    }
 
-                if ($domain_status && ($ssl_required === 'off' || ($ssl_required === 'on' && $is_ssl_enabled))) {
-                    $is_verified = 1;
+                    if ($domain_status && ($ssl_required === 'off' || ($ssl_required === 'on' && $is_ssl_enabled))) {
+                        $is_verified = 1;
+                    }
+                } catch (\Exception $e) {
+                    \Log::error('Domain check failed', [
+                        'domain' => $request->domain,
+                        'domain_type' => $request->domain_type,
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                    
+                    // في حالة فشل الفحص، خلي الدومين يتضاف بدون verification
+                    // وهيحتاج موافقة يدوية من الأدمن
+                    // For subdomains, we can auto-approve since they're on our server
+                    if ($request->domain_type === 'subdomain') {
+                        $domain_status = 1;
+                        $is_verified = 1;
+                        $is_ssl_enabled = 0; // Will be set up later
+                    }
                 }
             }
 

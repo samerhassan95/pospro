@@ -15,14 +15,31 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
 
     Route::resource('profiles', Business\ProfileController::class)->only('index', 'update');
 
+    // Finance & Accounts
+    Route::resource('banks', Business\AcnooBankController::class);
+    Route::post('banks/filter', [Business\AcnooBankController::class, 'acnooFilter'])->name('banks.filter');
+    Route::post('banks/status/{id}', [Business\AcnooBankController::class, 'status'])->name('banks.status');
+    Route::post('banks/delete-all', [Business\AcnooBankController::class, 'deleteAll'])->name('banks.delete-all');
+
+    Route::resource('cashes', Business\AcnooCashController::class);
+    Route::post('cashes/filter', [Business\AcnooCashController::class, 'acnooFilter'])->name('cashes.filter');
+    Route::post('cashes/status/{id}', [Business\AcnooCashController::class, 'status'])->name('cashes.status');
+    Route::post('cashes/delete-all', [Business\AcnooCashController::class, 'deleteAll'])->name('cashes.delete-all');
+
+    Route::resource('cheques', Business\AcnooChequeController::class);
+    Route::post('cheques/filter', [Business\AcnooChequeController::class, 'acnooFilter'])->name('cheques.filter');
+    Route::post('cheques/status/{id}', [Business\AcnooChequeController::class, 'status'])->name('cheques.status');
+    Route::post('cheques/delete-all', [Business\AcnooChequeController::class, 'deleteAll'])->name('cheques.delete-all');
+
+    Route::resource('bank-transactions', Business\AcnooBankTransactionController::class);
+    Route::post('bank-transactions/filter', [Business\AcnooBankTransactionController::class, 'acnooFilter'])->name('bank-transactions.filter');
+
     // Pos Sale
     Route::resource('sales', Business\AcnooSaleController::class);
     Route::post('sales/filter', [Business\AcnooSaleController::class, 'acnooFilter'])->name('sales.filter');
     Route::post('sales/delete-all', [Business\AcnooSaleController::class, 'deleteAll'])->name('sales.delete-all');
-    Route::get('sales/{id}/zatca-issues', [Business\AcnooSaleController::class, 'getZatcaIssues'])->name('sales.zatca-issues');
     Route::get('/get-product-prices', [Business\AcnooSaleController::class, 'getProductPrices'])->name('products.prices');
     Route::get('/sale-cart-data', [Business\AcnooSaleController::class, 'getCartData'])->name('sales.cart-data');
-    Route::get('/sale-cart', [Business\AcnooSaleController::class, 'showSaleCart'])->name('sales.cart');
     Route::get('/get-invoice/{id}', [Business\AcnooSaleController::class, 'getInvoice'])->name('sales.invoice');
     Route::post('sale/product-filter', [Business\AcnooSaleController::class, 'productFilter'])->name('sales.product-filter');
     Route::post('sale/category-filter', [Business\AcnooSaleController::class, 'categoryFilter'])->name('sales.category-filter');
@@ -201,6 +218,7 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::post('parties/filter', [Business\AcnooPartyController::class, 'acnooFilter'])->name('parties.filter');
     Route::post('parties/status/{id}', [Business\AcnooPartyController::class, 'status'])->name('parties.status');
     Route::post('parties/delete-all', [Business\AcnooPartyController::class, 'deleteAll'])->name('parties.delete-all');
+    Route::get('parties/ledger/{id}', [Business\AcnooPartyController::class, 'ledger'])->name('parties.ledger');
 
     //Income Category
     Route::resource('income-categories', Business\AcnooIncomeCategoryController::class)->except('show');
@@ -238,6 +256,14 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
 
 
     //Reports
+    Route::get('top-customers', [Business\AcnooTopReportController::class, 'topCustomers'])->name('top-customers.index');
+    Route::get('top-suppliers', [Business\AcnooTopReportController::class, 'topSuppliers'])->name('top-suppliers.index');
+    Route::get('top-products', [Business\AcnooTopReportController::class, 'topProducts'])->name('top-products.index');
+
+    Route::get('product-sale-history', [Business\AcnooProductHistoryReportController::class, 'productSaleHistory'])->name('product-sale-history.index');
+    Route::get('product-purchase-history', [Business\AcnooProductHistoryReportController::class, 'productPurchaseHistory'])->name('product-purchase-history.index');
+    Route::get('loss-profit-history', [Business\AcnooGeneralReportController::class, 'lossProfit'])->name('loss-profit-history.index');
+
     Route::resource('income-reports', Business\AcnooIncomeReportController::class)->only('index');
     Route::post('income-reports/filter', [Business\AcnooIncomeReportController::class, 'acnooFilter'])->name('income-reports.filter');
     Route::get('income-reports/pdf', [Business\AcnooIncomeReportController::class, 'generatePDF'])->name('income-reports.pdf');
@@ -256,6 +282,25 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::get('transaction-history-reports/excel', [Business\AcnooTransactionHistoryReportController::class, 'exportExcel'])->name('transaction-history-reports.excel');
     Route::get('transaction-history-reports/csv', [Business\AcnooTransactionHistoryReportController::class, 'exportCsv'])->name('transaction-history-reports.csv');
 
+    // Financial Reports
+    Route::resource('cash-flow-reports', Business\AcnooCashFlowReportController::class)->only('index');
+    Route::post('cash-flow-reports/filter', [Business\AcnooCashFlowReportController::class, 'acnooFilter'])->name('cash-flow-reports.filter');
+    Route::get('cash-flow-reports/pdf', [Business\AcnooCashFlowReportController::class, 'generatePDF'])->name('cash-flow-reports.pdf');
+    Route::get('cash-flow-reports/excel', [Business\AcnooCashFlowReportController::class, 'exportExcel'])->name('cash-flow-reports.excel');
+    Route::get('cash-flow-reports/csv', [Business\AcnooCashFlowReportController::class, 'exportCsv'])->name('cash-flow-reports.csv');
+
+    Route::resource('balance-sheet-reports', Business\AcnooBalanceSheetReportController::class)->only('index');
+    Route::post('balance-sheet-reports/filter', [Business\AcnooBalanceSheetReportController::class, 'acnooFilter'])->name('balance-sheet-reports.filter');
+    Route::get('balance-sheet-reports/pdf', [Business\AcnooBalanceSheetReportController::class, 'generatePDF'])->name('balance-sheet-reports.pdf');
+    Route::get('balance-sheet-reports/excel', [Business\AcnooBalanceSheetReportController::class, 'exportExcel'])->name('balance-sheet-reports.excel');
+    Route::get('balance-sheet-reports/csv', [Business\AcnooBalanceSheetReportController::class, 'exportCsv'])->name('balance-sheet-reports.csv');
+
+    Route::resource('bill-wise-profit-reports', Business\AcnooBillWiseProfitReportController::class)->only('index', 'show');
+    Route::post('bill-wise-profit-reports/filter', [Business\AcnooBillWiseProfitReportController::class, 'acnooFilter'])->name('bill-wise-profit-reports.filter');
+    Route::get('bill-wise-profit-reports/pdf', [Business\AcnooBillWiseProfitReportController::class, 'generatePDF'])->name('bill-wise-profit-reports.pdf');
+    Route::get('bill-wise-profit-reports/excel', [Business\AcnooBillWiseProfitReportController::class, 'exportExcel'])->name('bill-wise-profit-reports.excel');
+    Route::get('bill-wise-profit-reports/csv', [Business\AcnooBillWiseProfitReportController::class, 'exportCsv'])->name('bill-wise-profit-reports.csv');
+
     Route::resource('subscription-reports', Business\AcnooSubscriptionReportController::class)->only('index');
     Route::post('subscription-reports/filter', [Business\AcnooSubscriptionReportController::class, 'acnooFilter'])->name('subscription-reports.filter');
     Route::get('subscription-reports/pdf', [Business\AcnooSubscriptionReportController::class, 'generatePDF'])->name('subscription-reports.pdf');
@@ -265,7 +310,6 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
 
     // Vat Reports
     Route::resource('vat-reports', Business\AcnooVatReportController::class)->only('index');
-    Route::post('vat-reports/filter', [Business\AcnooVatReportController::class, 'filter'])->name('vat-reports.filter');
     Route::get('vat-reports/excel{type?}', [Business\AcnooVatReportController::class, 'exportExcel'])->name('vat.reports.excel');
     Route::get('vat-reports/csv{type?}', [Business\AcnooVatReportController::class, 'exportCsv'])->name('vat.reports.csv');
 
@@ -288,24 +332,6 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::resource('subscriptions', Business\AcnooSubscriptionController::class)->withoutMiddleware('expired')->only('index');
 
     Route::resource('manage-settings', Business\AcnooSettingsManagerController::class);
-
-    // ZATCA Settings
-    Route::get('zatca-settings', [Business\ZatcaSettingController::class, 'index'])->name('zatca.index')->middleware('check.permission:zatca-settings.read');
-    Route::post('zatca-settings', [Business\ZatcaSettingController::class, 'update'])->name('zatca.update')->middleware('check.permission:zatca-settings.update');
-    Route::post('zatca-test-invoice/{id}', [Business\ZatcaSettingController::class, 'testInvoice'])->name('zatca.test-invoice')->middleware('check.permission:zatca-settings.read');
-    Route::post('zatca-production-csid', [Business\ZatcaSettingController::class, 'getProductionCsid'])->name('zatca.production-csid')->middleware('check.permission:zatca-settings.update');
-
-    // Moyasar Settings
-    Route::get('moyasar-settings', [Business\MoyasarSettingController::class, 'index'])->name('moyasar.index')->middleware('check.permission:moyasar-settings.read');
-    Route::post('moyasar-settings', [Business\MoyasarSettingController::class, 'update'])->name('moyasar.update')->middleware('check.permission:moyasar-settings.update');
-
-    // Moyasar Payments
-    Route::post('moyasar/pay-sale-due/{sale_id}', [Business\MoyasarPaymentController::class, 'paySaleDue'])->name('moyasar.pay-sale-due');
-    Route::post('moyasar/pay-purchase-due/{purchase_id}', [Business\MoyasarPaymentController::class, 'payPurchaseDue'])->name('moyasar.pay-purchase-due');
-    Route::post('moyasar/pay-due-collection', [Business\MoyasarPaymentController::class, 'payDueCollection'])->name('moyasar.pay-due-collection');
-    Route::post('moyasar/process-sale-payment', [Business\MoyasarPaymentController::class, 'processSalePayment'])->name('moyasar.process-sale-payment');
-    Route::post('moyasar/process-purchase-payment', [Business\MoyasarPaymentController::class, 'processPurchasePayment'])->name('moyasar.process-purchase-payment');
-
     Route::post('/invoice-settings', [Business\AcnooSettingsManagerController::class, 'updateInvoice'])->name('invoice.update');
     Route::post('/product-settings', [Business\AcnooSettingsManagerController::class, 'updateProductSetting'])->name('product.settings.update');
 
@@ -326,19 +352,44 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
         Route::get('view/all/', 'mtReadAll')->name('mtReadAll');
     });
 
-    // Table Reservation System API Routes
-    Route::prefix('api')->group(function () {
-        Route::apiResource('tables', Business\AcnooRestaurantTableController::class);
-        Route::post('tables/{table}/position', [Business\AcnooRestaurantTableController::class, 'updatePosition']);
-        Route::post('tables/{table}/rotate', [Business\AcnooRestaurantTableController::class, 'rotate']);
-        
-        // Reservation custom actions
-        Route::post('reservations/{reservation}/cancel', [Business\AcnooTableReservationController::class, 'cancel']);
-        Route::post('reservations/{reservation}/complete', [Business\AcnooTableReservationController::class, 'complete']);
-        Route::post('reservations/{reservation}/arrived', [Business\AcnooTableReservationController::class, 'guestArrived']);
-        
-        Route::apiResource('reservations', Business\AcnooTableReservationController::class);
-        Route::post('table-orders/{order}/complete', [Business\AcnooTableOrderController::class, 'complete']);
-        Route::apiResource('table-orders', Business\AcnooTableOrderController::class);
-    });
+    // Party Reports
+    Route::get('customer-ledger', [Business\AcnooPartyReportController::class, 'customerLedger'])->name('customer-ledger.index');
+    Route::get('customer-ledger/{id}', [Business\AcnooPartyReportController::class, 'customerLedgerShow'])->name('customer-ledger.show');
+    Route::get('supplier-ledger', [Business\AcnooPartyReportController::class, 'supplierLedger'])->name('supplier-ledger.index');
+    Route::get('supplier-ledger/{id}', [Business\AcnooPartyReportController::class, 'supplierLedgerShow'])->name('supplier-ledger.show');
+    Route::get('party-loss-profit', [Business\AcnooPartyReportController::class, 'partyLossProfit'])->name('party-loss-profit.index');
+    Route::get('top-customers-report', [Business\AcnooPartyReportController::class, 'topCustomers'])->name('top-customers.index');
+    Route::get('top-suppliers-report', [Business\AcnooPartyReportController::class, 'topSuppliers'])->name('top-suppliers.index');
+
+    // Combo Products
+    Route::resource('combo-products', Business\AcnooComboProductController::class);
+    Route::post('combo-products/filter', [Business\AcnooComboProductController::class, 'acnooFilter'])->name('combo-products.filter');
+    Route::post('combo-products/status/{id}', [Business\AcnooComboProductController::class, 'status'])->name('combo-products.status');
+    Route::post('combo-products/delete-all', [Business\AcnooComboProductController::class, 'deleteAll'])->name('combo-products.delete-all');
+
+    // Guest Due (Walk-in Customers)
+    Route::get('walk-dues', [Business\AcnooWalkDueController::class, 'index'])->name('walk-dues.index');
+    Route::post('walk-dues/filter', [Business\AcnooWalkDueController::class, 'acnooFilter'])->name('walk-dues.filter');
+    Route::get('collect-walk-dues/{id}', [Business\AcnooWalkDueController::class, 'collectDue'])->name('collect.walk.dues');
+    Route::post('collect-walk-dues/store', [Business\AcnooWalkDueController::class, 'collectDueStore'])->name('collect.walk.dues.store');
+
+    // Sale Commission
+    Route::resource('commissions', Business\AcnooCommissionController::class);
+    Route::post('commissions/filter', [Business\AcnooCommissionController::class, 'acnooFilter'])->name('commissions.filter');
+    Route::post('commissions/delete-all', [Business\AcnooCommissionController::class, 'deleteAll'])->name('commissions.delete-all');
+    
+    Route::get('sale-commissions', [Business\AcnooSaleCommissionController::class, 'index'])->name('sale-commissions.index');
+    Route::post('sale-commissions/filter', [Business\AcnooSaleCommissionController::class, 'acnooFilter'])->name('sale-commissions.filter');
+
+
+    
+    // Advanced Reports
+    Route::get('product-loss-profit-reports', [Business\AcnooAdvancedReportController::class, 'productLossProfit'])->name('product-loss-profit-reports.index');
+    Route::post('product-loss-profit-reports/filter', [Business\AcnooAdvancedReportController::class, 'productLossProfitFilter'])->name('product-loss-profit-reports.filter');
+    
+    Route::get('top-product-reports', [Business\AcnooAdvancedReportController::class, 'topProducts'])->name('top-product-reports.index');
+    Route::get('combo-product-reports', [Business\AcnooAdvancedReportController::class, 'comboProducts'])->name('combo-product-reports.index');
+    Route::get('discount-product-reports', [Business\AcnooAdvancedReportController::class, 'discountProducts'])->name('discount-product-reports.index');
+    Route::get('product-purchase-reports', [Business\AcnooAdvancedReportController::class, 'productPurchase'])->name('product-purchase-reports.index');
+    Route::get('product-sale-reports', [Business\AcnooAdvancedReportController::class, 'productSale'])->name('product-sale-reports.index');
 });

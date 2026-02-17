@@ -19,4 +19,6 @@ class ProductModel extends Model
         'business_id' => 'integer',
         'status' => 'integer',
     ];
+
+    
 }

@@ -15,6 +15,7 @@ class CheckDomain
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // If module is disabled, allow all requests
         if (!moduleCheck('CustomDomainAddon')) {
             return $next($request);
         }
@@ -26,20 +27,46 @@ class CheckDomain
             abort(406, 'Error: App URL not detected. Please update the APP_URL value in your .env file.');
         }
 
-        // Allow the exact installed domain
+        // Allow the exact installed domain (main domain)
         if ($host === $installedDomain) {
             return $next($request);
         }
 
-        // Otherwise check verified addon/custom domains
-        $isAllowed = \Modules\CustomDomainAddon\App\Models\Domain::query()
-                        ->where('domain', $host)
-                        ->where('is_verified', 1)
-                        ->where('status', 1)
-                        ->exists();
+        // Allow localhost and local IPs for development
+        $localHosts = ['localhost', '127.0.0.1', '::1'];
+        if (in_array($host, $localHosts) || str_starts_with($host, '192.168.') || str_starts_with($host, '10.')) {
+            return $next($request);
+        }
 
-        if (!$isAllowed) {
-            abort(400, 'Error: this domain is not allowed. Please request for a domain/subdomain from the business panel.');
+        // Check if it's a subdomain of the main domain
+        if (str_ends_with($host, '.' . $installedDomain)) {
+            // It's a subdomain, check if it exists in database
+            $domain = \Modules\CustomDomainAddon\App\Models\Domain::query()
+                            ->where('domain', $host)
+                            ->first();
+
+            if (!$domain) {
+                abort(400, 'Error: This subdomain is not registered. Please request for a subdomain from the business panel.');
+            }
+
+            // Check if domain is approved
+            if ($domain->status != 1 || $domain->is_verified != 1) {
+                abort(400, 'Error: This domain is pending approval. Please contact the administrator or approve it from the admin panel.');
+            }
+        } else {
+            // It's a custom domain (addon domain), must be verified
+            $domain = \Modules\CustomDomainAddon\App\Models\Domain::query()
+                            ->where('domain', $host)
+                            ->first();
+
+            if (!$domain) {
+                abort(400, 'Error: This domain is not registered. Please request for a custom domain from the business panel.');
+            }
+
+            // Check if domain is approved
+            if ($domain->status != 1 || $domain->is_verified != 1) {
+                abort(400, 'Error: This domain is pending approval. Please contact the administrator or approve it from the admin panel.');
+            }
         }
 
         $publicRoutes = [

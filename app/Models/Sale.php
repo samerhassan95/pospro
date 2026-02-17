@@ -73,6 +73,10 @@ class Sale extends Model
     {
         return $this->hasMany(SaleDetails::class);
     }
+        public function saleDetails()
+    {
+        return $this->hasMany(SaleDetails::class);
+    }
 
     public function party(): BelongsTo
     {
