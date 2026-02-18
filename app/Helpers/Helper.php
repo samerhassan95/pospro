@@ -1058,3 +1058,31 @@ if (!function_exists('get_secondary_color')) {
         return $general['secondary_color'] ?? '#0071bc';
     }
 }
+
+
+/**
+ * Convert hex color to CSS filter for SVG/IMG colorization
+ */
+if (!function_exists('hex_to_filter')) {
+    function hex_to_filter(string $hex): string
+    {
+        // Remove # if present
+        $hex = str_replace('#', '', $hex);
+        
+        // Default filter for #011646 (dark blue)
+        if (strtolower($hex) === '011646') {
+            return 'brightness(0) saturate(100%) invert(7%) sepia(98%) saturate(4299%) hue-rotate(211deg) brightness(94%) contrast(105%)';
+        }
+        
+        // Convert hex to RGB
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+        
+        // Calculate brightness
+        $brightness = ($r + $g + $b) / 3 / 255;
+        
+        // Simple approximation - works for most colors
+        return sprintf('brightness(0) saturate(100%) brightness(%.2f)', $brightness);
+    }
+}
