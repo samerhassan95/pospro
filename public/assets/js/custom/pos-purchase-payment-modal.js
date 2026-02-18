@@ -9,14 +9,14 @@
     const modalOverlay = document.getElementById('purchase-payment-modal-overlay');
     const completePaymentBtn = document.getElementById('complete-purchase-payment-btn');
     
-    // Payment method buttons
-    const paymentMethodBtns = document.querySelectorAll('.payment-method-btn');
+    // Payment method buttons (only within purchase modal)
+    const paymentMethodBtns = document.querySelectorAll('#purchase-payment-modal-overlay .payment-method-btn');
     
-    // Payment tab buttons
-    const paymentTabBtns = document.querySelectorAll('.payment-tab-btn');
+    // Payment tab buttons (only within purchase modal)
+    const paymentTabBtns = document.querySelectorAll('#purchase-payment-modal-overlay .payment-tab-btn');
     
-    // Numpad buttons
-    const numpadBtns = document.querySelectorAll('.numpad-btn');
+    // Numpad buttons (only within purchase modal)
+    const numpadBtns = document.querySelectorAll('#purchase-payment-modal-overlay .numpad-btn');
     const receiveAmountInput = document.getElementById('modal-purchase-receive-amount');
     
     // Supplier select

@@ -1147,14 +1147,18 @@ $productSearch.on("keyup", function () {
 
 /** INVENTORY SALE END **/
 
-const choice = new Choices('.choices-select', {
-    placeholder: false,
-    placeholderValue: '',
-    searchPlaceholderValue: 'Search...',
-    removeItemButton: false,
-    allowHTML: true,
-    shouldSort: false,
-    itemSelectText: '',
-    duplicateItemsAllowed: false
-});
+// Initialize Choices.js only if elements exist
+const choicesElements = document.querySelectorAll('.choices-select');
+if (choicesElements.length > 0) {
+    const choice = new Choices('.choices-select', {
+        placeholder: false,
+        placeholderValue: '',
+        searchPlaceholderValue: 'Search...',
+        removeItemButton: false,
+        allowHTML: true,
+        shouldSort: false,
+        itemSelectText: '',
+        duplicateItemsAllowed: false
+    });
+}
 

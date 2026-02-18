@@ -1,54 +1,60 @@
-@extends('layouts.business.master')
+@extends('business::layouts.app')
 
 @section('title', __('Moyasar Settings'))
 
-@section('main_content')
-    <div class="erp-table-section">
-        <div class="container-fluid">
-            <div class="card shadow-sm">
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">{{ __('Moyasar Payment Settings') }}</h4>
+                </div>
+                
                 <div class="card-body">
-                    <div class="table-header p-16">
-                        <h4>{{ __('Moyasar Payment Integration / تكامل ميسر للدفع الإلكتروني') }}</h4>
-                    </div>
-                    
-                    <div class="order-form-section p-16">
-                        @if (session('success'))
-                            <div class="alert alert-success">{{ session('success') }}</div>
-                        @endif
-                        @if (session('error'))
-                            <div class="alert alert-danger">{{ session('error') }}</div>
-                        @endif
-
-                        <div class="alert alert-info">
-                            {{ __('Configure your Moyasar API keys to accept payments from customers.') }}
+                    @if(!$moyasarEnabled)
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            {{ __('Moyasar payment gateway is not enabled by the administrator. Please contact support.') }}
                         </div>
-
-                        <form action="{{ route('business.moyasar.update') }}" method="POST" class="ajaxform_instant_reload">
+                    @else
+                        <form action="{{ route('business.moyasar.update') }}" method="POST">
                             @csrf
                             
                             <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label>{{ __('API Secret Key') }} (sk_...)</label>
-                                    <input type="text" name="api_key" class="form-control" 
-                                           value="{{ $moyasar_setting['api_key'] ?? '' }}" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label>{{ __('Publishable Key') }} (pk_...)</label>
-                                    <input type="text" name="publishable_key" class="form-control" 
-                                           value="{{ $moyasar_setting['publishable_key'] ?? '' }}" required>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ __('Environment') }} <span class="text-danger">*</span></label>
+                                        <select name="environment" class="form-control" required>
+                                            <option value="test" {{ ($moyasar_setting['environment'] ?? 'test') == 'test' ? 'selected' : '' }}>
+                                                {{ __('Test Environment') }}
+                                            </option>
+                                            <option value="live" {{ ($moyasar_setting['environment'] ?? '') == 'live' ? 'selected' : '' }}>
+                                                {{ __('Live Environment') }}
+                                            </option>
+                                        </select>
+                                        <small class="text-muted">
+                                            {{ __('Select Test for development and Live for production payments') }}
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <div class="text-end">
+
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                {{ __('API keys are managed by the system administrator. You only need to select the environment.') }}
+                            </div>
+
+                            <div class="form-group">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Save Moyasar Settings') }}
+                                    <i class="fas fa-save"></i> {{ __('Save Settings') }}
                                 </button>
                             </div>
                         </form>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

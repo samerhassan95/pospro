@@ -347,6 +347,7 @@ class AcnooSaleController extends Controller
             'shipping_city' => 'nullable|string|max:100',
             'shipping_postal_code' => 'nullable|string|max:10',
             'shipping_country_code' => 'nullable|string|size:2',
+            'table_id' => 'nullable|exists:restaurant_tables,id',
         ]);
 
         $business_id = auth()->user()->business_id;
@@ -442,11 +443,25 @@ class AcnooSaleController extends Controller
                 'shipping_city' => $request->shipping_city,
                 'shipping_postal_code' => $request->shipping_postal_code,
                 'shipping_country_code' => $request->shipping_country_code ? strtoupper($request->shipping_country_code) : null,
+                'table_id' => $request->table_id,
                 'meta' => [
                     'customer_phone' => $request->customer_phone,
                     'note' => $request->note,
                 ]
             ]);
+
+            // Handle table status if assigned
+            if ($request->table_id) {
+                $table = \App\Models\RestaurantTable::find($request->table_id);
+                if ($table) {
+                    $table->updateStatus('free');
+                    
+                    // Mark any in-progress orders for this table as completed
+                    \App\Models\TableOrder::where('table_id', $table->id)
+                        ->where('status', 'in_progress')
+                        ->update(['status' => 'completed', 'sale_id' => $sale->id]);
+                }
+            }
 
             $avgDiscount = $discountAmount / max($carts->count(), 1);
             $totalPurchaseAmount = 0;
@@ -860,12 +875,13 @@ class AcnooSaleController extends Controller
         $sale = Sale::where('business_id', auth()->user()->business_id)
             ->with([
                 'user:id,name,role',
-                'party:id,name,phone,address,zatca_type,vat_number,building_number,street_name,district,city,postal_code,country_code',
-                'business:id,phoneNumber,companyName,vat_name,vat_no,address,email,building_number,street_name,district,city,postal_code,country_code',
+                'party:id,name,phone,address,zatca_type,vat_number,commercial_registration,additional_id,building_number,street_name,district,city,postal_code,country_code',
+                'business:id,phoneNumber,companyName,vat_name,vat_no,commercial_registration,additional_id,bank_name,bank_account_number,address,email,building_number,street_name,district,city,postal_code,country_code',
                 'details:id,price,quantities,product_id,sale_id,stock_id',
                 'details.stock:id,batch_no',
                 'details.product:id,productName',
-                'payment_type:id,name'
+                'payment_type:id,name',
+                'vat:id,name,rate'
             ])
             ->findOrFail($sale_id);
 

@@ -103,6 +103,25 @@
                                 <div class="col-lg-6 mb-2">
                                     <label>{{ __('VAT Number') }} (الرقم الضريبي)</label>
                                     <input type="text" name="vat_no" class="form-control" placeholder="300000000000003">
+                                    <small class="text-muted">15 digits</small>
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('Commercial Registration') }} (رقم السجل التجاري)</label>
+                                    <input type="text" name="commercial_registration" class="form-control" placeholder="1234567890">
+                                    <small class="text-muted">10 digits</small>
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('Additional ID') }} (معرف إضافي)</label>
+                                    <input type="text" name="additional_id" class="form-control" placeholder="152034">
+                                    <small class="text-muted">Optional - 6 digits</small>
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('Country Code') }} (رمز الدولة)</label>
+                                    <input type="text" name="country_code" class="form-control" placeholder="SA" value="SA" maxlength="2">
+                                    <small class="text-muted">2 letters (e.g., SA)</small>
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
@@ -128,6 +147,22 @@
                                 <div class="col-lg-6 mb-2">
                                     <label>{{ __('Postal Code') }} (الرمز البريدي)</label>
                                     <input type="text" name="postal_code" class="form-control" placeholder="12345">
+                                </div>
+
+                                <div class="col-lg-12 mb-3 mt-4">
+                                    <h6 class="text-primary border-bottom pb-2">{{ __('Bank Information') }} (معلومات البنك)</h6>
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('Bank Name') }} (اسم البنك)</label>
+                                    <input type="text" name="bank_name" class="form-control" placeholder="البنك الأهلي السعودي">
+                                    <small class="text-muted">Optional</small>
+                                </div>
+
+                                <div class="col-lg-6 mb-2">
+                                    <label>{{ __('Bank Account Number') }} (رقم الحساب البنكي)</label>
+                                    <input type="text" name="bank_account_number" class="form-control" placeholder="SA1234567890123456789012">
+                                    <small class="text-muted">IBAN format (Optional)</small>
                                 </div>
 
                                 <div class="col-lg-12 mb-3 mt-4">

@@ -104,7 +104,13 @@ class AcnooSubscriptionReportController extends Controller
 
     public function getInvoice($invoice_id)
     {
-        $subscriber = PlanSubscribe::with(['plan:id,subscriptionName','business:id,companyName,business_category_id,pictureUrl,phoneNumber,address','business.category:id,name','gateway:id,name'])->where('business_id', auth()->user()->business_id)->findOrFail($invoice_id);
+        $subscriber = PlanSubscribe::with([
+            'plan:id,subscriptionName,price,duration',
+            'business:id,companyName,business_category_id,pictureUrl,phoneNumber,address,vat_no,commercial_registration,additional_id,bank_name,bank_account_number,building_number,street_name,district,city,postal_code,country_code',
+            'business.category:id,name',
+            'gateway:id,name'
+        ])->where('business_id', auth()->user()->business_id)->findOrFail($invoice_id);
+        
         return view('business::reports.subscription-reports.invoice', compact('subscriber'));
     }
 }

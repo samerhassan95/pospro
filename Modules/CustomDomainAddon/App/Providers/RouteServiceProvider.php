@@ -27,9 +27,29 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(): void
     {
+        // Only load routes if module is enabled
+        if (!$this->isModuleEnabled()) {
+            return;
+        }
+        
         $this->mapApiRoutes();
-
         $this->mapWebRoutes();
+    }
+
+    /**
+     * Check if module is enabled
+     */
+    private function isModuleEnabled(): bool
+    {
+        $statusFile = base_path('modules_statuses.json');
+        
+        if (!file_exists($statusFile)) {
+            return false;
+        }
+        
+        $moduleStatuses = json_decode(file_get_contents($statusFile), true);
+        
+        return isset($moduleStatuses['CustomDomainAddon']) && $moduleStatuses['CustomDomainAddon'] === true;
     }
 
     /**

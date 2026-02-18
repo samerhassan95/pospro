@@ -51,6 +51,10 @@
                                             <button class="btn w-100 plan-buy-btn" disabled>
                                                 {{ __('Buy Now')  }}
                                             </button>
+                                        @elseif (!auth()->user()->business_id)
+                                            <a href="{{ route('home', ['setup_business' => 1]) }}" class="btn w-100 plan-buy-btn">
+                                                {{ __('Complete Setup First') }}
+                                            </a>
                                         @else
                                             <a href="{{ route('payments-gateways.index', ['plan_id' => $plan->id, 'business_id' => auth()->user()->business_id]) }}" class="btn w-100 plan-buy-btn">
                                                 {{ __('Buy Now') }}

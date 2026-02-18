@@ -14,6 +14,12 @@ class AcnooSubscriptionController extends Controller
 
     public function index()
     {
+        // Check if user has completed business setup
+        if (!auth()->user()->business_id) {
+            return redirect()->route('home', ['setup_business' => 1])
+                ->with('error', __('Please complete your business setup first.'));
+        }
+
         $plans = Plan::where('status', 1)->latest()->get();
         return view('business::subscriptions.index', compact('plans'));
     }

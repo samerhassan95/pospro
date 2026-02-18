@@ -40,7 +40,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\DemoMode::class,
             \App\Http\Middleware\CheckActiveBranch::class,
-            \App\Http\Middleware\CheckDomain::class
+            \App\Http\Middleware\CheckDomain::class,
+            \App\Http\Middleware\CustomDomainMapping::class
         ],
 
         'api' => [
@@ -77,6 +78,7 @@ class Kernel extends HttpKernel
         'users' =>  \App\Http\Middleware\UserMiddleware::class,
         'expired' => \App\Http\Middleware\ExpiredMiddleware::class,
         'affiliator' =>  \App\Http\Middleware\AffiliatorMiddleware::class,
-        'check.permission' => \App\Http\Middleware\CheckPermission::class
+        'check.permission' => \App\Http\Middleware\CheckPermission::class,
+        'domain.mapping' => \App\Http\Middleware\CustomDomainMapping::class
     ];
 }

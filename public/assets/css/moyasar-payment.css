@@ -1,0 +1,371 @@
+/* Moyasar Payment Integration Styles */
+
+/* Payment Buttons */
+.moyasar-payment-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.moyasar-payment-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    color: white;
+}
+
+.moyasar-payment-btn:active {
+    transform: translateY(0);
+}
+
+.moyasar-payment-btn i {
+    font-size: 16px;
+}
+
+/* Payment Modal Styles */
+.moyasar-modal .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-bottom: none;
+}
+
+.moyasar-modal .modal-header .btn-close {
+    filter: invert(1);
+}
+
+.moyasar-modal .amount-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #28a745;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.moyasar-modal .alert-info {
+    background-color: #e8f4fd;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+/* Payment Status Alerts */
+.payment-status-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.payment-status-error {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Configuration Notice */
+.moyasar-config-notice {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    color: #212529;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.moyasar-config-notice .btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #212529;
+    font-weight: 500;
+}
+
+.moyasar-config-notice .btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Loading Spinner */
+.moyasar-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.moyasar-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: moyasar-spin 1s linear infinite;
+}
+
+@keyframes moyasar-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Payment Form Styles */
+.moyasar-payment-form {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.moyasar-payment-form .form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.moyasar-payment-form .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    padding: 0.75rem;
+    transition: border-color 0.3s ease;
+}
+
+.moyasar-payment-form .form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.moyasar-payment-form .input-group-text {
+    background: #28a745;
+    color: white;
+    border: 2px solid #28a745;
+    font-weight: 600;
+}
+
+/* Due Collection Table */
+.moyasar-due-table {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.moyasar-due-table .table th {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+}
+
+.moyasar-due-table .table td {
+    vertical-align: middle;
+    padding: 1rem 0.75rem;
+}
+
+.moyasar-due-table .btn-xs {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+}
+
+/* Invoice Payment Styles */
+.moyasar-invoice-payment {
+    background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+    border: 2px solid #28a745;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.moyasar-invoice-payment h5 {
+    color: #28a745;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.moyasar-invoice-payment .alert {
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    color: #155724;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .moyasar-payment-btn {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .moyasar-due-table {
+        font-size: 0.875rem;
+    }
+    
+    .moyasar-due-table .table td,
+    .moyasar-due-table .table th {
+        padding: 0.5rem 0.25rem;
+    }
+    
+    .moyasar-payment-form {
+        padding: 1rem;
+    }
+}
+
+/* RTL Support */
+[dir="rtl"] .moyasar-payment-btn {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .moyasar-loading {
+    flex-direction: row-reverse;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .moyasar-payment-form {
+        background: #343a40;
+        color: #f8f9fa;
+    }
+    
+    .moyasar-payment-form .form-label {
+        color: #f8f9fa;
+    }
+    
+    .moyasar-payment-form .form-control {
+        background: #495057;
+        border-color: #6c757d;
+        color: #f8f9fa;
+    }
+    
+    .moyasar-due-table {
+        background: #343a40;
+        color: #f8f9fa;
+    }
+    
+    .moyasar-due-table .table th {
+        background: #495057;
+        color: #f8f9fa;
+    }
+}
+
+/* Animation for success states */
+.moyasar-success-animation {
+    animation: moyasar-success-pulse 2s ease-in-out;
+}
+
+@keyframes moyasar-success-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Payment method icons */
+.moyasar-payment-methods {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.moyasar-payment-method {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: #6c757d;
+    border: 1px solid #e9ecef;
+}
+
+.moyasar-payment-method i {
+    font-size: 1.2rem;
+    color: #28a745;
+}
+
+/* Security badge */
+.moyasar-security-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    color: #155724;
+}
+
+.moyasar-security-badge i {
+    font-size: 1.5rem;
+    color: #28a745;
+}
+
+/* Amount display enhancements */
+.moyasar-amount-large {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #28a745;
+    text-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+    margin: 1rem 0;
+    text-align: center;
+}
+
+/* Button variations */
+.moyasar-btn-outline {
+    background: transparent;
+    border: 2px solid #28a745;
+    color: #28a745;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.moyasar-btn-outline:hover {
+    background: #28a745;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* Status indicators */
+.moyasar-status-paid {
+    background: #28a745;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.moyasar-status-pending {
+    background: #ffc107;
+    color: #212529;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.moyasar-status-failed {
+    background: #dc3545;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
