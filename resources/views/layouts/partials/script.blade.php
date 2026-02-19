@@ -15,6 +15,18 @@
 <script src="{{ asset('assets/js/custom-ajax.js') }}"></script>
 {{-- Toaster --}}
 <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
+
+{{-- Translation variables for JavaScript --}}
+<script>
+    window.translations = window.translations || {};
+    Object.assign(window.translations, {
+        'no_products_in': '{{ __("No Products in") }}',
+        'no_products_available_category': '{{ __("There are no products available in this category.") }}',
+        'no_products_found': '{{ __("No products found") }}',
+        'no_products_available': '{{ __("No products available") }}'
+    });
+</script>
+
 <script src="{{ asset('assets/js/custom/custom.js') }}"></script>
 <!-- Dropdown Fix for Mobile -->
 <script src="{{ asset('assets/js/dropdown-fix.js') }}?v={{ time() }}"></script>

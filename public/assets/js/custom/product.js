@@ -684,8 +684,9 @@ function populateProducts(products = []) {
     $dropdownList.empty();
 
     if (!Array.isArray(products) || products.length === 0) {
+        const noProductsMessage = window.translations?.no_products_available || 'No products available';
         $dropdownList.html(
-            '<div class="product-option-item">No products available</div>'
+            `<div class="product-option-item">${noProductsMessage}</div>`
         );
         return;
     }

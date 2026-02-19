@@ -37,11 +37,11 @@
                                     <h4>{{ __('Add new Product') }}</h4>
                                 <div class="d-flex align-items-center gap-3">
                                 <a class="save-publish-btn" href="{{ route('business.bulk-uploads.index') }}">
-                                    Bulk Upload
+                                    {{ __('Bulk Upload') }}
                                 </a>
                                 @usercan('products.create')
                                 <button class="save-publish-btn submit-btn" href="">
-                                    Save & Published
+                                    {{ __('Save & Published') }}
                                 </button>
                                 @endusercan
                                 <div class="position-relative">
@@ -202,26 +202,26 @@
                         </div>
                         <div class="product-price-container min-h-80vh">
                             <div class="product-price-header">
-                                <h3>Product price, stock</h3>
+                                <h3>{{ __('Product price, stock') }}</h3>
                                 <div class="d-flex align-items-center justify-content-center gap-3">
                                     @if ($showSingle && $showVariant)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="product_type" id="singleOption" value="single" checked>
-                                            <label class="form-check-label" for="singleOption">Single</label>
+                                            <label class="form-check-label" for="singleOption">{{ __('Single') }}</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="product_type" id="variantOption" value="variant">
-                                            <label class="form-check-label" for="variantOption">Batch</label>
+                                            <label class="form-check-label" for="variantOption">{{ __('Batch') }}</label>
                                         </div>
                                     @elseif ($showSingle)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="product_type" id="singleOption" value="single" checked>
-                                            <label class="form-check-label" for="singleOption">Single</label>
+                                            <label class="form-check-label" for="singleOption">{{ __('Single') }}</label>
                                         </div>
                                     @elseif ($showVariant)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="product_type" id="variantOption" value="variant" checked>
-                                            <label class="form-check-label" for="variantOption">Batch</label>
+                                            <label class="form-check-label" for="variantOption">{{ __('Batch') }}</label>
                                         </div>
                                     @endif
                                 </div>
@@ -232,7 +232,7 @@
                                 <div class="main-variant-content">
                                     <div class="variant-content mt-3">
                                         @if (is_module_enabled($modules, 'show_vat_id'))
-                                        <h5>Tax</h5>
+                                        <h5>{{ __('Tax') }}</h5>
                                         @endif
                                         <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
                                             @if (is_module_enabled($modules, 'show_vat_id'))
@@ -253,7 +253,7 @@
                                             @endif
                                             @if ($hasVisibleColumn)
                                             <div class="d-flex align-items-center gap-2">
-                                                <a class="save-publish-btn add-variant-btn"> + Add </a>
+                                                <a class="save-publish-btn add-variant-btn"> + {{ __('Add') }} </a>
                                             </div>
                                             @endif
                                         </div>
@@ -431,21 +431,21 @@
                                     @if (is_module_enabled($modules, 'show_exclusive_price'))
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Cost exc. tax') }}</label>
-                                        <input type="number" class="form-control exclusive_price" name="stocks[0][exclusive_price]" placeholder="Enter Purchase Price">
+                                        <input type="number" class="form-control exclusive_price" name="stocks[0][exclusive_price]" placeholder="{{ __('Enter Purchase Price') }}">
                                     </div>
                                     @endif
 
                                     @if (is_module_enabled($modules, 'show_inclusive_price'))
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Cost inc. tax') }}</label>
-                                        <input type="number" class="form-control inclusive_price" name="stocks[0][inclusive_price]" placeholder="Enter Purchase Price">
+                                        <input type="number" class="form-control inclusive_price" name="stocks[0][inclusive_price]" placeholder="{{ __('Enter Purchase Price') }}">
                                     </div>
                                     @endif
 
                                     @if (is_module_enabled($modules, 'show_profit_percent'))
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Profit (%)') }}</label>
-                                        <input type="number" class="form-control profit_percent" name="stocks[0][profit_percent]" placeholder="Enter profit margin">
+                                        <input type="number" class="form-control profit_percent" name="stocks[0][profit_percent]" placeholder="{{ __('Enter profit margin') }}">
                                     </div>
                                     @endif
                                     @endusercan
@@ -507,11 +507,11 @@
                         @if (is_module_enabled($modules, 'show_product_image'))
                         <div class="upload-product-img">
                             <div class="upload-img-title">
-                                <h3>Product Image</h3>
+                                <h3>{{ __('Product Image') }}</h3>
                             </div>
                             <div class="upload-container mt-2" id="uploadContainer">
                                 <div class="upload-img-title border-0 p-0 m-0 mb-1">
-                                <h3><span>Image (Size 150x130)</span></h3>
+                                <h3><span>{{ __('Image (Size 150x130)') }}</span></h3>
                             </div>
                                 <div class="upload-box">
                                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
@@ -528,7 +528,7 @@
                                             </clipPath>
                                         </defs>
                                     </svg>
-                                    <div class="upload-text">Drag & drop image</div>
+                                    <div class="upload-text">{{ __('Drag & drop image') }}</div>
                                     <input type="file" name="productPicture" accept="image/*" class="handle-image-Upload">
                                 </div>
                             </div>

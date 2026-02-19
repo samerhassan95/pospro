@@ -662,10 +662,113 @@ svg {
         transition: opacity 0.3s ease-in-out;
     }
 
-    /* .side-bar.active .overlay {
+    .side-bar.active .overlay {
         opacity: 1;
         pointer-events: auto;
-    } */
+    }
+
+    /* Mobile sidebar mega menu style */
+    .side-bar-manu .dropdown-menu {
+        display: none;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        margin-left: 20px;
+        padding: 0;
+        position: static !important;
+    }
+
+    .side-bar-manu .dropdown.active > .dropdown-menu,
+    .side-bar-manu .dropdown-menu.menu-open {
+        display: block !important;
+    }
+
+    /* Make dropdown items easy to tap */
+    .side-bar-manu .dropdown-menu li {
+        margin: 2px 0;
+    }
+
+    .side-bar-manu .dropdown-menu li a {
+        display: block;
+        padding: 12px 15px;
+        color: #333;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        margin: 2px 0;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
+    }
+
+    .side-bar-manu .dropdown-menu li a:hover,
+    .side-bar-manu .dropdown-menu li a:active,
+    .side-bar-manu .dropdown-menu li a.active {
+        background-color: var(--clr-primary);
+        color: #fff !important;
+        transform: translateX(5px);
+    }
+
+    /* Make main dropdown links more prominent */
+    .side-bar-manu .dropdown > a {
+        min-height: 50px !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 12px !important;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .side-bar-manu .dropdown.active > a {
+        background-color: rgba(var(--clr-primary), 0.1) !important;
+        border-left: 3px solid var(--clr-primary);
+    }
+
+    /* Improve dropdown arrow */
+    .side-bar-manu .dropdown::before {
+        opacity: 1 !important;
+        transition: transform 0.2s ease;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .side-bar-manu .dropdown.active::before {
+        transform: rotate(90deg);
+        color: var(--clr-primary);
+    }
+
+    /* Ensure sidebar is accessible */
+    .side-bar {
+        z-index: 1050 !important;
+    }
+
+    .side-bar.active {
+        z-index: 1050 !important;
+    }
+
+    /* Touch active state for better mobile feedback */
+    .side-bar-manu .dropdown > a.touch-active {
+        background-color: rgba(0, 0, 0, 0.05);
+        transform: scale(0.98);
+    }
+
+    /* RTL support for dropdown margins */
+    body[dir="rtl"] .side-bar-manu .dropdown-menu {
+        margin-right: 20px;
+        margin-left: 0;
+    }
+
+    body[dir="rtl"] .side-bar-manu .dropdown.active > a {
+        border-right: 3px solid var(--clr-primary);
+        border-left: none;
+    }
+
+    body[dir="rtl"] .side-bar-manu .dropdown-menu li a:hover {
+        transform: translateX(-5px);
+    }
+}
+}
 }
 
 @media (max-width: 480px) {

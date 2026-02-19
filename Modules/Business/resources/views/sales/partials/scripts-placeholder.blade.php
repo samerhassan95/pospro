@@ -1,4 +1,12 @@
     <script>
+        // Translation variables for JavaScript
+        window.translations = {
+            'no_products_in': '{{ __("No Products in") }}',
+            'no_products_available_category': '{{ __("There are no products available in this category.") }}',
+            'no_products_found': '{{ __("No products found") }}',
+            'no_products_available': '{{ __("No products available") }}'
+        };
+
         // Add missing functions for cart functionality
         window.fetchUpdatedCart = function(callback) {
             let url = "{{ route('business.carts.index') }}?layout=new";

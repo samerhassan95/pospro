@@ -1108,8 +1108,8 @@ $("#product-search").on("keyup click", function () {
                     }
                 });
             } else {
-                productList =
-                    '<li class="list-group-item text-danger">No products found.</li>';
+                const noProductsMessage = window.translations?.no_products_found || 'No products found.';
+                productList = `<li class="list-group-item text-danger">${noProductsMessage}</li>`;
             }
 
             $("#search-results").html(productList).show();

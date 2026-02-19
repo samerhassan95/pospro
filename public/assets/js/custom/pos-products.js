@@ -150,6 +150,9 @@
                 
                 // If no products found, show message
                 if (!hasProducts) {
+                    const noProductsTitle = window.translations?.no_products_in || 'No Products in';
+                    const noProductsMessage = window.translations?.no_products_available_category || 'There are no products available in this category.';
+                    
                     const noProductsHtml = `
                         <div class="no-products-message" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px;">
                             <div style="background: #f9f9f9; border: 2px dashed #e8e8e8; border-radius: 16px; padding: 40px;">
@@ -158,8 +161,8 @@
                                     <path d="M32 32V56" stroke="#666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M8 20L32 32L56 20" stroke="#666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                <h3 style="font-size: 18px; font-weight: 600; color: #1a1a1a; margin: 0 0 8px 0;">No Products in ${categoryName}</h3>
-                                <p style="font-size: 14px; color: #666; margin: 0;">There are no products available in this category.</p>
+                                <h3 style="font-size: 18px; font-weight: 600; color: #1a1a1a; margin: 0 0 8px 0;">${noProductsTitle} ${categoryName}</h3>
+                                <p style="font-size: 14px; color: #666; margin: 0;">${noProductsMessage}</p>
                             </div>
                         </div>
                     `;

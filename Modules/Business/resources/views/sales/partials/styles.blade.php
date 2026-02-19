@@ -4,6 +4,11 @@
         [dir="rtl"] .pos-top-nav a[href*="dashboard"] svg {
             transform: scaleX(-1) !important;
         }
+        
+        /* RTL flip for back arrow */
+        .rtl-flip {
+            transform: scaleX(-1) !important;
+        }
         @endif
         .pos-fullscreen-body { margin: 0; padding: 0; background: #f5f5f5; height: 100vh; overflow: hidden; }
         .pos-fullscreen-wrapper { width: 100%; height: 100vh; display: flex; flex-direction: column; }

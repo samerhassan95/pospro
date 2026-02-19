@@ -43,11 +43,12 @@ class AcnooWalkDueController extends Controller
             });
         }
 
-        if ($request->date_range) {
-            $dates = explode(' - ', $request->date_range);
-            if (count($dates) == 2) {
-                $sales->whereBetween('created_at', [$dates[0], $dates[1]]);
-            }
+        if ($request->start_date) {
+            $sales->whereDate('created_at', '>=', $request->start_date);
+        }
+
+        if ($request->end_date) {
+            $sales->whereDate('created_at', '<=', $request->end_date);
         }
 
         $sales = $sales->where('dueAmount', '>', 0)

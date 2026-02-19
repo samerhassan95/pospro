@@ -11,10 +11,12 @@
                 <div class="card-body">
                     <div class="table-header p-16">
                         <h4>{{ __('Combo Product') }}</h4>
-                        <div>
-                            <a href="{{ route('business.combo-products.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> {{ __('Add Combo Product') }}
+                        <div class="d-flex align-items-center gap-3">
+                            @usercan('products.create')
+                            <a href="{{ route('business.combo-products.create') }}" class="add-order-btn rounded-2">
+                                <i class="fas fa-plus-circle me-1"></i>{{ __('Add Combo Product') }}
                             </a>
+                            @endusercan
                         </div>
                     </div>
 

@@ -424,21 +424,24 @@
             </li>
             @endusercan
 
+            @usercanany(['commissions.read', 'sale-commissions.read'])
             <li class="dropdown {{ Request::routeIs('business.commissions.index','business.sale-commissions.index') ? 'active' : '' }}">
                 <a href="#">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/sidebar/cash_and_bank.svg') }}">
                     </span>
-                    {{ __('Sale Commission') }}</a>
+                    {{ __('Sale Commission') }}
+                </a>
                 <ul>
                     @usercan('commissions.read')
                     <li><a class="{{ Request::routeIs('business.commissions.index') ? 'active' : '' }}" href="{{ route('business.commissions.index') }}">{{ __('Set Commissions') }}</a></li>
                     @endusercan
                     @usercan('sale-commissions.read')
-                    <li><a class="{{ Request::routeIs('business.sale-commissions.index') ? 'active' : '' }}" href="{{ route('business.sale-commissions.index') }}">{{ __('Sale Commission') }}</a></li>
+                    <li><a class="{{ Request::routeIs('business.sale-commissions.index') ? 'active' : '' }}" href="{{ route('business.sale-commissions.index') }}">{{ __('Commission Reports') }}</a></li>
                     @endusercan
                 </ul>
             </li>
+            @endusercanany
 
             @if (moduleCheck('HrmAddon'))
               @usercanany(['department.read', 'designations.read', 'shifts.read', 'employees.read', 'leave-types.read', 'leaves.read', 'holidays.read', 'attendances.read', 'payrolls.read', 'attendance-reports.read', 'payroll-reports.read', 'leave-reports.read'])

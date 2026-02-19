@@ -13,7 +13,8 @@
             const selectedOption = this.options[this.selectedIndex];
             
             if (this.value === 'guest' || this.value === '') {
-                if (customerNameDisplay) customerNameDisplay.textContent = 'Guest';
+                const guestText = window.posTranslations ? window.posTranslations['Guest'] : 'Guest';
+                if (customerNameDisplay) customerNameDisplay.textContent = guestText;
                 if (customerPhoneDisplay) customerPhoneDisplay.textContent = '-';
             } else {
                 const customerName = selectedOption.textContent.split('(')[0].trim();
@@ -161,7 +162,8 @@
 
                 // Show success message
                 if (typeof toastr !== 'undefined') {
-                    toastr.success('Cart cleared successfully');
+                    const successText = window.posTranslations ? window.posTranslations['Cart cleared successfully'] : 'Cart cleared successfully';
+                    toastr.success(successText);
                 }
             } else {
                 throw new Error(data.message || 'Failed to clear cart');
@@ -259,6 +261,14 @@
         if (customerSelect && customerSelect.value) {
             customerSelect.dispatchEvent(new Event('change'));
         }
+        
+        // Set up translations for JavaScript
+        window.posTranslations = {
+            'No items in cart': '{{ __('No items in cart') }}',
+            'Cart cleared successfully': '{{ __('Cart cleared successfully') }}',
+            'Failed to clear cart': '{{ __('Failed to clear cart') }}',
+            'Guest': '{{ __('Guest') }}'
+        };
     });
 
     // Helper function for currency formatting (if not already defined)
