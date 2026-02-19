@@ -17,7 +17,7 @@
         @endif
         .pos-fullscreen-body { margin: 0; padding: 0; background: #f5f5f5; }
         .pos-fullscreen-wrapper { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
-        .pos-top-header {padding: 12px 24px 0px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background:#F7F7F7 !important; }
+        .pos-top-header {padding: 12px 24px 0px 24px; display: flex; flex-wrap: wrap;  align-items: center; background:#F7F7F7 !important; }
         .pos-brand { display: flex; align-items: center; gap: 12px; }
         .pos-brand-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0; }
         .pos-brand-subtitle { font-size: 12px; color: #E6E6E6; margin: 0; }
@@ -39,7 +39,7 @@
         .order-sidebar { background: #fff; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; border-right: none; }
         .order-header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
         .order-title { font-size: 18px; font-weight: 600; color: #1a1a1a; margin: 0; }
-        .order-date { font-size: 13px; color: #666; margin-top: 4px; }
+        .order-date { font-size: 13px; color: #666;  }
         .supplier-section { margin-bottom: 20px; }
         .supplier-select-wrapper { display: flex; gap: 10px; align-items: center; }
         .supplier-select-wrapper .form-select, .supplier-select-wrapper .choices { flex: 1; }
@@ -66,7 +66,7 @@
         .cart-item-image { width: 100%; height: 100%; object-fit: cover; }
         .cart-item-details { flex: 1; padding: 8px 4px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
         .cart-item-name { font-size: 14px; font-weight: 600; color: #1a1a1a; margin: 0 0 2px; line-height: 1.2; }
-        .cart-item-price { font-size: 13px; color: #666; margin: 0; font-weight: 500; }
+        .cart-item-price { font-size: 14px; color:#000000 ; margin: 0; font-weight: bold !important; }
         .cart-item-actions { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; padding: 8px; min-width: 90px; }
         .qty-control-wrapper { display: flex; align-items: center; background: #f0f0f0; border-radius: 50px; padding: 2px; }
         .qty-btn { width: 26px; height: 26px; border-radius: 50%; border: none; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; color: #bbb; }
@@ -78,8 +78,8 @@
         .empty-cart { text-align: center; padding: 30px 20px; color: #9ca3af; }
         .empty-cart-icon { font-size: 40px; margin-bottom: 10px; color: #ddd; }
         .order-summary { border-top: 1px solid #eee; padding-top: 15px; margin-bottom: 15px; }
-        .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 14px; color: #666; }
-        .summary-row.total { font-size: 16px; font-weight: 600; color: #1a1a1a; border-top: 1px solid #eee; padding-top: 12px; margin-top: 8px; }
+        .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; font-size: 14px; color: #666; }
+        .summary-row.total { font-size: 16px; font-weight: 600; color: #1a1a1a; border-top: 1px solid #eee; padding-top: 4px; margin-top: 2px; }
         .cancel-order-btn { width: 100%; padding: 12px; border: 1px solid #FF6500; background: #fff; color: #FF6500; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 20px; }
         .cancel-order-btn:hover { background: #fff5f5; }
         .payment-section-new { border-top: 1px solid #eee; padding-top: 20px; }
@@ -89,7 +89,7 @@
         .payment-field input:focus, .payment-field select:focus { outline: none; border-color: #FF6500; }
         .save-order-btn { width: 100%; padding: 14px; background: #FF6500; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 10px; }
         .save-order-btn:hover { background: #e55a00; }
-        .products-section { background: #fff; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; overflow: hidden; }
+        .products-section { border-radius: 12px; padding: 20px; display: flex; flex-direction: column; overflow: hidden; }
         
         /* Tabs */
         .pos-tabs-wrapper { display: flex; gap: 12px; padding-bottom: 24px;  border-bottom:2px solid #f0f0f0; }
@@ -98,7 +98,7 @@
         .pos-tab-btn:hover:not(.active) {   background: transparent; }
         
         /* Category Section */
-        .pos-category-section { margin-bottom: 32px; }
+        .pos-category-section { margin-top: 15px; }
         .pos-section-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px 0; }
         .pos-category-scroll-wrapper { position: relative; }
         .pos-category-list { display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; padding: 8px 0; scrollbar-width: none; -ms-overflow-style: none; }
@@ -114,7 +114,18 @@
             .pos-category-list { max-width: calc((100px * 2.25) + (16px * 2.25) + 24px); } /* 2.25 items visible */
         }
         
-        .pos-category-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 100px; padding: 12px; border: 2px solid #f0f0f0; background: #fff; border-radius: 12px; cursor: pointer; transition: all 0.3s; flex-shrink: 0; }
+        .pos-category-item {            display: flex; 
+            flex-direction: row !important;
+            align-items: center; 
+            gap: 4px; 
+            padding: 4px 8px !important; 
+            border: 2px solid #E5E7EB; 
+            background: #fff; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            flex-shrink: 0;
+            white-space: nowrap; }
         .pos-category-item:hover { border-color: #FF6500; transform: translateY(-2px); }
         .pos-category-item.active { border-color: #FF6500; background: #fff5f0; }
         .pos-category-icon { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #f9f9f9; }
@@ -129,17 +140,17 @@
         
         /* Products Grid */
         .pos-products-section { flex: 1; overflow-y: auto; }
-        .pos-products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding-bottom: 20px; }
+        .pos-products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; padding-bottom: 5px; }
         
         /* Product Card */
-        .pos-product-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 16px; overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column; }
+        .pos-product-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 8px; overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column; }
         .pos-product-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
-        .pos-product-image-wrapper { width: 100%; height: 160px; overflow: hidden; background: #f9f9f9; border-radius: 16px 16px 0 0; }
+        .pos-product-image-wrapper { width: 100%; height: auto; overflow: hidden; background: #f9f9f9; border-radius: 8px; }
         .pos-product-image { width: 100%; height: 100%; object-fit: cover; }
         .pos-product-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
         .pos-product-header { display: flex; flex-direction: column; gap: 4px; }
         .pos-product-name { font-size: 15px; font-weight: 600; color: #1a1a1a; margin: 0; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .pos-product-desc { font-size: 12px; color: #999; margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .pos-product-desc { font-size: 12px; color: #919191; margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .pos-product-price { font-size: 16px; font-weight: 700; color: #1a1a1a; margin: 0; }
         
         /* Category Header with Arrows */
@@ -178,12 +189,12 @@
         
         /* Table Reservation System */
         .tables-reservation-section { padding: 20px 0; }
-        .table-management-buttons { display: flex; flex-wrap:wrap; gap: 15px; margin-bottom: 20px; }
+        .table-management-buttons { display: flex; flex-wrap:wrap; gap: 6px; margin-bottom: 10px; }
         .btn-add-table, .btn-manage-tables { display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: #FF6500; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .btn-add-table:hover, .btn-manage-tables:hover { background: #e55a00; transform: translateY(-2px); }
         .btn-manage-tables { background: #374151; }
         .btn-manage-tables:hover { background: #1f2937; }
-        .table-legend { display: flex; gap: 30px; margin-bottom: 30px; flex-wrap: wrap; }
+        .table-legend { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
         .legend-item { display: flex; align-items: center; gap: 10px; }
         .legend-color { width: 20px; height: 20px; border-radius: 50%; }
         .legend-color.utilized { background: #ef4e44; }
@@ -195,7 +206,6 @@
         .floor-plan-wrapper { 
             position: relative; 
             width: 100%; 
-            margin-bottom: 30px; 
         }
         
         /* Make floor plan scrollable on small screens */
@@ -381,7 +391,7 @@
         .table-item .chair.chair-free { background: #48f045 !important; }
         .table-item .chair.chair-blocked { background: #fff301 !important; }
         
-        .table-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
+        .table-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; }
         
         /* Make table controls single column on small screens */
         @media (max-width: 768px) {

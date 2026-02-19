@@ -1,1383 +1,278 @@
-@extends('layouts.business.pos')
-
-@section('title')
-    {{ __('Pos Purchase') }}
-@endsection
-
-@push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/choices.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/calculator.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/pos-products.css') . '?v=' . time() }}">
-    <style>
-        /* Force RTL SVG flip */
-        @if (in_array(app()->getLocale(), ['ar', 'arbh', 'eg-ar', 'fa', 'prs', 'ps', 'ur']))
-        [dir="rtl"] .pos-top-nav a[href*="dashboard"] svg {
-            transform: scaleX(-1) !important;
-        }
-        @endif
-        .pos-fullscreen-body { margin: 0; padding: 0; background: #f5f5f5; }
-        .pos-fullscreen-wrapper { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
-        .pos-top-header {padding: 12px 24px 0px 24px; display: flex; flex-wrap: wrap;  align-items: center; background:#F7F7F7 !important; }
-        .pos-brand { display: flex; align-items: center; gap: 12px; }
-        .pos-brand-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0; }
-        .pos-brand-subtitle { font-size: 12px; color: #6b7280; margin: 0; }
-        .pos-top-nav { background: white; padding: 8px 8px; border-radius: 100px;  display: flex; flex-wrap: wrap; flex-wrap: wrap; align-items: center; gap: 8px; }
-        .pos-nav-btn { width: 40px; height: 40px; border-radius: 8px; border: none; background: #fff; display: flex; align-items: center; justify-content: center; color: #374151; cursor: pointer; transition: all 0.2s; text-decoration: none; flex-shrink: 0; }
-        .pos-nav-btn:hover { background: #f9fafb; color: #1a1a1a; }
-        .pos-nav-btn i { font-size: 16px; }
-        .pos-nav-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
-        .pos-nav-divider { width: 1px; height: 24px; background: #e5e7eb; margin: 0 8px; }
-        .pos-add-expense-btn { display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--clr-primary); border: none; border-radius: 100px; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; }
-        .pos-add-expense-btn:hover { background: var(--clr-secondary); color: #fff; }
-        .pos-add-expense-btn svg { width: 24px; height: 24px; flex-shrink: 0; }
-        .pos-header-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: #fff; border: 1px solid #e5e7eb; border-radius: 100px; color: #374151; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; transition: all 0.2s; }
-        .pos-header-btn:hover { background: #f9fafb; color: #1a1a1a; border-color: #d1d5db; }
-        .pos-header-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
-        .pos-main-container { display: grid; grid-template-columns:1fr 420px ; gap: 20px; padding: 20px; background: #f7f7f7 !important; height:100vh }
-        @media (max-width: 1200px) { .pos-main-container { grid-template-columns: 1fr 380px ;  height:100vh} }
-        @media (max-width: 992px) { .pos-main-container { grid-template-columns: 1fr; } }
-        .order-sidebar { background: #fff; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; border-right: none;  margin-top:20px; }
-        .order-header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
-        .order-title { font-size: 18px; font-weight: 600; color: #1a1a1a; margin: 0; }
-        .order-date { font-size: 13px; color: #666;  }
-        .supplier-section { margin-bottom: 20px; }
-        .supplier-select-wrapper { display: flex; gap: 10px; align-items: center; }
-        .supplier-select-wrapper .form-select, .supplier-select-wrapper .choices { flex: 1; }
-        .add-supplier-btn { width: 40px; height: 40px; border-radius: 8px; background: var(--clr-primary); border: none; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
-        .add-supplier-btn:hover { background: var(--clr-secondary); }
-        .cart-section { margin-bottom: 15px; display: flex; flex-direction: column; }
-        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .cart-title { font-size: 16px; font-weight: 600; color: #1a1a1a; }
-        .clear-cart-btn { font-size: 13px; color: var(--clr-primary); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-        .cart-items-list { display: flex; flex-direction: column; gap: 10px; padding-right: 5px; }
-        .cart-items-list::-webkit-scrollbar { width: 4px; }
-        .cart-items-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        .cart-items-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-        .cart-item-card { display: flex; align-items: stretch; background: #fff; border: 1px solid #eee; border-radius: 14px; overflow: hidden; flex-shrink: 0; }
-        .cart-item-image-wrapper { width: 70px; min-width: 70px; height: 70px; background: #f5f5f5; flex-shrink: 0; border-radius: 10px; margin: 6px; overflow: hidden; }
-        .cart-item-image { width: 100%; height: 100%; object-fit: cover; }
-        .cart-item-details { flex: 1; padding: 8px 4px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-        .cart-item-name { font-size: 14px; font-weight: 600; color: #000000; margin: 0 0 2px; line-height: 1.2; }
-        .cart-item-price { font-size: 14px; color:#000000 ; margin: 0; font-weight: bold !important; }
-        .cart-item-actions { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; padding: 8px; min-width: 90px; }
-        .qty-control-wrapper { display: flex; align-items: center; background: #f0f0f0; border-radius: 50px; padding: 2px; }
-        .qty-btn { width: 18px; height: 18px; border-radius: 50%; border: none; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; color: #bbb; }
-        .qty-btn.plus-btn { background: #1a1a1a; color: #fff; }
-        .cart-item-qty { width: 22px; text-align: center; font-size: 13px; font-weight: 600; border: none; background: transparent; color: #1a1a1a; }
-        /* .remove-item-btn { width: 22px; height: 22px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #dc3545; font-size: 14px; padding: 0; transition: all 0.2s; } */
-        /* .remove-item-btn:hover { background: #dc3545; color: #fff; transform: scale(1.1); } */
-        /* .remove-item-btn:active { transform: scale(0.95); } */
-        .empty-cart { text-align: center; padding: 30px 20px; color: #9ca3af; }
-        .empty-cart-icon { font-size: 40px; margin-bottom: 10px; color: #ddd; }
-        .order-summary { border-top: 1px solid #eee; padding-top: 15px; margin-bottom: 15px; }
-        .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; font-size: 14px; color: #666; }
-        .summary-row.total { font-size: 16px; font-weight: 600; color: #1a1a1a; border-top: 1px solid #eee; padding-top: 4px; margin-top: 2px; }
-        .cancel-order-btn { width: 100%; padding: 12px; border: 1px solid var(--clr-primary); background: #fff; color: var(--clr-primary); border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 20px; }
-        .cancel-order-btn:hover { background: #fff5f5; }
-        .payment-section-new { border-top: 1px solid #eee; padding-top: 20px; }
-        .payment-field { margin-bottom: 15px; }
-        .payment-field label { display: block; font-size: 13px; font-weight: 500; color: #374151; margin-bottom: 6px; }
-        .payment-field input, .payment-field select { width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; }
-        .payment-field input:focus, .payment-field select:focus { outline: none; border-color: var(--clr-primary); }
-        .save-order-btn { width: 100%; padding: 14px; background: var(--clr-primary); color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 10px; }
-        .save-order-btn:hover { background: var(--clr-secondary); }
-        .products-section { background: #fff; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; }
-        .choices__inner { padding: 12px 16px; border: 1px solid #e5e7eb !important; border-radius: 10px !important; font-size: 14px !important; background: #f9fafb !important; min-height: 44px !important; }
-        .choices__inner:focus, .choices.is-focused .choices__inner { border-color: var(--clr-primary) !important; background-color: #fff !important; }
-        .choices__list--dropdown { border: 1px solid #e5e7eb; border-radius: 8px; }
-        .choices__list--single { padding: 0; }
-        .choices[data-type*=select-one] .choices__input { background-color: #f9fafb; border-radius: 8px; padding: 8px; }
-        .hidden-cart-inputs { display: none; }
-
-        /* Tabs */
-        .pos-tabs-wrapper { display: flex; gap: 12px; padding-bottom: 24px;  border-bottom:2px solid #f0f0f0; }
-        .pos-tab-btn {    background: transparent; padding: 10px 24px; border:2px solid #f0f0f0; color: #666; border-radius: 100px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; }
-        .pos-tab-btn.active { background: var(--clr-primary); color: #fff; }
-        .pos-tab-btn:hover:not(.active) {   background: transparent; }
-
-        /* Category Section */
-        .pos-category-section { margin-top: 15px; }
-        .pos-category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .pos-section-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px 0; }
-        .pos-category-scroll-wrapper { position: relative; }
-        .pos-category-list, #purchase-category-list { display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; padding: 8px 0; scrollbar-width: none; -ms-overflow-style: none; }
-        .pos-category-list::-webkit-scrollbar, #purchase-category-list::-webkit-scrollbar { display: none; }
-
-        /* Limit visible categories on small screens - show 2.25 items */
-        @media (max-width: 768px) {
-            .pos-category-scroll-wrapper { max-width: 100%; overflow: hidden; }
-            .pos-category-list, #purchase-category-list { max-width: calc((100px * 2.25) + (16px * 2.25) + 24px); } /* 2.25 items + gaps + padding */
-        }
-
-        @media (max-width: 576px) {
-            .pos-category-list, #purchase-category-list { max-width: calc((100px * 2.25) + (16px * 2.25) + 24px); } /* 2.25 items visible */
-        }
-
-        .pos-category-item {           display: flex; 
-            flex-direction: row !important;
-            align-items: center; 
-            gap: 4px; 
-            padding: 4px 8px !important; 
-            border: 2px solid #E5E7EB; 
-            background: #fff; 
-            border-radius: 50px; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            flex-shrink: 0;
-            white-space: nowrap; }
-        .pos-category-item:hover { border-color: var(--clr-primary); transform: translateY(-2px); }
-        .pos-category-item.active { border-color: var(--clr-primary); background: #fff5f0; }
-        .pos-category-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; }
-        .pos-category-icon img { width: 100%; height: 100%; object-fit: contain; }
-        .pos-category-icon svg { width: 100%; height: 100%; color: #666; }
-        .pos-category-item.active .pos-category-icon svg { color: var(--clr-primary); }
-        .pos-category-name { font-size: 13px; font-weight: 500; color: #1a1a1a; text-align: center; }
-        .pos-category-nav-buttons { display: flex !important; gap: 8px !important; align-items: center !important; }
-        .pos-category-scroll-btn { width: 36px !important; height: 36px !important; border-radius: 50% !important; background: #fff !important; border: 2px solid #e0e0e0 !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; transition: all 0.2s !important; }
-        .pos-category-scroll-btn:hover { background: #f5f5f5 !important; border-color: var(--clr-primary) !important; }
-        .pos-category-scroll-btn.active { background: var(--clr-primary) !important; border-color: var(--clr-primary) !important; }
-        .pos-category-scroll-btn.active:hover { background: var(--clr-secondary) !important; }
-        .pos-category-scroll-btn.disabled { opacity: 0.3 !important; cursor: not-allowed !important; pointer-events: none !important; }
-        .pos-category-scroll-btn svg { color: #666 !important; width: 18px !important; height: 18px !important; }
-        .pos-category-scroll-btn.active svg { color: #fff !important; }
-
-        /* Table Reservation System */
-        .tables-reservation-section { padding: 20px 0; }
-        .table-management-buttons { display: flex; flex-wrap:wrap; gap: 6px; margin-bottom: 10px; }
-        .btn-add-table, .btn-manage-tables { display: flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--clr-primary); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .btn-add-table:hover, .btn-manage-tables:hover { background: var(--clr-secondary); transform: translateY(-2px); }
-        .btn-manage-tables { background: #374151; }
-        .btn-manage-tables:hover { background: #1f2937; }
-        .table-legend { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-        .legend-item { display: flex; align-items: center; gap: 10px; }
-        .legend-color { width: 20px; height: 20px; border-radius: 50%; }
-        .legend-color.utilized { background: #ef4e44; }
-        .legend-color.free { background: #48f045; }
-        .legend-color.blocked { background: #fff301; }
-        .legend-text { font-size: 14px; color: #666; }
-
-        /* Floor plan wrapper - allows cutout to extend outside */
-        .floor-plan-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
-        /* Make floor plan scrollable on small screens */
-        @media (max-width: 768px) {
-            .floor-plan-wrapper {
-                overflow-x: auto;
-                overflow-y: auto;
-                max-height: 80vh;
-                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-                border: 1px solid #e0e0e0;
-                border-radius: 8px;
-            }
-
-            .restaurant-floor-plan {
-                min-width: 800px; /* Ensure floor plan doesn't shrink too much */
-                min-height: 700px;
-                position: relative; /* Ensure absolute positioned items stay in place */
-            }
-
-            /* Ensure draggable items maintain position */
-            .table-item, .area-item {
-                position: absolute !important;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .floor-plan-wrapper {
-                max-height: 70vh;
-            }
-
-            .restaurant-floor-plan {
-                min-width: 600px;
-            }
-        }
-
-        .restaurant-floor-plan { position: relative; width: 100%; height: 700px; border: 3px solid #000; border-radius: 8px; background: #fff; overflow: hidden; }
-
-        /* Entrance cut-out cover - positioned relative to wrapper */
-        .entrance-cutout-cover { position: absolute; background: #fff; z-index: 6; pointer-events: none; }
-
-        .floor-area { position: absolute; border: 2px solid #000; background: #fff; z-index: 1; cursor: move; }
-        .bar-area { top: 20px; left: 20px; width: 180px; height: 140px; display: flex; align-items: center; justify-content: center; }
-        .area-label { font-size: 14px; color: #666; text-align: center; pointer-events: none; }
-        .toilets-wall { top: 180px; left: 20px; width: 60px; height: 180px; display: flex; align-items: center; justify-content: center; }
-        .toilets-label { font-size: 12px; color: #666; z-index: 2; pointer-events: none; }
-
-        .center-square { position: absolute; top: 35%; left: 45%; transform: translate(-50%, -50%); width: 100px; height: 100px; border: 2px solid #000; background: #fff; z-index: 1; cursor: move; }
-
-        .entrance-area { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 7; cursor: move; }
-        .entrance-label { font-size: 14px; color: #666; pointer-events: none; }
-        .entrance-arrow { display: none; }
-
-        .table-item { position: absolute; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; z-index: 10; }
-        .table-item:hover { transform: scale(1.05); }
-
-        /* Table rotation support */
-        .table-item[data-rotation="90"] { transform: rotate(90deg); }
-        .table-item[data-rotation="180"] { transform: rotate(180deg); }
-        .table-item[data-rotation="270"] { transform: rotate(270deg); }
-        .table-item[data-rotation="90"]:hover { transform: rotate(90deg) scale(1.05); }
-        .table-item[data-rotation="180"]:hover { transform: rotate(180deg) scale(1.05); }
-        .table-item[data-rotation="270"]:hover { transform: rotate(270deg) scale(1.05); }
-
-        .table-circle { width: 80px; height: 80px; border-radius: 50%; }
-        .table-rounded { width: 140px; height: 80px; border-radius: 12px; }
-
-        .table-item.utilized { background: #ef4e44; }
-        .table-item.free { background: #48f045; }
-        .table-item.blocked { background: #fff301; }
-
-        .table-name { position: absolute; font-size: 14px; font-weight: 600; color: #000; z-index: 2; }
-
-        /* Counter-rotate table name to keep it horizontal */
-        .table-item[data-rotation="90"] .table-name { transform: rotate(-90deg); }
-        .table-item[data-rotation="180"] .table-name { transform: rotate(-180deg); }
-        .table-item[data-rotation="270"] .table-name { transform: rotate(-270deg); }
-
-        /* Counter-rotate complete order button to keep it upright */
-        .table-item[data-rotation="90"] .complete-order-btn { transform: rotate(-90deg); }
-        .table-item[data-rotation="180"] .complete-order-btn { transform: rotate(-180deg); }
-        .table-item[data-rotation="270"] .complete-order-btn { transform: rotate(-270deg); }
-
-        /* Counter-rotate reservation badge to keep it upright */
-        .table-item[data-rotation="90"] .reservation-badge { transform: rotate(-90deg); }
-        .table-item[data-rotation="180"] .reservation-badge { transform: rotate(-180deg); }
-        .table-item[data-rotation="270"] .reservation-badge { transform: rotate(-270deg); }
-
-        /* Reservation info badge on table */
-        .reservation-badge { position: absolute; top: -10px; right: -10px; background: #fff301; color: #000; border: 2px solid #000; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; z-index: 3; cursor: pointer; }
-        .reservation-badge:hover { transform: scale(1.2); }
-
-        /* Complete order button on utilized tables */
-        .complete-order-btn {
-            position: absolute;
-            top: -12px;
-            right: -12px;
-            background: #10b981;
-            color: white;
-            border: 2px solid #059669;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: bold;
-            z-index: 3;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-        }
-        .complete-order-btn:hover {
-            transform: scale(1.15);
-            background: #059669;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.6);
-        }
-        .complete-order-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .chair-wrapper { position: absolute; width: 100%; height: 100%; }
-        .chair { position: absolute; width: 30px; height: 15px; border-radius: 4px; }
-
-        .table-circle .chair.chair-top { top: -20px; left: 50%; transform: translateX(-50%); }
-        .table-circle .chair.chair-right { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        .table-circle .chair.chair-bottom { bottom: -20px; left: 50%; transform: translateX(-50%); }
-        .table-circle .chair.chair-left { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-
-        /* Horizontal rectangle table for 10 chairs */
-        .table-rectangle-h10 { width: 280px; height: 100px; border-radius: 20px; }
-        .table-rectangle-h10 .chair.chair-top-1 { top: -20px; left: 12%; }
-        .table-rectangle-h10 .chair.chair-top-2 { top: -20px; left: 34%; }
-        .table-rectangle-h10 .chair.chair-top-3 { top: -20px; left: 56%; }
-        .table-rectangle-h10 .chair.chair-top-4 { top: -20px; left: 78%; }
-        .table-rectangle-h10 .chair.chair-bottom-1 { bottom: -20px; left: 12%; }
-        .table-rectangle-h10 .chair.chair-bottom-2 { bottom: -20px; left: 34%; }
-        .table-rectangle-h10 .chair.chair-bottom-3 { bottom: -20px; left: 56%; }
-        .table-rectangle-h10 .chair.chair-bottom-4 { bottom: -20px; left: 78%; }
-        .table-rectangle-h10 .chair.chair-left { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        .table-rectangle-h10 .chair.chair-right { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-
-        /* Horizontal rectangle table for 8 chairs */
-        .table-rectangle-h { width: 220px; height: 100px; border-radius: 20px; }
-        .table-rectangle-h .chair.chair-top-1 { top: -20px; left: 15%; }
-        .table-rectangle-h .chair.chair-top-2 { top: -20px; left: 50%; transform: translateX(-50%); }
-        .table-rectangle-h .chair.chair-top-3 { top: -20px; right: 15%; }
-        .table-rectangle-h .chair.chair-bottom-1 { bottom: -20px; left: 15%; }
-        .table-rectangle-h .chair.chair-bottom-2 { bottom: -20px; left: 50%; transform: translateX(-50%); }
-        .table-rectangle-h .chair.chair-bottom-3 { bottom: -20px; right: 15%; }
-        .table-rectangle-h .chair.chair-left { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        .table-rectangle-h .chair.chair-right { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        /* For tables with more chairs */
-        .table-rectangle { width: 100px; height: 240px; border-radius: 20px; }
-        .table-rectangle .chair.chair-top { top: -20px; left: 50%; transform: translateX(-50%); }
-        .table-rectangle .chair.chair-bottom { bottom: -20px; left: 50%; transform: translateX(-50%); }
-        .table-rectangle .chair.chair-right-1 { right: -35px; top: 10%; transform: rotate(90deg); }
-        .table-rectangle .chair.chair-right-2 { right: -35px; top: 25%; transform: rotate(90deg); }
-        .table-rectangle .chair.chair-right-3 { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        .table-rectangle .chair.chair-right-4 { right: -35px; top: 75%; transform: rotate(90deg); }
-        .table-rectangle .chair.chair-right-5 { right: -35px; top: 90%; transform: rotate(90deg); }
-        .table-rectangle .chair.chair-left-1 { left: -35px; top: 10%; transform: rotate(90deg); }
-        .table-rectangle .chair.chair-left-2 { left: -35px; top: 25%; transform: rotate(90deg); }
-        .table-rectangle .chair.chair-left-3 { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        .table-rectangle .chair.chair-left-4 { left: -35px; top: 75%; transform: rotate(90deg); }
-        .table-rectangle .chair.chair-left-5 { left: -35px; top: 90%; transform: rotate(90deg); }
-
-        .table-rounded .chair.chair-top-left { top: -20px; left: 15%; }
-        .table-rounded .chair.chair-top-right { top: -20px; right: 15%; }
-        .table-rounded .chair.chair-top { top: -20px; left: 50%; transform: translateX(-50%); }
-        .table-rounded .chair.chair-right { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        .table-rounded .chair.chair-bottom-right { bottom: -20px; right: 15%; }
-        .table-rounded .chair.chair-bottom-left { bottom: -20px; left: 15%; }
-        .table-rounded .chair.chair-left { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-
-        .table-item.utilized .chair { background: #ef4e44; border: 2px solid #000; }
-        .table-item.free .chair { background: #48f045; border: 2px solid #000; }
-        .table-item.blocked .chair { background: #fff301; border: 2px solid #000; }
-
-        /* Individual chair status classes - higher priority */
-        .table-item .chair.chair-utilized { background: #ef4e44 !important; }
-        .table-item .chair.chair-free { background: #48f045 !important; }
-        .table-item .chair.chair-blocked { background: #fff301 !important; }
-
-        .table-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; }
-
-        /* Make table controls single column on small screens */
-        @media (max-width: 768px) {
-            .table-controls { grid-template-columns: 1fr; gap: 20px; }
-        }
-        .controls-section { }
-        .controls-title { font-size: 16px; font-weight: 600; color: #999; margin-bottom: 15px; }
-        .toggle-group { display: flex; flex-direction: column; gap: 15px; }
-        .toggle-item { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .toggle-input { display: none; }
-        .toggle-slider { width: 50px; height: 28px; background: #ddd; border-radius: 50px; position: relative; transition: all 0.3s; }
-        .toggle-slider::before { content: ''; position: absolute; width: 22px; height: 22px; background: #fff; border-radius: 50%; top: 3px; left: 3px; transition: all 0.3s; }
-        .toggle-input:checked + .toggle-slider { background: var(--clr-primary); }
-        .toggle-input:checked + .toggle-slider::before { transform: translateX(22px); }
-        .toggle-label { font-size: 14px; color: #333; }
-
-        /* Pulse animation for recommendations */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Make tables draggable */
-        .table-item { cursor: move; user-select: none; }
-        .table-item:active { cursor: grabbing; }
-
-        /* Modal styling improvements - Match Payment Modal Style */
-        .modal-header { background: #f8f9fa; border-bottom: 2px solid #e5e7eb; padding: 20px 24px; }
-        .modal-title { font-weight: 600; color: #1a1a1a; font-size: 20px; }
-        .modal-body {  background: #fff; }
-        .form-label { font-weight: 500; color: #374151; margin-bottom: 8px; font-size: 14px; }
-        .form-control, .form-select { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px 16px; font-size: 14px; transition: all 0.2s; }
-        .form-control:focus, .form-select:focus { border-color: var(--clr-primary); box-shadow: 0 0 0 3px rgba(255, 101, 0, 0.1); outline: none; }
-        .modal-footer { padding: 20px 24px;  border-top: 1px solid #e5e7eb; }
-        .btn-primary { background: var(--clr-primary); border-color: var(--clr-primary); padding: 12px 24px; font-weight: 600; border-radius: 8px; transition: all 0.2s;  color:#FFFFFF;}
-        .btn-deleted { background: #bb2d3b; border-color: var(--clr-primary); padding: 12px 24px; font-weight: 600; border-radius: 8px; transition: all 0.2s;  color:#FFFFFF;}
-        .btn-primary:hover { background: var(--clr-secondary); border-color: var(--clr-secondary); transform: translateY(-1px); color: white;}
-        .btn-deleted:hover { background: #bb2d3b; border-color: var(--clr-secondary); transform: translateY(-1px); color: white;}
-        .btn-secondary { background: #E6E6E6; border-color: #E6E6E6; padding: 12px 24px; font-weight: 600; border-radius: 8px; transition: all 0.2s; }
-        .btn-secondary:hover { background: #E6E6E6; border-color: #4b5563; }
-        .btn-primary { background: #48f045; border-color: #48f045; color:#FFFFFF; font-weight: 600; padding: 12px 24px; border-radius: 8px; transition: all 0.2s; }
-        .btn-primary:hover { background: #3dd93a; border-color: #3dd93a; color: #000; transform: translateY(-1px); }
-        .complete-order { background: #157347; border-color: #48f045; color:#FFFFFF; font-weight: 600; padding: 12px 24px; border-radius: 8px; transition: all 0.2s; }
-        .complete-order:hover { background: #157347; border-color: #3dd93a; color: #000; transform: translateY(-1px); }
-        .btn-close { opacity: 0.5; transition: opacity 0.2s; }
-        .btn-close:hover { opacity: 1; }
-
-        /* Table order info styling */
-        .table-order-info { }
-
-        /* Corner shape for L-shaped table */
-        .corner-shape { width: 180px; height: 160px; border-radius: 40px 40px 0 40px; }
-        .corner-shape::after { content: ''; position: absolute; bottom: 0; right: 0; width: 90px; height: 90px; background: #F7F7F7; border-radius: 0 0 0 40px; }
-    </style>
-@endpush
-
-@php
-    $modules = product_setting()->modules ?? [];
-@endphp
-
-@section('main_content')
-    <form id="purchase-form" action="{{ route('business.purchases.store') }}" method="post" enctype="multipart/form-data" class="ajaxform pos-fullscreen-form">
-        @csrf
-
-        <!-- Top Header Bar -->
-        <div class="pos-top-header">
-            <div class="pos-brand">
-                <div>
-                    <p class="pos-brand-subtitle">{{ auth()->user()->business->companyName ?? __('Business') }}</p>
-                    <h1 class="pos-brand-title">POS Purchase</h1>
-                </div>
-            </div>
-
-            <div class="pos-top-nav">
-                <a href="{{ route('business.dashboard.index') }}" class="pos-nav-btn" title="{{ __('Back') }}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0249 7.30624C11.3026 7.08951 11.7843 6.7256 11.9457 6.60372C12.2792 6.35808 12.3505 5.88857 12.1048 5.55506C11.8592 5.22154 11.3892 5.15065 11.0557 5.39628L11.0535 5.39793C10.8846 5.52553 10.3855 5.90245 10.102 6.12372C9.53324 6.5676 8.77234 7.17803 8.00925 7.84058C7.24988 8.4999 6.47119 9.22557 5.87644 9.89869C5.57982 10.2344 5.3131 10.5747 5.11648 10.9008C4.93226 11.2064 4.75098 11.5933 4.75098 11.9998C4.75097 12.4063 4.93226 12.7932 5.11647 13.0988C5.3131 13.425 5.57982 13.7653 5.87643 14.101C6.47119 14.7741 7.24989 15.4997 8.00927 16.1591C8.77237 16.8216 9.53327 17.4321 10.1021 17.8759C10.3853 18.097 10.8841 18.4738 11.0535 18.6017L11.0562 18.6037C11.3897 18.8494 11.8592 18.7781 12.1049 18.4446C12.3505 18.1111 12.2786 17.6411 11.945 17.3954C11.7837 17.2735 11.3026 16.9101 11.0249 16.6934C10.4687 16.2593 9.72958 15.6662 8.99268 15.0264C8.25205 14.3834 7.53075 13.7079 7.00051 13.1078C6.73463 12.8068 6.5326 12.5425 6.4011 12.3244C6.27743 12.1192 6.25171 12.0016 6.25171 12.0016C6.25171 12.0016 6.27743 11.8804 6.4011 11.6753C6.5326 11.4571 6.73463 11.1928 7.00051 10.8919C7.53076 10.2918 8.25205 9.61627 8.99267 8.97323C9.72956 8.33342 10.4687 7.74031 11.0249 7.30624Z" fill="currentColor"/><path d="M18.0249 7.30624C18.3026 7.08951 18.7843 6.7256 18.9457 6.60372C19.2792 6.35808 19.3505 5.88857 19.1048 5.55506C18.8592 5.22154 18.3892 5.15065 18.0557 5.39628L18.0535 5.39793C17.8846 5.52551 17.3856 5.90243 17.102 6.12372C16.5332 6.5676 15.7723 7.17803 15.0092 7.84058C14.2499 8.4999 13.4712 9.22557 12.8764 9.89869C12.5798 10.2344 12.3131 10.5747 12.1165 10.9008C11.9323 11.2064 11.751 11.5933 11.751 11.9998C11.751 12.4063 11.9323 12.7932 12.1165 13.0988C12.3131 13.425 12.5798 13.7653 12.8764 14.101C13.4712 14.7741 14.2499 15.4997 15.0093 16.1591C15.7724 16.8216 16.5333 17.4321 17.1021 17.8759C17.3854 18.097 17.8843 18.4739 18.0536 18.6018L18.0562 18.6037C18.3897 18.8494 18.8592 18.7781 19.1049 18.4446C19.3505 18.1111 19.2786 17.6411 18.945 17.3954C18.7837 17.2735 18.3026 16.9101 18.0249 16.6934C17.4687 16.2593 16.7296 15.6662 15.9927 15.0264C15.2521 14.3834 14.5308 13.7079 14.0005 13.1078C13.7346 12.8068 13.5326 12.5425 13.4011 12.3244C13.2774 12.1192 13.2517 12.0016 13.2517 12.0016C13.2517 12.0016 13.2774 11.8804 13.4011 11.6753C13.5326 11.4571 13.7346 11.1928 14.0005 10.8919C14.5308 10.2918 15.252 9.61627 15.9927 8.97323C16.7296 8.33342 17.4687 7.74031 18.0249 7.30624Z" fill="currentColor"/></svg>
-                </a>
-                <a href="{{ route('business.products.index') }}" class="pos-nav-btn" title="{{ __('Products') }}">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8327 18.3327C10.1508 18.3327 9.49952 18.0483 8.19677 17.4797C6.67629 16.816 5.5123 16.3079 4.70475 15.8327H1.66602M10.8327 18.3327C11.5145 18.3327 12.1658 18.0483 13.4686 17.4797C16.7113 16.0643 18.3327 15.3565 18.3327 14.166V5.41602M10.8327 18.3327V9.16602M3.33268 5.41602V7.91602" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.77225 8.0755L5.33792 6.89756C4.00196 6.2511 3.33398 5.92787 3.33398 5.41602C3.33398 4.90416 4.00196 4.58093 5.33792 3.93447L7.77225 2.75653C9.27465 2.02952 10.0259 1.66602 10.834 1.66602C11.6421 1.66602 12.3933 2.02952 13.8957 2.75653L16.3301 3.93447C17.666 4.58093 18.334 4.90416 18.334 5.41602C18.334 5.92787 17.666 6.2511 16.3301 6.89756L13.8957 8.0755C12.3933 8.80252 11.6421 9.16602 10.834 9.16602C10.0259 9.16602 9.27465 8.80252 7.77225 8.0755Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.1145 3.3457L6.55664 7.48672" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.66602 10.834H4.16602" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.66602 13.334H4.16602" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-                <button type="button" data-bs-toggle="modal" data-bs-target="#bulk-upload-modal" class="pos-nav-btn" title="{{ __('Bulk Upload') }}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 15V16C3 18.2091 4.79086 20 7 20H17C19.2091 20 21 18.2091 21 16V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 4H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <a href="{{ route('business.purchases.index', ['today' => true]) }}" class="pos-nav-btn" title="{{ __('Today Purchase') }}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.40476 15.5264L8.93476 20.0564C10.7948 21.9164 13.8148 21.9164 15.6848 20.0564L20.0748 15.6664C21.9348 13.8064 21.9348 10.7864 20.0748 8.91637L15.5348 4.39637C14.5848 3.44637 13.2748 2.93637 11.9348 3.00637L6.93476 3.24637C4.93476 3.33637 3.34476 4.92637 3.24476 6.91637L3.00476 11.9164C2.94476 13.2664 3.45476 14.5764 4.40476 15.5264Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.73438 12.2266C11.1151 12.2266 12.2344 11.1073 12.2344 9.72656C12.2344 8.34585 11.1151 7.22656 9.73438 7.22656C8.35366 7.22656 7.23438 8.34585 7.23438 9.72656C7.23438 11.1073 8.35366 12.2266 9.73438 12.2266Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13.2344 17.2266L17.2344 13.2266" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-                <button type="button" data-bs-toggle="modal" data-bs-target="#calculatorModal" class="pos-nav-btn" title="{{ __('Calculator') }}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.75 6C16.75 5.58579 16.4142 5.25 16 5.25C15.5858 5.25 15.25 5.58579 15.25 6V7.25H14C13.5858 7.25 13.25 7.58579 13.25 8C13.25 8.41421 13.5858 8.75 14 8.75H15.25V10C15.25 10.4142 15.5858 10.75 16 10.75C16.4142 10.75 16.75 10.4142 16.75 10V8.75H18C18.4142 8.75 18.75 8.41421 18.75 8C18.75 7.58579 18.4142 7.25 18 7.25H16.75V6Z" fill="currentColor"/><path d="M13.25 17.5C13.25 17.0858 13.5858 16.75 14 16.75H18C18.4142 16.75 18.75 17.0858 18.75 17.5C18.75 17.9142 18.4142 18.25 18 18.25H14C13.5858 18.25 13.25 17.9142 13.25 17.5Z" fill="currentColor"/><path d="M14 13.75C13.5858 13.75 13.25 14.0858 13.25 14.5C13.25 14.9142 13.5858 15.25 14 15.25H18C18.4142 15.25 18.75 14.9142 18.75 14.5C18.75 14.0858 18.4142 13.75 18 13.75H14Z" fill="currentColor"/><path d="M10.5303 13.4697C10.8232 13.7626 10.8232 14.2374 10.5303 14.5303L9.31066 15.75L10.5303 16.9697C10.8232 17.2626 10.8232 17.7374 10.5303 18.0303C10.2374 18.3232 9.76256 18.3232 9.46967 18.0303L8.25 16.8107L7.03033 18.0303C6.73744 18.3232 6.26256 18.3232 5.96967 18.0303C5.67678 17.7374 5.67678 17.2626 5.96967 16.9697L7.18934 15.75L5.96967 14.5303C5.67678 14.2374 5.67678 13.7626 5.96967 13.4697C6.26256 13.1768 6.73744 13.1768 7.03033 13.4697L8.25 14.6893L9.46967 13.4697C9.76256 13.1768 10.2374 13.1768 10.5303 13.4697Z" fill="currentColor"/><path d="M6 7.25C5.58579 7.25 5.25 7.58579 5.25 8C5.25 8.41421 5.58579 8.75 6 8.75H10C10.4142 8.75 10.75 8.41421 10.75 8C10.75 7.58579 10.4142 7.25 10 7.25H6Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12.052 1.75H11.948C9.75288 1.74999 8.03639 1.74998 6.69787 1.91195C5.33461 2.0769 4.24953 2.42064 3.38952 3.19465C2.5182 3.97883 2.12077 4.98563 1.93214 6.24835C1.74997 7.46784 1.74998 9.02533 1.75 10.9878V13.0122C1.74998 14.9747 1.74997 16.5322 1.93214 17.7516C2.12077 19.0144 2.5182 20.0212 3.38952 20.8054C4.24953 21.5794 5.33461 21.9231 6.69787 22.0881C8.03639 22.25 9.75287 22.25 11.948 22.25H12.052C14.2471 22.25 15.9636 22.25 17.3021 22.0881C18.6654 21.9231 19.7505 21.5794 20.6105 20.8054C21.4818 20.0212 21.8792 19.0144 22.0679 17.7516C22.25 16.5322 22.25 14.9747 22.25 13.0123V10.9877C22.25 9.02532 22.25 7.46783 22.0679 6.24835C21.8792 4.98563 21.4818 3.97883 20.6105 3.19465C19.7505 2.42064 18.6654 2.0769 17.3021 1.91195C15.9636 1.74998 14.2471 1.74999 12.052 1.75ZM4.39297 4.30959C4.9242 3.83148 5.65432 3.54916 6.87805 3.40108C8.11596 3.2513 9.7417 3.25 12 3.25C14.2583 3.25 15.884 3.2513 17.1219 3.40108C18.3457 3.54916 19.0758 3.83148 19.607 4.30959C20.127 4.77752 20.4251 5.40441 20.5843 6.46997C20.748 7.56591 20.75 9.01126 20.75 11.05V12.95C20.75 14.9887 20.748 16.4341 20.5843 17.53C20.4251 18.5956 20.127 19.2225 19.607 19.6904C19.0758 20.1685 18.3457 20.4508 17.1219 20.5989C15.884 20.7487 14.2583 20.75 12 20.75C9.7417 20.75 8.11596 20.7487 6.87805 20.5989C5.65432 20.4508 4.92421 20.1685 4.39297 19.6904C3.87304 19.2225 3.57485 18.5956 3.41568 17.53C3.25196 16.4341 3.25 14.9887 3.25 12.95V11.05C3.25 9.01126 3.25196 7.56591 3.41568 6.46997C3.57485 5.40441 3.87304 4.77752 4.39297 4.30959Z" fill="currentColor"/></svg>
-                </button>
-                <a href="{{ route('business.dashboard.index') }}" class="pos-nav-btn" title="{{ __('Dashboard') }}">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.63606 9.45776L3.33268 9.63192L3.7134 13.4168C3.92852 15.5553 4.03607 16.6246 4.75018 17.2704C5.46429 17.9163 6.53896 17.9163 8.68827 17.9163H11.3104C13.4598 17.9163 14.5344 17.9163 15.2485 17.2704C15.9626 16.6246 16.0702 15.5553 16.2853 13.4168L16.666 9.63192L17.3627 9.45776C17.9328 9.31526 18.3327 8.80301 18.3327 8.21536C18.3327 7.79746 18.1288 7.40586 17.7864 7.16621L10.9551 2.38429C10.3813 1.98258 9.61743 1.98258 9.0436 2.38429L2.21226 7.16621C1.86991 7.40586 1.66602 7.79746 1.66602 8.21536C1.66602 8.80301 2.06596 9.31526 2.63606 9.45776Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.99935 14.1667C11.1499 14.1667 12.0827 13.2339 12.0827 12.0833C12.0827 10.9327 11.1499 10 9.99935 10C8.84876 10 7.91602 10.9327 7.91602 12.0833C7.91602 13.2339 8.84876 14.1667 9.99935 14.1667Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#category-search-modal" class="pos-nav-btn" title="{{ __('Category') }}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22 8.52V3.98C22 2.57 21.36 2 19.77 2H15.73C14.14 2 13.5 2.57 13.5 3.98V8.51C13.5 9.93 14.14 10.49 15.73 10.49H19.77C21.36 10.5 22 9.93 22 8.52Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M22 19.77V15.73C22 14.14 21.36 13.5 19.77 13.5H15.73C14.14 13.5 13.5 14.14 13.5 15.73V19.77C13.5 21.36 14.14 22 15.73 22H19.77C21.36 22 22 21.36 22 19.77Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M10.5 8.52V3.98C10.5 2.57 9.86 2 8.27 2H4.23C2.64 2 2 2.57 2 3.98V8.51C2 9.93 2.64 10.49 4.23 10.49H8.27C9.86 10.5 10.5 9.93 10.5 8.52Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M10.5 19.77V15.73C10.5 14.14 9.86 13.5 8.27 13.5H4.23C2.64 13.5 2 14.14 2 15.73V19.77C2 21.36 2.64 22 4.23 22H8.27C9.86 22 10.5 21.36 10.5 19.77Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#brand-search-modal" class="pos-nav-btn" title="{{ __('Brand') }}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 9C19 10.45 18.57 11.78 17.83 12.89C16.75 14.49 15.04 15.62 13.05 15.91C12.71 15.97 12.36 16 12 16C11.64 16 11.29 15.97 10.95 15.91C8.96 15.62 7.25 14.49 6.17 12.89C5.43 11.78 5 10.45 5 9C5 5.13 8.13 2 12 2C15.87 2 19 5.13 19 9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.2491 18.4699L19.5991 18.8599C19.2291 18.9499 18.9391 19.2299 18.8591 19.5999L18.5091 21.0699C18.3191 21.8699 17.2991 22.1099 16.7691 21.4799L11.9991 15.9999L7.2291 21.4899C6.6991 22.1199 5.6791 21.8799 5.4891 21.0799L5.1391 19.6099C5.0491 19.2399 4.7591 18.9499 4.3991 18.8699L2.7491 18.4799C1.9891 18.2999 1.7191 17.3499 2.2691 16.7999L6.1691 12.8999C7.2491 14.4999 8.9591 15.6299 10.9491 15.9199C11.2891 15.9799 11.6391 16.0099 11.9991 16.0099C12.3591 16.0099 12.7091 15.9799 13.0491 15.9199C15.0391 15.6299 16.7491 14.4999 17.8291 12.8999L21.7291 16.7999C22.2791 17.3399 22.0091 18.2899 21.2491 18.4699Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.58 5.98L13.17 7.15999C13.25 7.31999 13.46 7.48 13.65 7.51L14.72 7.68999C15.4 7.79999 15.56 8.3 15.07 8.79L14.24 9.61998C14.1 9.75998 14.02 10.03 14.07 10.23L14.31 11.26C14.5 12.07 14.07 12.39 13.35 11.96L12.35 11.37C12.17 11.26 11.87 11.26 11.69 11.37L10.69 11.96C9.96997 12.38 9.53997 12.07 9.72997 11.26L9.96997 10.23C10.01 10.04 9.93997 9.75998 9.79997 9.61998L8.96997 8.79C8.47997 8.3 8.63997 7.80999 9.31997 7.68999L10.39 7.51C10.57 7.48 10.78 7.31999 10.86 7.15999L11.45 5.98C11.74 5.34 12.26 5.34 12.58 5.98Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <!-- Bulk Upload Button -->
-
-                <!-- Today Purchase Button -->
-                <a href="{{ route('business.purchases.index', ['today' => true]) }}" class="pos-add-expense-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.40476 15.5264L8.93476 20.0564C10.7948 21.9164 13.8148 21.9164 15.6848 20.0564L20.0748 15.6664C21.9348 13.8064 21.9348 10.7864 20.0748 8.91637L15.5348 4.39637C14.5848 3.44637 13.2748 2.93637 11.9348 3.00637L6.93476 3.24637C4.93476 3.33637 3.34476 4.92637 3.24476 6.91637L3.00476 11.9164C2.94476 13.2664 3.45476 14.5764 4.40476 15.5264Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.73438 12.2266C11.1151 12.2266 12.2344 11.1073 12.2344 9.72656C12.2344 8.34585 11.1151 7.22656 9.73438 7.22656C8.35366 7.22656 7.23438 8.34585 7.23438 9.72656C7.23438 11.1073 8.35366 12.2266 9.73438 12.2266Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13.2344 17.2266L17.2344 13.2266" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    {{ __('Today Purchase') }}
-                </a>
-            </div>
-        </div>
-
-        <div class="pos-main-container">
-
-            <!-- Right Side - Products Section -->
-            <div class="products-section purchase-products-section">
-                <!-- Tabs -->
-                <div class="pos-tabs-wrapper">
-                    <button type="button" class="pos-tab-btn" data-tab="tables">{{ __('Tables') }}</button>
-                    <button type="button" class="pos-tab-btn active" data-tab="products">{{ __('Products') }}</button>
-                </div>
-
-                <!-- Tables Section -->
-                <div class="tables-reservation-section" id="tables-section" style="display: none;">
-                    <!-- Management Buttons -->
-                    <div class="table-management-buttons">
-                        <button type="button" class="btn-primary" id="btn-add-table">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            {{ __('Add Table') }}
-                        </button>
-                        <button type="button" class="btn btn-primary" id="btn-clear-all-data" style="background: #374151; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
-                                <path d="M3 3H8V8H3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M12 3H17V8H12V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M3 12H8V17H3V12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M12 12H17V17H12V12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            {{ __('Manage Tables') }}
-                        </button>
-                        <button type="button" class="btn-primary" id="btn-make-reservation">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            {{ __('Make Reservation') }}
-                        </button>
-                        <button type="button" class="btn-primary" id="btn-manage-all-tables">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 3H8V8H3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M12 3H17V8H12V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M3 12H8V17H3V12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M12 12H17V17H12V12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            {{ __('Manage Reservations') }}
-                        </button>
-                        <button type="button" class="btn-primary" id="btn-manage-orders" style="background: #10b981; border-color: #10b981;">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 3H17V17H3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M7 7H13M7 10H13M7 13H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            {{ __('Manage Orders') }}
-                        </button>
-                    </div>
-
-                    <!-- Legend -->
-                    <div class="table-legend">
-                        <div class="legend-item">
-                            <span class="legend-color utilized"></span>
-                            <span class="legend-text">{{ __('Utilized table/chair with guests') }}</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color free"></span>
-                            <span class="legend-text">{{ __('Free table/chair') }}</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color blocked"></span>
-                            <span class="legend-text">{{ __('Blocked table/chair') }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Restaurant Floor Plan Wrapper -->
-                    <div class="floor-plan-wrapper">
-                        <!-- Restaurant Floor Plan -->
-                        <div class="restaurant-floor-plan">
-                            <!-- Entrance -->
-                            <div class="entrance-area" data-area="entrance" data-entrance-side="right" style="top: 47%; right: 20px;">
-                                <span class="entrance-label">{{ __('Entrance') }}</span>
-                                <div class="entrance-arrow"></div>
-                            </div>
-
-                            <!-- Bar Area -->
-                            <div class="floor-area bar-area" data-area="bar-area">
-                                <span class="area-label">{{ __('Bar Area') }}</span>
-                            </div>
-
-                            <!-- Toilets Wall -->
-                            <div class="floor-area toilets-wall" data-area="toilets">
-                                <span class="toilets-label">{{ __('Toilets') }}</span>
-                            </div>
-
-                        <!-- Tables -->
-                        <!-- Top Row - 10 Chair Horizontal Rectangle (replaces Ta1 and Ta2) -->
-                        <div class="table-item table-rectangle-h10 free" style="top: 40px; left: 380px;" data-table="Ta1">
-                            <span class="table-name">Ta1</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top-1"></div>
-                                <div class="chair chair-top-2"></div>
-                                <div class="chair chair-top-3"></div>
-                                <div class="chair chair-top-4"></div>
-                                <div class="chair chair-right"></div>
-                                <div class="chair chair-bottom-1"></div>
-                                <div class="chair chair-bottom-2"></div>
-                                <div class="chair chair-bottom-3"></div>
-                                <div class="chair chair-bottom-4"></div>
-                                <div class="chair chair-left"></div>
-                            </div>
-                        </div>
-
-                        <div class="table-item table-rounded free" style="top: 50px; right: 60px;" data-table="Tb1">
-                            <span class="table-name">Tb1</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top-left"></div>
-                                <div class="chair chair-top-right"></div>
-                                <div class="chair chair-right"></div>
-                                <div class="chair chair-bottom-right"></div>
-                                <div class="chair chair-bottom-left"></div>
-                                <div class="chair chair-left"></div>
-                            </div>
-                        </div>
-
-                        <div class="table-item table-circle free" style="top: 200px; right: 80px;" data-table="Ta3">
-                            <span class="table-name">Ta3</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top"></div>
-                                <div class="chair chair-right"></div>
-                                <div class="chair chair-bottom"></div>
-                                <div class="chair chair-left"></div>
-                            </div>
-                        </div>
-
-                        <!-- Left Side -->
-                        <div class="table-item table-circle free" style="top: 280px; left: 120px;" data-table="Ta8">
-                            <span class="table-name">Ta8</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top"></div>
-                                <div class="chair chair-right"></div>
-                                <div class="chair chair-bottom"></div>
-                                <div class="chair chair-left"></div>
-                            </div>
-                        </div>
-
-                        <div class="table-item table-rounded free" style="bottom: 60px; left: 80px;" data-table="Tb2">
-                            <span class="table-name">Tb2</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top-left"></div>
-                                <div class="chair chair-top-right"></div>
-                                <div class="chair chair-right"></div>
-                                <div class="chair chair-bottom-right"></div>
-                                <div class="chair chair-bottom-left"></div>
-                                <div class="chair chair-left"></div>
-                            </div>
-                        </div>
-
-                        <!-- Center -->
-                        <div class="table-item table-circle free" style="top: 380px; left: 420px;" data-table="Ta4">
-                            <span class="table-name">Ta4</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top"></div>
-                                <div class="chair chair-right"></div>
-                                <div class="chair chair-bottom"></div>
-                                <div class="chair chair-left"></div>
-                            </div>
-                        </div>
-
-                        <!-- Bottom Row - All in one line -->
-                        <div class="table-item table-circle free" style="bottom: 60px; left: 380px;" data-table="Ta5">
-                            <span class="table-name">Ta5</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top"></div>
-                                <div class="chair chair-right"></div>
-                                <div class="chair chair-bottom"></div>
-                                <div class="chair chair-left"></div>
-                            </div>
-                        </div>
-
-                        <!-- 8 Chair Horizontal Rectangle Table (replaces Ta6 and Ta7) -->
-                        <div class="table-item table-rectangle-h free" style="bottom: 60px; right: 120px;" data-table="Ta6">
-                            <span class="table-name">Ta6</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top-1"></div>
-                                <div class="chair chair-top-2"></div>
-                                <div class="chair chair-top-3"></div>
-                                <div class="chair chair-right"></div>
-                                <div class="chair chair-bottom-1"></div>
-                                <div class="chair chair-bottom-2"></div>
-                                <div class="chair chair-bottom-3"></div>
-                                <div class="chair chair-left"></div>
-                            </div>
-                        </div>
-
-                        <!-- 2 Chair Table -->
-                        <div class="table-item table-circle free" style="top: 180px; left: 280px;" data-table="Ta9">
-                            <span class="table-name">Ta9</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top"></div>
-                                <div class="chair chair-bottom"></div>
-                            </div>
-                        </div>
-
-                        <!-- 12 Chair Table - Large Rectangle -->
-                        <div class="table-item table-rectangle free" style="top: 220px; right: 260px;" data-table="Ta10">
-                            <span class="table-name">Ta10</span>
-                            <div class="chair-wrapper">
-                                <div class="chair chair-top"></div>
-                                <div class="chair chair-right-1"></div>
-                                <div class="chair chair-right-2"></div>
-                                <div class="chair chair-right-3"></div>
-                                <div class="chair chair-right-4"></div>
-                                <div class="chair chair-right-5"></div>
-                                <div class="chair chair-bottom"></div>
-                                <div class="chair chair-left-1"></div>
-                                <div class="chair chair-left-2"></div>
-                                <div class="chair chair-left-3"></div>
-                                <div class="chair chair-left-4"></div>
-                                <div class="chair chair-left-5"></div>
-                            </div>
-                        </div>
-
-                        <!-- Center Square (decoration/pillar) -->
-                        <div class="center-square" data-area="center-square"></div>
-                    </div>
-
-                    <!-- Entrance cut-out cover only (no arrow) -->
-                    <div class="entrance-cutout-cover"></div>
-                    </div>
-
-                    <!-- Live Views & Integration Toggles -->
-                    <div class="table-controls">
-                        <div class="controls-section">
-                            <h4 class="controls-title">{{ __('Live Views') }}</h4>
-                            <div class="toggle-group">
-                                <label class="toggle-item">
-                                    <input type="checkbox" class="toggle-input" id="show-utilization" checked>
-                                    <span class="toggle-slider"></span>
-                                    <span class="toggle-label">{{ __('Show utilization') }}</span>
-                                </label>
-                                <label class="toggle-item">
-                                    <input type="checkbox" class="toggle-input" id="show-ordered">
-                                    <span class="toggle-slider"></span>
-                                    <span class="toggle-label">{{ __('Show ordered') }}</span>
-                                </label>
-                                <label class="toggle-item">
-                                    <input type="checkbox" class="toggle-input" id="show-recommendations">
-                                    <span class="toggle-slider"></span>
-                                    <span class="toggle-label">{{ __('Show recommendations') }}</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="controls-section">
-                            <h4 class="controls-title">{{ __('Integration') }}</h4>
-                            <div class="toggle-group">
-                                <label class="toggle-item">
-                                    <input type="checkbox" class="toggle-input" id="show-reservations">
-                                    <span class="toggle-slider"></span>
-                                    <span class="toggle-label">{{ __('Show reservations') }}</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Products Section (existing) -->
-                <div id="products-section">
-                <!-- Category Section -->
-                <div class="pos-category-section">
-                    <div class="pos-category-header">
-                        <h3 class="pos-section-title">{{ __('Category') }}</h3>
-                        <div class="pos-category-nav-buttons">
-                            <button type="button" class="pos-category-scroll-btn prev">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                            <button type="button" class="pos-category-scroll-btn next">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="pos-category-scroll-wrapper">
-                        <div class="pos-category-list" id="purchase-category-list">
-                            <!-- All Categories Option -->
-                            <button type="button" class="pos-category-item active" data-category="all">
-                                <div class="pos-category-icon">
-                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="6" y="6" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2.5"/>
-                                        <rect x="28" y="6" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2.5"/>
-                                        <rect x="6" y="28" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2.5"/>
-                                        <rect x="28" y="28" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2.5"/>
-                                    </svg>
-                                </div>
-                                <span class="pos-category-name">{{ __('All') }}</span>
-                            </button>
-                            @foreach($categories as $category)
-                            <button type="button" class="pos-category-item" data-category="{{ $category->id }}">
-                                <div class="pos-category-icon">
-                                    @if($category->icon)
-                                    <img src="{{ asset($category->icon) }}" alt="{{ $category->categoryName }}">
-                                    @else
-                                    <!-- Default category icon -->
-                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8 18L24 8L40 18V38C40 39.0609 39.5786 40.0783 38.8284 40.8284C38.0783 41.5786 37.0609 42 36 42H12C10.9391 42 9.92172 41.5786 9.17157 40.8284C8.42143 40.0783 8 39.0609 8 38V18Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M18 42V24H30V42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    @endif
-                                </div>
-                                <span class="pos-category-name">{{ $category->categoryName }}</span>
-                            </button>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Products Grid -->
-                <div class="pos-products-section">
-                    <h3 class="pos-section-title">{{ __('Products') }}</h3>
-                    <div class="pos-products-grid" id="products-list">
-                        @include('business::purchases.product-list-new')
-                    </div>
-                </div>
-                </div> <!-- Close products-section -->
-            </div>
-                        <!-- Left Sidebar - Order Section -->
-            <div class="order-sidebar">
-                <!-- Search Supplier Section -->
-                <div class="sidebar-search-customer">
-                    <div class="search-customer-wrapper">
-
-                        <select required name="party_id" id="supplier_id" class="sidebar-customer-select choices-select">
-                            <option value="">{{ __('Search Supplier') }}</option>
-                            @foreach ($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}" data-phone="">{{ $supplier->name }} ({{ __('Due: ') }} {{ currency_format($supplier->due, currency: business_currency()) }})</option>
-                            @endforeach
-                        </select>
-                        <a href="#supplier-create-modal" data-bs-toggle="modal" class="sidebar-add-customer-btn">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Order Details Card -->
-                <div class="sidebar-order-details">
-                    <h4 class="sidebar-section-title">{{ __('Purchase Details') }}</h4>
-                    <div class="order-details-content">
-                        <div class="order-detail-row">
-                            <span class="detail-value" id="selected-supplier-name">{{ __('Select Supplier') }}</span>
-                        </div>
-                        <div class="order-detail-row">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
-                                <circle cx="10" cy="10" r="8" stroke="#666" stroke-width="1.5"/>
-                                <path d="M10 5V10L13 13" stroke="#666" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                            <span class="detail-value">{{ now()->format('D, M\TH\LY Y') }} {{ now()->format('h:i A') }}</span>
-                        </div>
-                        <div class="order-detail-row">
-                            <span class="detail-value">{{ __('Purchase') }} #{{ $invoice_no }}</span>
-                        </div>
-                    </div>
-                    <input type="hidden" name="invoiceNumber" value="{{ $invoice_no }}">
-                    <input type="hidden" name="purchaseDate" value="{{ now()->format('Y-m-d') }}">
-                </div>
-
-                <!-- Cart Section -->
-                <div class="sidebar-cart-section">
-                    <div class="sidebar-cart-header">
-                        <span class="cart-title">{{ __('Products') }}</span>
-                        <button type="button" class="sidebar-clear-all-btn cancel-sale-btn" data-route="{{ route('business.carts.remove-all') }}">{{ __('Clear All') }}</button>
-                    </div>
-                    <div class="sidebar-cart-items" id="purchase_cart_list">@include('business::purchases.cart-list-new')</div>
-                </div>
-
-                <!-- Order Summary -->
-                <div class="sidebar-order-summary">
-                    <div class="summary-row"><span>{{ __('Items') }}</span><span id="items_count">0</span></div>
-                    <div class="summary-row"><span>{{ __('Subtotal') }}</span><span id="sub_total">{{ currency_format(0, currency: business_currency()) }}</span></div>
-                    <div class="summary-row"><span>{{ __('Discount') }}</span><span id="discount_display">0</span></div>
-                    <div class="summary-row"><span>{{ __('Taxes') }}</span><span id="vat_display">0</span></div>
-                    <div class="summary-row"><span>{{ __('Shipping') }}</span><span id="shipping_display">0</span></div>
-                    <div class="summary-row summary-total"><span>{{ __('Total') }}</span><span id="total_amount">{{ currency_format(0, currency: business_currency()) }}</span></div>
-                </div>
-
-                <!-- Hidden Inputs -->
-                <div class="hidden-cart-inputs" style="display: none;">
-                    <input name="receive_amount" type="number" step="any" id="receive_amount" min="0" value="0">
-                    <input type="number" step="any" id="change_amount" value="0" readonly>
-                    <input type="number" step="any" id="due_amount" value="0" readonly>
-                    <select name="payment_type_id" id="payment_type_id">@foreach ($payment_types as $type)<option value="{{ $type->id }}">{{ $type->name }}</option>@endforeach</select>
-                    <select name="vat_id" class="vat_select"><option value="">{{ __('Select') }}</option>@foreach ($vats as $vat)<option value="{{ $vat->id }}" data-rate="{{ $vat->rate }}">{{ $vat->name }} ({{ $vat->rate }}%)</option>@endforeach</select>
-                    <input type="number" step="any" name="vat_amount" id="vat_amount" min="0" value="0">
-                    <select name="discount_type" class="discount_type"><option value="flat">{{ __('Flat') }}</option><option value="percent">{{ __('Percent') }}</option></select>
-                    <input type="number" step="any" name="discountAmount" id="discount_amount" min="0" value="0">
-                    <input type="number" step="any" name="shipping_charge" id="shipping_charge" value="0">
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="sidebar-action-buttons">
-                    @usercan('purchases.create')<button type="button" class="sidebar-pay-btn" id="open-purchase-payment-modal">{{ __('Pay the Bill') }}</button>@endusercan
-                    <button type="button" class="sidebar-cancel-btn cancel-sale-btn" data-route="{{ route('business.carts.remove-all') }}">{{ __('Cancel Order') }}</button>
-                </div>
-            </div>
-
-        </div>
-
-        @php $currency = business_currency(); @endphp
-        <input type="hidden" id="currency_symbol" value="{{ $currency->symbol }}">
-        <input type="hidden" id="currency_position" value="{{ $currency->position }}">
-        <input type="hidden" id="currency_code" value="{{ $currency->code }}">
-        <input type="hidden" id="get_product" value="{{ route('business.products.prices') }}">
-        <input type="hidden" value="{{ route('business.purchases.cart') }}" id="purchase-cart">
-        <input type="hidden" value="{{ route('business.carts.remove-all') }}" id="clear-cart">
-    </form>
-
-    <!-- Payment Modal for Purchase -->
-    <div class="payment-modal-overlay" id="purchase-payment-modal-overlay">
-        <div class="payment-modal">
-            <div class="payment-modal-header">
-                <h3 class="payment-modal-title">{{ __('Collect Payment') }}</h3>
-                <div class="payment-modal-order-info">
-                    <div class="payment-order-number">{{ __('Purchase') }} #<span id="modal-purchase-number">{{ $invoice_no }}</span></div>
-                    <div class="payment-order-total" id="modal-purchase-total">{{ currency_format(0, currency: business_currency()) }}</div>
-                </div>
-            </div>
-
-            <div class="payment-modal-tabs">
-                <button type="button" class="payment-tab-btn active" data-tab="full">{{ __('Full Payment') }}</button>
-                <button type="button" class="payment-tab-btn" data-tab="split">{{ __('Split Bill') }}</button>
-            </div>
-
-            <div class="payment-methods">
-                <button type="button" class="payment-method-btn active" data-method="cash">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M28 8H4C2.89543 8 2 8.89543 2 10V22C2 23.1046 2.89543 24 4 24H28C29.1046 24 30 23.1046 30 22V10C30 8.89543 29.1046 8 28 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 20C18.2091 20 20 18.2091 20 16C20 13.7909 18.2091 12 16 12C13.7909 12 12 13.7909 12 16C12 18.2091 13.7909 20 16 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>{{ __('Cash') }}</span>
-                </button>
-                <button type="button" class="payment-method-btn" data-method="card">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
-                        <path d="M2 12H30" stroke="currentColor" stroke-width="2"/>
-                        <path d="M6 20H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    <span>{{ __('Card') }}</span>
-                </button>
-                <button type="button" class="payment-method-btn" data-method="upi">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 28C22.6274 28 28 22.6274 28 16C28 9.37258 22.6274 4 16 4C9.37258 4 4 9.37258 4 16C4 22.6274 9.37258 28 16 28Z" stroke="currentColor" stroke-width="2"/>
-                        <path d="M16 10V22M10 16H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    <span>{{ __('UPI') }}</span>
-                </button>
-                <button type="button" class="payment-method-btn" data-method="due">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 28C22.6274 28 28 22.6274 28 16C28 9.37258 22.6274 4 16 4C9.37258 4 4 9.37258 4 16C4 22.6274 9.37258 28 16 28Z" stroke="currentColor" stroke-width="2"/>
-                        <path d="M16 8V16L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    <span>{{ __('DUE') }}</span>
-                </button>
-            </div>
-
-            <div class="payment-amounts">
-                <div class="payment-amount-field">
-                    <label>{{ __('Due Amount') }}</label>
-                    <input type="text" id="modal-purchase-due-amount" readonly value="0">
-                </div>
-                <div class="payment-amount-field">
-                    <label>{{ __('Receive Amount') }}</label>
-                    <input type="text" id="modal-purchase-receive-amount" value="0">
-                </div>
-            </div>
-
-            <div class="payment-summary">
-                <div class="payment-summary-row">
-                    <span>{{ __('Total Bill') }}</span>
-                    <span id="modal-purchase-total-bill">{{ currency_format(0, currency: business_currency()) }}</span>
-                </div>
-                <div class="payment-summary-row">
-                    <span>{{ __('Amount Paid') }}</span>
-                    <span id="modal-purchase-amount-paid">{{ currency_format(0, currency: business_currency()) }}</span>
-                </div>
-                <div class="payment-summary-row">
-                    <span>{{ __('Due Amount') }}</span>
-                    <span id="modal-purchase-due-summary">{{ currency_format(0, currency: business_currency()) }}</span>
-                </div>
-            </div>
-
-            <div class="payment-numpad">
-                <button type="button" class="numpad-btn" data-value="7">7</button>
-                <button type="button" class="numpad-btn" data-value="8">8</button>
-                <button type="button" class="numpad-btn" data-value="9">9</button>
-                <button type="button" class="numpad-btn" data-value="4">4</button>
-                <button type="button" class="numpad-btn" data-value="5">5</button>
-                <button type="button" class="numpad-btn" data-value="6">6</button>
-                <button type="button" class="numpad-btn" data-value="1">1</button>
-                <button type="button" class="numpad-btn" data-value="2">2</button>
-                <button type="button" class="numpad-btn" data-value="3">3</button>
-                <button type="button" class="numpad-btn" data-value="0">0</button>
-                <button type="button" class="numpad-btn" data-value=".">.</button>
-                <button type="button" class="numpad-btn numpad-clear" data-value="clear">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-            </div>
-
-            <div class="payment-modal-actions">
-                <button type="button" class="payment-cancel-btn" id="cancel-purchase-payment-btn">{{ __('Cancel') }}</button>
-                <button type="submit" form="purchase-form" class="payment-complete-btn" id="complete-purchase-payment-btn">{{ __('Complete Payment') }}</button>
-            </div>
-        </div>
-    </div>
-@endsection
-
-@push('modal')
-    <!-- Add Table Modal -->
-    <div class="modal fade" id="addTableModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Add New Table') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('Table Number') }}</label>
-                        <input type="text" class="form-control" id="new-table-name" placeholder="Ta11, Ta12, etc.">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('Number of Chairs') }}</label>
-                        <select class="form-select" id="new-table-chairs">
-                            <option value="2">2 {{ __('Chairs') }}</option>
-                            <option value="4" selected>4 {{ __('Chairs') }}</option>
-                            <option value="6">6 {{ __('Chairs') }}</option>
-                            <option value="8">8 {{ __('Chairs') }}</option>
-                            <option value="10">10 {{ __('Chairs') }}</option>
-                            <option value="12">12 {{ __('Chairs') }}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="save-new-table">{{ __('Add Table') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Make Reservation Modal -->
-    <div class="modal fade" id="makeReservationModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Make Reservation') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">{{ __('Customer Name') }}</label>
-                            <input type="text" class="form-control" id="reservation-customer-name" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">{{ __('Phone Number') }}</label>
-                            <input type="tel" class="form-control" id="reservation-phone">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label">{{ __('Date') }}</label>
-                            <input type="date" class="form-control" id="reservation-date" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">{{ __('Time') }}</label>
-                            <input type="time" class="form-control" id="reservation-time" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">{{ __('Number of Guests') }}</label>
-                            <input type="number" class="form-control" id="reservation-guests" value="2" min="1" max="20" required>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('Special Notes') }}</label>
-                        <textarea class="form-control" id="reservation-notes" rows="2"></textarea>
-                    </div>
-                    <div class="mb-3 flex justify-end">
-                        <button type="button" class="btn   btn-primary" id="search-available-tables">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
-                                <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="currentColor" stroke-width="2"/>
-                                <path d="M19 19L14.65 14.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            {{ __('Search Available Tables') }}
-                        </button>
-                    </div>
-                    <div id="available-tables-list" style="display: none;">
-                        <h6 class="mb-3">{{ __('Available Tables') }}:</h6>
-                        <div id="available-tables-container" class="d-flex flex-wrap gap-2"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="confirm-reservation" disabled>{{ __('Confirm Reservation') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Manage Reservations Modal -->
-    <div class="modal fade" id="manageReservationsModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Manage Reservations') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Table') }}</th>
-                                    <th>{{ __('Customer Name') }}</th>
-                                    <th>{{ __('Phone') }}</th>
-                                    <th>{{ __('Date') }}</th>
-                                    <th>{{ __('Time') }}</th>
-                                    <th>{{ __('Guests') }}</th>
-                                    <th>{{ __('Notes') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody id="reservations-table-body">
-                                <!-- Reservations will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="no-reservations-message" style="display: none; text-align: center; padding: 40px;">
-                        <p class="text-muted">{{ __('No reservations found') }}</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Manage Orders Modal -->
-    <div class="modal fade" id="manageOrdersModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Manage Orders') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Table') }}</th>
-                                    <th>{{ __('Customer Name') }}</th>
-                                    <th>{{ __('Guests') }}</th>
-                                    <th>{{ __('Order Items') }}</th>
-                                    <th>{{ __('Notes') }}</th>
-                                    <th>{{ __('Started At') }}</th>
-                                    <th>{{ __('Actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody id="orders-table-body">
-                                <!-- Orders will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="no-orders-message" style="display: none; text-align: center; padding: 40px;">
-                        <p class="text-muted">{{ __('No active orders found') }}</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Manage All Tables Modal -->
-    <div class="modal fade" id="manageAllTablesModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Manage All Tables') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Table Name') }}</th>
-                                    <th>{{ __('Chairs') }}</th>
-                                    <th>{{ __('Type') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Current Order/Reservation') }}</th>
-                                    <th>{{ __('Actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody id="all-tables-body">
-                                <!-- Tables will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Reservation Details Modal -->
-    <div class="modal fade" id="reservationDetailsModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header ">
-                    <h5 class="modal-title"> {{ __('Reservation Details') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <strong>{{ __('Table') }}:</strong>
-                        <span id="detail-table" class="ms-2"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>{{ __('Customer Name') }}:</strong>
-                        <span id="detail-customer" class="ms-2"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>{{ __('Phone') }}:</strong>
-                        <span id="detail-phone" class="ms-2"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>{{ __('Date') }}:</strong>
-                        <span id="detail-date" class="ms-2"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>{{ __('Time') }}:</strong>
-                        <span id="detail-time" class="ms-2"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>{{ __('Number of Guests') }}:</strong>
-                        <span id="detail-guests" class="ms-2"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>{{ __('Special Notes') }}:</strong>
-                        <p id="detail-notes" class="mt-2 p-2 bg-light rounded"></p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>{{ __('Status') }}:</strong>
-                        <span id="detail-status" class="ms-2"></span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-deleted" id="cancel-reservation-btn">{{ __('Cancel Reservation') }}</button>
-                    <button type="button" class="btn btn-primary" id="guest-arrived-btn">{{ __('Guest Arrived') }}</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Table Order Modal -->
-    <div class="modal fade" id="tableOrderModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Table Order') }} - <span id="order-table-name"></span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-order-info">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">{{ __('Customer Name') }}</label>
-                                <input type="text" class="form-control" id="order-customer-name">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">{{ __('Number of Guests') }}</label>
-                                <input type="number" class="form-control" id="order-guests" value="1" min="1">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('Order Items') }}</label>
-                            <textarea class="form-control" id="order-items" rows="4" placeholder="{{ __('Enter order items...') }}"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('Special Notes') }}</label>
-                            <textarea class="form-control" id="order-notes" rows="2"></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label class="form-label">{{ __('Order Time') }}</label>
-                                <input type="time" class="form-control" id="order-time" value="{{ now()->format('H:i') }}">
-                            </div>
-                        </div>
-                        <!-- Hidden field for table status - managed automatically -->
-                        <input type="hidden" id="order-table-status" value="utilized">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="save-table-order">{{ __('Save Order') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Complete Order Modal -->
-    <div class="modal fade" id="completeOrderModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background: #10b981; color: white;">
-                    <h5 class="modal-title">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 8px;">
-                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        {{ __('Complete Order') }}
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="complete-order-info">
-                        <h6 style="font-weight: bold; margin-bottom: 15px;">{{ __('Order Details') }}</h6>
-                        <table class="table table-borderless">
-                            <tr>
-                                <td style="width: 40%; color: #666;">{{ __('Table') }}:</td>
-                                <td style="font-weight: bold;" id="complete-table-name"></td>
-                            </tr>
-                            <tr>
-                                <td style="color: #666;">{{ __('Customer') }}:</td>
-                                <td id="complete-customer-name"></td>
-                            </tr>
-                            <tr>
-                                <td style="color: #666;">{{ __('Guests') }}:</td>
-                                <td id="complete-guests"></td>
-                            </tr>
-                            <tr>
-                                <td style="color: #666;">{{ __('Order Time') }}:</td>
-                                <td id="complete-order-time"></td>
-                            </tr>
-                        </table>
-
-                        <div style="background: #f3f4f6; padding: 12px; border-radius: 8px; margin-top: 15px;">
-                            <strong>{{ __('Order Items') }}:</strong>
-                            <div id="complete-order-items" style="margin-top: 8px; white-space: pre-wrap;"></div>
-                        </div>
-
-                        <div id="complete-notes-section" style="margin-top: 15px; display: none;">
-                            <strong>{{ __('Notes') }}:</strong>
-                            <div id="complete-order-notes" style="margin-top: 8px; color: #666; font-style: italic;"></div>
-                        </div>
-
-                        <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin-top: 20px; border-radius: 4px;">
-                            <strong style="color: #92400e;">⚠️ {{ __('Confirm Completion') }}</strong>
-                            <p style="margin: 8px 0 0 0; color: #78350f; font-size: 14px;">
-                                {{ __('This will mark the order as complete and free the table for new customers.') }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
-                    <button type="button" class="btn complete-order" id="confirm-complete-order" style="background: #10b981; border-color: #10b981;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right: 6px;">
-                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        {{ __('Complete Order') }}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @include('business::purchases.calculator')
-    @include('business::purchases.category-search')
-    @include('business::purchases.brand-search')
-    @include('business::purchases.supplier-create')
-    @include('business::purchases.bulk-upload.index')
-    @include('business::purchases.product-modal')
-@endpush
-
-@push('js')
     <script>
+        // Add missing functions for cart functionality
+        window.fetchUpdatedCart = function(callback) {
+            let url = "{{ route('business.carts.index') }}?layout=new";
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function (response) {
+                    $("#cart-list").html(response);
+                    if (typeof callback == "function") callback();
+                },
+                error: function() {
+                    console.error("Error fetching cart");
+                }
+            });
+        };
+
+        // Add missing currency format function
+        window.currencyFormat = function(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        };
+
+        // Add missing helper functions
+        window.getNumericValue = function(value) {
+            if (typeof value === 'string') {
+                return parseFloat(value.replace(/[^0-9.-]/g, '')) || 0;
+            }
+            return parseFloat(value) || 0;
+        };
+
+        window.formattedAmount = function(amount, decimals = 2) {
+            return parseFloat(amount).toFixed(decimals);
+        };
+
+        window.RoundingTotal = function(amount) {
+            // Simple rounding logic - can be customized based on business needs
+            return Math.round(amount * 100) / 100;
+        };
+
+        // Add missing addProductToCart function for compatibility
+        window.addProductToCart = function(productElement) {
+            console.log("addProductToCart called with", productElement);
+            
+            // Convert DOM element to jQuery object if needed
+            const $element = $(productElement);
+            
+            // Get product data
+            const productId = $element.data('product_id');
+            const productName = $element.data('product_name');
+            const defaultPrice = parseFloat($element.data('default_price')) || 0;
+            const productCode = $element.data('product_code');
+            const productUnitId = $element.data('product_unit_id');
+            const productUnitName = $element.data('product_unit_name');
+            const productImage = $element.data('product_image');
+            const route = $element.data('route');
+            const stocks = $element.data('stocks') || [];
+            
+            console.log("Product data:", {
+                productId, productName, defaultPrice, productCode, 
+                productUnitId, productUnitName, productImage, route, stocks
+            });
+            
+            // Validate required data
+            if (!productId || !route) {
+                console.error("Missing required product data", { productId, route });
+                toastr.error("Missing product information");
+                return;
+            }
+            
+            // Validate price
+            if (defaultPrice < 0 || isNaN(defaultPrice)) {
+                console.error("Invalid price", defaultPrice);
+                toastr.error("Price can not be negative.");
+                return;
+            }
+            
+            // Use the first available stock if multiple stocks exist
+            let stockId = null;
+            let purchasePrice = 0;
+            if (Array.isArray(stocks) && stocks.length > 0) {
+                const firstStock = stocks[0];
+                stockId = firstStock.id;
+                purchasePrice = firstStock.productPurchasePrice || 0;
+            }
+            
+            const requestData = {
+                type: "sale",
+                id: productId,
+                name: productName,
+                price: defaultPrice,
+                quantity: 1,
+                product_code: productCode,
+                product_unit_id: productUnitId,
+                product_unit_name: productUnitName,
+                stock_id: stockId,
+                purchase_price: purchasePrice,
+                product_image: productImage,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            };
+            
+            console.log("Sending AJAX request to", route, "with data", requestData);
+            
+            // Add to cart via AJAX
+            $.ajax({
+                url: route,
+                type: "POST",
+                data: requestData,
+                success: function (response) {
+                    console.log("Add to cart response", response);
+                    if (response.success) {
+                        // Refresh cart list
+                        fetchUpdatedCart(function() {
+                            if (typeof calTotalAmount === 'function') {
+                                calTotalAmount();
+                            }
+                        });
+                        toastr.success("Product added to cart");
+                    } else {
+                        console.error("Add to cart failed", response);
+                        toastr.error(response.message || "Failed to add product to cart");
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Error adding product to cart:", xhr.responseText, xhr);
+                    toastr.error("Error adding product to cart");
+                },
+            });
+        };
+
+        // Product click handlers
+        $(document).ready(function() {
+            console.log("Product click handlers initialized");
+            
+            // Handle product card click (anywhere on the card)
+            $(document).on("click", ".single-product, .pos-product-card", function (e) {
+                console.log("Product card clicked", this);
+                
+                // Prevent double triggering if clicking on add button
+                if ($(e.target).closest('.add-product-btn, .pos-add-to-cart-btn').length) {
+                    console.log("Clicked on add button, skipping card handler");
+                    return;
+                }
+                
+                // Add product to cart
+                addProductToCart(this);
+            });
+
+            // Handle add product button click
+            $(document).on("click", ".add-product-btn, .pos-add-to-cart-btn", function (e) {
+                console.log("Add to cart button clicked", this);
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Find the parent product card
+                const productCard = $(this).closest('.single-product, .pos-product-card');
+                if (productCard.length) {
+                    console.log("Found product card", productCard[0]);
+                    addProductToCart(productCard[0]);
+                } else {
+                    console.error("Could not find product card");
+                }
+            });
+
+            // Note: Quantity increase/decrease functionality is handled by existing sale.js
+            // The existing handlers already support .plus-btn and .minus-btn classes
+            // They work with .cart-item-card containers and .cart-qty inputs
+            // We just need to sync the visible quantity span with the hidden input
+            
+            function syncQuantityDisplays() {
+                $('.cart-item-card').each(function() {
+                    const $item = $(this);
+                    const hiddenQty = $item.find('.cart-qty').val();
+                    const $visibleQty = $item.find('.cart-qty-display');
+                    if (hiddenQty && $visibleQty.length && $visibleQty.text() !== hiddenQty) {
+                        $visibleQty.text(hiddenQty);
+                    }
+                });
+            }
+            
+            // Override fetchUpdatedCart to sync quantities after cart refresh
+            const originalFetchUpdatedCart = window.fetchUpdatedCart;
+            window.fetchUpdatedCart = function(callback) {
+                originalFetchUpdatedCart(function() {
+                    // Small delay to ensure DOM is updated
+                    setTimeout(syncQuantityDisplays, 50);
+                    if (typeof callback === 'function') callback();
+                });
+            };
+            
+            // Sync quantities after any cart operation
+            $(document).on('click', '.plus-btn, .minus-btn', function() {
+                const $item = $(this).closest('.cart-item-card');
+                setTimeout(function() {
+                    const hiddenQty = $item.find('.cart-qty').val();
+                    const $visibleQty = $item.find('.cart-qty-display');
+                    if (hiddenQty && $visibleQty.length) {
+                        $visibleQty.text(hiddenQty);
+                    }
+                }, 100);
+            });
+            
+            // Initial sync when page loads
+            $(document).ready(function() {
+                setTimeout(syncQuantityDisplays, 100);
+            });
+
+            // Note: Remove item functionality is handled by existing sale.js
+            // The existing handler already supports .remove-item-btn class
+            // No additional handler needed to avoid conflicts
+        });
+
         // Tab switching functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.pos-tab-btn');
-            const tablesSection = document.getElementById('tables-section');
+            const tabButtons = document.querySelectorAll('.pos-tab-btn, .pos-view-btn');
+            const toggleButtons = document.querySelectorAll('.pos-toggle-btn');
+            const tablesSection = document.getElementById('tables-view');
             const productsSection = document.getElementById('products-section');
             const productsGridSection = document.querySelector('.pos-products-section');
 
             tabButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    const tab = this.getAttribute('data-tab');
+                    const tab = this.getAttribute('data-tab') || this.getAttribute('data-view');
 
-                    // Remove active class from all buttons
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-
-                    // Add active class to clicked button
-                    this.classList.add('active');
+                    // Remove active from ALL buttons (both toggle and icon buttons)
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('pos-toggle-btn-active');
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active to clicked button only
+                    if (this.classList.contains('pos-toggle-btn')) {
+                        this.classList.add('pos-toggle-btn-active');
+                    } else {
+                        this.classList.add('active');
+                    }
 
                     // Show/hide sections
                     if (tab === 'tables') {
-                        tablesSection.style.display = 'block';
-                        productsSection.style.display = 'none';
+                        if (tablesSection) tablesSection.style.display = 'block';
+                        if (productsSection) productsSection.style.display = 'none';
                         if (productsGridSection) productsGridSection.style.display = 'none';
+                        
+                        // Hide other views
+                        const brandView = document.getElementById('brand-view');
+                        const categoryView = document.getElementById('category-view');
+                        const searchView = document.getElementById('search-view');
+                        if (brandView) brandView.style.display = 'none';
+                        if (categoryView) categoryView.style.display = 'none';
+                        if (searchView) searchView.style.display = 'none';
                     } else {
-                        tablesSection.style.display = 'none';
-                        productsSection.style.display = 'block';
+                        if (tablesSection) tablesSection.style.display = 'none';
+                        if (productsSection) productsSection.style.display = 'block';
                         if (productsGridSection) productsGridSection.style.display = 'block';
+                        
+                        // Show appropriate view
+                        const brandView = document.getElementById('brand-view');
+                        const categoryView = document.getElementById('category-view');
+                        const searchView = document.getElementById('search-view');
+                        
+                        if (tab === 'brand' && brandView) {
+                            brandView.style.display = 'block';
+                            if (categoryView) categoryView.style.display = 'none';
+                            if (searchView) searchView.style.display = 'none';
+                        } else if (tab === 'search' && searchView) {
+                            searchView.style.display = 'block';
+                            if (brandView) brandView.style.display = 'none';
+                            if (categoryView) categoryView.style.display = 'none';
+                        } else if (categoryView) {
+                            categoryView.style.display = 'block';
+                            if (brandView) brandView.style.display = 'none';
+                            if (searchView) searchView.style.display = 'none';
+                        }
                     }
                 });
             });
@@ -1713,7 +608,7 @@
                     const instruction = document.createElement('div');
                     instruction.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); color: white; padding: 30px 50px; border-radius: 12px; z-index: 10000; font-size: 18px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3);';
                     instruction.innerHTML = `
-                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 15px;">📍 {{ __("Position Your Table") }}</div>
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 15px;">ًں“چ {{ __("Position Your Table") }}</div>
                         <div style="margin-bottom: 20px;">{{ __("Click and drag the table to position it") }}</div>
                         <button id="confirm-position-btn" style="background: var(--clr-primary); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">{{ __("Confirm Position") }}</button>
                         <button id="cancel-position-btn" style="background: #E6E6E6; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-left: 10px;">{{ __("Cancel") }}</button>
@@ -1947,7 +842,7 @@
                 const tableName = table.getAttribute('data-table');
                 saveTablePosition(tableName, table);
 
-                console.log(`Table ${tableName} rotated to ${newRotation}°`);
+                console.log(`Table ${tableName} rotated to ${newRotation}آ°`);
             }
 
             // Reset table rotation to 0
@@ -1999,7 +894,7 @@
                             <path d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                             <path d="M8 2L10 4M8 2L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
-                        Rotate 90° (Current: ${currentRotation}°)
+                        Rotate 90آ° (Current: ${currentRotation}آ°)
                     </div>
                     <div class="menu-item" data-action="reset" style="padding: 10px 16px; cursor: pointer; transition: background 0.2s;">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="vertical-align: middle; margin-right: 8px;">
@@ -2160,12 +1055,12 @@
             console.log('Manage All Tables button found:', btnManageAllTables);
 
             function openManageReservationsModal() {
-                console.log('📋 Opening Manage Reservations modal...');
+                console.log('ًں“‹ Opening Manage Reservations modal...');
 
                 // Load and display all reservations in modal
                 const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
-                console.log('📋 Reservations from localStorage:', reservations);
-                console.log('📋 Number of reservations:', Object.keys(reservations).length);
+                console.log('ًں“‹ Reservations from localStorage:', reservations);
+                console.log('ًں“‹ Number of reservations:', Object.keys(reservations).length);
                 const tbody = document.getElementById('reservations-table-body');
                 const noReservationsMsg = document.getElementById('no-reservations-message');
 
@@ -2205,13 +1100,13 @@
                         const row = document.createElement('tr');
 
                         // Determine status
-                        let status = '🟡 Reserved';
+                        let status = 'ًںں، Reserved';
                         let statusClass = 'text-warning';
                         const reservationDateTime = new Date(reservation.date + ' ' + reservation.time);
                         const currentDateTime = new Date(currentDate + ' ' + currentTime);
 
                         if (currentDateTime >= reservationDateTime) {
-                            status = '⏰ Time Arrived';
+                            status = 'âڈ° Time Arrived';
                             statusClass = 'text-success';
                         }
 
@@ -2278,12 +1173,12 @@
             console.log('Manage Orders button found:', btnManageOrders);
 
             function openManageOrdersModal() {
-                console.log('📦 Opening Manage Orders modal...');
+                console.log('ًں“¦ Opening Manage Orders modal...');
 
                 // Load and display all orders in modal
                 const tableOrders = JSON.parse(localStorage.getItem('tableOrders') || '{}');
-                console.log('📦 Orders from localStorage:', tableOrders);
-                console.log('📦 Number of orders:', Object.keys(tableOrders).length);
+                console.log('ًں“¦ Orders from localStorage:', tableOrders);
+                console.log('ًں“¦ Number of orders:', Object.keys(tableOrders).length);
                 const tbody = document.getElementById('orders-table-body');
                 const noOrdersMsg = document.getElementById('no-orders-message');
 
@@ -2398,29 +1293,29 @@
 
             // Auto-check reservations and update table status
             function checkReservationTimes() {
-                console.log('⏰ checkReservationTimes called');
+                console.log('âڈ° checkReservationTimes called');
                 const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
-                console.log('⏰ Current reservations:', reservations);
+                console.log('âڈ° Current reservations:', reservations);
                 const now = new Date();
                 const currentDate = now.toISOString().split('T')[0];
                 const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-                console.log('⏰ Current date/time:', currentDate, currentTime);
+                console.log('âڈ° Current date/time:', currentDate, currentTime);
 
                 // First, remove all existing badges
                 document.querySelectorAll('.reservation-badge').forEach(badge => badge.remove());
 
                 let needsUpdate = false;
                 for (const [key, reservation] of Object.entries(reservations)) {
-                    console.log('⏰ Checking reservation:', key, reservation);
+                    console.log('âڈ° Checking reservation:', key, reservation);
                     const table = document.querySelector(`[data-table="${reservation.table}"]`);
                     if (!table) {
-                        console.log('⏰ Table not found:', reservation.table);
+                        console.log('âڈ° Table not found:', reservation.table);
                         continue;
                     }
 
                     // Add reservation badge to table
                     if (table.classList.contains('blocked')) {
-                        console.log('⏰ Adding badge to table:', reservation.table);
+                        console.log('âڈ° Adding badge to table:', reservation.table);
                         const badge = document.createElement('div');
                         badge.className = 'reservation-badge';
                         badge.textContent = 'R';
@@ -2435,7 +1330,7 @@
                     // Just mark that time has arrived, but don't change status automatically
                     // Status will change when user clicks on the table
                     if (reservation.date === currentDate && reservation.time <= currentTime && !reservation.timeArrived) {
-                        console.log('⏰ Marking time arrived for:', reservation.table);
+                        console.log('âڈ° Marking time arrived for:', reservation.table);
                         // Store that reservation time has arrived
                         reservation.timeArrived = true;
                         needsUpdate = true;
@@ -2444,16 +1339,16 @@
 
                 // Only update localStorage if needed
                 if (needsUpdate) {
-                    console.log('⏰ Updating localStorage with timeArrived flags');
+                    console.log('âڈ° Updating localStorage with timeArrived flags');
                     localStorage.setItem('tableReservations', JSON.stringify(reservations));
                 }
-                console.log('⏰ checkReservationTimes completed');
+                console.log('âڈ° checkReservationTimes completed');
             }
 
             // Show reservation details in modal
             function showReservationDetails(reservation, reservationKey) {
-                console.log('🔍 showReservationDetails called for:', reservation.table, reservationKey);
-                console.log('🔍 Reservation data:', reservation);
+                console.log('ًں”چ showReservationDetails called for:', reservation.table, reservationKey);
+                console.log('ًں”چ Reservation data:', reservation);
 
                 document.getElementById('detail-table').textContent = reservation.table;
                 document.getElementById('detail-customer').textContent = reservation.customerName;
@@ -2465,12 +1360,12 @@
 
                 // Check table current status
                 const table = document.querySelector(`[data-table="${reservation.table}"]`);
-                let statusText = '🟡 Reserved';
+                let statusText = 'ًںں، Reserved';
                 let showGuestArrivedBtn = true;
 
                 if (table && table.classList.contains('utilized')) {
                     // Table is already utilized (guest has arrived)
-                    statusText = '� Utilized - Guest Arrived';
+                    statusText = 'ï؟½ Utilized - Guest Arrived';
                     showGuestArrivedBtn = false;
                 } else {
                     // Check if reservation time has arrived
@@ -2481,7 +1376,7 @@
                     const currentDateTime = new Date(currentDate + ' ' + currentTime);
 
                     if (currentDateTime >= reservationDateTime) {
-                        statusText = '⏰ Time Arrived - Waiting for Guest';
+                        statusText = 'âڈ° Time Arrived - Waiting for Guest';
                     }
                 }
 
@@ -2516,9 +1411,9 @@
 
                 // Guest arrived button
                 document.getElementById('guest-arrived-btn').onclick = function() {
-                    console.log('🚨 Guest Arrived button clicked!');
-                    console.log('🚨 Reservation key:', reservationKey);
-                    console.log('🚨 Table:', reservation.table);
+                    console.log('ًںڑ¨ Guest Arrived button clicked!');
+                    console.log('ًںڑ¨ Reservation key:', reservationKey);
+                    console.log('ًںڑ¨ Table:', reservation.table);
 
                     const table = document.querySelector(`[data-table="${reservation.table}"]`);
                     if (table) {
@@ -2527,11 +1422,11 @@
 
                         // Remove reservation from localStorage (guest has arrived)
                         const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
-                        console.log('🚨 Before delete:', reservations);
+                        console.log('ًںڑ¨ Before delete:', reservations);
                         delete reservations[reservationKey];
-                        console.log('🚨 After delete:', reservations);
+                        console.log('ًںڑ¨ After delete:', reservations);
                         localStorage.setItem('tableReservations', JSON.stringify(reservations));
-                        console.log('🚨 Saved to localStorage');
+                        console.log('ًںڑ¨ Saved to localStorage');
 
                         // Remove reservation badge
                         const badge = table.querySelector('.reservation-badge');
@@ -2649,7 +1544,7 @@
 
                         // Show success message
                         setTimeout(() => {
-                            alert(`✅ Order completed! ${tableName} is now free.`);
+                            alert(`âœ… Order completed! ${tableName} is now free.`);
                         }, 300);
                     });
 
@@ -3099,7 +1994,7 @@
             function initializeEntranceCutout() {
                 const entranceArea = document.querySelector('.entrance-area');
                 if (!entranceArea) {
-                    console.error('❌ Entrance area not found');
+                    console.error('â‌Œ Entrance area not found');
                     return;
                 }
 
@@ -3125,16 +2020,16 @@
                     // Check if element has dimensions OR if we've exhausted retries
                     if ((rect.width === 0 || rect.height === 0) && retryCount < maxRetries && isVisible) {
                         retryCount++;
-                        console.log(`⚠️ Entrance not rendered yet, retry ${retryCount}/${maxRetries} in 300ms...`);
+                        console.log(`âڑ ï¸ڈ Entrance not rendered yet, retry ${retryCount}/${maxRetries} in 300ms...`);
                         setTimeout(attemptUpdate, 300);
                     } else if (rect.width > 0 && rect.height > 0) {
                         updateEntranceCutout(entranceArea, entranceSide);
-                        console.log('✅ Cutout Updated Successfully');
+                        console.log('âœ… Cutout Updated Successfully');
                     } else {
                         // Force update anyway - the cutout calculation will use the entrance position
-                        console.warn('⚠️ Forcing cutout update despite 0 dimensions');
+                        console.warn('âڑ ï¸ڈ Forcing cutout update despite 0 dimensions');
                         updateEntranceCutout(entranceArea, entranceSide);
-                        console.log('✅ Cutout forced update completed');
+                        console.log('âœ… Cutout forced update completed');
                     }
                 }
 
@@ -3145,7 +2040,7 @@
             function startInitialization() {
                 if (document.fonts && document.fonts.ready) {
                     document.fonts.ready.then(() => {
-                        console.log('📝 Fonts loaded, initializing entrance cutout...');
+                        console.log('ًں“‌ Fonts loaded, initializing entrance cutout...');
                         setTimeout(initializeEntranceCutout, 200);
                     });
                 } else {
@@ -3277,7 +2172,7 @@
             if (confirmReservationBtn) {
                 console.log('Adding click event listener to confirm reservation button...');
                 confirmReservationBtn.addEventListener('click', function() {
-                    console.log('✅ Confirm reservation clicked!');
+                    console.log('âœ… Confirm reservation clicked!');
                     console.log('Selected table:', selectedTableForReservation);
 
                     if (!selectedTableForReservation) {
@@ -3328,8 +2223,8 @@
 
                     // Verify save
                     const savedData = localStorage.getItem('tableReservations');
-                    console.log('✅ Saved! Verifying:', savedData);
-                    console.log('✅ Parsed saved data:', JSON.parse(savedData));
+                    console.log('âœ… Saved! Verifying:', savedData);
+                    console.log('âœ… Parsed saved data:', JSON.parse(savedData));
 
                     // Change table status to blocked (reserved)
                     selectedTableForReservation.element.classList.remove('free', 'utilized');
@@ -3337,9 +2232,9 @@
                     console.log('Table status changed to blocked');
 
                     // Immediately add reservation badge to the table
-                    console.log('✅ Calling checkReservationTimes to add badge...');
+                    console.log('âœ… Calling checkReservationTimes to add badge...');
                     checkReservationTimes();
-                    console.log('✅ Badge added, now closing modal...');
+                    console.log('âœ… Badge added, now closing modal...');
 
                     // Close modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById('makeReservationModal'));
@@ -3434,7 +2329,7 @@
                     // Update entrance side attribute
                     currentTable.setAttribute('data-entrance-side', entranceSide);
 
-                    // Update cutout position in real-time
+                    // Update cutout position
                     updateEntranceCutout(currentTable, entranceSide);
                 } else {
                     // Normal dragging for tables and other areas
@@ -3509,10 +2404,9 @@
         window.addEventListener('resize', positionSidebar);
     </script>
     <script src="{{ asset('assets/js/choices.min.js') }}"></script>
-    <script src="{{ asset('assets/js/custom/purchase.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/sale.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/math.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom/calculator.js') }}"></script>
     <script src="{{ asset('assets/js/custom/pos-products.js') . '?v=' . time() }}"></script>
-    <script src="{{ asset('assets/js/custom/pos-purchase-payment-modal.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/pos-payment-modal.js') . '?v=' . time() }}"></script>
-@endpush
+

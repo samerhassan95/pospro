@@ -39,8 +39,10 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::post('sales/filter', [Business\AcnooSaleController::class, 'acnooFilter'])->name('sales.filter');
     Route::post('sales/delete-all', [Business\AcnooSaleController::class, 'deleteAll'])->name('sales.delete-all');
     Route::get('/get-product-prices', [Business\AcnooSaleController::class, 'getProductPrices'])->name('products.prices');
+    Route::get('/sale-cart', [Business\AcnooSaleController::class, 'showSaleCart'])->name('sales.cart');
     Route::get('/sale-cart-data', [Business\AcnooSaleController::class, 'getCartData'])->name('sales.cart-data');
     Route::get('/get-invoice/{id}', [Business\AcnooSaleController::class, 'getInvoice'])->name('sales.invoice');
+    Route::get('/sales/{id}/zatca-issues', [Business\AcnooSaleController::class, 'getZatcaIssues'])->name('sales.zatca-issues');
     Route::post('sale/product-filter', [Business\AcnooSaleController::class, 'productFilter'])->name('sales.product-filter');
     Route::post('sale/category-filter', [Business\AcnooSaleController::class, 'categoryFilter'])->name('sales.category-filter');
     Route::post('sale/brand-filter', [Business\AcnooSaleController::class, 'brandFilter'])->name('sales.brand-filter');

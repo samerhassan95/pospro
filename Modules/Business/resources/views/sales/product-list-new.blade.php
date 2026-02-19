@@ -7,6 +7,7 @@
     <div class="pos-product-card single-product {{ $product->id }}"
          data-product_id="{{ $product->id }}"
          data-category_id="{{ $product->category_id ?? '' }}"
+         data-brand_id="{{ $product->brand_id ?? '' }}"
          data-default_price="{{ $salePrice }}"
          data-product_code="{{ $product->productCode }}"
          data-product_unit_id="{{ $product->unit->id ?? null }}"

@@ -15,18 +15,15 @@
     <form id="sale-form" action="{{ route('business.sales.store') }}" method="post" enctype="multipart/form-data" class="ajaxform pos-fullscreen-form">
         @csrf
 
+        {{-- Top Header Navigation --}}
+        @include('business::sales.partials.header')
+
         {{-- Main Content Area --}}
         <div class="pos-main-container">
-            {{-- Left Column: Header + Products/Tables --}}
-            <div class="pos-left-column">
-                {{-- Top Header Navigation --}}
-                @include('business::sales.partials.header')
-                
-                {{-- Products & Tables Section --}}
-                @include('business::sales.partials.products')
-            </div>
+            {{-- Products & Tables Section (Left Side) --}}
+            @include('business::sales.partials.products')
 
-            {{-- Right Column: Order Sidebar --}}
+            {{-- Order Sidebar (Right Side) --}}
             @include('business::sales.partials.sidebar')
         </div>
 
@@ -41,15 +38,7 @@
 @endpush
 
 @push('js')
-    <script src="{{ asset('assets/js/choices.min.js') }}"></script>
-    <script src="{{ asset('assets/js/custom/sale.js') . '?v=' . time() }}"></script>
-    <script src="{{ asset('assets/js/custom/math.min.js') }}"></script>
-    <script src="{{ asset('assets/js/custom/calculator.js') }}"></script>
-    <script src="{{ asset('assets/js/custom/pos-products.js') . '?v=' . time() }}"></script>
-    <script src="{{ asset('assets/js/custom/pos-payment-modal.js') . '?v=' . time() }}"></script>
-    <script src="{{ asset('assets/js/custom/pos-sidebar.js') . '?v=' . time() }}"></script>
-    
     {{-- JavaScript functionality --}}
+    {{-- Note: Full scripts are still in original file. Use scripts-placeholder.blade.php as template --}}
     @include('business::sales.partials.scripts-placeholder')
-    @include('business::sales.partials.product-filter-scripts')
 @endpush

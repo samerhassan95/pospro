@@ -1,0 +1,61 @@
+        /* Category/Brand Items - Vertical layout with icon on top like image */
+        .pos-category-item, .pos-brand-item { 
+            display: flex !important; 
+            flex-direction: column !important;
+            align-items: center !important; 
+            gap: 12px !important; 
+            padding: 20px 32px !important; 
+            border: 2px solid #E5E7EB !important; 
+            background: #fff !important; 
+            border-radius: 50px !important; 
+            cursor: pointer !important; 
+            transition: all 0.3s !important; 
+            flex-shrink: 0 !important;
+            min-width: 140px !important;
+        }
+        .pos-category-item:hover, .pos-brand-item:hover { 
+            border-color: #9CA3AF !important; 
+            transform: translateY(-2px) !important; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important; 
+        }
+        .pos-category-item.active, .pos-brand-item.active { 
+            border-color: #1F2937 !important; 
+            background: #fff !important; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        }
+        .pos-category-icon, .pos-brand-icon { 
+            width: 48px !important; 
+            height: 48px !important; 
+            display: flex !important; 
+            align-items: center !important; 
+            justify-content: center !important; 
+            flex-shrink: 0 !important; 
+        }
+        .pos-category-icon img, .pos-brand-icon img { 
+            max-width: 100% !important; 
+            max-height: 100% !important; 
+            width: auto !important; 
+            height: auto !important; 
+            object-fit: contain !important; 
+        }
+        .pos-category-icon svg, .pos-brand-icon svg { 
+            width: 44px !important; 
+            height: 44px !important; 
+            color: #1F2937 !important; 
+            stroke-width: 1.5 !important;
+        }
+        .pos-category-item.active .pos-category-icon svg, 
+        .pos-brand-item.active .pos-brand-icon svg { 
+            color: #1F2937 !important; 
+        }
+        .pos-category-name, .pos-brand-name { 
+            font-size: 16px !important; 
+            font-weight: 500 !important; 
+            color: #1F2937 !important; 
+            text-align: center !important;
+        }
+        .pos-category-item.active .pos-category-name,
+        .pos-brand-item.active .pos-brand-name { 
+            color: #1F2937 !important; 
+            font-weight: 600 !important;
+        }

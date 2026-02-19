@@ -244,7 +244,7 @@
         
         .summary-label {
             font-weight: 600;
-            color: #6c757d;
+            color: #000000;
         }
         
         .summary-value {

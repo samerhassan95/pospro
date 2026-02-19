@@ -102,14 +102,13 @@ class CartController extends Controller
     public function update(Request $request, $id)
     {
         try {
-
             $cart = Cart::get($id);
 
             if ($cart) {
-                $quantity = $request->input('');
-                $price = $request->input(''); // If sale
+                $quantity = $request->input('qty');
+                $price = $request->input('price'); // If sale
 
-                if ($quantity >= 0) {
+                if ($quantity !== null && $quantity >= 0) {
                     $updateData = ['qty' => $quantity];
 
                     if ($price !== null && $price >= 0) {

@@ -31,7 +31,8 @@
             
             // Get total amount from sidebar
             const totalAmount = document.getElementById('total_amount').textContent;
-            const totalAmountValue = document.getElementById('payable_amount').value || '0';
+            const payableAmountInput = document.getElementById('payable_amount');
+            const totalAmountValue = payableAmountInput ? payableAmountInput.value : '0';
             
             // Update modal with order info
             document.getElementById('modal-order-total').textContent = totalAmount;
@@ -42,6 +43,29 @@
             // Reset receive amount
             receiveAmountInput.value = totalAmountValue;
             updatePaymentCalculations();
+            
+            // Set default payment method to cash (first option)
+            const firstPaymentMethod = document.querySelector('.payment-method-btn[data-method="cash"]');
+            if (firstPaymentMethod) {
+                paymentMethodBtns.forEach(b => b.classList.remove('active'));
+                firstPaymentMethod.classList.add('active');
+                
+                // Set payment type to cash (usually ID 1)
+                const paymentTypeSelect = document.getElementById('payment_type_id');
+                if (paymentTypeSelect && paymentTypeSelect.options.length > 0) {
+                    // Try to find "Cash" option
+                    for (let i = 0; i < paymentTypeSelect.options.length; i++) {
+                        if (paymentTypeSelect.options[i].text.toLowerCase().includes('cash')) {
+                            paymentTypeSelect.value = paymentTypeSelect.options[i].value;
+                            break;
+                        }
+                    }
+                    // If not found, select first option
+                    if (!paymentTypeSelect.value) {
+                        paymentTypeSelect.value = paymentTypeSelect.options[0].value;
+                    }
+                }
+            }
             
             // Show modal
             modalOverlay.classList.add('active');
@@ -75,17 +99,39 @@
             // Update hidden payment type field
             const method = this.getAttribute('data-method');
             const paymentTypeSelect = document.getElementById('payment_type_id');
+            
             if (paymentTypeSelect) {
-                // Map method to payment type (you may need to adjust this based on your payment types)
-                const methodMap = {
-                    'cash': '1',
-                    'card': '2',
-                    'upi': '3',
-                    'due': '4'
+                // Try to find matching payment type by name
+                const methodNames = {
+                    'cash': ['cash', 'نقد', 'نقدي'],
+                    'card': ['card', 'credit', 'debit', 'بطاقة', 'كرت'],
+                    'upi': ['upi', 'online', 'digital'],
+                    'due': ['due', 'credit', 'آجل', 'دين']
                 };
-                if (methodMap[method]) {
-                    paymentTypeSelect.value = methodMap[method];
+                
+                let found = false;
+                const searchTerms = methodNames[method] || [method];
+                
+                for (let i = 0; i < paymentTypeSelect.options.length; i++) {
+                    const optionText = paymentTypeSelect.options[i].text.toLowerCase();
+                    
+                    for (let term of searchTerms) {
+                        if (optionText.includes(term.toLowerCase())) {
+                            paymentTypeSelect.value = paymentTypeSelect.options[i].value;
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if (found) break;
                 }
+                
+                // If no match found, use first option
+                if (!found && paymentTypeSelect.options.length > 0) {
+                    paymentTypeSelect.value = paymentTypeSelect.options[0].value;
+                }
+                
+                console.log('Payment method selected:', method, 'Payment type ID:', paymentTypeSelect.value);
             }
         });
     });
@@ -123,7 +169,8 @@
 
     // Update payment calculations
     function updatePaymentCalculations() {
-        const totalBill = parseFloat(document.getElementById('payable_amount').value) || 0;
+        const payableAmountInput = document.getElementById('payable_amount');
+        const totalBill = parseFloat(payableAmountInput ? payableAmountInput.value : '0') || 0;
         const receiveAmount = parseFloat(receiveAmountInput.value) || 0;
         const dueAmount = totalBill - receiveAmount;
         
@@ -132,10 +179,17 @@
         document.getElementById('modal-due-summary').textContent = formatCurrency(Math.max(0, dueAmount));
         
         // Update hidden form fields
-        document.getElementById('receive_amount').value = receiveAmount;
-        document.getElementById('due_amount').value = Math.max(0, dueAmount);
-        document.getElementById('change_amount').value = Math.max(0, -dueAmount);
+        const receiveAmountField = document.getElementById('receive_amount');
+        const dueAmountField = document.getElementById('due_amount');
+        const changeAmountField = document.getElementById('change_amount');
+        
+        if (receiveAmountField) receiveAmountField.value = receiveAmount;
+        if (dueAmountField) dueAmountField.value = Math.max(0, dueAmount);
+        if (changeAmountField) changeAmountField.value = Math.max(0, -dueAmount);
     }
+
+    // Make updatePaymentCalculations available globally
+    window.updatePaymentCalculations = updatePaymentCalculations;
 
     // Format currency (basic implementation)
     function formatCurrency(amount) {
@@ -156,14 +210,14 @@
             const selectedOption = this.options[this.selectedIndex];
             
             if (this.value === 'guest' || this.value === '') {
-                customerNameDisplay.textContent = 'Guest';
-                customerPhoneDisplay.textContent = '-';
+                if (customerNameDisplay) customerNameDisplay.textContent = 'Guest';
+                if (customerPhoneDisplay) customerPhoneDisplay.textContent = '-';
             } else {
                 const customerName = selectedOption.textContent.split('(')[0].trim();
                 const customerPhone = selectedOption.getAttribute('data-phone') || '-';
                 
-                customerNameDisplay.textContent = customerName;
-                customerPhoneDisplay.textContent = customerPhone;
+                if (customerNameDisplay) customerNameDisplay.textContent = customerName;
+                if (customerPhoneDisplay) customerPhoneDisplay.textContent = customerPhone;
             }
         });
     }
@@ -171,6 +225,15 @@
     // Complete payment - close modal and submit form
     if (completePaymentBtn) {
         completePaymentBtn.addEventListener('click', function() {
+            // Ensure payment type is selected
+            const paymentTypeSelect = document.getElementById('payment_type_id');
+            if (paymentTypeSelect && !paymentTypeSelect.value) {
+                // Set to first option if not selected
+                if (paymentTypeSelect.options.length > 0) {
+                    paymentTypeSelect.value = paymentTypeSelect.options[0].value;
+                }
+            }
+            
             // Modal will close, form will submit
             closeModal();
         });

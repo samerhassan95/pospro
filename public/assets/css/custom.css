@@ -699,9 +699,7 @@
     border-radius: 8px;
     padding: 12px 15px 5px 15px;
 }
-.cancel-sale-btn {
-    margin-top: 15px;
-}
+
 .table-background {
     background-color: rgba(245, 243, 243, 0.5);
 }
@@ -721,8 +719,7 @@
 .products-header {
     border: none;
     border-radius: 0px 12px 12px 0px !important;
-    border-left: 1px solid #d8d8d8;
-    padding: 12px;
+    /* border-left: 1px solid #d8d8d8; */
     overflow: hidden;
     color: white;
 }

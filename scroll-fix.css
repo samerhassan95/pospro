@@ -1,0 +1,25 @@
+/* Clean Products Scroll Fix */
+.pos-products-section { 
+    flex: 1 !important; 
+    overflow-y: auto !important; 
+    min-height: 0 !important;
+    max-height: calc(100vh - 200px) !important;
+}
+
+.pos-products-section::-webkit-scrollbar { 
+    width: 6px !important; 
+}
+
+.pos-products-section::-webkit-scrollbar-track { 
+    background: #f1f1f1 !important; 
+    border-radius: 10px !important; 
+}
+
+.pos-products-section::-webkit-scrollbar-thumb { 
+    background: #ccc !important; 
+    border-radius: 10px !important; 
+}
+
+.pos-products-section::-webkit-scrollbar-thumb:hover { 
+    background: #999 !important; 
+}
