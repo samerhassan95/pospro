@@ -19,29 +19,67 @@ a {
     color: #000;
     text-decoration: underline
 }
-/* RTL Sidebar - Force right positioning and match English design */
-[dir="rtl"] .side-bar {
-    left: auto !important;
-    right: 0 !important;
-    background-color: #FAFAFA !important;
-    background: #FAFAFA !important;
-    font-family: Cairo !important;
-    font-size: 15px !important;
-    font-weight: 500 !important;
-    line-height: 22px !important;
-    text-align: right !important;
-    width: var(--sidebar-width) !important;
-    height: 100vh !important;
-    position: fixed !important;
-    top: 0 !important;
-    z-index: 10 !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transition: all 0.4s ease !important;
-    scrollbar-width: none !important; /* Firefox */
-    /* box-shadow: 0px 3.93px 88.43px 1.97px #00000014 !important; */
+/* RTL Sidebar - Base styles for large screens */
+@media (min-width: 769px) {
+    [dir="rtl"] .side-bar {
+        left: auto !important;
+        right: 0 !important;
+        background-color: #FAFAFA !important;
+        background: #FAFAFA !important;
+        font-family: Cairo !important;
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        line-height: 22px !important;
+        text-align: right !important;
+        width: var(--sidebar-width) !important;
+        height: 100vh !important;
+        position: fixed !important;
+        top: 0 !important;
+        z-index: 10 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transition: width 0.3s ease-in-out !important;
+        scrollbar-width: none !important; /* Firefox */
+        /* box-shadow: 0px 3.93px 88.43px 1.97px #00000014 !important; */
+    }
+
+    /* RTL Sidebar Active State - Collapsed (Large screens only) */
+    [dir="rtl"] .side-bar.active {
+        width: var(--sidebar-collapsed-width) !important;
+        right: 0 !important;
+    }
+}
+
+/* RTL Sidebar - Mobile behavior (keep original) */
+@media (max-width: 768px) {
+    [dir="rtl"] .side-bar {
+        left: auto !important;
+        right: -100% !important;
+        background-color: #FAFAFA !important;
+        background: #FAFAFA !important;
+        font-family: Cairo !important;
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        line-height: 22px !important;
+        text-align: right !important;
+        width: var(--sidebar-width) !important;
+        height: 100vh !important;
+        position: fixed !important;
+        top: 0 !important;
+        z-index: 10 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transition: right 0.3s ease-in-out !important;
+        scrollbar-width: none !important; /* Firefox */
+    }
+
+    [dir="rtl"] .side-bar.active {
+        right: 0 !important;
+    }
 }
 
 /* RTL Sidebar scrollbar styling */
@@ -128,9 +166,7 @@ html[dir="rtl"] body .custom-image-bg svg path {
     border-radius: 12px;
 }
 
-[dir="rtl"] .nav-link.active {
-    color: #fff !important;
-}
+
 
 [dir="rtl"] .btn-custom-warning {
     background-color: var(--clr-primary) !important;
@@ -150,15 +186,31 @@ html[dir="rtl"] body .custom-image-bg svg path {
 [dir="rtl"] ul {
     padding-right: 0;
 }
-[dir="rtl"] .section-container {
-    padding-right: var(--sidebar-width);
-    padding-left: 0 !important;
-    transition: padding-right 0.3s ease-in-out;
+/* RTL Section Container - Large screens */
+@media (min-width: 769px) {
+    [dir="rtl"] .section-container {
+        padding-right: var(--sidebar-width);
+        padding-left: 0 !important;
+        transition: padding-right 0.3s ease-in-out;
+    }
+
+    [dir="rtl"] .section-container.active {
+        padding-left: 0 !important;
+        padding-right: var(--sidebar-collapsed-width);
+    }
 }
 
-[dir="rtl"] .section-container.active {
-    padding-left: 0 !important;
-    padding-right: var(--sidebar-collapsed-width);
+/* RTL Section Container - Mobile screens */
+@media (max-width: 768px) {
+    [dir="rtl"] .section-container {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+    }
+
+    [dir="rtl"] .section-container.active {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 }
 [dir="rtl"] .view-website i {
     transform: rotate(180deg);
@@ -235,13 +287,17 @@ html[dir="rtl"] body .custom-image-bg svg path {
         width: var(--sidebar-width);
     }
 }
-/* Desktop RTL sidebar toggle fix */
+/* Desktop RTL sidebar toggle fix - Large screens only */
 @media (min-width: 769px) {
     [dir="rtl"] .side-bar {
-        transition: right 0.3s ease-in-out;
+        width: var(--sidebar-width) !important;
+        right: 0 !important;
+        left: auto !important;
+        transition: width 0.3s ease-in-out !important;
     }
     [dir="rtl"] .side-bar.active {
-        right: calc(-1 * var(--sidebar-width) + var(--sidebar-collapsed-width));
+        width: var(--sidebar-collapsed-width) !important;
+        right: 0 !important;
     }
 }
 [dir="rtl"] .side-bar-addon {
@@ -426,13 +482,12 @@ html[dir="rtl"] body .custom-image-bg svg path {
     stroke: #fff !important;
 }
 [dir="rtl"] .side-bar.active {
-    width: var(--sidebar-collapsed-width);
+    width: var(--sidebar-collapsed-width) !important;
 }
 
 [dir="rtl"] .side-bar.active .side-bar-manu .dropdown::before {
     opacity: 0;
 }
-
 
 [dir="rtl"] .side-bar.active .side-bar-manu li a .sidebar-icon {
     margin-right: 0;
@@ -444,7 +499,7 @@ html[dir="rtl"] body .custom-image-bg svg path {
 
 [dir="rtl"] .side-bar.active .side-bar-manu li a {
     white-space: nowrap !important;
-    padding: 10px 23px;
+    padding: 10px 23px !important;
 }
 
 [dir="rtl"] .side-bar.active .sidebar-icon img {
@@ -484,6 +539,12 @@ html[dir="rtl"] body .custom-image-bg svg path {
     padding: 0;
     border-radius: 0;
     background: transparent;
+    display: none;
+    box-shadow: none !important;
+}
+
+[dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
+    display: block !important;
 }
 
 [dir="rtl"] .side-bar-manu li .dropdown-menu li a {
@@ -517,7 +578,6 @@ html[dir="rtl"] body .custom-image-bg svg path {
 [dir="rtl"] .side-bar-manu .dropdown::before {
     left: 15px;
     right: unset;
-    transform: rotate(180deg);
     content: "\f105";
     font-family: "Font Awesome 5 Pro";
     font-weight: 400;
@@ -544,6 +604,14 @@ html[dir="rtl"] body .custom-image-bg svg path {
 
 [dir="rtl"] .side-bar-manu .dropdown.active .active {
     background-color: var(--clr-primary);
+}
+
+/* Higher specificity override for all screen sizes */
+html[dir="rtl"] body .side-bar-manu .dropdown.active > .dropdown-menu,
+html[dir="rtl"] body .side-bar-manu .dropdown-menu.menu-open {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 /* RTL Sidebar Search Styling */
@@ -778,41 +846,6 @@ html[dir="rtl"] body .custom-image-bg svg path {
         font-size: 11px;
     }
 }
-@media (max-width: 768px) {
-    [dir="rtl"] .side-bar {
-        right: -100%;
-        left: unset;
-        transition: right 0.3s ease-in-out;
-        width: var(--sidebar-width);
-    }
-    
-    [dir="rtl"] .side-bar.active {
-        right: 0;
-        left: unset;
-    }
-    
-    [dir="rtl"] .section-container {
-        padding-right: 0;
-        padding-left: 0;
-    }
-    
-    [dir="rtl"] .section-container.active {
-        padding-left: 0;
-        padding-right: 0;
-    }
-    
-    [dir="rtl"] .close-btn {
-        left: 15px;
-        right: unset;
-        display: block !important;
-    }
-    
-    [dir="rtl"] .side-bar.active .side-bar-manu li a .sidebar-icon {
-        margin-left: 10px;
-        margin-right: 0;
-    }
-}
-
 @media only screen and (min-width: 1400px) {
     [dir="rtl"] .gpt-dashboard-card .couter-box p {
         width: 100%;
@@ -924,39 +957,22 @@ html[dir="rtl"] body .custom-image-bg svg path {
     text-align: left;
 }
 
-/* RTL Sidebar overlay fix */
+/* RTL Sidebar overlay fix - DISABLED */
 [dir="rtl"] .side-bar .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: none;
+    display: none !important;
+    pointer-events: none !important;
 }
 
-/* Only show overlay on mobile when sidebar is open */
+/* Only show overlay on mobile when sidebar is open - DISABLED */
 @media (max-width: 768px) {
     [dir="rtl"] .side-bar .overlay {
-        display: block !important;
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease-in-out;
+        display: none !important;
+        pointer-events: none !important;
     }
 
     /* [dir="rtl"] .side-bar.active .overlay {
-        opacity: 1;
-        pointer-events: auto;
+        opacity: 0;
+        pointer-events: none;
     } */
 }
 
@@ -1420,4 +1436,129 @@ html[dir="rtl"] body .section-container.active,
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
+    
+    /* Mobile dropdown - SAME AS LARGE SCREEN */
+    [dir="rtl"] .side-bar-manu .dropdown-menu {
+        display: none;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        margin-right: 20px;
+        margin-left: 0;
+        padding: 0;
+        position: static !important;
+    }
+
+    [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu,
+    [dir="rtl"] .side-bar-manu .dropdown-menu.menu-open {
+        display: block !important;
+    }
+    
+    /* Higher specificity to override any conflicting rules */
+    html[dir="rtl"] body .side-bar-manu .dropdown.active > .dropdown-menu,
+    html[dir="rtl"] body .side-bar-manu .dropdown-menu.menu-open {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Remove shadow and make border consistent with large screen */
+    [dir="rtl"] .side-bar-manu .dropdown-menu {
+        box-shadow: none !important;
+        border: none !important;
+        border-right: 1px solid #ddd !important;
+        border-left: none !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+    }
+    
+    /* Ensure dropdown items look the same as large screen */
+    [dir="rtl"] .side-bar-manu .dropdown-menu li {
+        padding-right: 15px !important;
+        padding-left: 0 !important;
+        margin: 0 !important;
+    }
+    
+    [dir="rtl"] .side-bar-manu .dropdown-menu li a {
+        color: black !important;
+        padding: 5px 15px !important;
+        background: transparent !important;
+        border: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        min-height: auto !important;
+    }
+    
+    [dir="rtl"] .side-bar-manu .dropdown-menu li a:hover,
+    [dir="rtl"] .side-bar-manu .dropdown-menu li a.active {
+        background-color: var(--clr-primary) !important;
+        color: #fff !important;
+        transform: none !important;
+    }
+}
+
+/* FINAL RTL SIDEBAR TOGGLE FIX - LARGE SCREENS ONLY */
+@media (min-width: 769px) {
+    html[dir="rtl"] body .side-bar {
+        width: var(--sidebar-width) !important;
+        right: 0 !important;
+        left: auto !important;
+        transition: width 0.3s ease-in-out !important;
+    }
+
+    html[dir="rtl"] body .side-bar.active {
+        width: var(--sidebar-collapsed-width) !important;
+        right: 0 !important;
+        left: auto !important;
+    }
+
+    html[dir="rtl"] body .side-bar.active:hover {
+        width: var(--sidebar-width) !important;
+    }
+
+    /* Ensure section container also responds properly on large screens */
+    html[dir="rtl"] body .section-container {
+        padding-right: var(--sidebar-width) !important;
+        padding-left: 0 !important;
+        transition: padding-right 0.3s ease-in-out !important;
+    }
+
+    html[dir="rtl"] body .section-container.active {
+        padding-right: var(--sidebar-collapsed-width) !important;
+        padding-left: 0 !important;
+    }
+}
+
+/* MOBILE SCREENS - Keep original off-screen behavior */
+@media (max-width: 768px) {
+    html[dir="rtl"] body .side-bar {
+        width: var(--sidebar-width) !important;
+        right: -100% !important;
+        left: auto !important;
+        transition: right 0.3s ease-in-out !important;
+    }
+
+    html[dir="rtl"] body .side-bar.active {
+        width: var(--sidebar-width) !important;
+        right: 0 !important;
+        left: auto !important;
+    }
+
+    /* Mobile - section container has no padding */
+    html[dir="rtl"] body .section-container {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+    }
+
+    html[dir="rtl"] body .section-container.active {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+    }
+}
+
+/* LARGE SCREENS - Keep dropdown functionality */
+@media (min-width: 769px) {
+    /* Desktop specific sidebar behavior only */
 }

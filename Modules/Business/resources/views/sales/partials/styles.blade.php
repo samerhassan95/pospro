@@ -71,6 +71,61 @@
         .dropdown-icon { position: absolute; right: 12px; z-index: 2; }
         .add-customer-btn { width: 48px; height: 48px; background: #1E3A8A; border: none; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-left: 8px; cursor: pointer; }
 
+        /* Request Number Section */
+        .request-number-section { margin-bottom: 5px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef; }
+        .request-number-row { display: flex; justify-content: space-between; align-items: center; }
+        .request-label { font-size: 14px; color: #6b7280; font-weight: 500; }
+        .request-value { font-size: 16px; color: #1f2937; font-weight: 700; }
+
+        /* Discount Controls */
+        .discount-row { position: relative; }
+        .discount-controls { display: flex; align-items: center; gap: 8px; }
+        .add-discount-btn { width: 24px; height: 24px; border: none; background: var(--clr-primary); color: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .add-discount-btn:hover { background: var(--clr-secondary); }
+        .add-discount-btn svg { width: 12px; height: 12px; }
+        
+        .discount-input-section { margin-top: 8px; }
+        .discount-input-wrapper { display: flex; align-items: center; gap: 8px; }
+        .discount-input { flex: 1; padding: 8px 12px; border: 1px solid #E5E7EB; border-radius: 6px; font-size: 14px; }
+        .discount-input:focus { outline: none; border-color: var(--clr-primary); }
+        .discount-type-select { width: 80px; padding: 8px; border: 1px solid #E5E7EB; border-radius: 6px; font-size: 12px; }
+        .apply-discount-btn { padding: 8px 12px; background: var(--clr-primary); color: #fff; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .apply-discount-btn:hover { background: var(--clr-secondary); }
+        .cancel-discount-btn { padding: 8px 12px; background: #f3f4f6; color: #6b7280; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .cancel-discount-btn:hover { background: #e5e7eb; }
+
+        /* VAT Controls */
+        .vat-row { position: relative; }
+        .vat-controls { display: flex; align-items: center; gap: 8px; }
+        .add-vat-btn { width: 24px; height: 24px; border: none; background: var(--clr-primary); color: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .add-vat-btn:hover { background: var(--clr-secondary); }
+        .add-vat-btn svg { width: 12px; height: 12px; }
+        
+        .vat-input-section { margin-top: 8px; }
+        .vat-input-wrapper { display: flex; align-items: center; gap: 8px; }
+        .vat-select-input { flex: 1; padding: 8px 12px; border: 1px solid #E5E7EB; border-radius: 6px; font-size: 14px; }
+        .vat-select-input:focus { outline: none; border-color: var(--clr-primary); }
+        .apply-vat-btn { padding: 8px 12px; background: var(--clr-primary); color: #fff; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .apply-vat-btn:hover { background: var(--clr-secondary); }
+        .cancel-vat-btn { padding: 8px 12px; background: #f3f4f6; color: #6b7280; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .cancel-vat-btn:hover { background: #e5e7eb; }
+
+        /* Shipping Controls */
+        .shipping-row { position: relative; }
+        .shipping-controls { display: flex; align-items: center; gap: 8px; }
+        .add-shipping-btn { width: 24px; height: 24px; border: none; background: var(--clr-primary); color: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .add-shipping-btn:hover { background: var(--clr-secondary); }
+        .add-shipping-btn svg { width: 12px; height: 12px; }
+        
+        .shipping-input-section { margin-top: 8px; }
+        .shipping-input-wrapper { display: flex; align-items: center; gap: 8px; }
+        .shipping-input { flex: 1; padding: 8px 12px; border: 1px solid #E5E7EB; border-radius: 6px; font-size: 14px; }
+        .shipping-input:focus { outline: none; border-color: var(--clr-primary); }
+        .apply-shipping-btn { padding: 8px 12px; background: var(--clr-primary); color: #fff; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .apply-shipping-btn:hover { background: var(--clr-secondary); }
+        .cancel-shipping-btn { padding: 8px 12px; background: #f3f4f6; color: #6b7280; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .cancel-shipping-btn:hover { background: #e5e7eb; }
+
         /* Order Details Section */
         .order-details-section { margin-bottom: 3px; }
         .section-title { font-size: 18px; font-weight: bold; color: #1F2937; }

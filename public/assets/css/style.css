@@ -647,24 +647,16 @@ svg {
         padding-left: 0;
     }
 
-    /* Overlay for mobile sidebar */
+    /* Overlay for mobile sidebar - DISABLED */
     .side-bar .overlay {
-        display: block !important;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease-in-out;
+        display: none !important;
+        pointer-events: none !important;
     }
 
     .side-bar.active .overlay {
-        opacity: 1;
-        pointer-events: auto;
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
     /* Mobile sidebar mega menu style */
@@ -676,6 +668,8 @@ svg {
         margin-left: 20px;
         padding: 0;
         position: static !important;
+        border-left: 1px solid #ddd;
+        border-radius: 0;
     }
 
     .side-bar-manu .dropdown.active > .dropdown-menu,
@@ -683,23 +677,35 @@ svg {
         display: block !important;
     }
 
-    /* Make dropdown items easy to tap */
+    /* Force consistent styling for menu-open class - remove shadow, add start border */
+    .side-bar-manu .dropdown-menu.menu-open {
+        box-shadow: none !important;
+        border: none !important;
+        border-left: 1px solid #ddd !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        position: relative !important;
+    }
+
+    /* Make dropdown items consistent with desktop - EXACT SAME STYLING */
     .side-bar-manu .dropdown-menu li {
-        margin: 2px 0;
+        margin: 0;
+        padding-left: 15px;
     }
 
     .side-bar-manu .dropdown-menu li a {
-        display: block;
-        padding: 12px 15px;
-        color: #333;
-        text-decoration: none;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        margin: 2px 0;
-        min-height: 44px;
-        display: flex;
-        align-items: center;
+        color: black;
+        padding: 5px 15px;
+        position: relative;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        margin: 0;
+        min-height: auto;
+        font-size: inherit;
+        font-weight: inherit;
         transition: all 0.2s ease;
+        display: block;
     }
 
     .side-bar-manu .dropdown-menu li a:hover,
@@ -707,30 +713,70 @@ svg {
     .side-bar-manu .dropdown-menu li a.active {
         background-color: var(--clr-primary);
         color: #fff !important;
-        transform: translateX(5px);
+        transform: none;
     }
 
-    /* Make main dropdown links more prominent */
+    /* Make main dropdown links exactly like desktop */
     .side-bar-manu .dropdown > a {
-        min-height: 50px !important;
-        display: flex !important;
-        align-items: center !important;
-        padding: 12px !important;
-        font-weight: 500;
+        position: relative;
+        display: flex;
+        padding: 10px 12px;
+        color: black;
+        border-radius: 4px;
+        z-index: 2;
+        align-items: center;
+        font-size: 0.9rem;
+        font-weight: 400;
+        text-decoration: none;
         transition: all 0.2s ease;
     }
 
     .side-bar-manu .dropdown.active > a {
-        background-color: rgba(var(--clr-primary), 0.1) !important;
-        border-left: 3px solid var(--clr-primary);
+        background-color: var(--clr-primary);
+        color: #fff !important;
+        border-left: none;
     }
 
-    /* Improve dropdown arrow */
+    /* Make all sidebar items look like desktop */
+    .side-bar-manu li {
+        position: relative;
+        font-size: 11px;
+        margin: 5px 0;
+    }
+
+    .side-bar-manu li a {
+        position: relative;
+        display: flex;
+        padding: 10px 12px;
+        color: black;
+        border-radius: 4px;
+        z-index: 2;
+        align-items: center;
+        font-size: 0.9rem;
+        font-weight: 400;
+        text-decoration: none;
+    }
+
+    .side-bar-manu li:hover > a,
+    .side-bar-manu li.active > a {
+        background-color: var(--clr-primary);
+        color: #fff !important;
+    }
+
+    /* Improve dropdown arrow - same as desktop */
     .side-bar-manu .dropdown::before {
-        opacity: 1 !important;
+        content: "\f105";
+        font-family: "Font Awesome 5 Pro";
+        font-weight: 400;
+        color: #aaabae;
+        position: absolute;
+        right: 15px;
+        font-size: 16px;
+        display: block;
+        z-index: 3;
+        top: 10px;
+        opacity: 1;
         transition: transform 0.2s ease;
-        font-size: 14px;
-        color: #666;
     }
 
     .side-bar-manu .dropdown.active::before {
@@ -767,8 +813,6 @@ svg {
     body[dir="rtl"] .side-bar-manu .dropdown-menu li a:hover {
         transform: translateX(-5px);
     }
-}
-}
 }
 
 @media (max-width: 480px) {
@@ -1166,16 +1210,23 @@ font-size: 14px;
 
 .side-bar-manu li .dropdown-menu {
     margin-left: 20px;
- border-right: none;
- border-top: none;
- border-bottom: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    border-left: 1px solid #ddd;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
 }
 
 body [dir="rtl"] .side-bar-manu li .dropdown-menu{
-        border-left: 1px solid #fff;
+    border-left: none;
+    border-right: 1px solid #ddd;
 }
 body [dir="ltr"] .side-bar-manu li .dropdown-menu{
-        border-right: 1px solid #fff;
+    border-right: none;
+    border-left: 1px solid #ddd;
 }
 
 .side-bar-manu li .dropdown-menu li .dropdown-menu {
@@ -1245,6 +1296,22 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
     border-right: 1px solid #ddd !important;
 }
 
+/* Force consistent styling for menu-open class on all screen sizes */
+.side-bar-manu .dropdown-menu.menu-open {
+    box-shadow: none !important;
+    border: none !important;
+    border-left: 1px solid #ddd !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    position: relative !important;
+}
+
+/* RTL version for menu-open class */
+body [dir="rtl"] .side-bar-manu .dropdown-menu.menu-open {
+    border-left: none !important;
+    border-right: 1px solid #ddd !important;
+}
+
 .side-bar-manu .dropdown.active > .dropdown-menu .dropdown {
     background: none !important;
 }
@@ -1307,7 +1374,6 @@ body [dir="rtl"] .side-bar-manu .dropdown.active > .dropdown-menu {
 }
 .side-bar.active .side-bar-manu li a {
     white-space: nowrap !important;
-    padding: 10px 23px;
 }
 
 .side-bar.active .sidebar-icon img {

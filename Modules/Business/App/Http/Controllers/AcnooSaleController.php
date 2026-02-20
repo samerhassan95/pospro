@@ -1305,4 +1305,75 @@ class AcnooSaleController extends Controller
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
+
+    /**
+     * Search for a sale by request/invoice number
+     */
+    public function searchByRequestNumber(Request $request)
+    {
+        $requestNumber = $request->get('request_number');
+        
+        if (!$requestNumber) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Request number is required')
+            ]);
+        }
+
+        try {
+            $sale = Sale::with(['party:id,name,phone,type', 'details.product', 'details.stock'])
+                ->where('business_id', auth()->user()->business_id)
+                ->where('invoiceNumber', $requestNumber)
+                ->first();
+
+            if (!$sale) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('Request number not found')
+                ]);
+            }
+
+            // Format the sale data for frontend
+            $saleData = [
+                'id' => $sale->id,
+                'invoiceNumber' => $sale->invoiceNumber,
+                'customer' => $sale->party ? [
+                    'id' => $sale->party->id,
+                    'name' => $sale->party->name,
+                    'phone' => $sale->party->phone,
+                    'type' => $sale->party->type
+                ] : null,
+                'items' => $sale->details->map(function ($detail) {
+                    return [
+                        'product_id' => $detail->product_id,
+                        'product_name' => $detail->product->productName ?? '',
+                        'quantity' => $detail->quantities,
+                        'price' => $detail->price,
+                        'discount' => $detail->discount ?? 0,
+                        'stock_id' => $detail->stock_id
+                    ];
+                }),
+                'discount_amount' => $sale->discountAmount ?? 0,
+                'discount_type' => $sale->discount_type ?? 'flat',
+                'vat_amount' => $sale->vat_amount ?? 0,
+                'shipping_charge' => $sale->shipping_charge ?? 0,
+                'total_amount' => $sale->totalAmount,
+                'paid_amount' => $sale->paidAmount,
+                'due_amount' => $sale->dueAmount,
+                'sale_date' => $sale->saleDate
+            ];
+
+            return response()->json([
+                'success' => true,
+                'message' => __('Request found successfully'),
+                'sale' => $saleData
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Error searching for request: ') . $e->getMessage()
+            ], 500);
+        }
+    }
 }

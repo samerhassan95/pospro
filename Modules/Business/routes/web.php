@@ -44,6 +44,7 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::get('/sale-cart-data', [Business\AcnooSaleController::class, 'getCartData'])->name('sales.cart-data');
     Route::get('/get-invoice/{id}', [Business\AcnooSaleController::class, 'getInvoice'])->name('sales.invoice');
     Route::get('/sales/{id}/zatca-issues', [Business\AcnooSaleController::class, 'getZatcaIssues'])->name('sales.zatca-issues');
+    Route::get('/sales/search-request', [Business\AcnooSaleController::class, 'searchByRequestNumber'])->name('sales.search-request');
     Route::post('sale/product-filter', [Business\AcnooSaleController::class, 'productFilter'])->name('sales.product-filter');
     Route::post('sale/category-filter', [Business\AcnooSaleController::class, 'categoryFilter'])->name('sales.category-filter');
     Route::post('sale/brand-filter', [Business\AcnooSaleController::class, 'brandFilter'])->name('sales.brand-filter');
