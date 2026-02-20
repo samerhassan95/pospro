@@ -880,6 +880,140 @@ function addItemToCart(element) {
 }
 
 /** Add to Cart Functionality End **/
+
+// Update current time every second
+function updateCurrentTime() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+    });
+    $("#current-time").text(timeString);
+}
+
+// Start the time update interval
+setInterval(updateCurrentTime, 1000);
+// Update immediately on page load
+updateCurrentTime();
+
+// Discount functionality
+$("#add-discount-btn").on("click", function() {
+    $("#discount-input-section").removeClass("d-none");
+    $(this).hide();
+});
+
+$("#apply-discount-btn").on("click", function() {
+    const discountAmount = parseFloat($("#discount_amount_input").val()) || 0;
+    const discountType = $("#discount_type_select").val();
+    
+    if (discountAmount < 0) {
+        toastr.error("Discount amount cannot be negative.");
+        return;
+    }
+    
+    // Update the hidden form fields
+    $("#discount_amount").val(discountAmount);
+    $(".discount_type").val(discountType);
+    
+    // Recalculate totals
+    calTotalAmount();
+    
+    // Hide the input section and show the add button
+    $("#discount-input-section").addClass("d-none");
+    $("#add-discount-btn").show();
+    
+    toastr.success("Discount applied successfully!");
+});
+
+$("#cancel-discount-btn").on("click", function() {
+    // Clear the input
+    $("#discount_amount_input").val("");
+    $("#discount_type_select").val("flat");
+    
+    // Hide the input section and show the add button
+    $("#discount-input-section").addClass("d-none");
+    $("#add-discount-btn").show();
+});
+
+// VAT functionality
+$("#add-vat-btn").on("click", function() {
+    $("#vat-input-section").removeClass("d-none");
+    $(this).hide();
+});
+
+$("#apply-vat-btn").on("click", function() {
+    const selectedVat = $("#vat_select_input").val();
+    const vatRate = parseFloat($("#vat_select_input option:selected").data("rate")) || 0;
+    
+    if (!selectedVat) {
+        toastr.error("Please select a VAT option.");
+        return;
+    }
+    
+    // Update the hidden form fields
+    $(".vat_select").val(selectedVat);
+    
+    // Calculate VAT amount
+    let subtotal = getNumericValue($("#sub_total").text()) || 0;
+    let vatAmount = (subtotal * vatRate) / 100;
+    $("#vat_amount").val(vatAmount.toFixed(2));
+    
+    // Recalculate totals
+    calTotalAmount();
+    
+    // Hide the input section and show the add button
+    $("#vat-input-section").addClass("d-none");
+    $("#add-vat-btn").show();
+    
+    toastr.success("VAT applied successfully!");
+});
+
+$("#cancel-vat-btn").on("click", function() {
+    // Clear the selection
+    $("#vat_select_input").val("");
+    
+    // Hide the input section and show the add button
+    $("#vat-input-section").addClass("d-none");
+    $("#add-vat-btn").show();
+});
+
+// Shipping functionality
+$("#add-shipping-btn").on("click", function() {
+    $("#shipping-input-section").removeClass("d-none");
+    $(this).hide();
+});
+
+$("#apply-shipping-btn").on("click", function() {
+    const shippingAmount = parseFloat($("#shipping_charge_input").val()) || 0;
+    
+    if (shippingAmount < 0) {
+        toastr.error("Shipping charge cannot be negative.");
+        return;
+    }
+    
+    // Update the hidden form field
+    $("#shipping_charge").val(shippingAmount);
+    
+    // Recalculate totals
+    calTotalAmount();
+    
+    // Hide the input section and show the add button
+    $("#shipping-input-section").addClass("d-none");
+    $("#add-shipping-btn").show();
+    
+    toastr.success("Shipping charge applied successfully!");
+});
+
+$("#cancel-shipping-btn").on("click", function() {
+    // Clear the input
+    $("#shipping_charge_input").val("");
+    
+    // Hide the input section and show the add button
+    $("#shipping-input-section").addClass("d-none");
+    $("#add-shipping-btn").show();
+});
+
 // ---------------------------------------------------------------------------------------------------------
 /** INVENTORY SALE START **/
 

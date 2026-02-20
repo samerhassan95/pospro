@@ -1,5 +1,13 @@
 <!-- Order Sidebar -->
 <div class="order-sidebar">
+    <!-- Request Number Display - First Element -->
+    <div class="request-number-section">
+        <div class="request-number-row">
+            <span class="request-label">{{ __('Request #') }}</span>
+            <span class="request-value" id="request-number-display">{{ $invoice_no }}</span>
+        </div>
+    </div>
+
     <!-- Search Customer Section -->
     <div class="sidebar-search-customer">
         <div class="search-customer-wrapper">
@@ -33,7 +41,7 @@
                 <circle cx="10" cy="10" r="8" stroke="#6B7280" stroke-width="1.5"/>
                 <path d="M10 5V10L13 13" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
-            <span class="order-time">{{ now()->format('h:i A') }}</span>
+            <span class="order-time" id="current-time">{{ now()->format('h:i A') }}</span>
             <span class="phone-number" id="selected-customer-phone">+1(415)123-4547</span>
         </div>
         <input type="hidden" name="invoiceNumber" value="{{ $invoice_no }}">
@@ -74,17 +82,68 @@
             <span class="summary-label">{{ __('Subtotal') }}</span>
             <span class="summary-value" id="sub_total">$35.00</span>
         </div>
-        <div class="summary-row">
+        <div class="summary-row discount-row">
             <span class="summary-label">{{ __('Discount') }}</span>
-            <span class="summary-value" id="discount_display">0</span>
+            <div class="discount-controls">
+                <span class="summary-value" id="discount_display">0</span>
+                <button type="button" class="add-discount-btn" id="add-discount-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div class="summary-row">
-            <span class="summary-label">{{ __('Taxes') }}</span>
-            <span class="summary-value" id="vat_display">0</span>
+        <div class="discount-input-section d-none" id="discount-input-section">
+            <div class="discount-input-wrapper">
+                <input type="number" step="0.01" min="0" id="discount_amount_input" class="form-control discount-input" placeholder="0.00">
+                <select id="discount_type_select" class="form-select discount-type-select">
+                    <option value="flat">{{ __('Flat') }}</option>
+                    <option value="percent">{{ __('Percent') }}</option>
+                </select>
+                <button type="button" class="apply-discount-btn" id="apply-discount-btn">{{ __('Apply') }}</button>
+                <button type="button" class="cancel-discount-btn" id="cancel-discount-btn">{{ __('Cancel') }}</button>
+            </div>
         </div>
-        <div class="summary-row">
+        <div class="summary-row vat-row">
+            <span class="summary-label">{{ __('VAT') }}</span>
+            <div class="vat-controls">
+                <span class="summary-value" id="vat_display">0</span>
+                <button type="button" class="add-vat-btn" id="add-vat-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="vat-input-section d-none" id="vat-input-section">
+            <div class="vat-input-wrapper">
+                <select id="vat_select_input" class="form-select vat-select-input">
+                    <option value="">{{ __('Select VAT') }}</option>
+                    @foreach ($vats as $vat)
+                        <option value="{{ $vat->id }}" data-rate="{{ $vat->rate }}">{{ $vat->name }} ({{ $vat->rate }}%)</option>
+                    @endforeach
+                </select>
+                <button type="button" class="apply-vat-btn" id="apply-vat-btn">{{ __('Apply') }}</button>
+                <button type="button" class="cancel-vat-btn" id="cancel-vat-btn">{{ __('Cancel') }}</button>
+            </div>
+        </div>
+        <div class="summary-row shipping-row">
             <span class="summary-label">{{ __('Shipping') }}</span>
-            <span class="summary-value" id="shipping_display">0</span>
+            <div class="shipping-controls">
+                <span class="summary-value" id="shipping_display">0</span>
+                <button type="button" class="add-shipping-btn" id="add-shipping-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="shipping-input-section d-none" id="shipping-input-section">
+            <div class="shipping-input-wrapper">
+                <input type="number" step="0.01" min="0" id="shipping_charge_input" class="form-control shipping-input" placeholder="0.00">
+                <button type="button" class="apply-shipping-btn" id="apply-shipping-btn">{{ __('Apply') }}</button>
+                <button type="button" class="cancel-shipping-btn" id="cancel-shipping-btn">{{ __('Cancel') }}</button>
+            </div>
         </div>
         <div class="summary-row summary-total">
             <span class="summary-label ">{{ __('Total') }}</span>

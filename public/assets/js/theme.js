@@ -33,7 +33,7 @@
 
         let subMenuSelector = ".dropdown-menu";
 
-        // Simple mega menu style dropdown for mobile
+        // Simple dropdown toggle - same behavior for all screen sizes
         $(".side-bar-manu > ul").on("click", ".dropdown > a", function (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -47,21 +47,35 @@
                 // Toggle this dropdown
                 if ($parentLi.hasClass("active")) {
                     // Close this dropdown
-                    $submenu.slideUp(animationSpeed);
                     $parentLi.removeClass("active");
                     $submenu.removeClass("menu-open");
+                    // Hide the submenu
+                    $submenu.css('display', 'none');
                 } else {
-                    // Close all other dropdowns first (optional - remove if you want multiple open)
+                    // Close all other dropdowns first
                     $(".side-bar-manu .dropdown.active").each(function() {
-                        $(this).find(".dropdown-menu").slideUp(animationSpeed);
                         $(this).removeClass("active");
-                        $(this).find(".dropdown-menu").removeClass("menu-open");
+                        $(this).find(".dropdown-menu").removeClass("menu-open").css('display', 'none');
                     });
                     
                     // Open this dropdown
-                    $submenu.slideDown(animationSpeed);
                     $parentLi.addClass("active");
                     $submenu.addClass("menu-open");
+                    
+                    // Force show the submenu by overriding inline styles
+                    $submenu.css({
+                        'display': 'block',
+                        'visibility': 'visible',
+                        'opacity': '1',
+                        'position': 'relative',
+                        'inset': 'auto',
+                        'transform': 'none',
+                        'z-index': 'auto',
+                        'float': 'none',
+                        'width': 'auto',
+                        'min-width': 'auto',
+                        'max-width': 'none'
+                    });
                 }
             }
         });
@@ -121,9 +135,55 @@
             });
         }
 
+        // Prevent other scripts from hiding dropdown menus with inline styles
+        function forceDropdownVisibility() {
+            $('.side-bar-manu .dropdown.active .dropdown-menu, .side-bar-manu .dropdown-menu.menu-open').each(function() {
+                let $menu = $(this);
+                let currentDisplay = $menu.css('display');
+                
+                if (currentDisplay === 'none') {
+                    // Remove all problematic inline styles and show the dropdown
+                    $menu.removeAttr('style');
+                    $menu.css({
+                        'display': 'block',
+                        'visibility': 'visible',
+                        'opacity': '1',
+                        'position': 'relative'
+                    });
+                }
+            });
+        }
+        
+        // Run the force function every 50ms to override any other scripts
+        setInterval(forceDropdownVisibility, 50);
+        
+        // Watch for style attribute changes using MutationObserver
+        if (window.MutationObserver) {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        const $target = $(mutation.target);
+                        if ($target.hasClass('dropdown-menu') && ($target.closest('.dropdown.active').length || $target.hasClass('menu-open'))) {
+                            forceDropdownVisibility();
+                        }
+                    }
+                });
+            });
+            
+            // Observe all dropdown menus for style changes
+            $('.side-bar-manu .dropdown-menu').each(function() {
+                observer.observe(this, { attributes: true, attributeFilter: ['style'] });
+            });
+        }
+        
         // Ensure dropdowns stay open when clicking submenu items
         $('.side-bar-manu .dropdown-menu a').on('click', function(e) {
             // Don't close the dropdown when clicking submenu items
+            e.stopPropagation();
+        });
+        
+        // Prevent dropdown from closing when clicking inside the dropdown menu
+        $('.side-bar-manu .dropdown-menu').on('click', function(e) {
             e.stopPropagation();
         });
     }
