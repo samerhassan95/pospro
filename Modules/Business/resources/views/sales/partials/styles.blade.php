@@ -575,14 +575,14 @@
         .table-item[data-rotation="180"]:hover { transform: rotate(180deg) scale(1.05); }
         .table-item[data-rotation="270"]:hover { transform: rotate(270deg) scale(1.05); }
 
-        .table-circle { width: 80px; height: 80px; border-radius: 50%; }
-        .table-rounded { width: 140px; height: 80px; border-radius: 12px; }
+        .table-circle { width: 120px; height: 120px; border-radius: 50%; }
+        .table-rounded { width: 200px; height: 120px; border-radius: 12px; }
 
         .table-item.utilized { background: #ef4e44; }
         .table-item.free { background: #48f045; }
         .table-item.blocked { background: #fff301; }
 
-        .table-name { position: absolute; font-size: 14px; font-weight: 600; color: #000; z-index: 2; }
+        .table-name { position: absolute; font-size: 18px; font-weight: 600; color: #000; z-index: 2; }
 
         /* Counter-rotate table name to keep it horizontal */
         .table-item[data-rotation="90"] .table-name { transform: rotate(-90deg); }
@@ -635,7 +635,7 @@
         }
 
         .chair-wrapper { position: absolute; width: 100%; height: 100%; }
-        .chair { position: absolute; width: 30px; height: 15px; border-radius: 4px; }
+        .chair { position: absolute; width: 45px; height: 22px; border-radius: 4px; }
 
         .table-circle .chair.chair-top { top: -20px; left: 50%; transform: translateX(-50%); }
         .table-circle .chair.chair-right { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
@@ -643,7 +643,7 @@
         .table-circle .chair.chair-left { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
 
         /* Horizontal rectangle table for 10 chairs */
-        .table-rectangle-h10 { width: 280px; height: 100px; border-radius: 20px; }
+        .table-rectangle-h10 { width: 400px; height: 150px; border-radius: 20px; }
         .table-rectangle-h10 .chair.chair-top-1 { top: -20px; left: 12%; }
         .table-rectangle-h10 .chair.chair-top-2 { top: -20px; left: 34%; }
         .table-rectangle-h10 .chair.chair-top-3 { top: -20px; left: 56%; }
@@ -656,7 +656,7 @@
         .table-rectangle-h10 .chair.chair-right { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
 
         /* Horizontal rectangle table for 8 chairs */
-        .table-rectangle-h { width: 220px; height: 100px; border-radius: 20px; }
+        .table-rectangle-h { width: 320px; height: 150px; border-radius: 20px; }
         .table-rectangle-h .chair.chair-top-1 { top: -20px; left: 15%; }
         .table-rectangle-h .chair.chair-top-2 { top: -20px; left: 50%; transform: translateX(-50%); }
         .table-rectangle-h .chair.chair-top-3 { top: -20px; right: 15%; }
@@ -666,7 +666,7 @@
         .table-rectangle-h .chair.chair-left { left: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
         .table-rectangle-h .chair.chair-right { right: -35px; top: 50%; transform: translateY(-50%) rotate(90deg); }
         /* For tables with more chairs */
-        .table-rectangle { width: 100px; height: 240px; border-radius: 20px; }
+        .table-rectangle { width: 150px; height: 350px; border-radius: 20px; }
         .table-rectangle .chair.chair-top { top: -20px; left: 50%; transform: translateX(-50%); }
         .table-rectangle .chair.chair-bottom { bottom: -20px; left: 50%; transform: translateX(-50%); }
         .table-rectangle .chair.chair-right-1 { right: -35px; top: 10%; transform: rotate(90deg); }

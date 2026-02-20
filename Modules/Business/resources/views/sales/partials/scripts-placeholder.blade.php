@@ -48,7 +48,8 @@
             return Math.round(amount * 100) / 100;
         };
 
-        // Removed duplicate addProductToCart function - using addItemToCart from sale.js instead
+        // NOTE: addProductToCart function removed - sale.js handles all product addition
+        // sale.js provides: handleAddToCart() and addItemToCart() functions
 
         // Product click handlers - removed duplicate handlers, using sale.js handlers instead
         $(document).ready(function() {
@@ -68,6 +69,13 @@
                 
                 console.log('Delivery type selected:', deliveryType);
             });
+
+            // NOTE: Product click handlers are now in sale.js to avoid duplication
+            // The sale.js file handles:
+            // - .single-product and .product-card-new clicks
+            // - .add-product-btn clicks
+            // - Batch/variant selection modal
+            // Do NOT add duplicate handlers here!
 
             // Note: Quantity increase/decrease functionality is handled by existing sale.js
             // The existing handlers already support .plus-btn and .minus-btn classes
@@ -216,7 +224,7 @@
                             // Show reservation details in modal
                             showReservationDetails(reservationInfo, reservationKey);
                         } else {
-                            alert('{{ __("This table is blocked/reserved") }}');
+                            toastr.warning('{{ __("This table is blocked/reserved") }}');
                         }
                         return;
                     }
@@ -407,7 +415,7 @@
                     const tableStatus = 'free'; // Always default to free
 
                     if (!tableName) {
-                        alert('{{ __("Please enter a table number") }}');
+                        toastr.error('{{ __("Please enter a table number") }}');
                         return;
                     }
 
@@ -575,7 +583,7 @@
                     document.addEventListener('mouseup', positionMouseUp);
 
                     // Confirm position
-                    document.getElementById('confirm-position-btn').addEventListener('click', function() {
+                    document.getElementById('confirm-position-btn').addEventListener('click', async function() {
                         isPositioning = false;
                         isDraggingNew = false;
                         document.removeEventListener('mousemove', positionMouseMove);
@@ -586,21 +594,54 @@
                         newTable.style.border = 'none';
                         newTable.style.cursor = 'move';
 
-                        // Add event listeners
-                        addTableEventListeners(newTable);
-                        makeDraggable(newTable);
+                        // Prepare table data for backend
+                        const tableData = {
+                            table_name: tableName,
+                            table_type: tableType,
+                            chair_count: chairCount,
+                            position_top: newTable.style.top,
+                            position_left: newTable.style.left,
+                            status: 'free',
+                            is_custom: true
+                        };
 
-                        // Save to localStorage
-                        saveCustomTable(newTable);
+                        try {
+                            // Save to backend
+                            const savedTable = await createTableInBackend(tableData);
+                            
+                            // Update table element with backend ID
+                            newTable.dataset.tableId = savedTable.id;
+                            
+                            // Add event listeners
+                            addTableEventListeners(newTable);
+                            makeDraggable(newTable);
 
-                        // Remove instruction
-                        instruction.remove();
+                            // Remove instruction
+                            instruction.remove();
 
-                        // Reset form
-                        document.getElementById('new-table-name').value = '';
-                        document.getElementById('new-table-chairs').value = '4';
+                            // Reset form
+                            document.getElementById('new-table-name').value = '';
+                            document.getElementById('new-table-chairs').value = '4';
 
-                        alert('{{ __("Table added successfully!") }}');
+                            // Show success notification
+                            toastr.success('{{ __("Table added successfully!") }}');
+                            
+                            // Reload tables to ensure sync
+                            await loadAndRenderTables();
+                        } catch (error) {
+                            console.error('❌ Error saving table:', error);
+                            
+                            // Remove the table element since save failed
+                            newTable.remove();
+                            instruction.remove();
+                            
+                            // Show error message
+                            if (error.message && error.message.includes('already exists')) {
+                                toastr.error('{{ __("Table name already exists. Please choose a different name.") }}');
+                            } else {
+                                toastr.error('{{ __("Failed to add table. Please try again.") }}');
+                            }
+                        }
                     });
 
                     // Cancel
@@ -646,7 +687,7 @@
                             // Show reservation details in modal
                             showReservationDetails(reservationInfo, reservationKey);
                         } else {
-                            alert('{{ __("This table is blocked/reserved") }}');
+                            toastr.warning('{{ __("This table is blocked/reserved") }}');
                         }
                         return;
                     }
@@ -883,7 +924,7 @@
                     const status = document.getElementById('order-table-status').value;
 
                     if (!customerName) {
-                        alert('{{ __("Please enter customer name") }}');
+                        toastr.error('{{ __("Please enter customer name") }}');
                         return;
                     }
 
@@ -945,9 +986,9 @@
                     document.getElementById('order-table-status').value = 'utilized';
 
                     if (status === 'completed') {
-                        alert('{{ __("Order completed! Table is now free.") }}');
+                        toastr.success('{{ __("Order completed! Table is now free.") }}');
                     } else {
-                        alert('{{ __("Order saved successfully!") }}');
+                        toastr.success('{{ __("Order saved successfully!") }}');
                     }
                 });
             }
@@ -960,103 +1001,291 @@
             console.log('Manage All Tables button found:', btnManageAllTables);
 
             function openManageReservationsModal() {
-                console.log('ًں“‹ Opening Manage Reservations modal...');
+                console.log('✅ Opening Manage Reservations modal...');
 
-                // Load and display all reservations in modal
-                const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
-                console.log('ًں“‹ Reservations from localStorage:', reservations);
-                console.log('ًں“‹ Number of reservations:', Object.keys(reservations).length);
+                // Load reservations from backend API
                 const tbody = document.getElementById('reservations-table-body');
                 const noReservationsMsg = document.getElementById('no-reservations-message');
 
-                console.log('Reservations:', reservations);
-                console.log('Table body element:', tbody);
-                console.log('No reservations message element:', noReservationsMsg);
-
                 if (!tbody) {
                     console.error('reservations-table-body element not found!');
-                    alert('Error: Table body element not found. Please refresh the page.');
+                    toastr.error('{{ __("Error: Table body element not found. Please refresh the page.") }}');
                     return;
                 }
 
-                tbody.innerHTML = '';
+                // Show loading state
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center"><i class="fas fa-spinner fa-spin"></i> {{ __("Loading reservations...") }}</td></tr>';
 
-                if (Object.keys(reservations).length === 0) {
-                    if (tbody.closest('.table-responsive')) {
-                        tbody.closest('.table-responsive').style.display = 'none';
-                    }
-                    if (noReservationsMsg) {
-                        noReservationsMsg.style.display = 'block';
-                    }
-                } else {
-                    if (tbody.closest('.table-responsive')) {
-                        tbody.closest('.table-responsive').style.display = 'block';
-                    }
-                    if (noReservationsMsg) {
-                        noReservationsMsg.style.display = 'none';
-                    }
-
-                    // Get current date/time for status check
-                    const now = new Date();
-                    const currentDate = now.toISOString().split('T')[0];
-                    const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-
-                    for (const [key, reservation] of Object.entries(reservations)) {
-                        const row = document.createElement('tr');
-
-                        // Determine status
-                        let status = 'ًںں، Reserved';
-                        let statusClass = 'text-warning';
-                        const reservationDateTime = new Date(reservation.date + ' ' + reservation.time);
-                        const currentDateTime = new Date(currentDate + ' ' + currentTime);
-
-                        if (currentDateTime >= reservationDateTime) {
-                            status = 'âڈ° Time Arrived';
-                            statusClass = 'text-success';
-                        }
-
-                        row.innerHTML = `
-                            <td><strong>${reservation.table}</strong></td>
-                            <td>${reservation.customerName}</td>
-                            <td>${reservation.phone || 'N/A'}</td>
-                            <td>${reservation.date}</td>
-                            <td>${reservation.time}</td>
-                            <td>${reservation.guests}</td>
-                            <td>${reservation.notes || '-'}</td>
-                            <td class="${statusClass}">${status}</td>
-                            <td>
-                                <button class="btn btn-sm btn-danger delete-reservation" data-key="${key}" data-table="${reservation.table}">
-                                    {{ __('Cancel') }}
-                                </button>
-                            </td>
-                        `;
-                        tbody.appendChild(row);
-                    }
-
-                    // Add delete functionality
-                    document.querySelectorAll('.delete-reservation').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const key = this.getAttribute('data-key');
-                            const tableName = this.getAttribute('data-table');
-
-                            if (confirm('{{ __("Are you sure you want to cancel this reservation?") }}')) {
-                                // Remove reservation
-                                delete reservations[key];
-                                localStorage.setItem('tableReservations', JSON.stringify(reservations));
-
-                                // Update table status to free
-                                const table = document.querySelector(`[data-table="${tableName}"]`);
-                                if (table && table.classList.contains('blocked')) {
-                                    table.classList.remove('blocked');
-                                    table.classList.add('free');
+                // Fetch reservations from backend using XMLHttpRequest to bypass service worker
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', '/business/table-reservations', true);
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhr.setRequestHeader('Accept', 'application/json');
+                
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            console.log('✅ Reservations from backend:', response);
+                            
+                            tbody.innerHTML = '';
+                            
+                            if (!response.success || !response.data || response.data.length === 0) {
+                                if (tbody.closest('.table-responsive')) {
+                                    tbody.closest('.table-responsive').style.display = 'none';
+                                }
+                                if (noReservationsMsg) {
+                                    noReservationsMsg.style.display = 'block';
+                                }
+                            } else {
+                                if (tbody.closest('.table-responsive')) {
+                                    tbody.closest('.table-responsive').style.display = 'block';
+                                }
+                                if (noReservationsMsg) {
+                                    noReservationsMsg.style.display = 'none';
                                 }
 
-                                // Reload modal
-                                openManageReservationsModal();
+                                // Get current date/time for status check
+                                const now = new Date();
+                                const currentDate = now.toISOString().split('T')[0];
+                                const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+                                response.data.forEach(reservation => {
+                                    const row = document.createElement('tr');
+
+                                    // Determine status display
+                                    let statusDisplay = '🔒 Reserved';
+                                    let statusClass = 'text-warning';
+                                    
+                                    if (reservation.status === 'cancelled') {
+                                        statusDisplay = '❌ Cancelled';
+                                        statusClass = 'text-danger';
+                                    } else if (reservation.status === 'completed' || reservation.status === 'arrived') {
+                                        statusDisplay = '✅ Arrived';
+                                        statusClass = 'text-success';
+                                    } else if (reservation.status === 'reserved') {
+                                        // Check if time has arrived
+                                        const reservationDateTime = new Date(reservation.reservation_date + ' ' + reservation.reservation_time);
+                                        const currentDateTime = new Date(currentDate + ' ' + currentTime);
+                                        
+                                        if (currentDateTime >= reservationDateTime) {
+                                            statusDisplay = '⏰ Time Arrived';
+                                            statusClass = 'text-info';
+                                        }
+                                    }
+
+                                    // Action buttons based on status
+                                    let actionButtons = '';
+                                    if (reservation.status === 'reserved') {
+                                        const reservationDateTime = new Date(reservation.reservation_date + ' ' + reservation.reservation_time);
+                                        const currentDateTime = new Date(currentDate + ' ' + currentTime);
+                                        
+                                        if (currentDateTime >= reservationDateTime) {
+                                            // Show Mark Arrived button
+                                            actionButtons = `
+                                                <button class="btn btn-sm btn-success mark-arrived-btn" data-id="${reservation.id}" data-table="${reservation.table_name}">
+                                                    {{ __('Mark Arrived') }}
+                                                </button>
+                                                <button class="btn btn-sm btn-danger cancel-reservation-btn" data-id="${reservation.id}" data-table="${reservation.table_name}" data-customer="${reservation.customer_name}" data-date="${reservation.reservation_date}" data-time="${reservation.reservation_time}">
+                                                    {{ __('Cancel') }}
+                                                </button>
+                                            `;
+                                        } else {
+                                            // Only show cancel button
+                                            actionButtons = `
+                                                <button class="btn btn-sm btn-danger cancel-reservation-btn" data-id="${reservation.id}" data-table="${reservation.table_name}" data-customer="${reservation.customer_name}" data-date="${reservation.reservation_date}" data-time="${reservation.reservation_time}">
+                                                    {{ __('Cancel') }}
+                                                </button>
+                                            `;
+                                        }
+                                    } else if (reservation.status === 'cancelled' || reservation.status === 'completed') {
+                                        actionButtons = '<span class="text-muted">-</span>';
+                                    }
+
+                                    row.innerHTML = `
+                                        <td><strong>${reservation.table_name || 'N/A'}</strong></td>
+                                        <td>${reservation.customer_name}</td>
+                                        <td>${reservation.customer_phone || 'N/A'}</td>
+                                        <td>${reservation.reservation_date}</td>
+                                        <td>${reservation.reservation_time}</td>
+                                        <td>${reservation.number_of_guests || 1}</td>
+                                        <td>${reservation.special_notes || '-'}</td>
+                                        <td class="${statusClass}">${statusDisplay}</td>
+                                        <td>${actionButtons}</td>
+                                    `;
+                                    tbody.appendChild(row);
+                                });
+
+                                // Add Mark Arrived functionality
+                                document.querySelectorAll('.mark-arrived-btn').forEach(btn => {
+                                    btn.addEventListener('click', function() {
+                                        const reservationId = this.getAttribute('data-id');
+                                        const tableName = this.getAttribute('data-table');
+                                        
+                                        // Call backend API to mark as arrived
+                                        const markXhr = new XMLHttpRequest();
+                                        markXhr.open('POST', `/business/table-reservations/${reservationId}/guest-arrived`, true);
+                                        markXhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                                        markXhr.setRequestHeader('Accept', 'application/json');
+                                        markXhr.setRequestHeader('Content-Type', 'application/json');
+                                        markXhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                                        
+                                        markXhr.onload = function() {
+                                            if (markXhr.status === 200) {
+                                                const response = JSON.parse(markXhr.responseText);
+                                                if (response.success) {
+                                                    toastr.success('{{ __("Guest marked as arrived") }}');
+                                                    
+                                                    // Update table status in UI
+                                                    const tableElement = document.querySelector(`[data-table="${tableName}"]`);
+                                                    if (tableElement) {
+                                                        tableElement.classList.remove('free', 'blocked');
+                                                        tableElement.classList.add('utilized');
+                                                    }
+                                                    
+                                                    // Reload modal
+                                                    openManageReservationsModal();
+                                                } else {
+                                                    toastr.error(response.message || '{{ __("Error marking guest as arrived") }}');
+                                                }
+                                            } else {
+                                                toastr.error('{{ __("Error marking guest as arrived") }}');
+                                            }
+                                        };
+                                        
+                                        markXhr.onerror = function() {
+                                            toastr.error('{{ __("Network error marking guest as arrived") }}');
+                                        };
+                                        
+                                        markXhr.send();
+                                    });
+                                });
+
+                                // Add Cancel functionality
+                                document.querySelectorAll('.cancel-reservation-btn').forEach(btn => {
+                                    btn.addEventListener('click', function() {
+                                        const reservationId = this.getAttribute('data-id');
+                                        const tableName = this.getAttribute('data-table');
+                                        const customerName = this.getAttribute('data-customer');
+                                        const date = this.getAttribute('data-date');
+                                        const time = this.getAttribute('data-time');
+
+                                        // Create confirmation modal
+                                        const confirmCancelModalHtml = `
+                                            <div class="modal fade" id="confirmCancelReservationFromListModal" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">{{ __("Confirm Cancel Reservation") }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>{{ __("Are you sure you want to cancel this reservation?") }}</p>
+                                                            <hr>
+                                                            <div class="row mb-2">
+                                                                <div class="col-5"><strong>{{ __("Table") }}:</strong></div>
+                                                                <div class="col-7">${tableName}</div>
+                                                            </div>
+                                                            <div class="row mb-2">
+                                                                <div class="col-5"><strong>{{ __("Customer") }}:</strong></div>
+                                                                <div class="col-7">${customerName}</div>
+                                                            </div>
+                                                            <div class="row mb-2">
+                                                                <div class="col-5"><strong>{{ __("Date") }}:</strong></div>
+                                                                <div class="col-7">${date}</div>
+                                                            </div>
+                                                            <div class="row mb-2">
+                                                                <div class="col-5"><strong>{{ __("Time") }}:</strong></div>
+                                                                <div class="col-7">${time}</div>
+                                                            </div>
+                                                            <hr>
+                                                            <p class="text-danger mb-0">{{ __("This action cannot be undone.") }}</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __("No, Keep It") }}</button>
+                                                            <button type="button" class="btn btn-danger" id="confirmCancelFromListBtn">{{ __("Yes, Cancel Reservation") }}</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                        
+                                        // Remove old modal if exists
+                                        const oldModal = document.getElementById('confirmCancelReservationFromListModal');
+                                        if (oldModal) oldModal.remove();
+                                        
+                                        // Add modal
+                                        document.body.insertAdjacentHTML('beforeend', confirmCancelModalHtml);
+                                        
+                                        // Show modal
+                                        const confirmModal = new bootstrap.Modal(document.getElementById('confirmCancelReservationFromListModal'));
+                                        confirmModal.show();
+                                        
+                                        // Handle confirm
+                                        document.getElementById('confirmCancelFromListBtn').addEventListener('click', function() {
+                                            // Call backend API to cancel reservation
+                                            const cancelXhr = new XMLHttpRequest();
+                                            cancelXhr.open('POST', `/business/table-reservations/${reservationId}/cancel`, true);
+                                            cancelXhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                                            cancelXhr.setRequestHeader('Accept', 'application/json');
+                                            cancelXhr.setRequestHeader('Content-Type', 'application/json');
+                                            cancelXhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                                            
+                                            cancelXhr.onload = function() {
+                                                if (cancelXhr.status === 200) {
+                                                    const response = JSON.parse(cancelXhr.responseText);
+                                                    if (response.success) {
+                                                        // Update table status to free in UI
+                                                        const tableElement = document.querySelector(`[data-table="${tableName}"]`);
+                                                        if (tableElement && tableElement.classList.contains('blocked')) {
+                                                            tableElement.classList.remove('blocked');
+                                                            tableElement.classList.add('free');
+                                                        }
+
+                                                        // Close confirmation modal
+                                                        confirmModal.hide();
+                                                        
+                                                        // Show success message
+                                                        toastr.success('{{ __("Reservation cancelled successfully") }}');
+                                                        
+                                                        // Reload modal
+                                                        openManageReservationsModal();
+                                                    } else {
+                                                        toastr.error(response.message || '{{ __("Error cancelling reservation") }}');
+                                                    }
+                                                } else {
+                                                    toastr.error('{{ __("Error cancelling reservation") }}');
+                                                }
+                                            };
+                                            
+                                            cancelXhr.onerror = function() {
+                                                toastr.error('{{ __("Network error cancelling reservation") }}');
+                                            };
+                                            
+                                            cancelXhr.send();
+                                        });
+                                    });
+                                });
                             }
-                        });
-                    });
-                }
+                        } catch (e) {
+                            console.error('Error parsing reservations:', e);
+                            toastr.error('{{ __("Error loading reservations") }}');
+                            tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">{{ __("Error loading reservations") }}</td></tr>';
+                        }
+                    } else {
+                        console.error('Error fetching reservations:', xhr.status);
+                        toastr.error('{{ __("Error loading reservations") }}');
+                        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">{{ __("Error loading reservations") }}</td></tr>';
+                    }
+                };
+                
+                xhr.onerror = function() {
+                    console.error('Network error fetching reservations');
+                    toastr.error('{{ __("Network error loading reservations") }}');
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-danger">{{ __("Network error loading reservations") }}</td></tr>';
+                };
+                
+                xhr.send();
 
                 // Open modal
                 console.log('Opening manage reservations modal...');
@@ -1089,7 +1318,7 @@
 
                 if (!tbody) {
                     console.error('orders-table-body element not found!');
-                    alert('Error: Table body element not found. Please refresh the page.');
+                    toastr.error('{{ __("Error: Table body element not found. Please refresh the page.") }}');
                     return;
                 }
 
@@ -1181,7 +1410,7 @@
                                 // Refresh the modal
                                 openManageOrdersModal();
 
-                                alert(`{{ __("Order completed! Table") }} ${tableName} {{ __("is now free.") }}`);
+                                toastr.success(`{{ __("Order completed! Table") }} ${tableName} {{ __("is now free.") }}`);
                             }
                         });
                     });
@@ -1295,7 +1524,44 @@
 
                 // Cancel reservation button
                 document.getElementById('cancel-reservation-btn').onclick = function() {
-                    if (confirm('{{ __("Are you sure you want to cancel this reservation?") }}')) {
+                    // Create confirmation modal
+                    const confirmCancelModalHtml = `
+                        <div class="modal fade" id="confirmCancelReservationModal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">{{ __("Confirm Cancel Reservation") }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>{{ __("Are you sure you want to cancel this reservation?") }}</p>
+                                        <p><strong>{{ __("Table") }}:</strong> ${reservation.table}</p>
+                                        <p><strong>{{ __("Customer") }}:</strong> ${reservation.customerName}</p>
+                                        <p><strong>{{ __("Date") }}:</strong> ${reservation.date} ${reservation.time}</p>
+                                        <p class="text-danger">{{ __("This action cannot be undone.") }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __("No, Keep It") }}</button>
+                                        <button type="button" class="btn btn-danger" id="confirmCancelReservationBtn">{{ __("Yes, Cancel Reservation") }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Remove old modal if exists
+                    const oldModal = document.getElementById('confirmCancelReservationModal');
+                    if (oldModal) oldModal.remove();
+                    
+                    // Add modal
+                    document.body.insertAdjacentHTML('beforeend', confirmCancelModalHtml);
+                    
+                    // Show modal
+                    const confirmModal = new bootstrap.Modal(document.getElementById('confirmCancelReservationModal'));
+                    confirmModal.show();
+                    
+                    // Handle confirm
+                    document.getElementById('confirmCancelReservationBtn').onclick = function() {
                         const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
                         delete reservations[reservationKey];
                         localStorage.setItem('tableReservations', JSON.stringify(reservations));
@@ -1307,11 +1573,14 @@
                             table.classList.add('free');
                         }
 
-                        // Close modal and refresh
+                        // Close modals
+                        confirmModal.hide();
                         bootstrap.Modal.getInstance(document.getElementById('reservationDetailsModal')).hide();
                         checkReservationTimes();
-                        alert('{{ __("Reservation cancelled successfully") }}');
-                    }
+                        
+                        // Show success message
+                        toastr.success('{{ __("Reservation cancelled successfully") }}');
+                    };
                 };
 
                 // Guest arrived button
@@ -1449,7 +1718,7 @@
 
                         // Show success message
                         setTimeout(() => {
-                            alert(`âœ… Order completed! ${tableName} is now free.`);
+                            toastr.success(`{{ __("Order completed!") }} ${tableName} {{ __("is now free.") }}`);
                         }, 300);
                     });
 
@@ -1765,134 +2034,175 @@
             // Clear all data button - now "Manage Tables" button
             const btnClearAllData = document.getElementById('btn-clear-all-data');
             if (btnClearAllData) {
-                btnClearAllData.addEventListener('click', function() {
-                    // Show modal with all tables (default + custom)
-                    const customTables = JSON.parse(localStorage.getItem('customTables') || '[]');
-                    const allTables = document.querySelectorAll('.table-item');
+                btnClearAllData.addEventListener('click', async function() {
+                    try {
+                        // Load tables from backend
+                        const tables = await getTablesFromBackend();
 
-                    let tablesList = '<div style="max-height: 400px; overflow-y: auto;"><table class="table table-striped"><thead><tr><th>Table Name</th><th>Chairs</th><th>Status</th><th>Type</th><th>Actions</th></tr></thead><tbody>';
+                        let tablesList = '<div style="max-height: 400px; overflow-y: auto;"><table class="table table-striped"><thead><tr><th>Table Name</th><th>Chairs</th><th>Status</th><th>Type</th><th>Actions</th></tr></thead><tbody>';
 
-                    allTables.forEach(table => {
-                        const tableName = table.getAttribute('data-table');
-                        const chairCount = table.querySelectorAll('.chair').length;
-                        let status = 'Free';
-                        if (table.classList.contains('utilized')) status = 'Utilized';
-                        else if (table.classList.contains('blocked')) status = 'Reserved';
+                        // Use backend data to populate table list
+                        tables.forEach(table => {
+                            const chairCount = table.chair_count;
+                            let status = 'Free';
+                            if (table.status === 'utilized') status = 'Utilized';
+                            else if (table.status === 'blocked') status = 'Reserved';
 
-                        const isCustom = customTables.some(t => t.name === tableName);
-                        const tableType = isCustom ? 'Custom' : 'Default';
+                            const tableType = table.is_custom ? 'Custom' : 'Default';
 
-                        const deleteBtn = isCustom ? `<button class="btn btn-sm btn-danger delete-table-btn" data-table="${tableName}">Delete</button>` : '<span class="text-muted">-</span>';
+                            // Show action buttons for ALL custom tables (is_custom = true)
+                            const actionButtons = table.is_custom ? `
+                                <button class="btn btn-sm btn-primary rotate-table-btn me-1" data-table-id="${table.id}" title="{{ __('Rotate 90°') }}">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-table-btn" data-table-id="${table.id}" data-table-name="${table.table_name}" title="{{ __('Delete') }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : '<span class="text-muted">-</span>';
 
-                        tablesList += `<tr>
-                            <td><strong>${tableName}</strong></td>
-                            <td>${chairCount} chairs</td>
-                            <td><span class="badge bg-${status === 'Free' ? 'success' : status === 'Utilized' ? 'danger' : 'warning'}">${status}</span></td>
-                            <td>${tableType}</td>
-                            <td>${deleteBtn}</td>
-                        </tr>`;
-                    });
+                            tablesList += `<tr>
+                                <td><strong>${table.table_name}</strong></td>
+                                <td>${chairCount} {{ __("chairs") }}</td>
+                                <td><span class="badge bg-${status === 'Free' ? 'success' : status === 'Utilized' ? 'danger' : 'warning'}">${status}</span></td>
+                                <td>${tableType}</td>
+                                <td>${actionButtons}</td>
+                            </tr>`;
+                        });
 
-                    tablesList += '</tbody></table></div>';
+                        tablesList += '</tbody></table></div>';
 
-                    // Create custom modal
-                    const modalHtml = `
-                        <div class="modal fade" id="manageTablesModal" tabindex="-1">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Manage Tables</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ${tablesList}
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        // Create custom modal
+                        const modalHtml = `
+                            <div class="modal fade" id="manageTablesModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">{{ __("Manage Tables") }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ${tablesList}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __("Close") }}</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        `;
 
-                    // Remove old modal if exists
-                    const oldModal = document.getElementById('manageTablesModal');
-                    if (oldModal) oldModal.remove();
+                        // Remove old modal if exists
+                        const oldModal = document.getElementById('manageTablesModal');
+                        if (oldModal) oldModal.remove();
 
-                    // Add new modal
-                    document.body.insertAdjacentHTML('beforeend', modalHtml);
+                        // Add new modal
+                        document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-                    // Open modal
-                    const manageTablesModal = new bootstrap.Modal(document.getElementById('manageTablesModal'));
-                    manageTablesModal.show();
+                        // Open modal
+                        const manageTablesModal = new bootstrap.Modal(document.getElementById('manageTablesModal'));
+                        manageTablesModal.show();
 
-                    // Add delete table functionality
-                    document.querySelectorAll('.delete-table-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const tableName = this.getAttribute('data-table');
-                            if (confirm(`Are you sure you want to delete table ${tableName}?`)) {
-                                // Remove from DOM
-                                const tableElement = document.querySelector(`[data-table="${tableName}"]`);
-                                if (tableElement) tableElement.remove();
-
-                                // Remove from localStorage
-                                deleteCustomTable(tableName);
-
-                                // Close and reopen modal to refresh
-                                manageTablesModal.hide();
-                                setTimeout(() => btnClearAllData.click(), 300);
-                            }
+                        // Add rotate table functionality
+                        document.querySelectorAll('.rotate-table-btn').forEach(btn => {
+                            btn.addEventListener('click', async function() {
+                                const tableId = this.getAttribute('data-table-id');
+                                try {
+                                    await rotateTableInBackend(tableId, 90);
+                                    toastr.success('{{ __("Table rotated successfully!") }}');
+                                    
+                                    // Reload tables
+                                    await loadAndRenderTables();
+                                    
+                                    // Close and reopen modal to refresh
+                                    manageTablesModal.hide();
+                                    setTimeout(() => btnClearAllData.click(), 300);
+                                } catch (error) {
+                                    console.error('❌ Error rotating table:', error);
+                                    toastr.error('{{ __("Failed to rotate table") }}');
+                                }
+                            });
                         });
-                    });
 
-                    // Clear all reservations & orders
-                    document.getElementById('clear-all-data-btn').addEventListener('click', function() {
-                        if (confirm('Are you sure you want to clear all reservations, orders, and positions? This cannot be undone.')) {
-                            localStorage.removeItem('tableReservations');
-                            localStorage.removeItem('tableOrders');
-                            localStorage.removeItem('tablePositions');
-                            localStorage.removeItem('areaPositions');
-
-                            document.querySelectorAll('.table-item').forEach(table => {
-                                table.classList.remove('blocked', 'utilized');
-                                table.classList.add('free');
+                        // Add delete table functionality with confirmation modal
+                        document.querySelectorAll('.delete-table-btn').forEach(btn => {
+                            btn.addEventListener('click', async function() {
+                                const tableId = this.getAttribute('data-table-id');
+                                const tableName = this.getAttribute('data-table-name');
+                                
+                                // Create confirmation modal
+                                const confirmModalHtml = `
+                                    <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">{{ __("Confirm Delete") }}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>{{ __("Are you sure you want to delete table") }} <strong>${tableName}</strong>?</p>
+                                                    <p class="text-danger">{{ __("This action cannot be undone.") }}</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __("Cancel") }}</button>
+                                                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">{{ __("Delete") }}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                // Remove old confirm modal if exists
+                                const oldConfirmModal = document.getElementById('confirmDeleteModal');
+                                if (oldConfirmModal) oldConfirmModal.remove();
+                                
+                                // Add confirm modal
+                                document.body.insertAdjacentHTML('beforeend', confirmModalHtml);
+                                
+                                // Show confirm modal
+                                const confirmModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+                                confirmModal.show();
+                                
+                                // Handle confirm delete
+                                document.getElementById('confirmDeleteBtn').addEventListener('click', async function() {
+                                    try {
+                                        await deleteTableFromBackend(tableId);
+                                        toastr.success('{{ __("Table deleted successfully!") }}');
+                                        
+                                        // Close confirm modal
+                                        confirmModal.hide();
+                                        
+                                        // Reload tables
+                                        await loadAndRenderTables();
+                                        
+                                        // Close and reopen manage tables modal to refresh
+                                        manageTablesModal.hide();
+                                        setTimeout(() => btnClearAllData.click(), 300);
+                                    } catch (error) {
+                                        console.error('❌ Error deleting table:', error);
+                                        toastr.error('{{ __("Failed to delete table") }}');
+                                        confirmModal.hide();
+                                    }
+                                });
                             });
-
-                            document.querySelectorAll('.reservation-badge').forEach(badge => badge.remove());
-
-                            alert('All reservations, orders, and positions cleared! Refresh the page to reset positions.');
-                            manageTablesModal.hide();
-                        }
-                    });
-
-                    // Clear all custom tables
-                    document.getElementById('clear-custom-tables-btn').addEventListener('click', function() {
-                        if (confirm('Are you sure you want to delete all custom tables? This cannot be undone.')) {
-                            customTables.forEach(tableData => {
-                                const tableElement = document.querySelector(`[data-table="${tableData.name}"]`);
-                                if (tableElement) tableElement.remove();
-                            });
-
-                            localStorage.removeItem('customTables');
-                            alert('All custom tables deleted!');
-                            manageTablesModal.hide();
-                        }
-                    });
+                        });
+                    } catch (error) {
+                        console.error('❌ Error loading tables:', error);
+                        toastr.error('{{ __("Failed to load tables") }}');
+                    }
                 });
             }
 
             // Restore custom tables first (before restoring statuses)
-            restoreCustomTables();
+            // REMOVED: restoreCustomTables(); - Now loading from backend via loadAndRenderTables()
 
             // Restore table statuses on page load
-            restoreTableStatuses();
+            // REMOVED: restoreTableStatuses(); - Now loading from backend
 
             // Restore table positions after tables are loaded
-            restoreTablePositions();
+            // REMOVED: restoreTablePositions(); - Now loading from backend
 
             // Restore area positions (Bar, Toilets, Entrance)
-            restoreAreaPositions();
+            // REMOVED: restoreAreaPositions(); - Now loading from backend
 
             // Wait for DOM to be fully ready, then update entrance cutout
             // Use window.load event AND font loading to ensure all elements are fully rendered
@@ -2002,70 +2312,143 @@
             let selectedTableForReservation = null;
             const searchAvailableBtn = document.getElementById('search-available-tables');
             if (searchAvailableBtn) {
-                searchAvailableBtn.addEventListener('click', function() {
+                searchAvailableBtn.addEventListener('click', async function() {
                     const guests = parseInt(document.getElementById('reservation-guests').value);
                     const date = document.getElementById('reservation-date').value;
                     const time = document.getElementById('reservation-time').value;
                     const customerName = document.getElementById('reservation-customer-name').value;
 
                     if (!customerName || !date || !time) {
-                        alert('{{ __("Please fill in customer name, date and time") }}');
+                        toastr.error('{{ __("Please fill in customer name, date and time") }}');
                         return;
                     }
 
-                    // Get all tables
-                    const allTables = document.querySelectorAll('.table-item');
-                    const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
-                    const availableTables = [];
-
-                    allTables.forEach(table => {
-                        const tableName = table.getAttribute('data-table');
-                        const chairCount = table.querySelectorAll('.chair').length;
-
-                        // Check if table has enough chairs
-                        if (chairCount >= guests) {
-                            // Check if table is not reserved at this time
-                            const reservationKey = `${tableName}_${date}_${time}`;
-                            if (!reservations[reservationKey] && !table.classList.contains('utilized')) {
-                                availableTables.push({
-                                    name: tableName,
-                                    chairs: chairCount,
-                                    element: table
-                                });
-                            }
-                        }
-                    });
-
-                    // Display available tables
+                    // Show loading
                     const container = document.getElementById('available-tables-container');
-                    container.innerHTML = '';
-
-                    if (availableTables.length === 0) {
-                        container.innerHTML = '<p class="text-danger">{{ __("No available tables found for this time and guest count") }}</p>';
-                        document.getElementById('available-tables-list').style.display = 'block';
-                        return;
-                    }
-
-                    availableTables.forEach(table => {
-                        const tableBtn = document.createElement('button');
-                        tableBtn.className = 'btn btn-outline-success';
-                        tableBtn.textContent = `${table.name} (${table.chairs} {{ __("chairs") }})`;
-                        tableBtn.onclick = function() {
-                            // Remove selection from other buttons
-                            container.querySelectorAll('.btn').forEach(btn => {
-                                btn.classList.remove('btn-success');
-                                btn.classList.add('btn-outline-success');
-                            });
-                            // Select this button
-                            this.classList.remove('btn-outline-success');
-                            this.classList.add('btn-success');
-                            selectedTableForReservation = table;
-                            document.getElementById('confirm-reservation').disabled = false;
-                        };
-                        container.appendChild(tableBtn);
-                    });
-
+                    container.innerHTML = '<p class="text-muted">{{ __("Searching for available tables...") }}</p>';
                     document.getElementById('available-tables-list').style.display = 'block';
+
+                    try {
+                        console.log('Fetching reservations...');
+                        // Get all reservations from backend
+                        const reservationsResponse = await fetch('{{ route("business.table-reservations.index") }}', {
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        });
+                        
+                        if (!reservationsResponse.ok) {
+                            throw new Error(`Reservations API error: ${reservationsResponse.status}`);
+                        }
+                        
+                        const reservationsData = await reservationsResponse.json();
+                        console.log('Reservations data:', reservationsData);
+                        const allReservations = reservationsData.success ? reservationsData.data : [];
+
+                        // Parse selected time
+                        const selectedDateTime = new Date(`${date} ${time}`);
+                        const selectedTimeMs = selectedDateTime.getTime();
+
+                        // Filter reservations that overlap with selected time (within 2 hours)
+                        const overlappingReservations = allReservations.filter(reservation => {
+                            if (reservation.status === 'cancelled' || reservation.status === 'completed' || reservation.status === 'arrived') {
+                                return false; // Skip cancelled/completed/arrived reservations
+                            }
+
+                            const reservationDateTime = new Date(`${reservation.reservation_date} ${reservation.reservation_time}`);
+                            const reservationTimeMs = reservationDateTime.getTime();
+                            
+                            // Check if within 2 hours (7200000 ms = 2 hours)
+                            const timeDiff = Math.abs(selectedTimeMs - reservationTimeMs);
+                            return timeDiff < 7200000; // 2 hours in milliseconds
+                        });
+
+                        console.log('Overlapping reservations:', overlappingReservations);
+
+                        // Get IDs of reserved tables
+                        const reservedTableIds = overlappingReservations.map(r => r.table_id);
+                        console.log('Reserved table IDs:', reservedTableIds);
+
+                        console.log('Fetching tables...');
+                        // Get all tables from backend
+                        const tablesResponse = await fetch('{{ route("business.tables.index") }}', {
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        });
+                        
+                        if (!tablesResponse.ok) {
+                            throw new Error(`Tables API error: ${tablesResponse.status}`);
+                        }
+                        
+                        const tablesData = await tablesResponse.json();
+                        console.log('Tables data:', tablesData);
+                        const allTables = tablesData.success ? tablesData.data : [];
+
+                        // Filter available tables
+                        const availableTables = allTables.filter(table => {
+                            // Check if table has enough chairs (use chair_count from backend)
+                            const chairCount = table.chair_count || table.chairs || 0;
+                            if (chairCount < guests) {
+                                return false;
+                            }
+
+                            // Check if table is not reserved at this time
+                            if (reservedTableIds.includes(table.id)) {
+                                return false;
+                            }
+
+                            // Check if table is not currently utilized
+                            if (table.status === 'utilized') {
+                                return false;
+                            }
+
+                            return true;
+                        });
+
+                        console.log('Available tables:', availableTables);
+
+                        // Display available tables
+                        container.innerHTML = '';
+
+                        if (availableTables.length === 0) {
+                            container.innerHTML = '<p class="text-danger">{{ __("No available tables found for this time and guest count") }}</p>';
+                            return;
+                        }
+
+                        availableTables.forEach(table => {
+                            const tableName = table.table_name || table.name || 'Unknown';
+                            const chairCount = table.chair_count || table.chairs || 0;
+                            
+                            const tableBtn = document.createElement('button');
+                            tableBtn.className = 'btn btn-outline-success me-2 mb-2';
+                            tableBtn.textContent = `${tableName} (${chairCount} {{ __("chairs") }})`;
+                            tableBtn.onclick = function() {
+                                // Remove selection from other buttons
+                                container.querySelectorAll('.btn').forEach(btn => {
+                                    btn.classList.remove('btn-success');
+                                    btn.classList.add('btn-outline-success');
+                                });
+                                // Select this button
+                                this.classList.remove('btn-outline-success');
+                                this.classList.add('btn-success');
+                                selectedTableForReservation = {
+                                    id: table.id,
+                                    name: tableName,
+                                    chairs: chairCount
+                                };
+                                document.getElementById('confirm-reservation').disabled = false;
+                            };
+                            container.appendChild(tableBtn);
+                        });
+
+                    } catch (error) {
+                        console.error('Error searching tables:', error);
+                        container.innerHTML = '<p class="text-danger">{{ __("Error loading available tables. Please try again.") }}</p>';
+                        toastr.error('{{ __("Error loading available tables") }}: ' + error.message);
+                    }
                 });
             }
 
@@ -2076,12 +2459,12 @@
 
             if (confirmReservationBtn) {
                 console.log('Adding click event listener to confirm reservation button...');
-                confirmReservationBtn.addEventListener('click', function() {
-                    console.log('âœ… Confirm reservation clicked!');
+                confirmReservationBtn.addEventListener('click', async function() {
+                    console.log('✅ Confirm reservation clicked!');
                     console.log('Selected table:', selectedTableForReservation);
 
                     if (!selectedTableForReservation) {
-                        alert('{{ __("Please select a table") }}');
+                        toastr.error('{{ __("Please select a table") }}');
                         return;
                     }
 
@@ -2096,66 +2479,154 @@
 
                     // Validate required fields
                     if (!customerName || !date || !time) {
-                        alert('{{ __("Please fill in customer name, date and time") }}');
+                        toastr.error('{{ __("Please fill in customer name, date and time") }}');
                         return;
                     }
 
                     // Validate: guests cannot exceed table chairs
                     if (guests > selectedTableForReservation.chairs) {
-                        alert(`{{ __("Number of guests") }} (${guests}) {{ __("cannot exceed table capacity") }} (${selectedTableForReservation.chairs} {{ __("chairs") }}). {{ __("Please select a larger table or reduce guests.") }}`);
+                        toastr.error(`{{ __("Number of guests") }} (${guests}) {{ __("cannot exceed table capacity") }} (${selectedTableForReservation.chairs} {{ __("chairs") }}). {{ __("Please select a larger table or reduce guests.") }}`);
                         return;
                     }
 
-                    // Save reservation
-                    const reservations = JSON.parse(localStorage.getItem('tableReservations') || '{}');
-                    const reservationKey = `${selectedTableForReservation.name}_${date}_${time}`;
+                    // Disable button to prevent double submission
+                    confirmReservationBtn.disabled = true;
+                    confirmReservationBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>{{ __("Saving...") }}';
 
-                    console.log('Reservation key:', reservationKey);
+                    try {
+                        // Save reservation to backend using XMLHttpRequest to bypass service worker
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', '{{ route("business.table-reservations.store") }}', true);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                        
+                        xhr.onload = function() {
+                            if (xhr.status >= 200 && xhr.status < 300) {
+                                const result = JSON.parse(xhr.responseText);
+                                
+                                if (!result.success) {
+                                    toastr.error(result.message || '{{ __("Error creating reservation") }}');
+                                    confirmReservationBtn.disabled = false;
+                                    confirmReservationBtn.innerHTML = '{{ __("Confirm Reservation") }}';
+                                    return;
+                                }
 
-                    reservations[reservationKey] = {
-                        table: selectedTableForReservation.name,
-                        customerName: customerName,
-                        phone: phone,
-                        date: date,
-                        time: time,
-                        guests: guests,
-                        notes: notes,
-                        timestamp: new Date().toISOString()
-                    };
+                                // Update table status in UI
+                                const tableElement = document.querySelector(`.table-item[data-table="${selectedTableForReservation.name}"]`);
+                                if (tableElement) {
+                                    tableElement.classList.remove('free', 'utilized');
+                                    tableElement.classList.add('blocked');
+                                }
 
-                    console.log('Saving to localStorage:', reservations);
-                    localStorage.setItem('tableReservations', JSON.stringify(reservations));
+                                // Close modal
+                                const modal = bootstrap.Modal.getInstance(document.getElementById('makeReservationModal'));
+                                modal.hide();
 
-                    // Verify save
-                    const savedData = localStorage.getItem('tableReservations');
-                    console.log('âœ… Saved! Verifying:', savedData);
-                    console.log('âœ… Parsed saved data:', JSON.parse(savedData));
+                                // Reset form
+                                document.getElementById('reservation-customer-name').value = '';
+                                document.getElementById('reservation-phone').value = '';
+                                document.getElementById('reservation-guests').value = '2';
+                                document.getElementById('reservation-guests').removeAttribute('max');
+                                document.getElementById('reservation-notes').value = '';
+                                document.getElementById('available-tables-list').style.display = 'none';
+                                document.getElementById('confirm-reservation').disabled = false;
+                                document.getElementById('confirm-reservation').innerHTML = '{{ __("Confirm Reservation") }}';
+                                
+                                const tableName = selectedTableForReservation.name;
+                                selectedTableForReservation = null;
 
-                    // Change table status to blocked (reserved)
-                    selectedTableForReservation.element.classList.remove('free', 'utilized');
-                    selectedTableForReservation.element.classList.add('blocked');
-                    console.log('Table status changed to blocked');
+                                // Show success modal
+                                const successModalHtml = `
+                                    <div class="modal fade" id="reservationSuccessModal" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-success text-white">
+                                                    <h5 class="modal-title">
+                                                        <i class="fas fa-check-circle me-2"></i>
+                                                        {{ __("Reservation Confirmed!") }}
+                                                    </h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="text-center mb-3">
+                                                        <i class="fas fa-calendar-check text-success" style="font-size: 48px;"></i>
+                                                    </div>
+                                                    <p class="text-center"><strong>{{ __("Reservation confirmed for") }} ${customerName}</strong></p>
+                                                    <hr>
+                                                    <div class="row">
+                                                        <div class="col-6"><strong>{{ __("Table") }}:</strong></div>
+                                                        <div class="col-6">${tableName}</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6"><strong>{{ __("Date") }}:</strong></div>
+                                                        <div class="col-6">${date}</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6"><strong>{{ __("Time") }}:</strong></div>
+                                                        <div class="col-6">${time}</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6"><strong>{{ __("Guests") }}:</strong></div>
+                                                        <div class="col-6">${guests}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">{{ __("OK") }}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                // Remove old modal if exists
+                                const oldSuccessModal = document.getElementById('reservationSuccessModal');
+                                if (oldSuccessModal) oldSuccessModal.remove();
+                                
+                                // Add modal
+                                document.body.insertAdjacentHTML('beforeend', successModalHtml);
+                                
+                                // Show modal
+                                const successModal = new bootstrap.Modal(document.getElementById('reservationSuccessModal'));
+                                successModal.show();
 
-                    // Immediately add reservation badge to the table
-                    console.log('âœ… Calling checkReservationTimes to add badge...');
-                    checkReservationTimes();
-                    console.log('âœ… Badge added, now closing modal...');
+                                // Reload tables to update status
+                                if (typeof loadTablesFromBackend === 'function') {
+                                    loadTablesFromBackend();
+                                }
+                                
+                                toastr.success('{{ __("Reservation created successfully!") }}');
+                            } else {
+                                const result = JSON.parse(xhr.responseText);
+                                toastr.error(result.message || '{{ __("Error creating reservation") }}');
+                                confirmReservationBtn.disabled = false;
+                                confirmReservationBtn.innerHTML = '{{ __("Confirm Reservation") }}';
+                            }
+                        };
+                        
+                        xhr.onerror = function() {
+                            console.error('Error creating reservation: Network error');
+                            toastr.error('{{ __("Error creating reservation. Please try again.") }}');
+                            confirmReservationBtn.disabled = false;
+                            confirmReservationBtn.innerHTML = '{{ __("Confirm Reservation") }}';
+                        };
+                        
+                        xhr.send(JSON.stringify({
+                            table_id: selectedTableForReservation.id,
+                            customer_name: customerName,
+                            customer_phone: phone,
+                            reservation_date: date,
+                            reservation_time: time,
+                            number_of_guests: guests,
+                            special_notes: notes
+                        }));
 
-                    // Close modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('makeReservationModal'));
-                    modal.hide();
-
-                    // Reset form
-                    document.getElementById('reservation-customer-name').value = '';
-                    document.getElementById('reservation-phone').value = '';
-                    document.getElementById('reservation-guests').value = '2';
-                    document.getElementById('reservation-guests').removeAttribute('max'); // Remove max limit
-                    document.getElementById('reservation-notes').value = '';
-                    document.getElementById('available-tables-list').style.display = 'none';
-                    document.getElementById('confirm-reservation').disabled = true;
-                    selectedTableForReservation = null;
-
-                    alert(`{{ __("Reservation confirmed for") }} ${customerName} {{ __("at table") }} ${reservations[reservationKey].table}`);
+                    } catch (error) {
+                        console.error('Error creating reservation:', error);
+                        toastr.error('{{ __("Error creating reservation. Please try again.") }}');
+                        confirmReservationBtn.disabled = false;
+                        confirmReservationBtn.innerHTML = '{{ __("Confirm Reservation") }}';
+                    }
                 });
             }
 

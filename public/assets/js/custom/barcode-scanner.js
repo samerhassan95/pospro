@@ -319,7 +319,12 @@
                 if (response.success) {
                     // Refresh cart display
                     if (typeof fetchUpdatedCart === 'function') {
-                        fetchUpdatedCart();
+                        fetchUpdatedCart(function() {
+                            // Recalculate totals after cart is updated
+                            if (typeof calTotalAmount === 'function') {
+                                calTotalAmount();
+                            }
+                        });
                     }
                     
                     if (typeof toastr !== 'undefined') {

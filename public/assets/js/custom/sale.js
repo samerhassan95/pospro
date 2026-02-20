@@ -1268,6 +1268,7 @@ $("#productDropdown .product-selected").on("click", function (e) {
 
 // Add to cart on batch click
 $("#dropdownList").on("click", ".add-batch-item", function (e) {
+    e.preventDefault();
     e.stopPropagation();
 
     const value = $(this).data("value") ?? "";

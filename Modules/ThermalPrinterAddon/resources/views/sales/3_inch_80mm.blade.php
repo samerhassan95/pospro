@@ -1,13 +1,13 @@
 <div class="invoice-container-sm">
     <div class="invoice-content invoice-content-size">
 
-        <div class="invoice-logo">
+        <div class="invoice-logo" style="margin: 5px 0;">
             <img src="{{ asset(get_business_option('business-settings')['invoice_logo'] ?? 'assets/images/default.svg') ?? '' }}"
-                alt="Logo">
+                alt="Logo" style="max-width: 80px; max-height: 60px;">
         </div>
-        <div class="mt-2">
-            <h4 class="company-name">{{ $sale->business->companyName ?? 'Pos Pro' }}</h4>
-            <div class="company-info">
+        <div style="margin: 5px 0;">
+            <h4 class="company-name" style="font-size: 14px; margin: 3px 0;">{{ $sale->business->companyName ?? 'Pos Pro' }}</h4>
+            <div class="company-info" style="font-size: 8px; text-align: center; line-height: 1.3;">
                 @if($sale->invoice_type === 'b2b')
                 {{-- B2B Seller Details --}}
                 @if($sale->business->building_number || $sale->business->street_name)
@@ -35,22 +35,33 @@
                 @endif
                 @else
                 {{-- B2C Seller Details --}}
-                <p> {{__('Address')}} : {{ $sale->business->address ?? '' }}</p>
+                @if($sale->business->address || $sale->business->building_number)
+                <p>
+                    @if($sale->business->building_number || $sale->business->street_name)
+                        {{ $sale->business->building_number }}، {{ $sale->business->street_name }}، 
+                        {{ $sale->business->district }}، {{ $sale->business->city }}
+                    @else
+                        {{ $sale->business->address ?? '' }}
+                    @endif
+                </p>
                 @endif
-                <p> {{__('Mobile')}} : {{ $sale->business->phoneNumber ?? '' }}</p>
-                <p> {{__('Email')}} : {{ auth()->user()->email ?? '' }}</p>
-                @if (!empty($sale->business->vat_name))
-                <p>{{ $sale->business->vat_name }} : {{ $sale->business->vat_no ?? '' }}</p>
+                @endif
+                @if($sale->business->phoneNumber)
+                <p>{{__('Mobile')}} : {{ $sale->business->phoneNumber }}</p>
+                @endif
+                @if (!empty($sale->business->vat_no))
+                <p>{{ __('VAT Number') }} / الرقم الضريبي: {{ $sale->business->vat_no }}</p>
                 @endif
             </div>
         </div>
-        <h3 class="invoice-title my-1" style="text-align: center;">
+        <h3 class="invoice-title my-1" style="text-align: center; font-size: 11px; margin: 5px 0;">
             @if($sale->invoice_type === 'b2b')
             <strong>Tax Invoice / فاتورة ضريبية</strong>
             <br>
-            <small style="font-size:9px;">(تصدر غالباً بين منشأة ومنشأة أخرى)</small>
+            <small style="font-size:7px;">(تصدر غالباً بين منشأة ومنشأة أخرى)</small>
             @else
-            Simplified Tax Invoice / فاتورة ضريبية مبسطة
+            <strong>فاتورة ضريبية مبسطة</strong><br>
+            <small style="font-size:8px;">Simplified Tax Invoice</small>
             @endif
         </h3>
 
@@ -113,29 +124,26 @@
             @endif
         </div>
         @else
-        {{-- B2C Invoice Details --}}
-        <div class="invoice-info">
-            <div class="">
-                <p><strong>{{__('Invoice')}} :</strong> {{ $sale->invoiceNumber ?? '' }}</p>
-                <p><strong>{{__('Name')}} :</strong> {{ $sale->party->name ?? 'Cash' }}</p>
-                <p> {{__('Mobile')}} : {{ $sale->party->phone ?? '' }}</p>
-                @if($sale->delivery_type)
-                <p><strong>{{__('Order Type')}} :</strong> 
-                    @if($sale->delivery_type == 'delivery')
-                        {{__('Delivery')}}
-                    @elseif($sale->delivery_type == 'pre-order')
-                        {{__('Pre-order')}}
-                    @else
-                        {{__('Takeaway')}}
-                    @endif
-                </p>
+        {{-- B2C Invoice Details - Compact Format --}}
+        <div style="text-align: center; margin: 5px 0; padding: 5px 0; border-top: 2px dashed #000; border-bottom: 2px dashed #000; font-size: 9px;">
+            <p style="margin: 2px 0;"><strong>{{ __('Invoice') }}:</strong> {{ $sale->invoiceNumber ?? '' }}</p>
+            <p style="margin: 2px 0;">{{ \Carbon\Carbon::parse($sale->saleDate)->format('Y/m/d h:i A') }}</p>
+            <p style="margin: 2px 0;"><strong>{{ __('Sales By') }}:</strong> {{ $sale->user->name }}</p>
+            <p style="margin: 2px 0;"><strong>{{ __('Customer') }}:</strong> {{ $sale->party->name ?? 'Cash' }}</p>
+            @if($sale->party->phone)
+            <p style="margin: 2px 0;"><strong>{{ __('Mobile') }}:</strong> {{ $sale->party->phone }}</p>
+            @endif
+            @if($sale->delivery_type)
+            <p style="margin: 2px 0;"><strong>{{ __('Order Type') }}:</strong> 
+                @if($sale->delivery_type == 'delivery')
+                    {{ __('Delivery') }}
+                @elseif($sale->delivery_type == 'pre-order')
+                    {{ __('Pre-order') }}
+                @else
+                    {{ __('Takeaway') }}
                 @endif
-            </div>
-            <div class="">
-                <p class="text-end date"> {{__('Date')}} : {{ formatted_date($sale->saleDate ?? '') }}</p>
-                <p class="text-end time"> {{__('Time')}} : {{ formatted_time($sale->saleDate ?? '') }}</p>
-                <p class="text-end"> {{__('Sales By')}} : {{ $sale->user->name }}</p>
-            </div>
+            </p>
+            @endif
         </div>
         @endif
         @if (!$sale_returns->isEmpty())
@@ -348,15 +356,14 @@
             </div>
         </div>
         @else
-        {{-- B2C Products Table --}}
-        <table class="ph-invoice-table">
+        {{-- B2C Products Table - Compact Format --}}
+        <table class="ph-invoice-table" style="width: 100%; font-size: 8px; margin: 3px 0;">
             <thead>
-                <tr>
-                    <th class="text-start table-sl"> {{__('SL')}}.</th>
-                    <th> {{__('Product')}} </th>
-                    <th> {{__('QTY')}} </th>
-                    <th> {{__('U.Price')}} </th>
-                    <th class="text-end"> {{__('Amount')}} </th>
+                <tr style="border-top: 2px solid #000; border-bottom: 2px solid #000;">
+                    <th style="padding: 3px; text-align: right;">الصنف</th>
+                    <th style="padding: 3px; text-align: center;">الكمية</th>
+                    <th style="padding: 3px; text-align: right;">السعر</th>
+                    <th style="padding: 3px; text-align: right;">المجموع</th>
                 </tr>
             </thead>
 
@@ -369,70 +376,58 @@
                 $productTotal = ($detail->price ?? 0) * ($detail->quantities ?? 0);
                 $subtotal += $productTotal;
                 @endphp
-                <tr>
-                    <td class="text-start table-sl">{{ $loop->iteration }}</td>
-                    <td>{{ $detail->product->productName ?? '' }}</td>
-                    <td class="text-center">{{ $detail->quantities ?? '' }}</td>
-                    <td class="text-center">
+                <tr style="border-bottom: 1px dashed #ccc;">
+                    <td style="padding: 3px; text-align: right;">{{ $detail->product->productName ?? '' }}</td>
+                    <td style="padding: 3px; text-align: center;">{{ $detail->quantities ?? '' }}</td>
+                    <td style="padding: 3px; text-align: right;">
                         {{ currency_format($detail->price ?? 0, currency: business_currency()) }}
                     </td>
-                    <td class="text-end">
+                    <td style="padding: 3px; text-align: right;">
                         {{ currency_format($productTotal, currency: business_currency()) }}
                     </td>
                 </tr>
                 @endforeach
-                <tr>
-                    <td colspan="2" class="">
-                        <div class="payment-type-container">
-                            <h6 class="text-start"> {{__('Payment Type')}} :
-                                {{ $sale->payment_type_id != null ? $sale->payment_type->name ?? '' : $sale->paymentType }}
-                            </h6>
-
-                        </div>
-                    </td>
-                    <td colspan="3">
-                        <div class="calculate-amount">
-                            <div class="d-flex justify-content-between">
-                                <p> {{__('Sub-Total')}} :</p>
-                                <p>{{ currency_format($subtotal, currency: business_currency()) }}</p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <p> {{__('Vat')}} :</p>
-                                <p>{{ currency_format($sale->vat_amount, currency: business_currency()) }}
-                                </p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <p> {{__('Discount')}} :</p>
-                                <p>{{ currency_format($sale->discountAmount, currency: business_currency()) }}
-                                </p>
-                            </div>
-                            <div class="d-flex justify-content-between ">
-                                <p> {{__('Shipping Charge')}} :</p>
-                                <p>{{ currency_format($sale->shipping_charge, currency: business_currency()) }}
-                                </p>
-                            </div>
-
-                            <div class="d-flex justify-content-between total-amount">
-                                <p> {{__('Net Payable')}} :</p>
-                                <p>{{ currency_format($sale->totalAmount, currency: business_currency()) }}
-                                </p>
-                            </div>
-                            <div class="d-flex justify-content-between paid">
-                                <p> {{__('Paid')}} :</p>
-                                <p>{{ currency_format($sale->paidAmount, currency: business_currency()) }}
-                                </p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <p> {{__('Due')}} :</p>
-                                <p>{{ currency_format($sale->dueAmount, currency: business_currency()) }}
-                                </p>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
             </tbody>
-
         </table>
+        
+        {{-- B2C Totals - Compact Format --}}
+        <div style="margin: 5px 0; padding: 5px 0; border-top: 2px dashed #000; font-size: 9px;">
+            @php
+                // حساب الضريبة الصحيح
+                $totalItems = $sale->details->sum('quantities');
+                if (!empty($sale->vat_amount) && $sale->vat_amount > 0) {
+                    $subtotalBeforeVat = $sale->totalAmount - $sale->vat_amount;
+                    $vatAmount = $sale->vat_amount;
+                } else {
+                    $subtotalBeforeVat = $subtotal;
+                    $vatAmount = $subtotalBeforeVat * 0.15;
+                }
+                $totalWithVat = $subtotalBeforeVat + $vatAmount;
+            @endphp
+            
+            <div style="display: flex; justify-content: space-between; padding: 1px 0;">
+                <span>عدد المنتجات:</span>
+                <span><strong>{{ $totalItems }}</strong></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 1px 0;">
+                <span>الإجمالي قبل الضريبة:</span>
+                <span><strong>{{ currency_format($subtotalBeforeVat, currency: business_currency()) }}</strong></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 1px 0;">
+                <span>ضريبة القيمة المضافة (15%):</span>
+                <span><strong>{{ currency_format($vatAmount, currency: business_currency()) }}</strong></span>
+            </div>
+            @if($sale->discountAmount > 0)
+            <div style="display: flex; justify-content: space-between; padding: 1px 0;">
+                <span>الخصم:</span>
+                <span><strong>-{{ currency_format($sale->discountAmount, currency: business_currency()) }}</strong></span>
+            </div>
+            @endif
+            <div style="display: flex; justify-content: space-between; padding: 4px 0; margin-top: 2px; border-top: 2px solid #000; font-size: 11px;">
+                <span><strong>الإجمالي / Total:</strong></span>
+                <span><strong>{{ currency_format($totalWithVat, currency: business_currency()) }}</strong></span>
+            </div>
+        </div>
         @endif
         @endif
 
