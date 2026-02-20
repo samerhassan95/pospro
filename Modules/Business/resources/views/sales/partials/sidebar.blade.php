@@ -50,10 +50,13 @@
 
     <!-- Delivery Type Tabs -->
     <div class="sidebar-delivery-tabs">
-        <button type="button" class="delivery-tab-btn">{{ __('Delivery') }}</button>
-        <button type="button" class="delivery-tab-btn">{{ __('Pre-order') }}</button>
-        <button type="button" class="delivery-tab-btn active">{{ __('Takeaway') }}</button>
+        <button type="button" class="delivery-tab-btn" data-delivery-type="delivery">{{ __('Delivery') }}</button>
+        <button type="button" class="delivery-tab-btn" data-delivery-type="pre-order">{{ __('Pre-order') }}</button>
+        <button type="button" class="delivery-tab-btn active" data-delivery-type="takeaway">{{ __('Takeaway') }}</button>
     </div>
+    
+    <!-- Hidden input to store selected delivery type -->
+    <input type="hidden" name="delivery_type" id="delivery_type" value="takeaway">
 
     <!-- Products Section -->
     <div class="products-section">

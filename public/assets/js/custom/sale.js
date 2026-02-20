@@ -792,16 +792,41 @@ $(document).on("click", ".single-product, .product-card-new", function (e) {
     if ($(e.target).closest('.add-product-btn').length) {
         return;
     }
+    
+    // Prevent double clicks
+    if ($(this).data('adding')) {
+        return;
+    }
+    $(this).data('adding', true);
+    
     const customer_id = $(".customer-select").val();
     handleAddToCart($(this));
+    
+    // Reset the flag after a short delay
+    setTimeout(() => {
+        $(this).data('adding', false);
+    }, 500);
 });
 
 // Handle add product button click
 $(document).on("click", ".add-product-btn", function (e) {
     e.preventDefault();
     e.stopPropagation();
+    
     const $productCard = $(this).closest(".single-product, .product-card-new");
+    
+    // Prevent double clicks
+    if ($productCard.data('adding')) {
+        return;
+    }
+    $productCard.data('adding', true);
+    
     handleAddToCart($productCard);
+    
+    // Reset the flag after a short delay
+    setTimeout(() => {
+        $productCard.data('adding', false);
+    }, 500);
 });
 
 // Handle Add to Cart button click for multiple selections
@@ -874,7 +899,7 @@ function addItemToCart(element) {
             }
         },
         error: function (xhr) {
-            console.error("Error:", xhr.responseText);
+            console.error("AJAX Error:", xhr.responseText);
         },
     });
 }

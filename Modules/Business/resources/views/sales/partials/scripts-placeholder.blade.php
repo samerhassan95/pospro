@@ -48,128 +48,25 @@
             return Math.round(amount * 100) / 100;
         };
 
-        // Add missing addProductToCart function for compatibility
-        window.addProductToCart = function(productElement) {
-            console.log("addProductToCart called with", productElement);
-            
-            // Convert DOM element to jQuery object if needed
-            const $element = $(productElement);
-            
-            // Get product data
-            const productId = $element.data('product_id');
-            const productName = $element.data('product_name');
-            const defaultPrice = parseFloat($element.data('default_price')) || 0;
-            const productCode = $element.data('product_code');
-            const productUnitId = $element.data('product_unit_id');
-            const productUnitName = $element.data('product_unit_name');
-            const productImage = $element.data('product_image');
-            const route = $element.data('route');
-            const stocks = $element.data('stocks') || [];
-            
-            console.log("Product data:", {
-                productId, productName, defaultPrice, productCode, 
-                productUnitId, productUnitName, productImage, route, stocks
-            });
-            
-            // Validate required data
-            if (!productId || !route) {
-                console.error("Missing required product data", { productId, route });
-                toastr.error("Missing product information");
-                return;
-            }
-            
-            // Validate price
-            if (defaultPrice < 0 || isNaN(defaultPrice)) {
-                console.error("Invalid price", defaultPrice);
-                toastr.error("Price can not be negative.");
-                return;
-            }
-            
-            // Use the first available stock if multiple stocks exist
-            let stockId = null;
-            let purchasePrice = 0;
-            if (Array.isArray(stocks) && stocks.length > 0) {
-                const firstStock = stocks[0];
-                stockId = firstStock.id;
-                purchasePrice = firstStock.productPurchasePrice || 0;
-            }
-            
-            const requestData = {
-                type: "sale",
-                id: productId,
-                name: productName,
-                price: defaultPrice,
-                quantity: 1,
-                product_code: productCode,
-                product_unit_id: productUnitId,
-                product_unit_name: productUnitName,
-                stock_id: stockId,
-                purchase_price: purchasePrice,
-                product_image: productImage,
-                _token: $('meta[name="csrf-token"]').attr('content')
-            };
-            
-            console.log("Sending AJAX request to", route, "with data", requestData);
-            
-            // Add to cart via AJAX
-            $.ajax({
-                url: route,
-                type: "POST",
-                data: requestData,
-                success: function (response) {
-                    console.log("Add to cart response", response);
-                    if (response.success) {
-                        // Refresh cart list
-                        fetchUpdatedCart(function() {
-                            if (typeof calTotalAmount === 'function') {
-                                calTotalAmount();
-                            }
-                        });
-                        toastr.success("Product added to cart");
-                    } else {
-                        console.error("Add to cart failed", response);
-                        toastr.error(response.message || "Failed to add product to cart");
-                    }
-                },
-                error: function (xhr) {
-                    console.error("Error adding product to cart:", xhr.responseText, xhr);
-                    toastr.error("Error adding product to cart");
-                },
-            });
-        };
+        // Removed duplicate addProductToCart function - using addItemToCart from sale.js instead
 
-        // Product click handlers
+        // Product click handlers - removed duplicate handlers, using sale.js handlers instead
         $(document).ready(function() {
-            console.log("Product click handlers initialized");
+            console.log("Product click handlers initialized - using sale.js handlers");
             
-            // Handle product card click (anywhere on the card)
-            $(document).on("click", ".single-product, .pos-product-card", function (e) {
-                console.log("Product card clicked", this);
+            // Delivery type selection functionality
+            $('.delivery-tab-btn').on('click', function() {
+                // Remove active class from all buttons
+                $('.delivery-tab-btn').removeClass('active');
                 
-                // Prevent double triggering if clicking on add button
-                if ($(e.target).closest('.add-product-btn, .pos-add-to-cart-btn').length) {
-                    console.log("Clicked on add button, skipping card handler");
-                    return;
-                }
+                // Add active class to clicked button
+                $(this).addClass('active');
                 
-                // Add product to cart
-                addProductToCart(this);
-            });
-
-            // Handle add product button click
-            $(document).on("click", ".add-product-btn, .pos-add-to-cart-btn", function (e) {
-                console.log("Add to cart button clicked", this);
-                e.preventDefault();
-                e.stopPropagation();
+                // Update hidden input with selected delivery type
+                const deliveryType = $(this).data('delivery-type');
+                $('#delivery_type').val(deliveryType);
                 
-                // Find the parent product card
-                const productCard = $(this).closest('.single-product, .pos-product-card');
-                if (productCard.length) {
-                    console.log("Found product card", productCard[0]);
-                    addProductToCart(productCard[0]);
-                } else {
-                    console.error("Could not find product card");
-                }
+                console.log('Delivery type selected:', deliveryType);
             });
 
             // Note: Quantity increase/decrease functionality is handled by existing sale.js

@@ -129,6 +129,17 @@
                     <div class="col-md-6 text-end">
                         <p><strong>{{ __('Invoice Date:') }}</strong> {{ $sale->saleDate->format('Y-m-d') }}</p>
                         <p><strong>{{ __('Payment Method:') }}</strong> {{ $sale->payment_type->name ?? __('N/A') }}</p>
+                        @if($sale->delivery_type)
+                            <p><strong>{{ __('Order Type:') }}</strong> 
+                                @if($sale->delivery_type == 'delivery')
+                                    {{ __('Delivery') }}
+                                @elseif($sale->delivery_type == 'pre-order')
+                                    {{ __('Pre-order') }}
+                                @else
+                                    {{ __('Takeaway') }}
+                                @endif
+                            </p>
+                        @endif
                         @if($sale->vat)
                             <p><strong>{{ __('VAT Rate:') }}</strong> {{ $sale->vat->rate }}%</p>
                         @endif

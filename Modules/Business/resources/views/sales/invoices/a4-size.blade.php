@@ -90,7 +90,7 @@
         
         .header-info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 20px;
         }
         
@@ -444,6 +444,20 @@
                     <div class="info-label">رقم الفاتورة</div>
                     <div class="info-value large">{{ $sale->invoiceNumber }}</div>
                 </div>
+                @if($sale->delivery_type)
+                <div class="info-box">
+                    <div class="info-label">نوع الطلب</div>
+                    <div class="info-value">
+                        @if($sale->delivery_type == 'delivery')
+                            توصيل
+                        @elseif($sale->delivery_type == 'pre-order')
+                            طلب مسبق
+                        @else
+                            استلام
+                        @endif
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
         

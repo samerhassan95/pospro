@@ -27,7 +27,18 @@
             <div class="invoice-header d-flex justify-content-between align-items-center">
                 <div>
                     <h1 class="display-6 fw-bold mb-1">{{ __('INVOICE') }}</h1>
-                    <p class="mb-0 opacity-75">#{{ $sale->invoiceNumber }} | {{ formatted_date($sale->saleDate) }}</p>
+                    <p class="mb-0 opacity-75">#{{ $sale->invoiceNumber }} | {{ formatted_date($sale->saleDate) }}
+                        @if($sale->delivery_type)
+                            | 
+                            @if($sale->delivery_type == 'delivery')
+                                {{ __('Delivery') }}
+                            @elseif($sale->delivery_type == 'pre-order')
+                                {{ __('Pre-order') }}
+                            @else
+                                {{ __('Takeaway') }}
+                            @endif
+                        @endif
+                    </p>
                 </div>
                 <div class="text-end">
                     @if($sale->isPaid)

@@ -90,7 +90,7 @@
         
         .header-info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 20px;
         }
         
@@ -308,6 +308,7 @@
             }
             .header-info-grid {
                 gap: 8px;
+                grid-template-columns: 1fr 1fr 1fr;
             }
             .info-box {
                 padding: 8px;
@@ -565,6 +566,20 @@
                     <div class="info-label">التاريخ / Date</div>
                     <div class="info-value">{{ \Carbon\Carbon::parse($sale->saleDate)->format('d/m/Y') }}</div>
                 </div>
+                @if($sale->delivery_type)
+                <div class="info-box">
+                    <div class="info-label">نوع الطلب / Order Type</div>
+                    <div class="info-value">
+                        @if($sale->delivery_type == 'delivery')
+                            توصيل / Delivery
+                        @elseif($sale->delivery_type == 'pre-order')
+                            طلب مسبق / Pre-order
+                        @else
+                            استلام / Takeaway
+                        @endif
+                    </div>
+                </div>
+                @endif
                 @if($sale->supply_date)
                 <div class="info-box">
                     <div class="info-label">تاريخ التوريد / Supply Date</div>

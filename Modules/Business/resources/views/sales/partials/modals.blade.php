@@ -360,6 +360,129 @@
     </div>
 </div>
 
+<!-- Barcode Scanner Modal -->
+<div class="modal fade" id="barcodeScannerModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <svg width="24" height="24" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+                        <g clip-path="url(#clip0_456_3729)">
+                            <path d="M0 0.625C0 0.45924 0.0691404 0.300269 0.192211 0.183058C0.315282 0.065848 0.482202 0 0.65625 0L4.59375 0C4.7678 0 4.93472 0.065848 5.05779 0.183058C5.18086 0.300269 5.25 0.45924 5.25 0.625C5.25 0.79076 5.18086 0.949732 5.05779 1.06694C4.93472 1.18415 4.7678 1.25 4.59375 1.25H1.3125V4.375C1.3125 4.54076 1.24336 4.69973 1.12029 4.81694C0.997218 4.93415 0.830298 5 0.65625 5C0.482202 5 0.315282 4.93415 0.192211 4.81694C0.0691404 4.69973 0 4.54076 0 4.375V0.625ZM15.75 0.625C15.75 0.45924 15.8191 0.300269 15.9422 0.183058C16.0653 0.065848 16.2322 0 16.4062 0L20.3438 0C20.5178 0 20.6847 0.065848 20.8078 0.183058C20.9309 0.300269 21 0.45924 21 0.625V4.375C21 4.54076 20.9309 4.69973 20.8078 4.81694C20.6847 4.93415 20.5178 5 20.3438 5C20.1697 5 20.0028 4.93415 19.8797 4.81694C19.7566 4.69973 19.6875 4.54076 19.6875 4.375V1.25H16.4062C16.2322 1.25 16.0653 1.18415 15.9422 1.06694C15.8191 0.949732 15.75 0.79076 15.75 0.625ZM0.65625 15C0.830298 15 0.997218 15.0658 1.12029 15.1831C1.24336 15.3003 1.3125 15.4592 1.3125 15.625V18.75H4.59375C4.7678 18.75 4.93472 18.8158 5.05779 18.9331C5.18086 19.0503 5.25 19.2092 5.25 19.375C5.25 19.5408 5.18086 19.6997 5.05779 19.8169C4.93472 19.9342 4.7678 20 4.59375 20H0.65625C0.482202 20 0.315282 19.9342 0.192211 19.8169C0.0691404 19.6997 0 19.5408 0 19.375V15.625C0 15.4592 0.0691404 15.3003 0.192211 15.1831C0.315282 15.0658 0.482202 15 0.65625 15ZM20.3438 15C20.5178 15 20.6847 15.0658 20.8078 15.1831C20.9309 15.3003 21 15.4592 21 15.625V19.375C21 19.5408 20.9309 19.6997 20.8078 19.8169C20.6847 19.9342 20.5178 20 20.3438 20H16.4062C16.2322 20 16.0653 19.9342 15.9422 19.8169C15.8191 19.6997 15.75 19.5408 15.75 19.375C15.75 19.2092 15.8191 19.0503 15.9422 18.9331C16.0653 18.8158 16.2322 18.75 16.4062 18.75H19.6875V15.625C19.6875 15.4592 19.7566 15.3003 19.8797 15.1831C20.0028 15.0658 20.1697 15 20.3438 15Z" fill="#333333"/>
+                            <path d="M9.1875 2.5H2.625V8.75H9.1875V2.5ZM3.9375 3.75H7.875V7.5H3.9375V3.75ZM6.5625 13.75H5.25V15H6.5625V13.75Z" fill="black"/>
+                            <path d="M9.1875 11.25H2.625V17.5H9.1875V11.25ZM3.9375 12.5H7.875V16.25H3.9375V12.5ZM14.4375 5H15.75V6.25H14.4375V5Z" fill="black"/>
+                            <path d="M11.8125 2.5H18.375V8.75H11.8125V2.5ZM13.125 3.75V7.5H17.0625V3.75H13.125ZM10.5 10V12.5H11.8125V13.75H10.5V15H13.125V12.5H14.4375V15H15.75V13.75H18.375V12.5H14.4375V10H10.5ZM13.125 12.5H11.8125V11.25H13.125V12.5ZM18.375 15H17.0625V16.25H14.4375V17.5H18.375V15ZM13.125 17.5V16.25H10.5V17.5H13.125Z" fill="black"/>
+                            <path d="M15.75 11.25H18.375V10H15.75V11.25Z" fill="black"/>
+                            <ellipse cx="5.89163" cy="5.61111" rx="0.758333" ry="0.722222" fill="black"/>
+                            <path d="M0.408203 10L20.7665 9.83334" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_456_3729">
+                                <rect width="21" height="20" fill="white"/>
+                            </clipPath>
+                        </defs>
+                    </svg>
+                    {{ __('Barcode & QR Code Scanner') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Search Section -->
+                <div class="barcode-search-section mb-4">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M19 19L14.65 14.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </span>
+                                <input type="text" class="form-control" id="barcode-search-input" placeholder="{{ __('Scan or type product code, name, barcode, or QR code...') }}" autofocus>
+                                <button class="btn btn-outline-secondary" type="button" id="clear-search-btn">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-primary w-100" id="start-camera-scan">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+                                    <path d="M2 6C2 4.89543 2.89543 4 4 4H6L7 2H13L14 4H16C17.1046 4 18 4.89543 18 6V14C18 15.1046 17.1046 16 16 16H4C2.89543 16 2 15.1046 2 14V6Z" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                {{ __('Start Camera') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Camera Section (Hidden by default) -->
+                <div id="camera-section" class="mb-4" style="display: none;">
+                    <div class="camera-container text-center">
+                        <video id="barcode-scanner-video" width="400" height="300" style="border: 2px solid #ddd; border-radius: 8px;"></video>
+                        <div class="camera-controls mt-2">
+                            <button type="button" class="btn btn-danger" id="stop-camera-scan">
+                                {{ __('Stop Camera') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Results Section -->
+                <div class="barcode-results-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">{{ __('Search Results') }}</h6>
+                        <span class="badge bg-secondary" id="results-count">0 {{ __('products found') }}</span>
+                    </div>
+                    
+                    <!-- Loading State -->
+                    <div id="search-loading" class="text-center py-4" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">{{ __('Loading...') }}</span>
+                        </div>
+                        <p class="mt-2 text-muted">{{ __('Searching products...') }}</p>
+                    </div>
+
+                    <!-- No Results State -->
+                    <div id="no-results" class="text-center py-4" style="display: none;">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-3">
+                            <circle cx="32" cy="32" r="30" stroke="#E5E7EB" stroke-width="4"/>
+                            <path d="M22 22L42 42M22 42L42 22" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                        <h6 class="text-muted">{{ __('No products found') }}</h6>
+                        <p class="text-muted small">{{ __('Try searching with a different code or product name') }}</p>
+                    </div>
+
+                    <!-- Results Table -->
+                    <div class="table-responsive" id="results-table-container">
+                        <table class="table table-hover" id="barcode-results-table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>{{ __('Image') }}</th>
+                                    <th>{{ __('Product Name') }}</th>
+                                    <th>{{ __('Code') }}</th>
+                                    <th>{{ __('Category') }}</th>
+                                    <th>{{ __('Price') }}</th>
+                                    <th>{{ __('Stock') }}</th>
+                                    <th>{{ __('Action') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="barcode-results-tbody">
+                                <!-- Results will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Include existing modals -->
 @include('business::sales.calculator')
 @include('business::sales.category-search')

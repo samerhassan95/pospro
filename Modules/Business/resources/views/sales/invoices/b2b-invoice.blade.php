@@ -412,6 +412,21 @@
     <div class="b2b-header">
         <h1>{{ __('TAX INVOICE') }} / فاتورة ضريبية</h1>
         <p>{{ __('Tax Invoice issued between businesses') }} / تصدر غالباً بين منشأة ومنشأة</p>
+        <div class="invoice-info">
+            <div class="invoice-number">{{ __('Invoice No') }}: {{ $sale->invoiceNumber }}</div>
+            <div class="invoice-date">{{ __('Date') }}: {{ \Carbon\Carbon::parse($sale->saleDate)->format('d/m/Y') }}</div>
+            @if($sale->delivery_type)
+            <div class="delivery-type">{{ __('Order Type') }}: 
+                @if($sale->delivery_type == 'delivery')
+                    {{ __('Delivery') }} / توصيل
+                @elseif($sale->delivery_type == 'pre-order')
+                    {{ __('Pre-order') }} / طلب مسبق
+                @else
+                    {{ __('Takeaway') }} / استلام
+                @endif
+            </div>
+            @endif
+        </div>
     </div>
 
     {{-- Seller and Buyer Information --}}

@@ -85,14 +85,42 @@
 
     <!-- Search View (hidden by default) -->
     <div id="search-view" class="view-section" style="display: none; margin-top:10px">
-        <div class="pos-search-section" style="margin-bottom: 2px;">
+        <div class="pos-search-section" style="margin-bottom: 16px;">
             <div class="pos-search-wrapper" style="display: flex; gap: 12px; align-items: center; width: 100%;">
                 <div style="position: relative; flex: 1;">
                     <svg style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: #9ca3af;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2"/>
                         <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
-                    <input type="text" id="product-search-input" class="pos-search-input" placeholder="{{ __('Search Customer') }}" style="width: 100%; padding: 10px 16px 10px 44px; border: none; border-radius: 8px; font-size: 14px; background: #fff; outline: none; box-shadow: none;">
+                    <input type="text" id="product-search-input" class="pos-search-input" placeholder="{{ __('Scan or type product code, name, barcode, or QR code...') }}" style="width: 100%; padding: 12px 16px 12px 44px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: #fff; outline: none;">
+                </div>
+                <!-- <button type="button" class="btn btn-outline-secondary" id="clear-product-search-btn" style="padding: 12px 20px; border-radius: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button> -->
+                <button type="button" class="btn btn-primary" id="start-camera-scan" style="padding: 12px 20px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 6C2 4.89543 2.89543 4 4 4H6L7 2H13L14 4H16C17.1046 4 18 4.89543 18 6V14C18 15.1046 17.1046 16 16 16H4C2.89543 16 2 15.1046 2 14V6Z" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    {{ __('Start Camera') }}
+                </button>
+            </div>
+            
+            <!-- Camera Section (Hidden by default) -->
+            <div id="camera-section" class="mt-3" style="display: none;">
+                <div class="camera-container text-center">
+                    <div id="barcode-scanner-video" style="width: 100%; max-width: 500px; margin: 0 auto;"></div>
+                    <div class="camera-controls mt-2">
+                        <button type="button" class="btn btn-danger" id="stop-camera-scan">
+                            {{ __('Stop Camera') }}
+                        </button>
+                    </div>
+                    <!-- <div class="alert alert-info mt-3">
+                        <strong>{{ __('Camera not working?') }}</strong><br>
+                        {{ __('You can type or paste the barcode manually in the search box above') }}
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -102,17 +130,15 @@
                 <table class="table" style="width: 100%; margin: 0;">
                     <thead style="background: #f9fafb; border-bottom: 2px solid #e5e7eb;">
                         <tr>
-                            <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151; width: 40px;">
-                                <input type="checkbox" id="select-all-search" style="width: 18px; height: 18px; cursor: pointer;">
-                            </th>
                             <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Image') }}</th>
                             <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Items') }}</th>
                             <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Code') }}</th>
                             <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Batch') }}</th>
-                            <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Unit') }}</th>
+                            <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Stock') }}</th>
                             <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Sale Price') }}</th>
                             <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Qty') }}</th>
                             <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Sub Total') }}</th>
+                            <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Action') }}</th>
                         </tr>
                     </thead>
                     <tbody id="search-products-table">
@@ -120,22 +146,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        
-        <!-- Hidden product data for search -->
-        <div id="search-products-data" style="display: none;">
-            @foreach($products as $product)
-            <div class="product-data" 
-                 data-product-id="{{ $product->id }}"
-                 data-product-name="{{ strtolower($product->productName) }}" 
-                 data-product-code="{{ strtolower($product->productCode ?? '') }}"
-                 data-product-image="{{ $product->image ? asset($product->image) : asset('default-product.png') }}"
-                 data-product-display-name="{{ $product->productName }}"
-                 data-product-display-code="{{ $product->productCode ?? '-' }}"
-                 data-product-unit="{{ $product->unit->unitName ?? '-' }}"
-                 data-product-price="{{ $product->salePrice }}">
-            </div>
-            @endforeach
         </div>
     </div>
 

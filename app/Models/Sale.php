@@ -54,6 +54,7 @@ class Sale extends Model
         'actual_total_amount',
         'change_amount',
         'type',
+        'delivery_type',
         'uuid',
         'invoice_hash',
         'previous_hash',

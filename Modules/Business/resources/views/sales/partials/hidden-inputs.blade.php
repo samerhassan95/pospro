@@ -19,3 +19,5 @@
 <input type="hidden" id="get_stock_prices" value="{{ route('business.products.stocks-prices') }}">
 <input type="hidden" id="warehouse_module_exist" value="{{ moduleCheck('WarehouseAddon') ? 1 : 0 }}">
 <input type="hidden" id="payable_amount" value="0">
+<input type="hidden" id="barcode-search-route" value="{{ route('business.products.search') }}">
+<input type="hidden" id="add-to-cart-route" value="{{ route('business.carts.store') }}">

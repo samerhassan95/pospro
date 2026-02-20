@@ -108,86 +108,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // ========== SEARCH FUNCTIONALITY ==========
+    // DISABLED - Search functionality is now handled by barcode-scanner.js
+    // This prevents conflicts with the barcode scanner search table
+    /*
     const searchInput = document.getElementById('product-search-input');
     const searchProductsTable = document.getElementById('search-products-table');
-    const searchProductsData = document.getElementById('search-products-data');
+    let searchTimeout = null;
     
     function performSearch() {
-        if (!searchInput || !searchProductsTable || !searchProductsData) return;
-        
-        const query = searchInput.value.trim().toLowerCase();
-        
-        // Clear table
-        searchProductsTable.innerHTML = '';
-        
-        if (!query) {
-            return; // Keep table empty if no search query
-        }
-        
-        const productDataElements = searchProductsData.querySelectorAll('.product-data');
-        let foundCount = 0;
-        
-        productDataElements.forEach(productData => {
-            const productName = productData.getAttribute('data-product-name');
-            const productCode = productData.getAttribute('data-product-code');
-            
-            if (productName.includes(query) || productCode.includes(query)) {
-                foundCount++;
-                
-                // Create table row
-                const row = document.createElement('tr');
-                row.className = 'search-product-row';
-                row.style.cssText = 'border-bottom: 1px solid #f3f4f6; transition: background 0.2s;';
-                
-                const price = parseFloat(productData.getAttribute('data-product-price'));
-                
-                row.innerHTML = `
-                    <td style="padding: 12px 16px;">
-                        <input type="checkbox" class="product-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
-                    </td>
-                    <td style="padding: 12px 16px;">
-                        <img src="${productData.getAttribute('data-product-image')}" alt="${productData.getAttribute('data-product-display-name')}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
-                    </td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #1f2937; font-weight: 500;">${productData.getAttribute('data-product-display-name')}</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #6b7280;">${productData.getAttribute('data-product-display-code')}</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #6b7280;">-</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #6b7280;">${productData.getAttribute('data-product-unit')}</td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #1f2937; font-weight: 600;">${price.toFixed(2)}</td>
-                    <td style="padding: 12px 16px;">
-                        <input type="number" value="1" min="1" class="qty-input" style="width: 70px; padding: 6px 8px; border: 1px solid #e5e7eb; border-radius: 6px; text-align: center; font-size: 14px;">
-                    </td>
-                    <td style="padding: 12px 16px; font-size: 14px; color: #1f2937; font-weight: 600;" class="subtotal">${price.toFixed(2)}</td>
-                `;
-                
-                searchProductsTable.appendChild(row);
-                
-                // Add qty input listener for subtotal calculation
-                const qtyInput = row.querySelector('.qty-input');
-                const subtotalCell = row.querySelector('.subtotal');
-                qtyInput.addEventListener('input', function() {
-                    const qty = parseInt(this.value) || 1;
-                    const subtotal = price * qty;
-                    subtotalCell.textContent = subtotal.toFixed(2);
-                });
-            }
-        });
-        
-        // Show no results message if nothing found
-        if (foundCount === 0) {
-            const noResultsRow = document.createElement('tr');
-            noResultsRow.innerHTML = '<td colspan="9" style="padding: 40px; text-align: center; color: #9ca3af; font-size: 14px;">{{ __("No products found matching your search") }}</td>';
-            searchProductsTable.appendChild(noResultsRow);
-        }
+        // Search is now handled by barcode-scanner.js
     }
     
     if (searchInput) {
-        searchInput.addEventListener('input', performSearch);
-        searchInput.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        });
+        // Event listeners disabled - handled by barcode-scanner.js
     }
+    */
     
     // ========== HELPER FUNCTIONS ==========
     function showNoProductsMessage(container, visibleCount, message) {

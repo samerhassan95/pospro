@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/choices.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/calculator.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/pos-products.css') . '?v=' . time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/barcode-scanner.css') . '?v=' . time() }}">
     @include('business::sales.partials.styles')
 @endpush
 
@@ -42,12 +43,14 @@
 
 @push('js')
     <script src="{{ asset('assets/js/choices.min.js') }}"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script src="{{ asset('assets/js/custom/sale.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/math.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom/calculator.js') }}"></script>
     <script src="{{ asset('assets/js/custom/pos-products.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/pos-payment-modal.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/pos-sidebar.js') . '?v=' . time() }}"></script>
+    <script src="{{ asset('assets/js/custom/barcode-scanner.js') . '?v=' . time() }}"></script>
     
     {{-- JavaScript functionality --}}
     @include('business::sales.partials.scripts-placeholder')

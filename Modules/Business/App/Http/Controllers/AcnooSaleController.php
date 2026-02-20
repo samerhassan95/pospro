@@ -336,6 +336,7 @@ class AcnooSaleController extends Controller
             'discount_type' => 'nullable|in:flat,percent',
             'shipping_charge' => 'nullable|numeric',
             'saleDate' => 'nullable|date',
+            'delivery_type' => 'nullable|string|in:delivery,pre-order,takeaway',
             // B2B Additional Fields
             'supply_date' => 'nullable|date',
             'po_number' => 'nullable|string|max:50',
@@ -412,6 +413,7 @@ class AcnooSaleController extends Controller
                 'business_id' => $business_id,
                 'branch_id' => auth()->user()->branch_id ?? session('branch_id'),
                 'type' => $request->type == 'inventory' ? 'inventory' : 'sale',
+                'delivery_type' => $request->delivery_type ?? 'takeaway',
                 'party_id' => $request->party_id == 'guest' ? null : $request->party_id,
                 'invoiceNumber' => $request->invoiceNumber,
                 'saleDate' => $request->saleDate ?? now(),
@@ -1375,5 +1377,187 @@ class AcnooSaleController extends Controller
                 'message' => __('Error searching for request: ') . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Search products for barcode scanner
+     */
+    public function searchProducts(Request $request)
+    {
+        try {
+            $query = $request->input('query');
+            
+            if (empty($query) || strlen($query) < 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('Search query must be at least 2 characters'),
+                    'products' => []
+                ]);
+            }
+
+            $business_id = auth()->user()->business_id;
+            
+            // Search products by name and code (barcode, qr_code, description columns don't exist in products table)
+            $products = Product::with(['category:id,categoryName', 'stocks' => function($query) {
+                    $query->where('productStock', '>', 0)->orderBy('created_at', 'desc');
+                }])
+                ->where('business_id', $business_id)
+                ->where(function ($q) use ($query) {
+                    $q->where('productName', 'like', '%' . $query . '%')
+                      ->orWhere('productCode', 'like', '%' . $query . '%')
+                      // Also search for exact matches
+                      ->orWhere('productCode', '=', $query)
+                      // Search in product ID
+                      ->orWhere('id', '=', is_numeric($query) ? $query : 0);
+                })
+                ->limit(20)
+                ->get();
+
+            // If no products found with direct search, try to extract product info from QR code content
+            if ($products->isEmpty() && $this->looksLikeQRCodeContent($query)) {
+                $extractedInfo = $this->extractProductInfoFromQRCode($query);
+                if ($extractedInfo) {
+                    $products = Product::with(['category:id,categoryName', 'stocks' => function($query) {
+                            $query->where('productStock', '>', 0)->orderBy('created_at', 'desc');
+                        }])
+                        ->where('business_id', $business_id)
+                        ->where(function ($q) use ($extractedInfo) {
+                            if (isset($extractedInfo['id'])) {
+                                $q->orWhere('id', $extractedInfo['id']);
+                            }
+                            if (isset($extractedInfo['code'])) {
+                                $q->orWhere('productCode', $extractedInfo['code']);
+                            }
+                            if (isset($extractedInfo['name'])) {
+                                $q->orWhere('productName', 'like', '%' . $extractedInfo['name'] . '%');
+                            }
+                        })
+                        ->limit(20)
+                        ->get();
+                }
+            }
+
+            // Format products for response
+            $formattedProducts = $products->map(function ($product) {
+                $stock = $product->stocks->first();
+                $stockQuantity = $product->stocks->sum('productStock');
+                
+                // Format image path using asset() helper - return full URL
+                $imagePath = $product->productPicture 
+                    ? asset($product->productPicture)
+                    : asset('assets/images/products/box.svg');
+                
+                return [
+                    'id' => $product->id,
+                    'productName' => $product->productName,
+                    'name' => $product->productName, // Alias for compatibility
+                    'productCode' => $product->productCode,
+                    'code' => $product->productCode, // Alias for compatibility
+                    'image' => $imagePath,
+                    'sales_price' => $stock ? $stock->productSalePrice : $product->productSalePrice,
+                    'price' => $stock ? $stock->productSalePrice : $product->productSalePrice, // Alias for compatibility
+                    'stock_quantity' => $stockQuantity,
+                    'stock_id' => $stock ? $stock->id : null,
+                    'category' => $product->category ? [
+                        'id' => $product->category->id,
+                        'categoryName' => $product->category->categoryName,
+                        'name' => $product->category->categoryName // Alias for compatibility
+                    ] : null,
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => __('Products found successfully'),
+                'products' => $formattedProducts,
+                'count' => $formattedProducts->count()
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Error searching products: ') . $e->getMessage(),
+                'products' => []
+            ], 500);
+        }
+    }
+
+    /**
+     * Check if the query looks like QR code content (URL, JSON, etc.)
+     */
+    private function looksLikeQRCodeContent($query)
+    {
+        // Check for common QR code patterns
+        return (
+            str_contains($query, 'http://') ||
+            str_contains($query, 'https://') ||
+            str_contains($query, 'www.') ||
+            (str_starts_with($query, '{') && str_ends_with($query, '}')) ||
+            str_contains($query, '|') ||
+            str_contains($query, ';') ||
+            strlen($query) > 50 // Long strings are often QR code content
+        );
+    }
+
+    /**
+     * Extract product information from QR code content
+     */
+    private function extractProductInfoFromQRCode($qrContent)
+    {
+        $info = [];
+        
+        try {
+            // Try to parse as JSON
+            $json = json_decode($qrContent, true);
+            if ($json && is_array($json)) {
+                if (isset($json['product_id'])) $info['id'] = $json['product_id'];
+                if (isset($json['id'])) $info['id'] = $json['id'];
+                if (isset($json['product_code'])) $info['code'] = $json['product_code'];
+                if (isset($json['code'])) $info['code'] = $json['code'];
+                if (isset($json['product_name'])) $info['name'] = $json['product_name'];
+                if (isset($json['name'])) $info['name'] = $json['name'];
+                return $info;
+            }
+        } catch (\Exception $e) {
+            // Not JSON, continue with other parsing methods
+        }
+
+        // Try to parse pipe-separated values (common QR format)
+        if (str_contains($qrContent, '|')) {
+            $parts = explode('|', $qrContent);
+            if (count($parts) >= 2) {
+                $info['code'] = trim($parts[0]);
+                $info['name'] = trim($parts[1]);
+                if (count($parts) >= 3 && is_numeric($parts[2])) {
+                    $info['id'] = intval($parts[2]);
+                }
+                return $info;
+            }
+        }
+
+        // Try to parse semicolon-separated values
+        if (str_contains($qrContent, ';')) {
+            $parts = explode(';', $qrContent);
+            if (count($parts) >= 2) {
+                $info['code'] = trim($parts[0]);
+                $info['name'] = trim($parts[1]);
+                return $info;
+            }
+        }
+
+        // Try to extract from URL parameters
+        if (str_contains($qrContent, '?')) {
+            $urlParts = parse_url($qrContent);
+            if (isset($urlParts['query'])) {
+                parse_str($urlParts['query'], $params);
+                if (isset($params['product_id'])) $info['id'] = $params['product_id'];
+                if (isset($params['id'])) $info['id'] = $params['id'];
+                if (isset($params['code'])) $info['code'] = $params['code'];
+                if (isset($params['name'])) $info['name'] = $params['name'];
+                return $info;
+            }
+        }
+
+        return null;
     }
 }

@@ -1,0 +1,219 @@
+/* Barcode Scanner Modal Styles */
+#barcodeScannerModal .modal-dialog {
+    max-width: 1200px;
+}
+
+#barcodeScannerModal .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-bottom: none;
+}
+
+#barcodeScannerModal .modal-header .btn-close {
+    filter: invert(1);
+}
+
+.barcode-search-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.barcode-search-section .input-group-text {
+    background: white;
+    border-right: none;
+    color: #6c757d;
+}
+
+.barcode-search-section .form-control {
+    border-left: none;
+    border-right: none;
+    font-size: 16px;
+    padding: 12px 16px;
+}
+
+.barcode-search-section .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    border-color: #667eea;
+}
+
+.camera-container {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 2px dashed #dee2e6;
+}
+
+#barcode-scanner-video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.camera-controls {
+    margin-top: 15px;
+}
+
+.barcode-results-section {
+    min-height: 400px;
+}
+
+.barcode-results-section .badge {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+}
+
+#barcode-results-table {
+    font-size: 0.9rem;
+}
+
+#barcode-results-table th {
+    background: #f8f9fa;
+    border-top: none;
+    font-weight: 600;
+    color: #495057;
+    padding: 12px 8px;
+}
+
+#barcode-results-table td {
+    padding: 12px 8px;
+    vertical-align: middle;
+}
+
+.product-thumb {
+    border: 1px solid #dee2e6;
+    transition: transform 0.2s ease;
+}
+
+.product-thumb:hover {
+    transform: scale(1.1);
+}
+
+.product-name {
+    font-weight: 500;
+    color: #212529;
+    margin-bottom: 2px;
+}
+
+.add-to-cart-btn {
+    font-size: 0.875rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.add-to-cart-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Loading and empty states */
+#search-loading {
+    color: #6c757d;
+}
+
+#search-loading .spinner-border {
+    width: 2rem;
+    height: 2rem;
+}
+
+#no-results {
+    color: #6c757d;
+}
+
+#no-results svg {
+    opacity: 0.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #barcodeScannerModal .modal-dialog {
+        max-width: 95%;
+        margin: 10px auto;
+    }
+    
+    .barcode-search-section {
+        padding: 15px;
+    }
+    
+    .barcode-search-section .row > div {
+        margin-bottom: 10px;
+    }
+    
+    #barcode-results-table {
+        font-size: 0.8rem;
+    }
+    
+    #barcode-results-table th,
+    #barcode-results-table td {
+        padding: 8px 4px;
+    }
+    
+    .product-thumb {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    .add-to-cart-btn {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+}
+
+/* Animation for modal */
+#barcodeScannerModal.fade .modal-dialog {
+    transform: translate(0, -50px);
+    transition: transform 0.3s ease-out;
+}
+
+#barcodeScannerModal.show .modal-dialog {
+    transform: translate(0, 0);
+}
+
+/* Table hover effects */
+#barcode-results-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+#barcode-results-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Search input focus effect */
+.barcode-search-section .input-group:focus-within {
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    border-radius: 0.375rem;
+}
+
+/* Button loading state */
+.btn.loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -59,6 +59,17 @@
         <div style="margin: 8px 0; padding: 5px; border: 1px solid #333; font-size: 9px;">
             <p style="margin: 2px 0;"><strong>{{__('Serial Number')}} / الرقم التسلسلي:</strong> {{ $sale->invoiceNumber ?? '' }}</p>
             <p style="margin: 2px 0;"><strong>{{__('Date')}} / التاريخ:</strong> {{ formatted_date($sale->saleDate ?? '') }} {{ formatted_time($sale->saleDate ?? '') }}</p>
+            @if($sale->delivery_type)
+            <p style="margin: 2px 0;"><strong>{{__('Order Type')}} / نوع الطلب:</strong> 
+                @if($sale->delivery_type == 'delivery')
+                    {{__('Delivery')}} / توصيل
+                @elseif($sale->delivery_type == 'pre-order')
+                    {{__('Pre-order')}} / طلب مسبق
+                @else
+                    {{__('Takeaway')}} / استلام
+                @endif
+            </p>
+            @endif
         </div>
 
         {{-- Seller Information --}}
@@ -89,6 +100,17 @@
             </p>
             <p style="margin: 2px 0;"><strong>{{__('VAT Registration Number')}} / رقم تسجيل ضريبة القيمة المضافة للمشتري:</strong> {{ $sale->party->vat_number ?? '---' }}</p>
             <p style="margin: 2px 0;"><strong>{{__('Commercial Registration Number')}} / رقم السجل التجاري:</strong> {{ $sale->party->commercial_registration ?? '---' }}</p>
+            @if($sale->delivery_type)
+            <p style="margin: 2px 0;"><strong>{{__('Order Type')}} / نوع الطلب:</strong> 
+                @if($sale->delivery_type == 'delivery')
+                    {{__('Delivery')}} / توصيل
+                @elseif($sale->delivery_type == 'pre-order')
+                    {{__('Pre-order')}} / طلب مسبق
+                @else
+                    {{__('Takeaway')}} / استلام
+                @endif
+            </p>
+            @endif
         </div>
         @else
         {{-- B2C Invoice Details --}}
@@ -97,6 +119,17 @@
                 <p><strong>{{__('Invoice')}} :</strong> {{ $sale->invoiceNumber ?? '' }}</p>
                 <p><strong>{{__('Name')}} :</strong> {{ $sale->party->name ?? 'Cash' }}</p>
                 <p> {{__('Mobile')}} : {{ $sale->party->phone ?? '' }}</p>
+                @if($sale->delivery_type)
+                <p><strong>{{__('Order Type')}} :</strong> 
+                    @if($sale->delivery_type == 'delivery')
+                        {{__('Delivery')}}
+                    @elseif($sale->delivery_type == 'pre-order')
+                        {{__('Pre-order')}}
+                    @else
+                        {{__('Takeaway')}}
+                    @endif
+                </p>
+                @endif
             </div>
             <div class="">
                 <p class="text-end date"> {{__('Date')}} : {{ formatted_date($sale->saleDate ?? '') }}</p>

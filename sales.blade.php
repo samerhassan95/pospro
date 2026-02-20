@@ -61,7 +61,7 @@
         .cart-items-list::-webkit-scrollbar { width: 4px; }
         .cart-items-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         .cart-items-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-        .cart-item-card { display: flex; align-items: stretch; background: #fff; border: 1px solid #eee; border-radius: 14px; overflow: hidden; flex-shrink: 0; }
+        .cart-item-card { display: flex; align-items: stretch; background: #fff; border-bottom: 1px solid #E5E7EB;  overflow: hidden; flex-shrink: 0; }
         .cart-item-image-wrapper { width: 70px; min-width: 70px; height: 70px; background: #f5f5f5; flex-shrink: 0; border-radius: 10px; margin: 6px; overflow: hidden; }
         .cart-item-image { width: 100%; height: 100%; object-fit: cover; }
         .cart-item-details { flex: 1; padding: 8px 4px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
