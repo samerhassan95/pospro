@@ -3466,7 +3466,7 @@ strong {
 }
 
 .small-table tr td {
-    font-family: "Manrope";
+    font-family: "Cairo";
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -3509,7 +3509,7 @@ strong {
 
 .title-four {
     text-align: center;
-    font-family: "Manrope";
+    font-family: "Cairo";
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
@@ -5042,7 +5042,7 @@ tr.position-relative td {
 }
 
 .invoice-header h1 {
-    font-family: "Manrope";
+    font-family: "Cairo";
     font-weight: 600;
     font-size: 24px;
     line-height: 68px;
@@ -5051,7 +5051,7 @@ tr.position-relative td {
 }
 
 .invoice-header h2 {
-    font-family: "Manrope";
+    font-family: "Cairo";
     font-weight: 700;
     font-size: 20px;
     line-height: 30px;
@@ -5059,7 +5059,7 @@ tr.position-relative td {
 }
 
 .invoice-header p {
-    font-family: "Manrope";
+    font-family: "Cairo";
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
@@ -5071,7 +5071,7 @@ tr.position-relative td {
 }
 
 .invoice-address-section li {
-    font-family: "Manrope";
+    font-family: "Cairo";
     font-weight: 400;
     font-size: 13px;
     line-height: 23px;
@@ -5083,7 +5083,7 @@ tr.position-relative td {
 
 .invoice-address-section li p,
 .invoice-address-section li span {
-    font-family: "Manrope";
+    font-family: "Cairo";
     font-weight: 400;
     font-size: 13px;
     line-height: 23px;
@@ -5160,7 +5160,7 @@ tr.position-relative td {
 
 .invoice-bank-details h4 {
     display: inline-block;
-    font-family: "Manrope";
+    font-family: "Cairo";
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
@@ -5194,7 +5194,7 @@ tr.position-relative td {
 }
 
 .invoice-others-section h6 {
-    font-family: "Manrope";
+    font-family: "Cairo";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -5598,7 +5598,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .erp-new-invice .table-header p {
@@ -5607,7 +5607,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .erp-new-invice .bill-invoice-wrp {
@@ -5621,7 +5621,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     right: 0;
     top: 0;
     color: #000;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -5635,7 +5635,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .erp-new-invice .bill-invoice-wrp hr {
@@ -5651,7 +5651,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
     gap: 50px;
 }
 
@@ -5685,7 +5685,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .erp-new-invice .invice-detaisl .address-items p {
@@ -5694,7 +5694,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .erp-new-invice .bill-right-side {
@@ -5710,7 +5710,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .erp-new-invice tr {
@@ -5719,12 +5719,12 @@ grid-template-columns: 1fr; /* grid الحديث */
 
 .erp-new-invice td {
     color: #000;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
     border: none;
     border-right: 1px solid #000;
     border-left: 1px solid #000;
@@ -5732,17 +5732,17 @@ grid-template-columns: 1fr; /* grid الحديث */
 
 .erp-new-invice td p {
     color: #000;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 13px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .erp-new-invice td small {
     color: #000;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
@@ -5799,7 +5799,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     font-weight: 700;
     line-height: normal;
     padding-top: 10px;
-    font-family: "Lato", sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .erp-new-invice .table-header img {
@@ -5815,7 +5815,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 
 .erp-new-invice .invoice-text h2 {
     color: #000;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 35px;
     font-style: normal;
     font-weight: 800;
@@ -5836,7 +5836,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 
 .invoice-two th h2 {
     color: #1f1f1f;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -5851,7 +5851,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     display: inline-block;
     border-bottom: 1px solid #000;
     color: #1f1f1f;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 26px;
     font-style: normal;
     font-weight: 700;
@@ -5862,7 +5862,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 
 .invoice-payment-details p {
     color: #000;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 15px;
     font-style: normal;
     font-weight: 400;
@@ -5885,7 +5885,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 .new-invoice-others h5 {
     max-width: 340px;
     color: #000;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
@@ -5901,7 +5901,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     background: rgba(172, 133, 55, 0.13);
     padding: 15px 0;
     color: #000;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 19px;
     font-style: normal;
     font-weight: 400;
@@ -5913,7 +5913,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     background: #ffe6cd;
     padding: 10px;
     color: #000;
-    font-family: Lato;
+    font-family: "Cairo";
     font-size: 25px;
     font-style: normal;
     font-weight: 400;
@@ -11129,7 +11129,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 /* Fallback for when FontAwesome doesn't load */
 .remove-item-btn i:before {
     content: "×" !important;
-    font-family: Arial, sans-serif !important;
+    font-family: "Cairo", sans-serif !important;
     font-weight: bold !important;
 }
 /* Header responsive - Keep large screen appearance on all screen sizes */
@@ -11999,4 +11999,25 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: auto !important;
         right: 0 !important;
     }
+}
+/* Font Awesome 5 Pro font-family overrides - ALL ICONS GLOBAL */
+.fa, .fas, .far, .fal, .fab, .fad, .fat, .fass, .fasr, .fasl {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* All FontAwesome icon pseudo-elements */
+[class^="fa-"]:before, [class*=" fa-"]:before,
+.fa:before, .fas:before, .far:before, .fal:before, .fab:before, .fad:before, .fat:before, .fass:before, .fasr:before, .fasl:before {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* Specific icon overrides */
+.fa-navicon:before, .fa-reorder:before, .fa-bars:before,
+.fa-remove:before, .fa-close:before, .fa-times:before {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* Override FontAwesome shorthand for all icons */
+[class^="fa-"], [class*=" fa-"] {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
 }

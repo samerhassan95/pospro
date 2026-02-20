@@ -3537,3 +3537,22 @@ svg:not(:root) {
   border-radius: 0 0 3px 3px; }
 
 /*# sourceMappingURL=style.css.map */
+/* Font Awesome 5 Pro font-family overrides - IMPORTANT */
+.fa-navicon:before,
+.fa-reorder:before,
+.fa-bars:before {
+  font-family: "Font Awesome 5 Pro" !important; }
+
+.fa-remove:before,
+.fa-close:before,
+.fa-times:before {
+  font-family: "Font Awesome 5 Pro" !important; }
+
+/* Override the main .fa font shorthand for specific icons */
+.fa.fa-bars,
+.fa.fa-navicon,
+.fa.fa-reorder,
+.fa.fa-times,
+.fa.fa-close,
+.fa.fa-remove {
+  font-family: "Font Awesome 5 Pro" !important; }

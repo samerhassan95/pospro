@@ -423,7 +423,7 @@
 /* Customize the label text color and size */
 .table-custom-checkbox {
     color: #333;
-    font-family: Arial, sans-serif;
+    font-family: "Cairo", sans-serif;
 }
 
 .dropdown-menu-scroll {
@@ -1439,4 +1439,25 @@
 .table tbody tr .dropdown-menu {
     position: absolute;
     z-index: 1000;
+}
+/* Font Awesome 5 Pro font-family overrides - ALL ICONS CUSTOM */
+.fa, .fas, .far, .fal, .fab, .fad, .fat, .fass, .fasr, .fasl {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* All FontAwesome icon pseudo-elements */
+[class^="fa-"]:before, [class*=" fa-"]:before,
+.fa:before, .fas:before, .far:before, .fal:before, .fab:before, .fad:before, .fat:before, .fass:before, .fasr:before, .fasl:before {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* Specific icon overrides */
+.fa-navicon:before, .fa-reorder:before, .fa-bars:before,
+.fa-remove:before, .fa-close:before, .fa-times:before {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* Override FontAwesome shorthand for all icons */
+[class^="fa-"], [class*=" fa-"] {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
 }

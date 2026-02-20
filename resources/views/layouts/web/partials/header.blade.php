@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div class="accordion-item">
-                            <a href="{{ route('contact.index') }}" class="accordion-button without-sub-menu"
+                            <a href="{{ route('home') }}" class="accordion-button without-sub-menu"
                                 type="button">{{ __('Contact Us') }}</a>
                         </div>
                             <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}"  class="get-app-btn login-btn ">
@@ -118,7 +118,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page"
-                            href="{{ route('contact.index') }}">{{ __('Contact Us') }}</a>
+                            href="{{ route('home') }}">{{ __('Contact Us') }}</a>
                     </li>
                 </ul>
                 <div class="home-page-language-change">

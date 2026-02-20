@@ -3,6 +3,9 @@
 <link rel="icon" type="image/svg+xml" sizes="96x96" href="{{ asset(get_favicon()) }}">
 <link rel="apple-touch-icon" href="{{ asset(get_favicon()) }}">
 
+<!-- Cairo Font -->
+<link rel="stylesheet" href="{{ asset('fonts/cairo/cairo.css') }}">
+
 <link rel="stylesheet" href="{{ asset('assets/web/css/bootstrap.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('assets/web/css/swiper-bundle.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('assets/web/fonts/fontawesome/css/all.min.css') }}" />
@@ -62,5 +65,28 @@
 }
 
 /* Generated at: {{ now() }} */
+
+/* Font Awesome 5 Pro font-family overrides - HIGHEST PRIORITY */
+/* Font Awesome 5 Pro font-family overrides - ALL ICONS */
+.fa, .fas, .far, .fal, .fab, .fad, .fat, .fass, .fasr, .fasl {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* All FontAwesome icon pseudo-elements */
+[class^="fa-"]:before, [class*=" fa-"]:before,
+.fa:before, .fas:before, .far:before, .fal:before, .fab:before, .fad:before, .fat:before, .fass:before, .fasr:before, .fasl:before {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* Specific icon overrides */
+.fa-navicon:before, .fa-reorder:before, .fa-bars:before,
+.fa-remove:before, .fa-close:before, .fa-times:before {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* Override FontAwesome shorthand for all icons */
+[class^="fa-"], [class*=" fa-"] {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
 </style>
 <!-- Debug: Primary={{ get_primary_color() }}, Secondary={{ get_secondary_color() }} -->

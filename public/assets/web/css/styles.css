@@ -435,7 +435,7 @@ html {
     margin-bottom: 2px;
 }
 .header-section .menu-dropdown a span {
-    font-family: monospace;
+    font-family: "Cairo", monospace;
     margin-left: 20px;
 }
 .header-section .menu-dropdown .arrow {
@@ -603,7 +603,7 @@ html {
 }
 .slick-slider-section .slick-prev:before,
 .slick-slider-section .slick-next:before {
-    font-family: monospace !important;
+    font-family: "Cairo", monospace !important;
     line-height: inherit !important;
     opacity: 1 !important;
     color: var(--clr-white) !important;
@@ -2098,4 +2098,25 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+}
+/* Font Awesome 5 Pro font-family overrides - ALL ICONS WEB */
+.fa, .fas, .far, .fal, .fab, .fad, .fat, .fass, .fasr, .fasl {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* All FontAwesome icon pseudo-elements */
+[class^="fa-"]:before, [class*=" fa-"]:before,
+.fa:before, .fas:before, .far:before, .fal:before, .fab:before, .fad:before, .fat:before, .fass:before, .fasr:before, .fasl:before {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* Specific icon overrides */
+.fa-navicon:before, .fa-reorder:before, .fa-bars:before,
+.fa-remove:before, .fa-close:before, .fa-times:before {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* Override FontAwesome shorthand for all icons */
+[class^="fa-"], [class*=" fa-"] {
+    font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
 }

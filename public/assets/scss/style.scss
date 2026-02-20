@@ -5,8 +5,8 @@ html {
     padding: 0px;
     margin: 0px;
 }
-$mss: 'Manrope', sans-serif;
-$rss: 'Roboto', sans-serif;
+$mss: 'Cairo', sans-serif;
+$rss: 'Cairo', sans-serif;
 $acc: #C52127;
 .bg-green-one{
     background: #04f204 !important;
@@ -14,7 +14,7 @@ $acc: #C52127;
 body {
     margin: 0;
     padding: 0 !important;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Cairo', sans-serif;
     font-size: 14px;
     line-height: 25px;
     letter-spacing: 0px;
@@ -1191,7 +1191,7 @@ b, strong{
 .small-table{
     tr{
         td{
-            font-family: 'Manrope';
+            font-family: 'Cairo';
             font-style: normal;
             font-weight: 500;
             font-size: 12px;
@@ -1235,7 +1235,7 @@ b, strong{
 }
 .title-four{
     text-align: center;
-    font-family: 'Manrope';
+    font-family: 'Cairo';
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
@@ -1341,7 +1341,7 @@ b, strong{
     span{
         min-width: 165px !important;
         display: inline-block;
-        font-family: 'Manrope';
+        font-family: 'Cairo';
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
@@ -1446,7 +1446,7 @@ b, strong{
     border-radius: 10px;
     margin-bottom: 30px;
     .title-seven{
-        font-family: 'Manrope';
+        font-family: 'Cairo';
         font-style: normal;
         font-weight: 600;
         font-size: 16px;
@@ -1465,7 +1465,7 @@ b, strong{
         align-items: center;
         margin: 7px 0;
         span{
-            font-family: 'Manrope';
+            font-family: 'Cairo';
             font-style: normal;
             font-weight: 400;
             font-size: 16px;
@@ -2285,7 +2285,7 @@ tr.position-relative{
     background: #DBEEF4;
     padding: 20px 0;
     h1{
-        font-family: 'Manrope';
+        font-family: 'Cairo';
         font-weight: 600;
         font-size: 24px;
         line-height: 68px;
@@ -2293,14 +2293,14 @@ tr.position-relative{
         text-align: right;
     }
     h2{
-        font-family: 'Manrope';
+        font-family: 'Cairo';
         font-weight: 700;
         font-size: 20px;
         line-height: 30px;
         color: #191919;
     }
     p{
-        font-family: 'Manrope';
+        font-family: 'Cairo';
         font-weight: 400;
         font-size: 14px;
         line-height: 20px;
@@ -2312,13 +2312,13 @@ tr.position-relative{
     padding-top: 30px;
     li{
         // display: flex;
-        font-family: 'Manrope';
+        font-family: 'Cairo';
         font-weight: 400;
         font-size: 13px;
         line-height: 23px;
         color: #0C1928;
         p, span{
-            font-family: 'Manrope';
+            font-family: 'Cairo';
             font-weight: 400;
             font-size: 13px;
             line-height: 23px;
@@ -2388,7 +2388,7 @@ tr.position-relative{
     margin-top: 30px;
     h4{
         display: inline-block;
-        font-family: 'Manrope';
+        font-family: 'Cairo';
         font-style: normal;
         font-weight: 600;
         font-size: 20px;
@@ -2411,7 +2411,7 @@ tr.position-relative{
     justify-content: space-between;
     align-items: center;
     h6{
-        font-family: 'Manrope';
+        font-family: 'Cairo';
         font-style: normal;
         font-weight: 400;
         font-size: 12px;
@@ -2659,7 +2659,7 @@ tr.position-relative{
                 font-style: normal;
                 font-weight: 700;
                 line-height: normal;
-                font-family: 'Lato', sans-serif;
+                font-family: 'Cairo', sans-serif;
             }
         }
         p{
@@ -2668,7 +2668,7 @@ tr.position-relative{
             font-style: normal;
             font-weight: 700;
             line-height: normal;
-            font-family: 'Lato', sans-serif;
+            font-family: 'Cairo', sans-serif;
         }
     }
     .bill-invoice-wrp{
@@ -2680,7 +2680,7 @@ tr.position-relative{
             right: 0;
             top: 0;
             color: #000;
-            font-family: Lato;
+            font-family: 'Cairo';
             font-size: 16px;
             font-style: normal;
             font-weight: 400;
@@ -2693,7 +2693,7 @@ tr.position-relative{
             font-style: normal;
             font-weight: 700;
             line-height: normal;
-            font-family: 'Lato', sans-serif;
+            font-family: 'Cairo', sans-serif;
         }
         hr{
             margin: 0;
@@ -2707,7 +2707,7 @@ tr.position-relative{
     }
     .invice-detaisl{
         display: flex;
-        font-family: 'Lato', sans-serif;
+        font-family: 'Cairo', sans-serif;
         gap: 50px;
         .bill-left-side,
         .bill-right-side{
@@ -2730,7 +2730,7 @@ tr.position-relative{
                 font-style: normal;
                 font-weight: 700;
                 line-height: normal;
-                font-family: 'Lato', sans-serif;
+                font-family: 'Cairo', sans-serif;
             }
             p{
                 color: #000;
@@ -2738,7 +2738,7 @@ tr.position-relative{
                 font-style: normal;
                 font-weight: 400;
                 line-height: normal;
-                font-family: 'Lato', sans-serif;
+                font-family: 'Cairo', sans-serif;
             }
         }
     }
@@ -2753,35 +2753,35 @@ tr.position-relative{
         font-style: normal;
         font-weight: 700;
         line-height: normal;
-        font-family: 'Lato', sans-serif;
+        font-family: 'Cairo', sans-serif;
     }
     tr{
         border: none;
     }
     td{
         color: #000;
-        font-family: Lato;
+        font-family: 'Cairo';
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
         line-height: normal;
-        font-family: 'Lato', sans-serif;
+        font-family: 'Cairo', sans-serif;
         border: none;
         border-right: 1px solid #000;
         border-left: 1px solid #000;
 
         p{
             color: #000;
-            font-family: Lato;
+            font-family: 'Cairo';
             font-size: 13px;
             font-style: normal;
             font-weight: 600;
             line-height: normal;
-            font-family: 'Lato', sans-serif;
+            font-family: 'Cairo', sans-serif;
         }
         small{
             color: #000;
-            font-family: 'Lato', sans-serif;
+            font-family: 'Cairo', sans-serif;
             font-size: 10px;
             font-style: normal;
             font-weight: 400;
@@ -2822,7 +2822,7 @@ tr.position-relative{
             font-weight: 700;
             line-height: normal;
             padding-top: 10px;
-            font-family: 'Lato', sans-serif;
+            font-family: 'Cairo', sans-serif;
         }
     }
     .table-header{
@@ -2837,7 +2837,7 @@ tr.position-relative{
         margin-bottom: 30px;
         h2{
             color: #000;
-            font-family: Lato;
+            font-family: 'Cairo';
             font-size: 35px;
             font-style: normal;
             font-weight: 800;
@@ -2861,7 +2861,7 @@ tr.position-relative{
     th{
         h2{
             color:  #1F1F1F;
-            font-family: Lato;
+            font-family: 'Cairo';
             font-size: 20px;
             font-style: normal;
             font-weight: 700;
@@ -2877,7 +2877,7 @@ tr.position-relative{
         display: inline-block;
         border-bottom: 1px solid #000;
         color: #1F1F1F;
-        font-family: Lato;
+        font-family: 'Cairo';
         font-size: 26px;
         font-style: normal;
         font-weight: 700;
@@ -2887,7 +2887,7 @@ tr.position-relative{
     }
     p{
         color: #000;
-        font-family: Lato;
+        font-family: 'Cairo';
         font-size: 15px;
         font-style: normal;
         font-weight: 400;
@@ -2902,7 +2902,7 @@ tr.position-relative{
     h5{
         max-width: 340px;
         color: #000;
-        font-family: Lato;
+        font-family: 'Cairo';
         font-size: 18px;
         font-style: normal;
         font-weight: 400;
@@ -2916,7 +2916,7 @@ tr.position-relative{
         background: rgba(172, 133, 55, 0.13);
         padding: 15px 0;
         color: #000;
-        font-family: Lato;
+        font-family: 'Cairo';
         font-size: 19px;
         font-style: normal;
         font-weight: 400;
@@ -2928,7 +2928,7 @@ tr.position-relative{
     background: #FFE6CD;
     padding: 10px;
     color: #000;
-    font-family: Lato;
+    font-family: 'Cairo';
     font-size: 25px;
     font-style: normal;
     font-weight: 400;
