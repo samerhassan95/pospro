@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Reservation API</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .result { background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e9; color: #2e7d32; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Test Reservation API</h1>
+    
+    <button onclick="testTables()">Test GET /business/tables</button>
+    <button onclick="testReservations()">Test GET /business/table-reservations</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        function addResult(title, data, isError = false) {
+            const div = document.createElement('div');
+            div.className = 'result ' + (isError ? 'error' : 'success');
+            div.innerHTML = `<h3>${title}</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            resultsDiv.appendChild(div);
+        }
+        
+        async function testTables() {
+            resultsDiv.innerHTML = '';
+            try {
+                const response = await fetch('/business/tables', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                const data = await response.json();
+                addResult('GET /business/tables - Status: ' + response.status, data, !response.ok);
+            } catch (error) {
+                addResult('GET /business/tables - ERROR', { error: error.message }, true);
+            }
+        }
+        
+        async function testReservations() {
+            resultsDiv.innerHTML = '';
+            try {
+                const response = await fetch('/business/table-reservations', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                const data = await response.json();
+                addResult('GET /business/table-reservations - Status: ' + response.status, data, !response.ok);
+            } catch (error) {
+                addResult('GET /business/table-reservations - ERROR', { error: error.message }, true);
+            }
+        }
+    </script>
+</body>
+</html>

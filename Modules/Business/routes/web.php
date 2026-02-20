@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Business\App\Http\Controllers as Business;
+use Modules\Business\App\Http\Controllers\{AcnooRestaurantTableController, AcnooTableReservationController, AcnooTableOrderController};
 
-Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' => 'business', 'middleware' => ['users', 'expired']], function () {
+Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['users', 'expired']], function () {
 
     Route::get('update-expire-date', [Business\DashboardController::class, 'updateExpireDate']);
 
@@ -258,9 +259,9 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
 
 
     //Reports
-    Route::get('top-customers', [Business\AcnooTopReportController::class, 'topCustomers'])->name('top-customers.index');
-    Route::get('top-suppliers', [Business\AcnooTopReportController::class, 'topSuppliers'])->name('top-suppliers.index');
-    Route::get('top-products', [Business\AcnooTopReportController::class, 'topProducts'])->name('top-products.index');
+    // Route::get('top-customers', [Business\AcnooTopReportController::class, 'topCustomers'])->name('top-customers.index');
+    // Route::get('top-suppliers', [Business\AcnooTopReportController::class, 'topSuppliers'])->name('top-suppliers.index');
+    // Route::get('top-products', [Business\AcnooTopReportController::class, 'topProducts'])->name('top-products.index');
 
     Route::get('product-sale-history', [Business\AcnooProductHistoryReportController::class, 'productSaleHistory'])->name('product-sale-history.index');
     Route::get('product-purchase-history', [Business\AcnooProductHistoryReportController::class, 'productPurchaseHistory'])->name('product-purchase-history.index');
@@ -394,4 +395,28 @@ Route::group(['domain' => request()->getHost(), 'as' => 'business.', 'prefix' =>
     Route::get('discount-product-reports', [Business\AcnooAdvancedReportController::class, 'discountProducts'])->name('discount-product-reports.index');
     Route::get('product-purchase-reports', [Business\AcnooAdvancedReportController::class, 'productPurchase'])->name('product-purchase-reports.index');
     Route::get('product-sale-reports', [Business\AcnooAdvancedReportController::class, 'productSale'])->name('product-sale-reports.index');
+
+
+    // Restaurant Tables
+    Route::get('tables', [AcnooRestaurantTableController::class, 'index'])->name('tables.index');
+    Route::post('tables', [AcnooRestaurantTableController::class, 'store'])->name('tables.store');
+    Route::put('tables/{table}', [AcnooRestaurantTableController::class, 'update'])->name('tables.update');
+    Route::delete('tables/{table}', [AcnooRestaurantTableController::class, 'destroy'])->name('tables.destroy');
+    Route::put('tables/{table}/position', [AcnooRestaurantTableController::class, 'updatePosition'])->name('tables.position');
+    Route::put('tables/{table}/rotate', [AcnooRestaurantTableController::class, 'rotate'])->name('tables.rotate');
+    
+    // Table Reservations
+    Route::get('table-reservations', [AcnooTableReservationController::class, 'index'])->name('table-reservations.index');
+    Route::post('table-reservations', [AcnooTableReservationController::class, 'store'])->name('table-reservations.store');
+    Route::post('table-reservations/{reservation}/guest-arrived', [AcnooTableReservationController::class, 'guestArrived'])->name('table-reservations.guest-arrived');
+    Route::post('table-reservations/{reservation}/cancel', [AcnooTableReservationController::class, 'cancel'])->name('table-reservations.cancel');
+    Route::delete('table-reservations/{reservation}', [AcnooTableReservationController::class, 'destroy'])->name('table-reservations.destroy');
+    
+    // Table Orders
+    Route::get('table-orders', [AcnooTableOrderController::class, 'index'])->name('table-orders.index');
+    Route::post('table-orders', [AcnooTableOrderController::class, 'store'])->name('table-orders.store');
+    Route::post('table-orders/{order}/complete', [AcnooTableOrderController::class, 'complete'])->name('table-orders.complete');
+    Route::get('table-orders/{order}', [AcnooTableOrderController::class, 'show'])->name('table-orders.show');
+
+
 });

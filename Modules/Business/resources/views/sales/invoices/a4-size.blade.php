@@ -118,6 +118,30 @@
             font-size: 16px;
         }
         
+        /* Print Button */
+        .print-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .print-button:hover {
+            background: #218838;
+        }
+        
         /* Client Card */
         .client-card {
             padding: 25px 40px;
@@ -397,10 +421,97 @@
             .invoice-wrapper {
                 box-shadow: none;
             }
+            .print-button {
+                display: none !important;
+            }
+            
+            /* تقليل المسافات للطباعة */
+            .invoice-header {
+                padding: 15px 30px;
+            }
+            .header-top {
+                margin-bottom: 15px;
+            }
+            .header-info-grid {
+                gap: 10px;
+            }
+            .info-box {
+                padding: 10px;
+            }
+            .client-card {
+                padding: 12px 30px;
+            }
+            .table-section {
+                padding: 15px 30px;
+            }
+            .products-table thead th {
+                padding: 8px 6px;
+                font-size: 11px;
+            }
+            .products-table tbody td {
+                padding: 8px 6px;
+                font-size: 12px;
+            }
+            .totals-section {
+                padding: 0 30px 15px 30px;
+                gap: 20px;
+            }
+            .terms-box {
+                padding: 12px;
+            }
+            .total-row {
+                padding: 6px 0;
+            }
+            .invoice-footer {
+                padding: 15px 30px;
+            }
+            .qr-code {
+                width: 80px;
+                height: 80px;
+            }
+            .copyright {
+                padding: 10px;
+                font-size: 10px;
+            }
+            .company-logo {
+                width: 60px;
+                height: 60px;
+            }
+            .company-details h2 {
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
+            .company-info-text {
+                font-size: 10px;
+                line-height: 1.4;
+            }
+            .invoice-title {
+                font-size: 24px;
+            }
+            .client-title {
+                font-size: 11px;
+            }
+            .client-name {
+                font-size: 16px;
+            }
+            .total-row.grand-total {
+                margin-top: 10px;
+                padding-top: 10px;
+            }
+            
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
         }
     </style>
 </head>
 <body>
+    {{-- Print Button --}}
+    <button onclick="window.print()" class="print-button">
+        <i class="fas fa-print"></i> طباعة
+    </button>
+    
     <div class="invoice-wrapper">
         <!-- Header -->
         <div class="invoice-header">
@@ -410,14 +521,19 @@
                          alt="Logo" class="company-logo">
                     <div class="company-details">
                         <h2>{{ $sale->business->companyName ?? 'اسم الشركة' }}</h2>
+                        @if($sale->business->address || $sale->business->building_number)
+                        <p class="company-info-text">
+                            @if($sale->business->building_number || $sale->business->street_name)
+                                {{ $sale->business->building_number }}، {{ $sale->business->street_name }}، 
+                                {{ $sale->business->district }}، {{ $sale->business->city }}
+                            @else
+                                {{ $sale->business->address }}
+                            @endif
+                        </p>
+                        @endif
                         @if($sale->business->vat_no)
                         <p class="company-info-text">
                             <strong>رقم ضريبة القيمة المضافة:</strong> {{ $sale->business->vat_no }}
-                        </p>
-                        @endif
-                        @if($sale->business->commercial_registration ?? false)
-                        <p class="company-info-text">
-                            <strong>رقم السجل التجاري:</strong> {{ $sale->business->commercial_registration }}
                         </p>
                         @endif
                     </div>
@@ -437,12 +553,12 @@
             
             <div class="header-info-grid">
                 <div class="info-box">
-                    <div class="info-label">التاريخ</div>
-                    <div class="info-value">{{ formatted_date($sale->saleDate) }}</div>
+                    <div class="info-label">رقم الفاتورة / Printed At</div>
+                    <div class="info-value large">{{ $sale->invoiceNumber }}</div>
                 </div>
                 <div class="info-box">
-                    <div class="info-label">رقم الفاتورة</div>
-                    <div class="info-value large">{{ $sale->invoiceNumber }}</div>
+                    <div class="info-label">التاريخ / Date</div>
+                    <div class="info-value">{{ \Carbon\Carbon::parse($sale->saleDate)->format('Y/m/d h:i A') }}</div>
                 </div>
             </div>
         </div>
@@ -451,92 +567,43 @@
         <div class="client-card">
             <div class="client-header">
                 <div>
-                    <div class="client-title">بيانات العميل</div>
-                    <div class="client-name">
-                        {{ $sale->party->name ?? 'عميل' }}
-                        @if($sale->party->phone ?? false)
-                            ({{ $sale->party->phone }})
-                        @endif
-                    </div>
+                    <div class="client-title">البائع / Seller</div>
+                    <div class="client-name">{{ $sale->user->name ?? 'البائع' }}</div>
                 </div>
-                
-                @if($sale->isPaid)
-                    <span class="status-badge paid">
-                        <i class="fas fa-check-circle"></i> مدفوع
-                    </span>
-                @else
-                    <span class="status-badge unpaid">
-                        <i class="fas fa-clock"></i> غير مدفوع
-                    </span>
-                @endif
             </div>
-            
-            <div class="client-info-row">
-                <div class="client-info-item">
-                    <div class="client-info-label">العنوان</div>
-                    <div class="client-info-value">{{ $sale->party->address ?? '-' }}</div>
+        </div>
+        
+        <!-- Customer Card -->
+        <div class="client-card" style="border-top: 1px solid #e9ecef;">
+            <div class="client-header">
+                <div>
+                    <div class="client-title">المشتري / Customer</div>
+                    <div class="client-name">{{ $sale->party->name ?? 'عميل' }}</div>
                 </div>
-                @if($sale->invoice_type === 'b2b')
-                <div class="client-info-item">
-                    <div class="client-info-label">رقم السجل التجاري</div>
-                    <div class="client-info-value">{{ $sale->party->commercial_registration ?? '-' }}</div>
-                </div>
-                <div class="client-info-item">
-                    <div class="client-info-label">رقم ضريبة القيمة المضافة</div>
-                    <div class="client-info-value">{{ $sale->party->vat_number ?? '-' }}</div>
-                </div>
-                @else
-                <div class="client-info-item">
-                    <div class="client-info-label">طريقة الدفع</div>
-                    <div class="client-info-value">
-                        {{ $sale->payment_type_id != null ? ($sale->payment_type->name ?? '') : ($sale->paymentType ?? '-') }}
-                    </div>
-                </div>
-                @endif
             </div>
         </div>
         
         <!-- Products Table -->
         <div class="table-section">
-            <h2 class="section-title">تفاصيل المنتجات</h2>
             <table class="products-table">
                 <thead>
                     <tr>
-                        <th style="width: 40px;">#</th>
-                        <th style="width: 35%;">المنتج</th>
-                        <th style="width: 80px;">الكمية</th>
-                        <th style="width: 100px;">سعر الوحدة</th>
-                        <th style="width: 100px;">المجموع الفرعي</th>
-                        <th style="width: 70px;">نسبة الضريبة</th>
-                        <th style="width: 100px;">قيمة الضريبة</th>
-                        <th style="width: 100px;">المجموع</th>
+                        <th style="width: 45%;">الصنف / Item</th>
+                        <th style="width: 15%;">الكمية / Qty</th>
+                        <th style="width: 20%;">السعر / Price</th>
+                        <th style="width: 20%;">المجموع / Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                        $itemNumber = 1;
-                        $vatRate = 0.15; // 15% VAT
-                    @endphp
                     @foreach ($sale->details as $detail)
                         @php
-                            $subtotal = ($detail->price ?? 0) * ($detail->quantities ?? 0);
-                            $itemSubtotalBeforeVat = $subtotal / (1 + $vatRate);
-                            $itemVatAmount = $subtotal - $itemSubtotalBeforeVat;
+                            $itemTotal = ($detail->price ?? 0) * ($detail->quantities ?? 0);
                         @endphp
                         <tr>
-                            <td>{{ $itemNumber++ }}</td>
-                            <td>
-                                <div class="product-name">{{ $detail->product->productName ?? '-' }}</div>
-                                @if($detail->stock?->batch_no)
-                                    <div class="product-desc">رقم الدفعة: {{ $detail->stock->batch_no }}</div>
-                                @endif
-                            </td>
+                            <td style="text-align: right;">{{ $detail->product->productName ?? '-' }}</td>
                             <td>{{ $detail->quantities ?? 0 }}</td>
                             <td>{{ currency_format($detail->price ?? 0, currency: business_currency()) }}</td>
-                            <td>{{ currency_format($itemSubtotalBeforeVat, currency: business_currency()) }}</td>
-                            <td>15%</td>
-                            <td>{{ currency_format($itemVatAmount, currency: business_currency()) }}</td>
-                            <td><strong>{{ currency_format($subtotal, currency: business_currency()) }}</strong></td>
+                            <td>{{ currency_format($itemTotal, currency: business_currency()) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -546,64 +613,55 @@
         <!-- Totals Section -->
         <div class="totals-section">
             <div class="terms-box">
-                <h3 class="terms-title">الشروط والأحكام</h3>
-                <ul class="terms-list">
-                    @if(!empty($sale->meta['note']))
-                        <li>{{ $sale->meta['note'] }}</li>
-                    @endif
-                    <li>البضاعة المباعة لا ترد ولا تستبدل إلا في حالة وجود عيب مصنعي</li>
-                    <li>يرجى التحقق من جميع العناصر عند الاستلام</li>
-                    <li>الأسعار المذكورة شاملة لضريبة القيمة المضافة</li>
-                    <li>هذه الفاتورة صالحة لأغراض ضريبة القيمة المضافة</li>
-                </ul>
+                @if(!empty($sale->meta['note']))
+                    <h3 class="terms-title">ملاحظات</h3>
+                    <p style="font-size: 13px; color: #495057;">{{ $sale->meta['note'] }}</p>
+                @endif
             </div>
             
             <div class="totals-box">
                 @php
-                    $subtotalBeforeVat = $sale->totalAmount - $sale->vat_amount;
-                    $totalAfterDiscount = $subtotalBeforeVat - $sale->discountAmount;
+                    // حساب الضريبة الصحيح
+                    if (!empty($sale->vat_amount) && $sale->vat_amount > 0) {
+                        $subtotalBeforeVat = $sale->totalAmount - $sale->vat_amount;
+                        $vatAmount = $sale->vat_amount;
+                    } else {
+                        // احسب الضريبة: الإجمالي قبل الضريبة × 15%
+                        $subtotalBeforeVat = $sale->totalAmount;
+                        $vatAmount = $subtotalBeforeVat * 0.15;
+                    }
+                    $totalWithVat = $subtotalBeforeVat + $vatAmount;
+                    
+                    // حساب عدد المنتجات
+                    $totalItems = $sale->details->sum('quantities');
                 @endphp
                 
                 <div class="total-row">
-                    <span class="total-label">السعر:</span>
+                    <span class="total-label">عدد المنتجات / Total Items:</span>
+                    <span class="total-value">{{ $totalItems }}</span>
+                </div>
+                
+                <div class="total-row">
+                    <span class="total-label">الإجمالي قبل الضريبة / Subtotal:</span>
                     <span class="total-value">{{ currency_format($subtotalBeforeVat, currency: business_currency()) }}</span>
+                </div>
+                
+                <div class="total-row">
+                    <span class="total-label">ضريبة القيمة المضافة (15%) / VAT (15%):</span>
+                    <span class="total-value">{{ currency_format($vatAmount, currency: business_currency()) }}</span>
                 </div>
                 
                 @if($sale->discountAmount > 0)
                 <div class="total-row discount">
-                    <span class="total-label">الخصم:</span>
+                    <span class="total-label">الخصم / Discount:</span>
                     <span class="total-value">-{{ currency_format($sale->discountAmount, currency: business_currency()) }}</span>
                 </div>
-                
-                <div class="total-row">
-                    <span class="total-label">السعر بعد الخصم:</span>
-                    <span class="total-value">{{ currency_format($totalAfterDiscount, currency: business_currency()) }}</span>
-                </div>
                 @endif
-                
-                @if($sale->shipping_charge > 0)
-                <div class="total-row">
-                    <span class="total-label">قيمة الشحن:</span>
-                    <span class="total-value">{{ currency_format($sale->shipping_charge, currency: business_currency()) }}</span>
-                </div>
-                @endif
-                
-                <div class="total-row">
-                    <span class="total-label">ضريبة القيمة المضافة (15%):</span>
-                    <span class="total-value">{{ currency_format($sale->vat_amount, currency: business_currency()) }}</span>
-                </div>
                 
                 <div class="total-row grand-total">
-                    <span class="total-label">الإجمالي شامل ضريبة<br>القيمة المضافة (15%):</span>
-                    <span class="total-value">{{ currency_format($sale->totalAmount, currency: business_currency()) }}</span>
+                    <span class="total-label">الإجمالي / Total:</span>
+                    <span class="total-value">{{ currency_format($totalWithVat, currency: business_currency()) }}</span>
                 </div>
-                
-                @if(!$sale->isPaid && $sale->dueAmount > 0)
-                <div class="total-row" style="margin-top: 15px; border-top: 1px solid #dc3545;">
-                    <span class="total-label" style="color: #dc3545; font-weight: 700;">المبلغ المستحق:</span>
-                    <span class="total-value" style="color: #dc3545; font-size: 18px;">{{ currency_format($sale->dueAmount, currency: business_currency()) }}</span>
-                </div>
-                @endif
             </div>
         </div>
         

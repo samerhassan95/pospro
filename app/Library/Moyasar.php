@@ -250,7 +250,7 @@ class Moyasar
                                 'subscription_end_date' => now()->addDays($plan->duration_days ?? 30)
                             ]);
                         }
-                    }
+                    } else if ($credentials['payment_type'] === 'due_collect') {
                         $dueCollect = DueCollect::find($credentials['due_collect_id']);
                         if ($dueCollect) {
                             $dueCollect->update([

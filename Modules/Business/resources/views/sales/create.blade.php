@@ -48,8 +48,9 @@
     <script src="{{ asset('assets/js/custom/pos-products.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/pos-payment-modal.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/pos-sidebar.js') . '?v=' . time() }}"></script>
+    <script src="{{ asset('assets/js/custom/table-backend.js') . '?v=' . time() }}"></script>
     
     {{-- JavaScript functionality --}}
-    @include('business::sales.partials.scripts-placeholder')
+    @include('business::sales.partials.scripts-placeholder') {{-- Original file with all functionality --}}
     @include('business::sales.partials.product-filter-scripts')
 @endpush

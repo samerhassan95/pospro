@@ -5,5 +5,5 @@
     "MultiBranchAddon": true,
     "HrmAddon": true,
     "SubdomainAddon": true,
-    "CustomDomainAddon": true
+    "CustomDomainAddon": false
 }

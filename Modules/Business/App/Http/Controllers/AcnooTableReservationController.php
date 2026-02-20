@@ -19,14 +19,14 @@ class AcnooTableReservationController extends Controller
     {
         $reservations = TableReservation::where('business_id', Auth::user()->business_id)
             ->with(['table' => function($query) {
-                $query->select('id', 'name', 'status');
+                $query->select('id', 'table_name', 'status');
             }])
             ->orderBy('reservation_date', 'desc')
             ->orderBy('reservation_time', 'desc')
             ->get()
             ->map(function ($reservation) {
                 // Ensure table_name is available even if table relation is not loaded or null
-                $reservation->table_name = $reservation->table ? $reservation->table->name : 'Unknown Table';
+                $reservation->table_name = $reservation->table ? $reservation->table->table_name : 'Unknown Table';
                 return $reservation;
             });
 
@@ -71,13 +71,13 @@ class AcnooTableReservationController extends Controller
                 'reservation_time' => $validated['reservation_time'],
                 'number_of_guests' => $request->guest_count ?? $request->number_of_guests ?? 1,
                 'special_notes' => $request->notes ?? $request->special_notes,
-                'status' => 'pending'
+                'status' => 'reserved' // Changed from 'pending' to 'reserved'
             ];
 
             // Check for overlap
             $exists = TableReservation::where('table_id', $data['table_id'])
                 ->where('reservation_date', $data['reservation_date'])
-                ->where('status', 'pending')
+                ->where('status', 'reserved') // Changed from 'pending' to 'reserved'
                 ->where(function ($query) use ($data) {
                     // Simple check: if within 2 hours of another reservation
                     // This can be more complex based on requirements
