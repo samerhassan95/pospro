@@ -489,3 +489,4 @@
 @include('business::sales.brand-search')
 @include('business::sales.customer-create')
 @include('business::sales.stock-list')
+@include('business::sales.partials.b2b-additional-fields')

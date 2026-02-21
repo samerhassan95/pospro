@@ -40,6 +40,7 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('sales/filter', [Business\AcnooSaleController::class, 'acnooFilter'])->name('sales.filter');
     Route::post('sales/delete-all', [Business\AcnooSaleController::class, 'deleteAll'])->name('sales.delete-all');
     Route::get('/get-product-prices', [Business\AcnooSaleController::class, 'getProductPrices'])->name('products.prices');
+    Route::get('/get-product-variants/{product_id}', [Business\AcnooProductController::class, 'getProductVariants'])->name('products.variants');
     Route::get('/sale-cart', [Business\AcnooSaleController::class, 'showSaleCart'])->name('sales.cart');
     Route::get('/sale-cart-data', [Business\AcnooSaleController::class, 'getCartData'])->name('sales.cart-data');
     Route::get('/get-invoice/{id}', [Business\AcnooSaleController::class, 'getInvoice'])->name('sales.invoice');

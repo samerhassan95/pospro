@@ -281,7 +281,7 @@ let savingLoader = '<div class="spinner-border spinner-border-sm custom-text-pri
 
 // Function to load variant options
 function loadVariantOptions(product_id) {
-    let url = $("#get-product-variants").val() + '/' + product_id;
+    let url = $("#get-product-variants").val().replace('PRODUCT_ID', product_id);
     $.ajax({
         url: url,
         type: "GET",

@@ -614,4 +614,29 @@ class AcnooProductController extends Controller
         $rack = Rack::with('shelves')->find($request->rack_id);
         return response()->json($rack ? $rack->shelves : []);
     }
+
+    /**
+     * Get product variants by product ID
+     */
+    public function getProductVariants($product_id)
+    {
+        try {
+            $business_id = auth()->user()->business_id;
+            $branch_id = auth()->user()->active_branch_id ?? auth()->user()->branch_id;
+
+            // Get all stocks for this product that have variant names
+            $variants = Stock::where('product_id', $product_id)
+                ->where('business_id', $business_id)
+                ->where('branch_id', $branch_id)
+                ->whereNotNull('variant_name')
+                ->where('variant_name', '!=', '')
+                ->select('variant_name', 'batch_no', 'expire_date')
+                ->distinct()
+                ->get();
+
+            return response()->json($variants);
+        } catch (\Exception $e) {
+            return response()->json([]);
+        }
+    }
 }

@@ -6,7 +6,7 @@
         $wholeSalePrice = $firstStock->productWholeSalePrice ?? 0;
         $dealerPrice = $firstStock->productDealerPrice ?? 0;
     @endphp
-    <div id="single-product" class="pos-product-card single-product {{ $product->id }}"
+    <div class="pos-product-card single-product {{ $product->id }}" id="single-product"
          data-product_id="{{ $product->id }}"
          data-product_code="{{ $product->productCode }}"
          data-product_unit_id="{{ $product->unit->id ?? null }}"
@@ -19,7 +19,7 @@
          data-sales_price="{{ $salePrice }}"
          data-whole_sale_price="{{ $wholeSalePrice }}"
          data-dealer_price="{{ $dealerPrice }}"
-         data-category_id="{{ $product->category_id ?? '' }}"
+         data-product_type="{{ $product->productType ?? 'simple' }}"
     >
         <div class="pos-product-top">
             <div class="pos-product-image-wrapper">
@@ -62,7 +62,7 @@
             </div>
         </div>
         
-        <button type="button" class="pos-add-to-cart-btn add-product-btn">
+        <button type="button" class="pos-add-to-cart-btn add-product-btn" data-product-id="{{ $product->id }}">
             {{ __('Add to Purchase') }}
         </button>
     </div>

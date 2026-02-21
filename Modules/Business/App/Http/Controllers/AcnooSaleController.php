@@ -606,7 +606,7 @@ class AcnooSaleController extends Controller
         if ($sale->type == 'inventory') {
             return view('business::sales.edit-inventory', compact('sale', 'customers', 'products', 'cart_contents', 'categories', 'brands', 'vats', 'payment_types'));
         } else {
-            return view('business::sales.edit', compact('sale', 'customers', 'products', 'cart_contents', 'categories', 'brands', 'vats', 'payment_types'));
+            return view('business::sales.edit-pos', compact('sale', 'customers', 'products', 'cart_contents', 'categories', 'brands', 'vats', 'payment_types'));
         }
     }
 

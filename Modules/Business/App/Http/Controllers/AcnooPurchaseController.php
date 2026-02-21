@@ -302,7 +302,7 @@ class AcnooPurchaseController extends Controller
         $purchase_id = (Purchase::max('id') ?? 0) + 1;
         $invoice_no = 'P-' . str_pad($purchase_id, 5, '0', STR_PAD_LEFT);
 
-        return view('business::purchases.create', compact('suppliers', 'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
+        return view('business::purchases.create-pos', compact('suppliers', 'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
     }
 
     public function store(Request $request)
@@ -511,7 +511,7 @@ class AcnooPurchaseController extends Controller
 
         $cart_contents = Cart::content()->filter(fn($item) => $item->options->type == 'purchase');
 
-        return view('business::purchases.edit', compact('purchase', 'suppliers', 'products', 'cart_contents', 'categories', 'brands', 'vats', 'payment_types'));
+        return view('business::purchases.edit-pos', compact('purchase', 'suppliers', 'products', 'cart_contents', 'categories', 'brands', 'vats', 'payment_types'));
     }
 
     public function update(Request $request, $id)
@@ -737,7 +737,13 @@ class AcnooPurchaseController extends Controller
     public function showPurchaseCart()
     {
         $cart_contents = Cart::content()->filter(fn($item) => $item->options->type == 'purchase');
-        return view('business::purchases.cart-list-new', compact('cart_contents'));
+        
+        // Add cache-busting headers to ensure fresh content
+        return response()
+            ->view('business::purchases.cart-list-new', compact('cart_contents'))
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
     public function getCartData()
