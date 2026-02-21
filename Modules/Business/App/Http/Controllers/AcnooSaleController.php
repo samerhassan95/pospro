@@ -549,7 +549,13 @@ class AcnooSaleController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['message' => __('Somethings went wrong!')], 404);
+            Log::error('Sale Store Error: ' . $e->getMessage(), [
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'request' => $request->all(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['message' => __('Something went wrong!') . ' - ' . $e->getMessage()], 404);
         }
     }
 
@@ -824,7 +830,12 @@ class AcnooSaleController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['message' => __('Something went wrong!')], 404);
+            Log::error('Sale Update Error: ' . $e->getMessage(), [
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['message' => __('Something went wrong!') . ' Error: ' . $e->getMessage()], 404);
         }
     }
 

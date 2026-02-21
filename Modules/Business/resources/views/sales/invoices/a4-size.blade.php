@@ -20,7 +20,7 @@
         body { 
             background-color: #f5f5f5; 
             direction: rtl;
-            padding: 20px 0;
+            padding: 10px 0;
         }
         
         .invoice-wrapper {
@@ -32,7 +32,7 @@
         
         /* Header Section */
         .invoice-header {
-            padding: 30px 40px;
+            padding: 20px 30px;
             background: white;
             border-bottom: 3px solid #e9ecef;
         }
@@ -41,32 +41,32 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
         
         .company-section {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             align-items: center;
         }
         
         .company-logo {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             object-fit: contain;
         }
         
         .company-details h2 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .company-info-text {
-            font-size: 11px;
+            font-size: 10px;
             color: #6c757d;
-            line-height: 1.6;
+            line-height: 1.5;
             margin: 0;
         }
         
@@ -75,15 +75,15 @@
         }
         
         .invoice-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
             color: #2c3e50;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             text-align: left;
         }
         
         .invoice-subtitle {
-            font-size: 11px;
+            font-size: 10px;
             color: #95a5a6;
             text-align: left;
         }
@@ -91,31 +91,31 @@
         .header-info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
+            gap: 12px;
         }
         
         .info-box {
             background: #f8f9fa;
-            padding: 18px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 6px;
             border: 1px solid #e9ecef;
         }
         
         .info-label {
-            font-size: 11px;
+            font-size: 10px;
             color: #6c757d;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             text-transform: uppercase;
         }
         
         .info-value {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: #2c3e50;
         }
         
         .info-value.large {
-            font-size: 16px;
+            font-size: 14px;
         }
         
         /* Print Button */
@@ -144,7 +144,7 @@
         
         /* Client Card */
         .client-card {
-            padding: 25px 40px;
+            padding: 15px 30px;
             background: #f8f9fa;
             border-bottom: 2px solid #e9ecef;
         }
@@ -153,17 +153,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
         
         .client-title {
-            font-size: 13px;
+            font-size: 11px;
             color: #6c757d;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         .client-name {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
             color: #2c3e50;
         }
@@ -211,35 +211,35 @@
         
         /* Products Table */
         .table-section {
-            padding: 30px 40px;
+            padding: 15px 30px;
         }
         
         .section-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         
         .products-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
         
         .products-table thead th {
             background: #2c3e50;
             color: white;
-            padding: 12px 10px;
-            font-size: 12px;
+            padding: 10px 8px;
+            font-size: 11px;
             font-weight: 600;
             text-align: center;
             border: 1px solid #1a252f;
         }
         
         .products-table tbody td {
-            padding: 12px 10px;
-            font-size: 13px;
+            padding: 10px 8px;
+            font-size: 12px;
             border: 1px solid #e9ecef;
             text-align: center;
             vertical-align: middle;
@@ -263,24 +263,24 @@
         
         /* Totals Section */
         .totals-section {
-            padding: 0 40px 30px 40px;
+            padding: 0 30px 15px 30px;
             display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 30px;
+            grid-template-columns: 1fr 380px;
+            gap: 20px;
         }
         
         .terms-box {
             background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 15px;
+            border-radius: 6px;
             border: 1px solid #e9ecef;
         }
         
         .terms-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         
         .terms-list {
@@ -290,12 +290,12 @@
         }
         
         .terms-list li {
-            padding: 6px 0;
-            padding-right: 15px;
-            font-size: 12px;
+            padding: 5px 0;
+            padding-right: 12px;
+            font-size: 11px;
             color: #495057;
             position: relative;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         
         .terms-list li:before {
@@ -314,7 +314,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #e9ecef;
         }
         
@@ -323,12 +323,12 @@
         }
         
         .total-label {
-            font-size: 13px;
+            font-size: 12px;
             color: #6c757d;
         }
         
         .total-value {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: #2c3e50;
         }
@@ -338,26 +338,26 @@
         }
         
         .total-row.grand-total {
-            margin-top: 15px;
-            padding-top: 15px;
+            margin-top: 10px;
+            padding-top: 10px;
             border-top: 2px solid #2c3e50;
         }
         
         .total-row.grand-total .total-label {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             color: #2c3e50;
         }
         
         .total-row.grand-total .total-value {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: #2c3e50;
         }
         
         /* Footer */
         .invoice-footer {
-            padding: 25px 40px;
+            padding: 10px 30px;
             background: #f8f9fa;
             border-top: 2px solid #e9ecef;
             display: flex;
@@ -370,15 +370,15 @@
         }
         
         .qr-code {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             background: white;
             border: 1px solid #dee2e6;
-            border-radius: 8px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 5px;
+            padding: 4px;
         }
         
         .company-footer {
@@ -387,28 +387,28 @@
         }
         
         .company-footer-name {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
         
         .company-footer-info {
-            font-size: 12px;
+            font-size: 10px;
             color: #6c757d;
-            line-height: 1.8;
+            line-height: 1.5;
         }
         
         .company-footer-info i {
-            margin-left: 8px;
+            margin-left: 5px;
             color: #95a5a6;
-            width: 15px;
+            width: 12px;
         }
         
         .copyright {
             text-align: center;
-            padding: 15px;
-            font-size: 11px;
+            padding: 8px;
+            font-size: 9px;
             color: #95a5a6;
             background: #f8f9fa;
         }
@@ -420,88 +420,140 @@
             }
             .invoice-wrapper {
                 box-shadow: none;
+                max-width: 100%;
             }
             .print-button {
                 display: none !important;
             }
             
-            /* تقليل المسافات للطباعة */
+            /* تقليل المسافات للطباعة بشكل أكبر */
             .invoice-header {
-                padding: 15px 30px;
+                padding: 4px 15px;
             }
             .header-top {
-                margin-bottom: 15px;
+                margin-bottom: 4px;
             }
             .header-info-grid {
-                gap: 10px;
+                gap: 4px;
             }
             .info-box {
-                padding: 10px;
+                padding: 4px 6px;
+            }
+            .info-label {
+                font-size: 8px;
+                margin-bottom: 1px;
+            }
+            .info-value {
+                font-size: 10px;
+            }
+            .info-value.large {
+                font-size: 11px;
             }
             .client-card {
-                padding: 12px 30px;
-            }
-            .table-section {
-                padding: 15px 30px;
-            }
-            .products-table thead th {
-                padding: 8px 6px;
-                font-size: 11px;
-            }
-            .products-table tbody td {
-                padding: 8px 6px;
-                font-size: 12px;
-            }
-            .totals-section {
-                padding: 0 30px 15px 30px;
-                gap: 20px;
-            }
-            .terms-box {
-                padding: 12px;
-            }
-            .total-row {
-                padding: 6px 0;
-            }
-            .invoice-footer {
-                padding: 15px 30px;
-            }
-            .qr-code {
-                width: 80px;
-                height: 80px;
-            }
-            .copyright {
-                padding: 10px;
-                font-size: 10px;
-            }
-            .company-logo {
-                width: 60px;
-                height: 60px;
-            }
-            .company-details h2 {
-                font-size: 18px;
-                margin-bottom: 5px;
-            }
-            .company-info-text {
-                font-size: 10px;
-                line-height: 1.4;
-            }
-            .invoice-title {
-                font-size: 24px;
+                padding: 4px 15px;
             }
             .client-title {
-                font-size: 11px;
+                font-size: 8px;
+                margin-bottom: 1px;
             }
             .client-name {
-                font-size: 16px;
+                font-size: 12px;
+            }
+            .table-section {
+                padding: 4px 15px;
+            }
+            .section-title {
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
+            .products-table {
+                margin-bottom: 6px;
+            }
+            .products-table thead th {
+                padding: 3px 2px;
+                font-size: 8px;
+            }
+            .products-table tbody td {
+                padding: 3px 2px;
+                font-size: 9px;
+            }
+            .totals-section {
+                padding: 0 15px 4px 15px;
+                gap: 8px;
+                grid-template-columns: 1fr 280px;
+            }
+            .terms-box {
+                padding: 6px;
+            }
+            .terms-title {
+                font-size: 11px;
+                margin-bottom: 4px;
+            }
+            .terms-list li {
+                padding: 2px 0;
+                font-size: 8px;
+            }
+            .total-row {
+                padding: 2px 0;
+            }
+            .total-label {
+                font-size: 9px;
+            }
+            .total-value {
+                font-size: 10px;
             }
             .total-row.grand-total {
-                margin-top: 10px;
-                padding-top: 10px;
+                margin-top: 4px;
+                padding-top: 4px;
+            }
+            .total-row.grand-total .total-label {
+                font-size: 11px;
+            }
+            .total-row.grand-total .total-value {
+                font-size: 13px;
+            }
+            .invoice-footer {
+                padding: 4px 15px;
+            }
+            .qr-code {
+                width: 55px;
+                height: 55px;
+            }
+            .company-footer-name {
+                font-size: 11px;
+                margin-bottom: 2px;
+            }
+            .company-footer-info {
+                font-size: 8px;
+                line-height: 1.3;
+            }
+            .copyright {
+                padding: 4px;
+                font-size: 7px;
+            }
+            .company-logo {
+                width: 40px;
+                height: 40px;
+            }
+            .company-details h2 {
+                font-size: 13px;
+                margin-bottom: 2px;
+            }
+            .company-info-text {
+                font-size: 7px;
+                line-height: 1.1;
+            }
+            .invoice-title {
+                font-size: 16px;
+                margin-bottom: 1px;
+            }
+            .invoice-subtitle {
+                font-size: 8px;
             }
             
             @page {
                 size: A4;
-                margin: 10mm;
+                margin: 4mm;
             }
         }
     </style>
@@ -635,15 +687,29 @@
             
             <div class="totals-box">
                 @php
-                    // حساب الضريبة الصحيح
-                    if (!empty($sale->vat_amount) && $sale->vat_amount > 0) {
-                        $subtotalBeforeVat = $sale->totalAmount - $sale->vat_amount;
-                        $vatAmount = $sale->vat_amount;
-                    } else {
-                        // احسب الضريبة: الإجمالي قبل الضريبة × 15%
-                        $subtotalBeforeVat = $sale->totalAmount;
-                        $vatAmount = $subtotalBeforeVat * 0.15;
+                    // حساب صحيح للمبالغ
+                    // نحسب الإجمالي من المنتجات مباشرة
+                    $productsTotal = 0;
+                    foreach ($sale->details as $detail) {
+                        $productsTotal += ($detail->price ?? 0) * ($detail->quantities ?? 0);
                     }
+                    
+                    // الخصم
+                    $discountAmount = $sale->discountAmount ?? 0;
+                    
+                    // الإجمالي بعد الخصم
+                    $subtotalAfterDiscount = $productsTotal - $discountAmount;
+                    
+                    // قيمة التوصيل
+                    $shippingCharge = $sale->shipping_charge ?? 0;
+                    
+                    // الإجمالي قبل الضريبة (المنتجات - الخصم + التوصيل)
+                    $subtotalBeforeVat = $subtotalAfterDiscount + $shippingCharge;
+                    
+                    // الضريبة المحفوظة
+                    $vatAmount = $sale->vat_amount ?? 0;
+                    
+                    // الإجمالي النهائي
                     $totalWithVat = $subtotalBeforeVat + $vatAmount;
                     
                     // حساب عدد المنتجات
@@ -656,19 +722,33 @@
                 </div>
                 
                 <div class="total-row">
+                    <span class="total-label">إجمالي المنتجات / Products Total:</span>
+                    <span class="total-value">{{ currency_format($productsTotal, currency: business_currency()) }}</span>
+                </div>
+                
+                @if($discountAmount > 0)
+                <div class="total-row discount">
+                    <span class="total-label">الخصم / Discount:</span>
+                    <span class="total-value">-{{ currency_format($discountAmount, currency: business_currency()) }}</span>
+                </div>
+                @endif
+                
+                @if($shippingCharge > 0)
+                <div class="total-row">
+                    <span class="total-label">قيمة التوصيل / Shipping:</span>
+                    <span class="total-value">{{ currency_format($shippingCharge, currency: business_currency()) }}</span>
+                </div>
+                @endif
+                
+                <div class="total-row">
                     <span class="total-label">الإجمالي قبل الضريبة / Subtotal:</span>
                     <span class="total-value">{{ currency_format($subtotalBeforeVat, currency: business_currency()) }}</span>
                 </div>
                 
+                @if($vatAmount > 0)
                 <div class="total-row">
                     <span class="total-label">ضريبة القيمة المضافة (15%) / VAT (15%):</span>
                     <span class="total-value">{{ currency_format($vatAmount, currency: business_currency()) }}</span>
-                </div>
-                
-                @if($sale->discountAmount > 0)
-                <div class="total-row discount">
-                    <span class="total-label">الخصم / Discount:</span>
-                    <span class="total-value">-{{ currency_format($sale->discountAmount, currency: business_currency()) }}</span>
                 </div>
                 @endif
                 
@@ -696,7 +776,7 @@
                         
                         $zatcaQrContent = generateZatcaQrCode($sellerName, $vatRegistrationNumber, $timestamp, $invoiceTotal, $vatTotal, $xmlHash, $ecdsaSignature, $publicKey);
                     @endphp
-                    {!! QrCode::size(90)->margin(0)->generate($zatcaQrContent) !!}
+                    {!! QrCode::size(75)->margin(0)->generate($zatcaQrContent) !!}
                 </div>
             </div>
             

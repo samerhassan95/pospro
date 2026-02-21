@@ -71,8 +71,10 @@
                     <div class="col-md-6 text-md-end">
                         <h6 class="text-uppercase text-muted mb-2">{{ __('Bill To') }}</h6>
                         <h4 class="fw-bold mb-1">{{ $sale->party->name ?? 'Guest' }}</h4>
+                        @if($sale->party)
                         <p class="text-muted mb-1">{{ $sale->party->phone ?? '' }}</p>
                         <p class="text-muted mb-0">{{ $sale->party->address ?? '' }}</p>
+                        @endif
                         
                         <div class="mt-4">
                             @php

@@ -351,6 +351,7 @@
         <div class="b2b-party-box">
             <h3>{{ __('Buyer Information') }} / بيانات المشتري</h3>
             <p><strong>{{ __('Company Name') }}:</strong> {{ $sale->party->name ?? 'Guest' }}</p>
+            @if($sale->party)
             <p><strong>{{ __('VAT Number') }}:</strong> {{ $sale->party->vat_number ?? '---' }}</p>
             <p><strong>{{ __('Building No') }}:</strong> {{ $sale->party->building_number ?? '---' }}</p>
             <p><strong>{{ __('Street') }}:</strong> {{ $sale->party->street_name ?? '---' }}</p>
@@ -359,6 +360,9 @@
             <p><strong>{{ __('Postal Code') }}:</strong> {{ $sale->party->postal_code ?? '---' }}</p>
             <p><strong>{{ __('Country') }}:</strong> {{ $sale->party->country_code ?? '---' }}</p>
             <p><strong>{{ __('Phone') }}:</strong> {{ $sale->party->phone ?? '---' }}</p>
+            @else
+            <p><em>{{ __('Guest Customer - No details available') }}</em></p>
+            @endif
         </div>
     </div>
 
