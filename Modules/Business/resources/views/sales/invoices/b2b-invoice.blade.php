@@ -458,13 +458,14 @@
         <div class="b2b-party-box">
             <h3>{{ __('Buyer Information') }} / بيانات المشتري</h3>
             <p><strong>{{ __('Company Name') }}:</strong> {{ $sale->party->name ?? 'Guest' }}</p>
+            @if($sale->party)
             <p><strong>{{ __('VAT Number') }}:</strong> {{ $sale->party->vat_number ?? '---' }}</p>
-            @if($sale->party && $sale->party->commercial_registration)
+            @if($sale->party->commercial_registration)
             <p><strong>{{ __('CR Number') }}:</strong> {{ $sale->party->commercial_registration }}</p>
-            @elseif($sale->party)
+            @else
             <p style="color: #ff9800;"><strong>{{ __('CR Number') }}:</strong> <em>{{ __('Not provided - Please add in Party settings') }}</em></p>
             @endif
-            @if($sale->party && $sale->party->additional_id)
+            @if($sale->party->additional_id)
             <p><strong>{{ __('Additional ID') }}:</strong> {{ $sale->party->additional_id }}</p>
             @endif
             <p><strong>{{ __('Building No') }}:</strong> {{ $sale->party->building_number ?? '---' }}</p>
@@ -474,6 +475,9 @@
             <p><strong>{{ __('Postal Code') }}:</strong> {{ $sale->party->postal_code ?? '---' }}</p>
             <p><strong>{{ __('Country') }}:</strong> {{ $sale->party->country_code ?? '---' }}</p>
             <p><strong>{{ __('Phone') }}:</strong> {{ $sale->party->phone ?? '---' }}</p>
+            @else
+            <p><em>{{ __('Guest Customer - No details available') }}</em></p>
+            @endif
         </div>
     </div>
 

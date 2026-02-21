@@ -29,47 +29,105 @@
         openModalBtn.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Get total amount from sidebar
-            const totalAmount = document.getElementById('total_amount').textContent;
-            const payableAmountInput = document.getElementById('payable_amount');
-            const totalAmountValue = payableAmountInput ? payableAmountInput.value : '0';
+            console.log('🔵 Pay Bill button clicked');
             
-            // Update modal with order info
-            document.getElementById('modal-order-total').textContent = totalAmount;
-            document.getElementById('modal-total-bill').textContent = totalAmount;
-            document.getElementById('modal-due-amount').value = totalAmountValue;
-            document.getElementById('modal-due-summary').textContent = totalAmount;
-            
-            // Reset receive amount
-            receiveAmountInput.value = totalAmountValue;
-            updatePaymentCalculations();
-            
-            // Set default payment method to cash (first option)
-            const firstPaymentMethod = document.querySelector('.payment-method-btn[data-method="cash"]');
-            if (firstPaymentMethod) {
-                paymentMethodBtns.forEach(b => b.classList.remove('active'));
-                firstPaymentMethod.classList.add('active');
+            try {
+                // Get total amount from sidebar
+                const totalAmountElement = document.getElementById('total_amount');
+                const payableAmountInput = document.getElementById('payable_amount');
                 
-                // Set payment type to cash (usually ID 1)
-                const paymentTypeSelect = document.getElementById('payment_type_id');
-                if (paymentTypeSelect && paymentTypeSelect.options.length > 0) {
-                    // Try to find "Cash" option
-                    for (let i = 0; i < paymentTypeSelect.options.length; i++) {
-                        if (paymentTypeSelect.options[i].text.toLowerCase().includes('cash')) {
-                            paymentTypeSelect.value = paymentTypeSelect.options[i].value;
-                            break;
+                console.log('🔍 Elements check:', {
+                    totalAmountElement: totalAmountElement,
+                    payableAmountInput: payableAmountInput,
+                    modalOverlay: modalOverlay
+                });
+                
+                if (!totalAmountElement) {
+                    console.error('❌ total_amount element not found');
+                    alert('Error: Total amount element not found. Please refresh the page.');
+                    return;
+                }
+                
+                if (!payableAmountInput) {
+                    console.error('❌ payable_amount input not found');
+                    alert('Error: Payable amount input not found. Please refresh the page.');
+                    return;
+                }
+                
+                const totalAmount = totalAmountElement.textContent || '0';
+                const totalAmountValue = payableAmountInput.value || '0';
+                
+                console.log('💰 Amounts:', {
+                    totalAmount: totalAmount,
+                    totalAmountValue: totalAmountValue
+                });
+                
+                // Update modal with order info
+                const modalOrderTotal = document.getElementById('modal-order-total');
+                const modalTotalBill = document.getElementById('modal-total-bill');
+                const modalDueAmount = document.getElementById('modal-due-amount');
+                const modalDueSummary = document.getElementById('modal-due-summary');
+                
+                console.log('🔍 Modal elements:', {
+                    modalOrderTotal: modalOrderTotal,
+                    modalTotalBill: modalTotalBill,
+                    modalDueAmount: modalDueAmount,
+                    modalDueSummary: modalDueSummary
+                });
+                
+                if (modalOrderTotal) modalOrderTotal.textContent = totalAmount;
+                if (modalTotalBill) modalTotalBill.textContent = totalAmount;
+                if (modalDueAmount) modalDueAmount.value = totalAmountValue;
+                if (modalDueSummary) modalDueSummary.textContent = totalAmount;
+                
+                // Reset receive amount
+                if (receiveAmountInput) {
+                    receiveAmountInput.value = totalAmountValue;
+                    updatePaymentCalculations();
+                } else {
+                    console.warn('⚠️ receiveAmountInput not found');
+                }
+                
+                // Set default payment method to cash (first option)
+                const firstPaymentMethod = document.querySelector('.payment-method-btn[data-method="cash"]');
+                if (firstPaymentMethod) {
+                    paymentMethodBtns.forEach(b => b.classList.remove('active'));
+                    firstPaymentMethod.classList.add('active');
+                    
+                    // Set payment type to cash (usually ID 1)
+                    const paymentTypeSelect = document.getElementById('payment_type_id');
+                    if (paymentTypeSelect && paymentTypeSelect.options.length > 0) {
+                        // Try to find "Cash" option
+                        for (let i = 0; i < paymentTypeSelect.options.length; i++) {
+                            if (paymentTypeSelect.options[i].text.toLowerCase().includes('cash')) {
+                                paymentTypeSelect.value = paymentTypeSelect.options[i].value;
+                                break;
+                            }
+                        }
+                        // If not found, select first option
+                        if (!paymentTypeSelect.value) {
+                            paymentTypeSelect.value = paymentTypeSelect.options[0].value;
                         }
                     }
-                    // If not found, select first option
-                    if (!paymentTypeSelect.value) {
-                        paymentTypeSelect.value = paymentTypeSelect.options[0].value;
-                    }
+                } else {
+                    console.warn('⚠️ Cash payment method button not found');
                 }
+                
+                // Show modal
+                if (modalOverlay) {
+                    console.log('✅ Opening modal...');
+                    modalOverlay.classList.add('active');
+                } else {
+                    console.error('❌ Modal overlay not found');
+                    alert('Error: Payment modal not found. Please refresh the page.');
+                }
+            } catch (error) {
+                console.error('❌ Error opening payment modal:', error);
+                alert('Something went wrong: ' + error.message);
             }
-            
-            // Show modal
-            modalOverlay.classList.add('active');
         });
+    } else {
+        console.error('❌ Pay Bill button not found');
     }
 
     // Close modal
