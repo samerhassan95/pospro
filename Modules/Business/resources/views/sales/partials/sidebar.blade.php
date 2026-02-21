@@ -83,14 +83,6 @@
 
     <!-- Order Summary -->
     <div class="order-summary-section">
-        <div class="summary-row">
-            <span class="summary-label">{{ __('Items') }}</span>
-            <span class="summary-value" id="items_count">3</span>
-        </div>
-        <div class="summary-row">
-            <span class="summary-label">{{ __('Subtotal') }}</span>
-            <span class="summary-value" id="sub_total">$35.00</span>
-        </div>
         <div class="discount-shipping-row">
             <div class="summary-row discount-row">
                 <span class="summary-label">{{ __('Discount') }}</span>
@@ -132,6 +124,14 @@
                 <button type="button" class="apply-shipping-btn" id="apply-shipping-btn">{{ __('Apply') }}</button>
                 <button type="button" class="cancel-shipping-btn" id="cancel-shipping-btn">{{ __('Cancel') }}</button>
             </div>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">{{ __('Items') }}</span>
+            <span class="summary-value" id="items_count">3</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">{{ __('Subtotal') }}</span>
+            <span class="summary-value" id="sub_total">$35.00</span>
         </div>
         <div class="summary-row summary-total">
             <span class="summary-label ">{{ __('Total') }}</span>
