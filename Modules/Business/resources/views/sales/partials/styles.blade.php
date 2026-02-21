@@ -72,8 +72,8 @@
         .add-customer-btn { width: 48px; height: 48px; background: #1E3A8A; border: none; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-left: 8px; cursor: pointer; }
 
         /* Request Number Section */
-        .request-number-section { margin-bottom: 5px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef; }
-        .request-number-row { display: flex; justify-content: space-between; align-items: center; }
+        .request-number-section { margin-bottom: 0px; padding: 9px 12px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef; }
+        .request-number-row { display: flex; justify-content:  space-between;gap:5px;  align-items: center; }
         .request-label { font-size: 14px; color: #6b7280; font-weight: 500; }
         .request-value { font-size: 16px; color: #1f2937; font-weight: 700; }
 
@@ -173,15 +173,15 @@
         .summary-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0px; }
         .summary-label { font-size: 14px; color: #000000; }
         .summary-value { font-size: 14px; font-weight: 500; color: #1F2937; }
-        .summary-row.summary-total { font-size: 18px; font-weight: bold; color: #1F2937; margin-top: 8px; padding-top: 8px; border-top: 1px solid #E5E7EB; }
+        .summary-row.summary-total { font-size: 18px; font-weight: bold; color: #1F2937;  padding-top: 8px; border-top: 1px solid #E5E7EB; }
         .summary-row.summary-total .summary-label { font-weight: bold; font-size:18px; color: #000000; }
         .summary-row.summary-total .summary-value { font-weight: 700; color: #1F2937; }
 
         /* Action Buttons Section */
         .action-buttons-section { display: flex; gap: 12px; }
-        .pay-bill-btn { flex: 1; padding: 16px 24px; background: var(--clr-primary); color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .pay-bill-btn { flex: 1; padding: 8px 24px; background: var(--clr-primary); color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .pay-bill-btn:hover { background: var(--clr-secondary); }
-        .cancel-order-btn { flex: 1; padding: 16px 24px; background: transparent; color: var(--clr-primary); border: 1px solid #E5E7EB; border-radius: 50px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .cancel-order-btn { flex: 1; padding: 8px 24px; background: transparent; color: var(--clr-primary); border: 1px solid #E5E7EB; border-radius: 50px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
         .cancel-order-btn:hover { background: #F9FAFB; border-color: var(--clr-primary); }
         .order-header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
         .order-title { font-size: 18px; font-weight: 600; color: #1a1a1a; margin: 0; }
@@ -226,7 +226,7 @@
         .order-summary { border-top: 1px solid #eee; padding-top: 15px; margin-bottom: 15px; }
         .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; font-size: 14px; color: #666; }
         .summary-row.total { font-size: 16px; font-weight: 600; color: #1a1a1a; border-top: 1px solid #eee; padding-top: 12px; margin-top: 8px; }
-        .cancel-order-btn { width: 100%; padding: 12px; border: none; background: #fff; color: var(--clr-primary); border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 6px; }
+        .cancel-order-btn { width: 100%; padding:8 28px; border: none; background: #fff; color: var(--clr-primary); border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
         .cancel-order-btn:hover { background: #fff5f5; }
         .payment-section-new { border-top: 1px solid #eee; padding-top: 20px; }
         .payment-field { margin-bottom: 15px; }

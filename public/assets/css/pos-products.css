@@ -437,7 +437,7 @@ border-radius: 8px;    flex-shrink: 0 !important;
     /* background: #f9f9f9; */
     /* border: 1px solid #e8e8e8; */
     /* border-radius: 12px; */
-    padding: 0px 0px 12px  0;
+    padding: 0px 0px 0px  0;
 }
 .search-customer-wrapper .choices{
       background: #f9f9f9;

@@ -80,7 +80,7 @@
         .order-summary { border-top: 1px solid #eee; padding-top: 15px; margin-bottom: 15px; }
         .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; font-size: 14px; color: #666; }
         .summary-row.total { font-size: 16px; font-weight: 600; color: #1a1a1a; border-top: 1px solid #eee; padding-top: 4px; margin-top: 2px; }
-        .cancel-order-btn { width: 100%; padding: 12px; border: 1px solid #FF6500; background: #fff; color: #FF6500; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 20px; }
+        .cancel-order-btn { width: 100%; padding: 8px 24px; border: 1px solid #FF6500; background: #fff; color: #FF6500; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
         .cancel-order-btn:hover { background: #fff5f5; }
         .payment-section-new { border-top: 1px solid #eee; padding-top: 20px; }
         .payment-field { margin-bottom: 15px; }

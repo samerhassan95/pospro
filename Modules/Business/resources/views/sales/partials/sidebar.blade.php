@@ -1,15 +1,17 @@
 <!-- Order Sidebar -->
 <div class="order-sidebar">
-    <!-- Request Number Display - First Element -->
-    <div class="request-number-section">
-        <div class="request-number-row">
-            <span class="request-label">{{ __('Request #') }}</span>
-            <span class="request-value" id="request-number-display">{{ $invoice_no }}</span>
+    <!-- Top Row: Request Number and Search Customer -->
+    <div class="top-row-container">
+        <!-- Request Number Display -->
+        <div class="request-number-section">
+            <div class="request-number-row">
+                <span class="request-label">{{ __('Request #') }}</span>
+                <span class="request-value" id="request-number-display">{{ $invoice_no }}</span>
+            </div>
         </div>
-    </div>
 
-    <!-- Search Customer Section -->
-    <div class="sidebar-search-customer">
+        <!-- Search Customer Section -->
+        <div class="sidebar-search-customer">
         <div class="search-customer-wrapper">
             <select required name="party_id" id="party_id" class="sidebar-customer-select choices-select">
                 <option value="">{{ __('Search Customer') }}</option>
@@ -30,19 +32,23 @@
             <input type="text" name="customer_phone" class="form-control" placeholder="{{ __('Enter Customer Phone Number') }}">
         </div>
     </div>
+    </div>
 
     <!-- Order Details Section -->
     <div class="order-details-section">
-        <h3 class="section-title">{{ __('Order Details') }}</h3>
-        <div class="customer-name" id="selected-customer-name">{{ __('Johnson Mitchell') }}</div>
+        <div class="customer-info-flex">
+            <div class="customer-name" id="selected-customer-name">{{ __('Johnson Mitchell') }}</div>
+            <div class="customer-phone" id="selected-customer-phone">+1(415)123-4547</div>
+        </div>
         <div class="order-info-line">
             <span class="order-date">{{ now()->format('D, M\TH\LY Y') }}</span>
-            <svg class="clock-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10" cy="10" r="8" stroke="#6B7280" stroke-width="1.5"/>
-                <path d="M10 5V10L13 13" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            <span class="order-time" id="current-time">{{ now()->format('h:i A') }}</span>
-            <span class="phone-number" id="selected-customer-phone">+1(415)123-4547</span>
+            <div class="time-with-icon">
+                <svg class="clock-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="8" stroke="#6B7280" stroke-width="1.5"/>
+                    <path d="M10 5V10L13 13" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="order-time" id="current-time">{{ now()->format('h:i A') }}</span>
+            </div>
         </div>
         <input type="hidden" name="invoiceNumber" value="{{ $invoice_no }}">
         <input type="hidden" name="saleDate" value="{{ now()->format('Y-m-d') }}">
@@ -85,15 +91,28 @@
             <span class="summary-label">{{ __('Subtotal') }}</span>
             <span class="summary-value" id="sub_total">$35.00</span>
         </div>
-        <div class="summary-row discount-row">
-            <span class="summary-label">{{ __('Discount') }}</span>
-            <div class="discount-controls">
-                <span class="summary-value" id="discount_display">0</span>
-                <button type="button" class="add-discount-btn" id="add-discount-btn">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
+        <div class="discount-shipping-row">
+            <div class="summary-row discount-row">
+                <span class="summary-label">{{ __('Discount') }}</span>
+                <div class="discount-controls">
+                    <span class="summary-value" id="discount_display">0</span>
+                    <button type="button" class="add-discount-btn" id="add-discount-btn">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="summary-row shipping-row">
+                <span class="summary-label">{{ __('Shipping') }}</span>
+                <div class="shipping-controls">
+                    <span class="summary-value" id="shipping_display">0</span>
+                    <button type="button" class="add-shipping-btn" id="add-shipping-btn">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="discount-input-section d-none" id="discount-input-section">
@@ -105,40 +124,6 @@
                 </select>
                 <button type="button" class="apply-discount-btn" id="apply-discount-btn">{{ __('Apply') }}</button>
                 <button type="button" class="cancel-discount-btn" id="cancel-discount-btn">{{ __('Cancel') }}</button>
-            </div>
-        </div>
-        <div class="summary-row vat-row">
-            <span class="summary-label">{{ __('VAT') }}</span>
-            <div class="vat-controls">
-                <span class="summary-value" id="vat_display">0</span>
-                <button type="button" class="add-vat-btn" id="add-vat-btn">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <div class="vat-input-section d-none" id="vat-input-section">
-            <div class="vat-input-wrapper">
-                <select id="vat_select_input" class="form-select vat-select-input">
-                    <option value="">{{ __('Select VAT') }}</option>
-                    @foreach ($vats as $vat)
-                        <option value="{{ $vat->id }}" data-rate="{{ $vat->rate }}">{{ $vat->name }} ({{ $vat->rate }}%)</option>
-                    @endforeach
-                </select>
-                <button type="button" class="apply-vat-btn" id="apply-vat-btn">{{ __('Apply') }}</button>
-                <button type="button" class="cancel-vat-btn" id="cancel-vat-btn">{{ __('Cancel') }}</button>
-            </div>
-        </div>
-        <div class="summary-row shipping-row">
-            <span class="summary-label">{{ __('Shipping') }}</span>
-            <div class="shipping-controls">
-                <span class="summary-value" id="shipping_display">0</span>
-                <button type="button" class="add-shipping-btn" id="add-shipping-btn">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
             </div>
         </div>
         <div class="shipping-input-section d-none" id="shipping-input-section">
@@ -292,3 +277,68 @@
         </div>
     </div>
 </div>
+<style>
+/* Top row container for request number and search customer */
+.top-row-container {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 0px;
+    align-items: flex-start;
+}
+
+.top-row-container .request-number-section {
+    flex-shrink: 0;
+    min-width: 120px;
+}
+
+.top-row-container .sidebar-search-customer {
+    flex: 1;
+}
+
+/* Customer info flex layout */
+.customer-info-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customer-info-flex .customer-name {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.customer-info-flex .customer-phone {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* Order info line flex layout */
+.order-info-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Time with icon container */
+.time-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Discount and shipping in same row */
+.discount-shipping-row {
+    display: flex;
+    gap: 12px;
+}
+
+.discount-shipping-row .summary-row {
+    flex: 1;
+}
+
+.discount-shipping-row .discount-row {
+    border-right: 1px solid #e5e7eb;
+    padding-right: 12px;
+}
+</style>

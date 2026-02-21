@@ -191,7 +191,7 @@ label.img-label {
     align-items: flex-start;
     background: #ffffff;
     border-radius: 14.74px;
-    box-shadow: 0px 3.93px 88.43px 1.97px #00000014;
+    /* box-shadow: 0px 3.93px 88.43px 1.97px #00000014; */
     overflow: visible;
        border: none !important;
     min-height: auto;

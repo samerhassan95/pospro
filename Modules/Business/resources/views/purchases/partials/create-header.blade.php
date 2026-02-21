@@ -109,4 +109,29 @@
 #scan-barcode-btn:not(.active):not(.pos-nav-btn-active) {
     background: transparent !important;
 }
+
+/* Customer info flex layout */
+.customer-info-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customer-info-flex .customer-name {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.customer-info-flex .customer-phone {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* Order info line flex layout */
+.order-info-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
 </style>
