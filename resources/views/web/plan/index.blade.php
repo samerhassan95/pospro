@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -395,10 +395,26 @@
                 </a>
                 
                 <div class="nav-right">
-                    <a href="#products">{{ __('Products') }}</a>
-                    <a href="#services">{{ __('Services') }}</a>
-                    <a href="#expertise">{{ __('Expertise') }}</a>
-                    <a href="#about">{{ __('About') }}</a>
+                    <div class="home-page-language-change">
+                        <div class="dropdown">
+                            <button class="language-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: transparent; border: none; color: #FFFFFF; font-size: 15px; font-weight: 500;">
+                                <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" alt="" class="flag-icon me-2" style="width: 20px; height: 15px;">{{ languages()[app()->getLocale()]['name'] }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-scroll">
+                                @foreach (languages() as $key => $language)
+                                <li class="language-li">
+                                    <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}" style="color: #000C28;">
+                                        <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" alt="" class="flag-icon me-2" style="width: 20px; height: 15px;">
+                                        {{ $language['name'] }}
+                                    </a>
+                                    @if (app()->getLocale() == $key)
+                                        <i class="fas fa-check language-check" style="color: var(--clr-primary);"></i>
+                                    @endif
+                                </li>
+                               @endforeach
+                            </ul>
+                        </div>
+                    </div>
                     <a href="{{ route('login') }}" class="header-btn">{{ __('Login / Signup') }}</a>
                 </div>
             </div>

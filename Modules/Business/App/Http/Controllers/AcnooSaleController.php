@@ -542,9 +542,15 @@ class AcnooSaleController extends Controller
 
             DB::commit();
 
+            // Determine redirect URL based on request source
+            $redirectUrl = route('business.sales.index');
+            if ($request->has('pos_mode') || str_contains($request->header('referer', ''), '/pos')) {
+                $redirectUrl = route('business.sales.create');
+            }
+
             return response()->json([
                 'message' => __('Sales created successfully.'),
-                'redirect' => route('business.sales.index'),
+                'redirect' => $redirectUrl,
                 'secondary_redirect_url' => route('business.sales.invoice', $sale->id),
             ]);
         } catch (\Exception $e) {
@@ -823,9 +829,15 @@ class AcnooSaleController extends Controller
 
             DB::commit();
 
+            // Determine redirect URL based on request source
+            $redirectUrl = route('business.sales.index');
+            if ($request->has('pos_mode') || str_contains($request->header('referer', ''), '/edit')) {
+                $redirectUrl = route('business.sales.edit', $sale->id);
+            }
+
             return response()->json([
                 'message' => __('Sales updated successfully.'),
-                'redirect' => route('business.sales.index'),
+                'redirect' => $redirectUrl,
                 'secondary_redirect_url' => route('business.sales.invoice', $sale->id),
             ]);
         } catch (\Exception $e) {

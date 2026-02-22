@@ -444,9 +444,15 @@ class AcnooPurchaseController extends Controller
 
             DB::commit();
 
+            // Determine redirect URL based on request source
+            $redirectUrl = route('business.purchases.index');
+            if ($request->has('pos_mode') || str_contains($request->header('referer', ''), '/pos')) {
+                $redirectUrl = route('business.purchases.create');
+            }
+
             return response()->json([
                 'message' => __('Purchase created successfully.'),
-                'redirect' => route('business.purchases.index'),
+                'redirect' => $redirectUrl,
                 'secondary_redirect_url' => route('business.purchases.invoice', $purchase->id),
             ]);
         } catch (\Exception $e) {
@@ -685,9 +691,15 @@ class AcnooPurchaseController extends Controller
             sendNotifyToUser($purchase->id, route('business.purchases.index', ['id' => $purchase->id]), __('Purchase has been updated.'), $business_id);
 
             DB::commit();
+            // Determine redirect URL based on request source
+            $redirectUrl = route('business.purchases.index');
+            if ($request->has('pos_mode') || str_contains($request->header('referer', ''), '/edit')) {
+                $redirectUrl = route('business.purchases.edit', $purchase->id);
+            }
+
             return response()->json([
                 'message' => __('Purchase updated successfully.'),
-                'redirect' => route('business.purchases.index'),
+                'redirect' => $redirectUrl,
                 'secondary_redirect_url' => route('business.purchases.invoice', $purchase->id),
             ]);
         } catch (\Exception $e) {

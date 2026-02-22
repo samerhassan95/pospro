@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,10 @@
     
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Cairo Font -->
     <link rel="stylesheet" href="{{ asset('fonts/cairo/cairo.css') }}">
     
@@ -51,6 +55,72 @@
             -webkit-filter: blur(500px);
             z-index: 0;
             pointer-events: none;
+        }
+        
+        /* Header */
+        .header {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+        
+        .language-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .language-btn {
+            background: transparent !important;
+            border: none !important;
+            color: #FFFFFF !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            padding: 0 !important;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .flag-icon {
+            width: 20px !important;
+            height: 15px !important;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        
+        .dropdown-menu {
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 12, 40, 0.1);
+            border-radius: 12px;
+            padding: 8px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            min-width: 180px;
+        }
+        
+        .dropdown-item {
+            padding: 8px 16px;
+            color: #000C28 !important;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(0, 64, 206, 0.1);
+        }
+        
+        .language-check {
+            position: absolute;
+            right: 16px;
+            color: var(--clr-primary) !important;
+            font-size: 14px;
         }
         
         /* Main Content */
@@ -100,7 +170,7 @@
         .info-section h1 {
             font-size: 65.65px;
             font-weight: 700;
-            line-height: 1;
+            line-height: 1.3;
             margin-bottom: 20px;
             color: #FFFFFF;
         }
@@ -287,6 +357,30 @@
 </head>
 <body>
     <div class="page-wrapper">
+        <!-- Language Toggle -->
+        <div class="header">
+            <div class="language-toggle">
+                <div class="dropdown">
+                    <button class="language-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" alt="" class="flag-icon">{{ languages()[app()->getLocale()]['name'] }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        @foreach (languages() as $key => $language)
+                        <li>
+                            <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}">
+                                <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" alt="" class="flag-icon">
+                                {{ $language['name'] }}
+                                @if (app()->getLocale() == $key)
+                                    <i class="fas fa-check language-check"></i>
+                                @endif
+                            </a>
+                        </li>
+                       @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
         <!-- Main Content -->
         <main class="main-content">
             <div class="content-grid">
@@ -332,6 +426,8 @@
     
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     

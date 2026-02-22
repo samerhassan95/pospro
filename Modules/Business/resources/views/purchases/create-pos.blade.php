@@ -37,6 +37,7 @@
 
         {{-- Hidden Configuration Inputs --}}
         @php $currency = business_currency(); @endphp
+        <input type="hidden" name="pos_mode" value="1">
         <input type="hidden" id="currency_symbol" value="{{ $currency->symbol }}">
         <input type="hidden" id="currency_position" value="{{ $currency->position }}">
         <input type="hidden" id="currency_code" value="{{ $currency->code }}">

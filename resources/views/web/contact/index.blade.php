@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,10 @@
     
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Cairo Font -->
     <link rel="stylesheet" href="{{ asset('fonts/cairo/cairo.css') }}">
     
@@ -142,6 +146,60 @@
             opacity: 0.8;
         }
         
+        /* Language Dropdown */
+        .home-page-language-change .dropdown-toggle::after {
+            display: none;
+        }
+        
+        .home-page-language-change .language-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent !important;
+            border: none !important;
+            color: #FFFFFF !important;
+            font-size: 15px !important;
+            font-weight: 500 !important;
+            padding: 0 !important;
+        }
+        
+        .home-page-language-change .flag-icon {
+            width: 20px !important;
+            height: 15px !important;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        
+        .home-page-language-change .dropdown-menu {
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 12, 40, 0.1);
+            border-radius: 12px;
+            padding: 8px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            min-width: 180px;
+        }
+        
+        .home-page-language-change .dropdown-item {
+            padding: 8px 16px;
+            color: #000C28 !important;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+        
+        .home-page-language-change .dropdown-item:hover {
+            background: rgba(0, 64, 206, 0.1);
+        }
+        
+        .home-page-language-change .language-check {
+            position: absolute;
+            right: 16px;
+            color: var(--clr-primary) !important;
+            font-size: 14px;
+        }
+        
         /* Main Content */
         .main-content {
             position: relative;
@@ -179,8 +237,8 @@
         /* Left Side - Info */
         .info-section h1 {
             font-size: 71.65px;
-           
-            line-height: 1;
+             line-height: 1.3;
+             line-height: 1.3;
             margin-bottom: 20px;
         }
         
@@ -461,11 +519,27 @@
                 </a>
                 
                 <div class="nav-right">
-                    <a href="#products">Products</a>
-                    <a href="#services">Services</a>
-                    <a href="#expertise">Expertise</a>
-                    <a href="#about">About</a>
-                    <a href="{{ route('login') }}" class="header-btn">Login / Signup</a>
+                    <div class="home-page-language-change">
+                        <div class="dropdown">
+                            <button class="language-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: transparent; border: none; color: #FFFFFF; font-size: 15px; font-weight: 500;">
+                                <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" alt="" class="flag-icon me-2" style="width: 20px; height: 15px;">{{ languages()[app()->getLocale()]['name'] }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-scroll">
+                                @foreach (languages() as $key => $language)
+                                <li class="language-li">
+                                    <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}" style="color: #000C28;">
+                                        <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" alt="" class="flag-icon me-2" style="width: 20px; height: 15px;">
+                                        {{ $language['name'] }}
+                                    </a>
+                                    @if (app()->getLocale() == $key)
+                                        <i class="fas fa-check language-check" style="color: var(--clr-primary);"></i>
+                                    @endif
+                                </li>
+                               @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="{{ route('login') }}" class="header-btn">{{ __('Login / Signup') }}</a>
                 </div>
             </div>
         </header>
@@ -526,7 +600,7 @@
                             </div>
                             
                             <button type="submit" class="submit-btn">
-                                {{ $page_data['headings']['contact_us_btn_text'] ?? 'Book Demo' }}
+                                {{ __($page_data['headings']['contact_us_btn_text'] ?? 'Book Demo') }}
                                 <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0H19.002V9.50098C19.002 14.7482 14.7482 19.002 9.50098 19.002H0V0Z" fill="white"/>
                                     <path d="M13.8298 13.8702H12.4565V7.96739C10.4814 9.94191 8.50815 11.9137 6.55024 13.8702C6.18974 13.5108 5.86718 13.1885 5.54102 12.8626C7.4926 10.9125 9.46587 8.94065 11.478 6.93093H5.54102V5.54236H13.8298V13.8702Z" fill="#011646"/>
@@ -541,6 +615,8 @@
     
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     

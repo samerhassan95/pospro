@@ -83,28 +83,15 @@
 
     <!-- Order Summary -->
     <div class="order-summary-section">
-        <div class="discount-shipping-row">
-            <div class="summary-row discount-row">
-                <span class="summary-label">{{ __('Discount') }}</span>
-                <div class="discount-controls">
-                    <span class="summary-value" id="discount_display">0</span>
-                    <button type="button" class="add-discount-btn" id="add-discount-btn">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="summary-row shipping-row">
-                <span class="summary-label">{{ __('Shipping') }}</span>
-                <div class="shipping-controls">
-                    <span class="summary-value" id="shipping_display">0</span>
-                    <button type="button" class="add-shipping-btn" id="add-shipping-btn">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
+        <div class="summary-row discount-row">
+            <span class="summary-label">{{ __('Discount') }}</span>
+            <div class="discount-controls">
+                <span class="summary-value" id="discount_display">0</span>
+                <button type="button" class="add-discount-btn" id="add-discount-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
             </div>
         </div>
         <div class="discount-input-section d-none" id="discount-input-section">
@@ -116,6 +103,17 @@
                 </select>
                 <button type="button" class="apply-discount-btn" id="apply-discount-btn">{{ __('Apply') }}</button>
                 <button type="button" class="cancel-discount-btn" id="cancel-discount-btn">{{ __('Cancel') }}</button>
+            </div>
+        </div>
+        <div class="summary-row shipping-row">
+            <span class="summary-label">{{ __('Shipping') }}</span>
+            <div class="shipping-controls">
+                <span class="summary-value" id="shipping_display">0</span>
+                <button type="button" class="add-shipping-btn" id="add-shipping-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
             </div>
         </div>
         <div class="shipping-input-section d-none" id="shipping-input-section">

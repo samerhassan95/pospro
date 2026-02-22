@@ -22,45 +22,29 @@
                 </div>
                 <div class="offcanvas-body">
                     <div class="accordion accordion-flush mb-30" id="sidebarMenuAccordion">
-                        <div class="accordion-item">
-                            <a href="{{ route('home') }}" class="accordion-button without-sub-menu"
-                                type="button">{{ __('Home') }}</a>
+                        <!-- Navigation links removed -->
+                    </div>
+                    <div class="home-page-language-change mb-3">
+                        <div class="dropdown">
+                            <button class="language-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" alt="" class="flag-icon me-2">{{ languages()[app()->getLocale()]['name'] }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-scroll">
+                                @foreach (languages() as $key => $language)
+                                <li class="language-li">
+                                    <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}">
+                                        <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" alt="" class="flag-icon me-2">
+                                        {{ $language['name'] }}
+                                    </a>
+                                    @if (app()->getLocale() == $key)
+                                        <i class="fas fa-check language-check"></i>
+                                    @endif
+                                </li>
+                               @endforeach
+                            </ul>
                         </div>
-                        <div class="accordion-item">
-                            <a href="{{ route('about.index') }}" class="accordion-button without-sub-menu"
-                                type="button">{{ __('About Us') }}</a>
-                        </div>
-                        <div class="accordion-item">
-                            <a href="{{ route('plan.index') }}" class="accordion-button without-sub-menu"
-                                type="button">{{ __('Pricing') }}</a>
-                        </div>
-                        <div class="accordion-item">
-                            <a href="javascript:void(0);" class="accordion-button collapsed" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#support-menu" aria-expanded="false"
-                                aria-controls="support-menu">{{ __('Pages') }}</a>
-                            <div id="support-menu" class="accordion-collapse collapse"
-                                data-bs-parent="#sidebarMenuAccordion">
-                                <ul class="accordion-body p-0">
-                                    <li>
-                                        <a href="{{ route('blogs.index') }}">{{ __('Blog') }}</a>
-                                        <p class="mb-0 arrow">></p>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('term.index') }}"> {{ __('Terms & Conditions') }} </a>
-                                        <p class="mb-0 arrow">></p>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('policy.index') }}"> {{ __('Privacy Policy') }} </a>
-                                        <p class="mb-0 arrow">></p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <a href="{{ route('home') }}" class="accordion-button without-sub-menu"
-                                type="button">{{ __('Contact Us') }}</a>
-                        </div>
-                            <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}"  class="get-app-btn login-btn ">
+                    </div>
+                    <a href="{{ Route::has($page_data['headings']['header_btn_link']) ? route($page_data['headings']['header_btn_link']) : route('login') }}"  class="get-app-btn login-btn ">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -82,44 +66,7 @@
             <!-- Desktop Menu -->
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a href="{{ route('home') }}" class="nav-link active"
-                            aria-current="page">{{ __('Home') }}</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page"
-                            href="{{ route('about.index') }}">{{ __('About Us') }}</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page"
-                            href="{{ route('plan.index') }}">{{ __('Pricing') }}</a>
-                    </li>
-
-                    <li class="nav-item menu-dropdown">
-                        <a class="nav-link" aria-current="page" href="javascript:void(0);">{{ __('Pages') }} <span
-                                class="arrow">></span></a>
-                        <ul class="dropdown-content">
-                            <li>
-                                <a class="dropdown-item"
-                                    href="{{ route('blogs.index') }}">{{ __('Blog') }}<span>></span></a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                    href="{{ route('term.index') }}">{{ __('Terms & Conditions') }}
-                                    <span>></span></a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                    href="{{ route('policy.index') }}">{{ __('Privacy Policy') }}<span>></span></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page"
-                            href="{{ route('home') }}">{{ __('Contact Us') }}</a>
-                    </li>
+                    <!-- Navigation links removed -->
                 </ul>
                 <div class="home-page-language-change">
                     <div class="dropdown">
