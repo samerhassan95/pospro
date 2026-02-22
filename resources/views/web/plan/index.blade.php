@@ -187,7 +187,6 @@
         }
         
         .plan-card.featured::before {
-            content: 'POPULAR';
             position: absolute;
             top: 20px;
             right: -30px;
@@ -197,6 +196,32 @@
             font-size: 12px;
             font-weight: 700;
             transform: rotate(45deg);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--clr-primary);
+            color: #FFFFFF;
+            padding: 5px 40px;
+            font-size: 12px;
+            font-weight: 700;
+            transform: rotate(45deg);
+            z-index: 2;
+        }
+        
+        /* RTL Support for Arabic */
+        html[dir="rtl"] .plan-card.featured::before {
+            right: auto;
+            left: -30px;
+            transform: rotate(-45deg);
+        }
+        
+        html[dir="rtl"] .popular-badge {
+            right: auto;
+            left: -30px;
+            transform: rotate(-45deg);
         }
         
         .plan-name {
@@ -425,13 +450,16 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="section-title">
-                <h1>{{ $page_data['headings']['pricing_title'] ?? __('Choose Your Plan') }}</h1>
-                <p>{{ $page_data['headings']['pricing_description'] ?? __('Select the perfect plan for your business needs') }}</p>
+                <h1>{{ __('Our Pricing Plans') }}</h1>
+                <p>{{ __('We Offer flexible pricing plans to suit the diverse needs of our clients') }}</p>
             </div>
             
             <div class="plans-grid">
                 @foreach ($plans as $index => $plan)
                     <div class="plan-card {{ $index === 1 ? 'featured' : '' }}">
+                        @if ($index === 1)
+                            <div class="popular-badge">{{ __('POPULAR') }}</div>
+                        @endif
                         <div class="plan-name">{{ $plan['subscriptionName'] ?? '' }}</div>
                         <div class="plan-price">
                             @if (($plan['offerPrice'] && $plan['subscriptionPrice'] !== null) || $plan['offerPrice'] || $plan['subscriptionPrice'])

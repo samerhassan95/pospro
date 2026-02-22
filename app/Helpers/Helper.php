@@ -354,7 +354,6 @@ function languages()
         'nl' => ['name' => 'Dutch', 'flag' => 'nl'],
         'pt' => ['name' => 'Portuguese', 'flag' => 'pt'],
         'pl' => ['name' => 'Polish', 'flag' => 'pl'],
-        'he' => ['name' => 'Hebrew', 'flag' => 'il'],
         'hu' => ['name' => 'Hungarian', 'flag' => 'hu'],
         'fi' => ['name' => 'Finnish', 'flag' => 'fi'],
         'el' => ['name' => 'Greek', 'flag' => 'gr'],

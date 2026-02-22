@@ -61,8 +61,51 @@
         .header {
             position: absolute;
             top: 20px;
-            right: 20px;
+            left: 20px;
             z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* RTL positioning for Arabic */
+        html[dir="rtl"] .header {
+            left: auto;
+            right: 20px;
+            flex-direction: row-reverse;
+        }
+        
+        /* RTL icon flip for Arabic */
+        html[dir="rtl"] .home-link svg {
+            transform: scaleX(-1);
+        }
+        
+        .home-link {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .home-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+        }
+        
+        .home-link svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
         }
         
         .language-toggle {
@@ -423,28 +466,67 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Language Toggle -->
+        <!-- Header -->
         <div class="header">
-            <div class="language-toggle">
-                <div class="dropdown">
-                    <button class="language-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" alt="" class="flag-icon">{{ languages()[app()->getLocale()]['name'] }}
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        @foreach (languages() as $key => $language)
-                        <li>
-                            <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}">
-                                <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" alt="" class="flag-icon">
-                                {{ $language['name'] }}
-                                @if (app()->getLocale() == $key)
-                                    <i class="fas fa-check language-check"></i>
-                                @endif
-                            </a>
-                        </li>
-                       @endforeach
-                    </ul>
+            @if(app()->getLocale() == 'ar')
+                <!-- Arabic: Language Toggle first, then Home Link -->
+                <div class="language-toggle">
+                    <div class="dropdown">
+                        <button class="language-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" alt="" class="flag-icon">{{ languages()[app()->getLocale()]['name'] }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            @foreach (languages() as $key => $language)
+                            <li>
+                                <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}">
+                                    <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" alt="" class="flag-icon">
+                                    {{ $language['name'] }}
+                                    @if (app()->getLocale() == $key)
+                                        <i class="fas fa-check language-check"></i>
+                                    @endif
+                                </a>
+                            </li>
+                           @endforeach
+                        </ul>
+                    </div>
                 </div>
-            </div>
+                
+                <a href="{{ route('home') }}" class="home-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                    {{ __('Home') }}
+                </a>
+            @else
+                <!-- English: Home Link first, then Language Toggle -->
+                <a href="{{ route('home') }}" class="home-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                    {{ __('Home') }}
+                </a>
+                
+                <div class="language-toggle">
+                    <div class="dropdown">
+                        <button class="language-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ asset('flags/' . languages()[app()->getLocale()]['flag'] . '.svg') }}" alt="" class="flag-icon">{{ languages()[app()->getLocale()]['name'] }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            @foreach (languages() as $key => $language)
+                            <li>
+                                <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['lang' => $key]) }}">
+                                    <img src="{{ asset('flags/' . $language['flag'] . '.svg') }}" alt="" class="flag-icon">
+                                    {{ $language['name'] }}
+                                    @if (app()->getLocale() == $key)
+                                        <i class="fas fa-check language-check"></i>
+                                    @endif
+                                </a>
+                            </li>
+                           @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
         </div>
         
         <!-- Main Content -->
@@ -463,19 +545,19 @@
                 <div class="form-container">
                     <div class="form-inner">
                         <span class="star">✦ {{ get_system_title() }}</span>
-                        <h2>Welcome to {{ get_system_title() }}</h2>
-                        <p class="form-subtitle">Welcome back, Please login in to your account</p>
+                        <h2>{{ __('Welcome to POSpro') }}</h2>
+                        <p class="form-subtitle">{{ __('Welcome back, Please login in to your account') }}</p>
                         
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             
                             <div class="form-group">
-                                <label for="email">User Name</label>
+                                <label for="email">{{ __('User Name') }}</label>
                                 <input type="email" id="email" name="email" class="form-control" placeholder="{{ __('User Name') }}" value="{{ old('email') }}">
                             </div>
                             
                             <div class="form-group">
-                                <label for="password">Password</label>
+                                <label for="password">{{ __('Password') }}</label>
                                 <input type="password" id="password" name="password" class="form-control" placeholder="{{ __('Password') }}">
                             </div>
                             

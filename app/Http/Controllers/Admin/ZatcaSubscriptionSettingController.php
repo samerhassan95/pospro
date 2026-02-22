@@ -87,12 +87,12 @@ class ZatcaSubscriptionSettingController extends Controller
                 $zatcaSettings['public_key'] = $onboardResult['public_key'];
                 $zatcaSettings['status'] = 'connected';
                 
-                $msg = 'ZATCA Connected Successfully!';
+                $msg = __('ZATCA Connected Successfully!');
             } catch (\Exception $e) {
-                return redirect()->back()->with('error', 'ZATCA Connection Failed: ' . $e->getMessage());
+                return redirect()->back()->with('error', __('ZATCA Connection Failed:') . ' ' . $e->getMessage());
             }
         } else {
-            $msg = 'Settings Saved.';
+            $msg = __('Settings Saved.');
         }
 
         $zatcaOption->value = $zatcaSettings;
@@ -107,7 +107,7 @@ class ZatcaSubscriptionSettingController extends Controller
         $zatcaOption = Option::where('key', 'superadmin_zatca_setting')->first();
         
         if (!$zatcaOption || empty($zatcaOption->value['csid'])) {
-            return response()->json(['success' => false, 'message' => 'Please connect to ZATCA first.']);
+            return response()->json(['success' => false, 'message' => __('Please connect to ZATCA first.')]);
         }
 
         try {
@@ -159,7 +159,7 @@ class ZatcaSubscriptionSettingController extends Controller
     public function getProductionCsid()
     {
         $zatcaOption = Option::where('key', 'superadmin_zatca_setting')->first();
-        if (!$zatcaOption) return redirect()->back()->with('error', 'Settings not found');
+        if (!$zatcaOption) return redirect()->back()->with('error', __('Settings not found'));
         
         $zatcaSettings = $zatcaOption->value;
         $zatcaService = new ZatcaService();
@@ -178,9 +178,9 @@ class ZatcaSubscriptionSettingController extends Controller
             $zatcaOption->value = $zatcaSettings;
             $zatcaOption->save();
 
-            return redirect()->back()->with('success', 'Production CSID Received! You are now LIVE.');
+            return redirect()->back()->with('success', __('Production CSID Received! You are now LIVE.'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', __('Failed:') . ' ' . $e->getMessage());
         }
     }
 }

@@ -1057,6 +1057,12 @@ font-size: 14px;
     stroke-width: 1.5 !important;
 }
 
+/* Font Awesome SVG icons use fill instead of stroke */
+.side-bar-manu li a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path {
+    fill: var(--clr-primary) !important;
+    stroke: none !important;
+}
+
 .side-bar-manu li a .sidebar-icon svg {
     color: var(--clr-primary) !important;
 }
@@ -12020,4 +12026,45 @@ grid-template-columns: 1fr; /* grid الحديث */
 /* Override FontAwesome shorthand for all icons */
 [class^="fa-"], [class*=" fa-"] {
     font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
+}
+
+/* Font Awesome SVG Icons Fix for Sidebar */
+/* Font Awesome SVG icons use fill instead of stroke */
+.side-bar-manu li a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path {
+    fill: var(--clr-primary) !important;
+    stroke: none !important;
+}
+
+/* Font Awesome SVG icons hover and active states */
+.side-bar-manu li.active > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path,
+.side-bar-manu li:hover > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path {
+    fill: #fff !important;
+    stroke: none !important;
+}
+
+/* Ensure Font Awesome SVG icons have proper color inheritance */
+.side-bar-manu li a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] {
+    color: var(--clr-primary) !important;
+}
+
+.side-bar-manu li.active > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"],
+.side-bar-manu li:hover > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] {
+    color: #fff !important;
+}
+/* Alternative Font Awesome SVG selector using viewBox */
+.side-bar-manu li a .sidebar-icon svg[viewBox*="512"] path,
+.side-bar-manu li a .sidebar-icon svg[viewBox*="640"] path,
+.side-bar-manu li a .sidebar-icon svg[viewBox*="448"] path {
+    fill: var(--clr-primary) !important;
+    stroke: none !important;
+}
+
+.side-bar-manu li.active > a .sidebar-icon svg[viewBox*="512"] path,
+.side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="512"] path,
+.side-bar-manu li.active > a .sidebar-icon svg[viewBox*="640"] path,
+.side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="640"] path,
+.side-bar-manu li.active > a .sidebar-icon svg[viewBox*="448"] path,
+.side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="448"] path {
+    fill: #fff !important;
+    stroke: none !important;
 }

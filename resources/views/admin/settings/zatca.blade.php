@@ -243,7 +243,7 @@
         function testCompliance(subId, btn) {
             const originalText = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __("Testing...") }}';
 
             fetch(`{{ url('admin/zatca-subscription-test') }}/${subId}`, {
                 method: 'POST',
@@ -258,9 +258,9 @@
                 btn.disabled = false;
                 
                 if (data.success) {
-                    toastr.success('Subscription Invoice is compliant!');
+                    toastr.success('{{ __("Subscription Invoice is compliant!") }}');
                 } else {
-                    let msg = data.message || 'Compliance check failed.';
+                    let msg = data.message || '{{ __("Compliance check failed.") }}';
                     if (data.body && data.body.validationResults) {
                         const errors = data.body.validationResults.errorMessages.map(e => e.message).join('\n');
                         msg += '\n\nErrors:\n' + errors;
@@ -272,7 +272,7 @@
             .catch(error => {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-                alert('An error occurred: ' + error.message);
+                alert('{{ __("An error occurred:") }} ' + error.message);
             });
         }
 

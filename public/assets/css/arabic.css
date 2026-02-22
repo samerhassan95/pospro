@@ -1562,3 +1562,64 @@ html[dir="rtl"] body .section-container.active,
 @media (min-width: 769px) {
     /* Desktop specific sidebar behavior only */
 }
+/* Font Awesome SVG Icons Fix for Sidebar - RTL */
+/* Font Awesome SVG icons use fill instead of stroke */
+[dir="rtl"] .side-bar-manu li a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path,
+html[dir="rtl"] body .side-bar-manu li a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path,
+html[dir="rtl"] body.rtl .side-bar-manu li a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path {
+    fill: var(--clr-primary) !important;
+    stroke: none !important;
+}
+
+/* Font Awesome SVG icons hover and active states - RTL */
+[dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path,
+[dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path,
+html[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path,
+html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path,
+html[dir="rtl"] body.rtl .side-bar-manu li.active > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path,
+html[dir="rtl"] body.rtl .side-bar-manu li:hover > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] path {
+    fill: #fff !important;
+    stroke: none !important;
+}
+
+/* Ensure Font Awesome SVG icons have proper color inheritance - RTL */
+[dir="rtl"] .side-bar-manu li a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"],
+html[dir="rtl"] body .side-bar-manu li a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"],
+html[dir="rtl"] body.rtl .side-bar-manu li a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] {
+    color: var(--clr-primary) !important;
+}
+
+[dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"],
+[dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"],
+html[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"],
+html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"],
+html[dir="rtl"] body.rtl .side-bar-manu li.active > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"],
+html[dir="rtl"] body.rtl .side-bar-manu li:hover > a .sidebar-icon svg[xmlns="http://www.w3.org/2000/svg"] {
+    color: #fff !important;
+}
+/* Alternative Font Awesome SVG selector using viewBox - RTL */
+[dir="rtl"] .side-bar-manu li a .sidebar-icon svg[viewBox*="512"] path,
+[dir="rtl"] .side-bar-manu li a .sidebar-icon svg[viewBox*="640"] path,
+[dir="rtl"] .side-bar-manu li a .sidebar-icon svg[viewBox*="448"] path,
+html[dir="rtl"] body .side-bar-manu li a .sidebar-icon svg[viewBox*="512"] path,
+html[dir="rtl"] body .side-bar-manu li a .sidebar-icon svg[viewBox*="640"] path,
+html[dir="rtl"] body .side-bar-manu li a .sidebar-icon svg[viewBox*="448"] path {
+    fill: var(--clr-primary) !important;
+    stroke: none !important;
+}
+
+[dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg[viewBox*="512"] path,
+[dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="512"] path,
+[dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg[viewBox*="640"] path,
+[dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="640"] path,
+[dir="rtl"] .side-bar-manu li.active > a .sidebar-icon svg[viewBox*="448"] path,
+[dir="rtl"] .side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="448"] path,
+html[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon svg[viewBox*="512"] path,
+html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="512"] path,
+html[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon svg[viewBox*="640"] path,
+html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="640"] path,
+html[dir="rtl"] body .side-bar-manu li.active > a .sidebar-icon svg[viewBox*="448"] path,
+html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="448"] path {
+    fill: #fff !important;
+    stroke: none !important;
+}

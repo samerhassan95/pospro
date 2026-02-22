@@ -47,7 +47,6 @@ class LanguageSeeder extends Seeder
             array('name' => 'Polish','icon' => 'uploads/24/04/1713264358-886.png','status' => '1','created_at' => '2024-04-16 16:45:58','updated_at' => '2024-04-16 16:45:58'),
             array('name' => 'Bengali','icon' => 'uploads/24/04/1713264388-157.png','status' => '1','created_at' => '2024-04-16 16:46:28','updated_at' => '2024-04-16 16:46:28'),
             array('name' => 'Portuguese','icon' => 'uploads/24/04/1713264423-206.png','status' => '1','created_at' => '2024-04-16 16:47:03','updated_at' => '2024-04-16 16:47:03'),
-            array('name' => 'Hebrew','icon' => 'uploads/24/04/1713264450-677.png','status' => '1','created_at' => '2024-04-16 16:47:30','updated_at' => '2024-04-16 16:47:30'),
             array('name' => 'Dutch','icon' => 'uploads/24/04/1713264476-832.png','status' => '1','created_at' => '2024-04-16 16:47:56','updated_at' => '2024-04-16 16:47:56'),
             array('name' => 'Bosnian','icon' => 'uploads/24/04/1713264505-83.png','status' => '1','created_at' => '2024-04-16 16:48:25','updated_at' => '2024-04-16 16:48:25'),
             array('name' => 'Thai','icon' => 'uploads/24/04/1713264534-163.png','status' => '1','created_at' => '2024-04-16 16:48:54','updated_at' => '2024-04-16 16:48:54'),
