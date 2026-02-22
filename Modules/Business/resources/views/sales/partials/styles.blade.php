@@ -876,4 +876,9 @@
         .view-section[style*="display: none"] {
             display: none !important;
         }
+
+        /* Specific height for scan table container */
+        .pos-products-section.scan-table-container {
+            height: 1005px !important;
+        }
     </style>
