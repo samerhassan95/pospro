@@ -247,10 +247,12 @@
         
         .plan-features li i.fa-check-circle {
             color: #4CAF50;
+            font-family: "Font Awesome 6 Free" !important;
         }
         
         .plan-features li i.fa-times-circle {
             color: #FF5252;
+            font-family: "Font Awesome 6 Free" !important;
         }
         
         .plan-btn {

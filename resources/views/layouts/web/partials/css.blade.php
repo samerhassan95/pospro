@@ -88,5 +88,15 @@
 [class^="fa-"], [class*=" fa-"] {
     font-family: "Font Awesome 5 Pro", "Font Awesome 6 Free", "FontAwesome" !important;
 }
+
+/* Specific override for fa-check-circle */
+.fa-check-circle, .fas.fa-check-circle {
+    font-family: "Font Awesome 6 Free" !important;
+}
+
+/* Specific override for fa-times-circle */
+.fa-times-circle, .fas.fa-times-circle {
+    font-family: "Font Awesome 6 Free" !important;
+}
 </style>
 <!-- Debug: Primary={{ get_primary_color() }}, Secondary={{ get_secondary_color() }} -->

@@ -59,7 +59,7 @@ class AcnooPaymentTypeController extends Controller
         ]);
 
         return response()->json([
-            'message' => __('Payemnt Type created cuccessfully'),
+            'message' => __('Payment Type created successfully'),
             'redirect' => route('business.payment-types.index'),
         ]);
     }
@@ -78,7 +78,7 @@ class AcnooPaymentTypeController extends Controller
         ]);
 
         return response()->json([
-            'message' => __('Payemnt Type updated successfully'),
+            'message' => __('Payment Type updated successfully'),
             'redirect' => route('business.payment-types.index'),
         ]);
     }
@@ -90,7 +90,7 @@ class AcnooPaymentTypeController extends Controller
         $paymentType->delete();
 
         return response()->json([
-            'message' => __('Payemnt Type deleted successfully'),
+            'message' => __('Payment Type deleted successfully'),
             'redirect' => route('business.payment-types.index')
         ]);
     }
@@ -99,7 +99,7 @@ class AcnooPaymentTypeController extends Controller
     {
         $paymentType = PaymentType::findOrFail($id);
         $paymentType->update(['status' => $request->status]);
-        return response()->json(['message' => __('Payemnt Type')]);
+        return response()->json(['message' => __('Payment Type status updated')]);
     }
 
     public function deleteAll(Request $request)
@@ -107,7 +107,7 @@ class AcnooPaymentTypeController extends Controller
         $idsToDelete = $request->input('ids');
         PaymentType::whereIn('id', $idsToDelete)->delete();
         return response()->json([
-            'message' => __('Selected Payemnt Type deleted successfully'),
+            'message' => __('Selected Payment Types deleted successfully'),
             'redirect' => route('business.payment-types.index')
         ]);
     }

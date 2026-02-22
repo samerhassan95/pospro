@@ -10,14 +10,35 @@
             <div class="card">
                 <div class="card-bodys">
                     <div class="table-header p-16">
-                        <h4>{{ __('Party Profit & Loss') }}</h4>
-                        <div class="d-flex gap-2">
-                            <button onclick="window.print()" class="add-order-btn rounded-2">
-                                <i class="fas fa-print me-1"></i> {{ __('Print') }}
-                            </button>
-                            <div class="search-box">
-                                <input type="text" id="searchInput" class="form-control" placeholder="{{ __('Search parties...') }}">
-                                <i class="fas fa-search"></i>
+                        <div>
+                            <h4>{{ __('Party Profit & Loss') }}</h4>
+                            <small class="text-muted d-block">{{ __('View profit and loss analysis for all parties.') }}</small>
+                        </div>
+                        <button onclick="window.print()" class="add-order-btn rounded-2">
+                            <i class="fas fa-print me-1"></i> {{ __('Print') }}
+                        </button>
+                    </div>
+
+                    <div class="table-top-form p-16-0">
+                        <div class="table-top-left d-flex gap-3 margin-l-16">
+                            <div class="gpt-up-down-arrow position-relative">
+                                <select id="perPageSelect" class="form-control">
+                                    <option value="10" selected>{{ __('Show- 10') }}</option>
+                                    <option value="25">{{ __('Show- 25') }}</option>
+                                    <option value="50">{{ __('Show- 50') }}</option>
+                                    <option value="100">{{ __('Show- 100') }}</option>
+                                </select>
+                                <span></span>
+                            </div>
+                            <div class="table-search position-relative">
+                                <input type="text" id="searchInput" class="form-control"
+                                    placeholder="{{ __('Search...') }}">
+                                <span class="position-absolute">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M14.582 14.582L18.332 18.332" stroke="#4D4D4D" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M16.668 9.16797C16.668 5.02584 13.3101 1.66797 9.16797 1.66797C5.02584 1.66797 1.66797 5.02584 1.66797 9.16797C1.66797 13.3101 5.02584 16.668 9.16797 16.668C13.3101 16.668 16.668 13.3101 16.668 9.16797Z" stroke="#4D4D4D" stroke-width="1.25" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -65,23 +86,23 @@
                                             <i class="fas fa-{{ ($party->profit_loss ?? 0) >= 0 ? 'arrow-up' : 'arrow-down' }} me-1"></i>
                                             {{ currency_format($party->profit_loss ?? 0) }}
                                         </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                                    {{ __('Action') }}
+                                        <td class="d-print-none">
+                                            <div class="dropdown table-action">
+                                                <button type="button" data-bs-toggle="dropdown">
+                                                    <i class="far fa-ellipsis-v"></i>
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     @if($party->type == 'Customer')
                                                         <li><a class="dropdown-item" href="{{ route('business.customer-ledger.show', $party->id) }}">
-                                                            <i class="fas fa-book me-2"></i>{{ __('View Ledger') }}
+                                                            <i class="fal fa-book"></i>{{ __('View Ledger') }}
                                                         </a></li>
                                                     @else
                                                         <li><a class="dropdown-item" href="{{ route('business.supplier-ledger.show', $party->id) }}">
-                                                            <i class="fas fa-book me-2"></i>{{ __('View Ledger') }}
+                                                            <i class="fal fa-book"></i>{{ __('View Ledger') }}
                                                         </a></li>
                                                     @endif
                                                     <li><a class="dropdown-item" href="{{ route('business.parties.edit', $party->id) }}">
-                                                        <i class="fas fa-eye me-2"></i>{{ __('View Details') }}
+                                                        <i class="fal fa-eye"></i>{{ __('View Details') }}
                                                     </a></li>
                                                 </ul>
                                             </div>
@@ -106,25 +127,70 @@
                 <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const searchInput = document.getElementById('searchInput');
+                    const perPageSelect = document.getElementById('perPageSelect');
                     const table = document.getElementById('partiesTable');
-                    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+                    const tbody = table.getElementsByTagName('tbody')[0];
+                    const rows = Array.from(tbody.getElementsByTagName('tr'));
+                    let currentPage = 1;
+                    let itemsPerPage = 10;
 
+                    // Search functionality
                     searchInput.addEventListener('keyup', function() {
                         const filter = this.value.toLowerCase();
                         
-                        for (let i = 0; i < rows.length; i++) {
-                            const row = rows[i];
-                            const name = row.cells[1].textContent.toLowerCase();
-                            const phone = row.cells[3].textContent.toLowerCase();
-                            const type = row.cells[2].textContent.toLowerCase();
-                            
-                            if (name.includes(filter) || phone.includes(filter) || type.includes(filter)) {
-                                row.style.display = '';
-                            } else {
-                                row.style.display = 'none';
+                        rows.forEach(row => {
+                            if (row.cells.length > 1) { // Skip empty state row
+                                const name = row.cells[1].textContent.toLowerCase();
+                                const phone = row.cells[3].textContent.toLowerCase();
+                                const type = row.cells[2].textContent.toLowerCase();
+                                
+                                if (name.includes(filter) || phone.includes(filter) || type.includes(filter)) {
+                                    row.style.display = '';
+                                } else {
+                                    row.style.display = 'none';
+                                }
                             }
-                        }
+                        });
+                        
+                        updatePagination();
                     });
+
+                    // Per page functionality
+                    perPageSelect.addEventListener('change', function() {
+                        itemsPerPage = parseInt(this.value);
+                        currentPage = 1;
+                        updatePagination();
+                    });
+
+                    function updatePagination() {
+                        const visibleRows = rows.filter(row => 
+                            row.style.display !== 'none' && row.cells.length > 1
+                        );
+                        
+                        const totalItems = visibleRows.length;
+                        const totalPages = Math.ceil(totalItems / itemsPerPage);
+                        
+                        // Hide all rows first
+                        visibleRows.forEach(row => row.style.display = 'none');
+                        
+                        // Show rows for current page
+                        const startIndex = (currentPage - 1) * itemsPerPage;
+                        const endIndex = startIndex + itemsPerPage;
+                        
+                        visibleRows.slice(startIndex, endIndex).forEach(row => {
+                            row.style.display = '';
+                        });
+                        
+                        // Update row numbers
+                        visibleRows.slice(startIndex, endIndex).forEach((row, index) => {
+                            if (row.cells[0]) {
+                                row.cells[0].textContent = startIndex + index + 1;
+                            }
+                        });
+                    }
+
+                    // Initialize pagination
+                    updatePagination();
                 });
                 </script>
             </div>

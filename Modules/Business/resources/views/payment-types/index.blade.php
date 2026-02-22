@@ -11,10 +11,13 @@
                 <div class="card-bodys">
 
                     <div class="table-header p-16">
-                        <h4>{{ __('Payment Type List') }}</h4>
+                        <div>
+                            <h4>{{ __('Payment Type List') }}</h4>
+                            <small class="text-muted d-block">{{ __('Manage payment method for purchase.') }}</small>
+                        </div>
                         @usercan('payment-types.create')
                         <a type="button" href="#payment-types-create-modal" data-bs-toggle="modal"
-                            class="add-order-btn rounded-2"><i class="fas fa-plus-circle me-1"></i>{{ __('Add Payemnt Type') }}</a>
+                            class="add-order-btn rounded-2"><i class="fas fa-plus-circle me-1"></i>{{ __('Add Payment Type') }}</a>
                         @endusercan
                     </div>
 

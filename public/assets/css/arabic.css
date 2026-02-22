@@ -96,9 +96,9 @@ a {
 }
 
 /* RTL - Flip ALL SVG elements globally */
-[dir="rtl"] svg {
+/* [dir="rtl"] svg {
     transform: scaleX(-1) !important;
-}
+} */
 
 /* RTL - Except for specific icons that shouldn't flip */
 [dir="rtl"] .sidebar-icon svg,

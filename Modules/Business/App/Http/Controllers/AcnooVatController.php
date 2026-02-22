@@ -115,12 +115,12 @@ class AcnooVatController extends Controller
 
         } else {
             return response()->json([
-                'message' => 'Invalid data format.',
+                'message' => __('Invalid data format.'),
             ], 406);
         }
 
         return response()->json([
-            'message' => 'Vat created successfully',
+            'message' => __('Vat created successfully'),
             'redirect' => route('business.vats.index'),
         ]);
     }
@@ -192,14 +192,14 @@ class AcnooVatController extends Controller
             } else {
                 DB::rollBack();
                 return response()->json([
-                    'message' => 'Invalid data format.',
+                    'message' => __('Invalid data format.'),
                 ], 406);
             }
 
             DB::commit();
 
             return response()->json([
-                'message' => 'Vat updated successfully',
+                'message' => __('Vat updated successfully'),
                 'redirect' => route('business.vats.index'),
             ]);
         } catch (\Exception $e) {
@@ -217,7 +217,7 @@ class AcnooVatController extends Controller
 
             if ($vatGroupExist) {
                 return response()->json([
-                    'message' => 'Cannot delete. This VAT is part of a VAT group.',
+                    'message' => __('Cannot delete. This VAT is part of a VAT group.'),
                 ], 404);
             }
         }
@@ -225,7 +225,7 @@ class AcnooVatController extends Controller
         $vat->delete();
 
         return response()->json([
-            'message' => 'VAT Deleted Successfully',
+            'message' => __('VAT Deleted Successfully'),
             'redirect' => route('business.vats.index'),
         ]);
     }
@@ -251,7 +251,7 @@ class AcnooVatController extends Controller
         // If there are restricted VATs
         if ($restrictedVats->isNotEmpty()) {
             return response()->json([
-                'message' => 'Some VATs cannot be deleted as they are part of a VAT group.',
+                'message' => __('Some VATs cannot be deleted as they are part of a VAT group.'),
             ], 404);
         }
 

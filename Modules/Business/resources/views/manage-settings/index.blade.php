@@ -20,46 +20,46 @@
                         <li class="nav-item settings-item" role="presentation">
                             <button class="nav-link settings-link active" id="all-tab" data-bs-toggle="tab"
                                 data-bs-target="#all" type="button" role="tab">
-                                All Settings
+                                {{ __('All Settings') }}
                             </button>
                         </li>
 
                         <li class="nav-item settings-item" role="presentation">
                             <button class="nav-link settings-link" id="general-tab" data-bs-toggle="tab"
                                 data-bs-target="#general" type="button" role="tab">
-                                General
+                                {{ __('General') }}
                             </button>
                         </li>
 
                         <li class="nav-item settings-item" role="presentation">
                             <button class="nav-link settings-link" id="product-tab" data-bs-toggle="tab"
                                 data-bs-target="#product" type="button" role="tab">
-                                Product
+                                {{ __('Product') }}
                             </button>
                         </li>
 
                         <li class="nav-item settings-item" role="presentation">
                             <button class="nav-link settings-link" id="invoice-tab" data-bs-toggle="tab"
                                 data-bs-target="#invoice" type="button" role="tab">
-                                Invoice Print
+                                {{ __('Invoice Print') }}
                             </button>
                         </li>
                         <li class="nav-item settings-item" role="presentation">
                             <button class="nav-link settings-link" id="role-tab" data-bs-toggle="tab"
                                 data-bs-target="#role" type="button" role="tab">
-                                Role & Permission
+                                {{ __('Role & Permission') }}
                             </button>
                         </li>
                         <li class="nav-item settings-item" role="presentation">
-                            <button class="nav-link settings-link" id="role-tab" data-bs-toggle="tab"
+                            <button class="nav-link settings-link" id="currencies-tab" data-bs-toggle="tab"
                                 data-bs-target="#Currencies" type="button" role="tab">
-                                Currencies
+                                {{ __('Currencies') }}
                             </button>
                         </li>
                         <li class="nav-item settings-item" role="presentation">
-                            <button class="nav-link settings-link" id="role-tab" data-bs-toggle="tab"
+                            <button class="nav-link settings-link" id="payment-tab" data-bs-toggle="tab"
                                 data-bs-target="#Payment" type="button" role="tab">
-                                Payment Type
+                                {{ __('Payment Type') }}
                             </button>
                         </li>
                     </ul>
@@ -84,9 +84,8 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <h6>General Settings</h6>
-                                                    <small class="text-muted d-block">Configure the fundamental information
-                                                        of the site.</small>
+                                                    <h6>{{ __('General Settings') }}</h6>
+                                                    <small class="text-muted d-block">{{ __('Configure the fundamental information of the site.') }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -115,9 +114,8 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <h6>Notifications</h6>
-                                                    <small class="text-muted d-block">Control and configure overall
-                                                        notification systems</small>
+                                                    <h6>{{ __('Notifications') }}</h6>
+                                                    <small class="text-muted d-block">{{ __('Control and configure overall notification systems') }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -141,9 +139,8 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <h6>Currencies</h6>
-                                                    <small class="text-muted d-block">View and update currency
-                                                        settings</small>
+                                                    <h6>{{ __('Currencies') }}</h6>
+                                                    <small class="text-muted d-block">{{ __('View and update currency settings') }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -170,9 +167,8 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <h6>User Role</h6>
-                                                    <small class="text-muted d-block">Add new users, Provide role and
-                                                        Permission</small>
+                                                    <h6>{{ __('User Role') }}</h6>
+                                                    <small class="text-muted d-block">{{ __('Add new users, Provide role and Permission') }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -202,9 +198,8 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <h6>Payment Type</h6>
-                                                    <small class="text-muted d-block">Manage payment method for
-                                                        purchase.</small>
+                                                    <h6>{{ __('Payment Type') }}</h6>
+                                                    <small class="text-muted d-block">{{ __('Manage payment method for purchase.') }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,7 +214,7 @@
                                 <div>
                                     <a href="{{ route('business.settings.index') }}"
                                         class="text-decoration-none text-dark">
-                                        <div class=" setting-box">
+                                        <div class="setting-box">
                                             <div class="d-flex align-items-center jusitfy-content-center gap-3">
                                                 <div class="settings-icon">
                                                     <svg width="24" height="24" viewBox="0 0 24 24"
@@ -233,9 +228,8 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <h6>General Settings</h6>
-                                                    <small class="text-muted d-block">Configure the fundamental information
-                                                        of the site.</small>
+                                                    <h6>{{ __('General Settings') }}</h6>
+                                                    <small class="text-muted d-block">{{ __('Configure the fundamental information of the site.') }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -281,7 +275,7 @@
                                                 <input id="product_price" class="delete-checkbox-item  multi-delete" type="checkbox" name="show_product_price" value="1"
                                                     {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_product_price'] ?? false) ? 'checked' : '' }}>
                                                 <label for="product_price">
-                                                    Product Price
+                                                    {{ __('Product Price') }}
                                                 </label>
                                             </div>
 
@@ -289,7 +283,7 @@
                                                 <input type="hidden" name="show_product_code" value="0">
                                                 <input id="product_code" class="delete-checkbox-item multi-delete" type="checkbox" name="show_product_code" value="1"
                                                     {{ optional($product_setting?->modules)['show_product_code'] === "1" ? 'checked' : '' }}>
-                                                <label for="product_code">Product Code</label>
+                                                <label for="product_code">{{ __('Product Code') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -297,7 +291,7 @@
                                                 <input id="stock" class="delete-checkbox-item multi-delete"
                                                     type="checkbox" name="show_product_stock" value="1"
                                                     {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_product_stock'] ?? false) ? 'checked' : '' }}>
-                                                <label for="stock">Product Stock</label>
+                                                <label for="stock">{{ __('Product Stock') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -305,7 +299,7 @@
                                                 <input id="unit" class="delete-checkbox-item multi-delete"
                                                     type="checkbox" name="show_product_unit" value="1"
                                                     {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_product_unit'] ?? false) ? 'checked' : '' }}>
-                                                <label for="unit">Product Unit</label>
+                                                <label for="unit">{{ __('Product Unit') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -313,7 +307,7 @@
                                                 <input id="brand" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_product_brand" value="1"
                                                     {{ optional($product_setting?->modules)['show_product_brand'] === "1" ? 'checked' : '' }}>
-                                                <label for="brand">Product Brand</label>
+                                                <label for="brand">{{ __('Product Brand') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -321,7 +315,7 @@
                                                 <input id="model" type="checkbox" class="delete-checkbox-item multi-delete"
                                                        name="show_model_no" value="1"
                                                     {{ optional($product_setting?->modules)['show_model_no'] === "1" ? 'checked' : '' }}>
-                                                <label for="model">Model No</label>
+                                                <label for="model">{{ __('Model No') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -329,7 +323,7 @@
                                                 <input id="category" class="delete-checkbox-item multi-delete"
                                                     type="checkbox" name="show_product_category" value="1"
                                                     {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_product_category'] ?? false) ? 'checked' : '' }}>
-                                                <label for="category">Product Category</label>
+                                                <label for="category">{{ __('Product Category') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -337,7 +331,7 @@
                                                 <input id="manufacturer" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_product_manufacturer" value="1"
                                                     {{ optional($product_setting?->modules)['show_product_manufacturer'] === "1" ? 'checked' : '' }}>
-                                                <label for="manufacturer">Product Manufacturer</label>
+                                                <label for="manufacturer">{{ __('Product Manufacturer') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -345,7 +339,7 @@
                                                 <input id="image" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_product_image" value="1"
                                                     {{ optional($product_setting?->modules)['show_product_image'] === "1" ? 'checked' : '' }}>
-                                                <label for="image">Product Image</label>
+                                                <label for="image">{{ __('Product Image') }}</label>
                                             </div>
 
 
@@ -354,7 +348,7 @@
                                                 <input id="quantity" class="delete-checkbox-item multi-delete"
                                                     type="checkbox" name="show_alert_qty" value="1"
                                                     {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_alert_qty'] ?? false) ? 'checked' : '' }}>
-                                                <label for="quantity">Low Stock Alert</label>
+                                                <label for="quantity">{{ __('Low Stock Alert') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -362,7 +356,7 @@
                                                 <input id="vat" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_vat_id" value="1"
                                                     {{ optional($product_setting?->modules)['show_vat_id'] === "1" ? 'checked' : '' }}>
-                                                <label for="vat">VAT ID</label>
+                                                <label for="vat">{{ __('VAT ID') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -370,7 +364,7 @@
                                                 <input id="type" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_vat_type" value="1"
                                                     {{ optional($product_setting?->modules)['show_vat_type'] === "1" ? 'checked' : '' }}>
-                                                <label for="type">VAT Type</label>
+                                                <label for="type">{{ __('VAT Type') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -378,7 +372,7 @@
                                                 <input id="exclusive" class="delete-checkbox-item multi-delete"
                                                     type="checkbox" name="show_exclusive_price" value="1"
                                                     {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_exclusive_price'] ?? false) ? 'checked' : '' }}>
-                                                <label for="exclusive">Exclusive Price</label>
+                                                <label for="exclusive">{{ __('Exclusive Price') }}</label>
                                             </div>
 
 
@@ -387,7 +381,7 @@
                                                 <input id="inclusive" class="delete-checkbox-item multi-delete"
                                                     type="checkbox" name="show_inclusive_price" value="1"
                                                     {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_inclusive_price'] ?? false) ? 'checked' : '' }}>
-                                                <label for="inclusive">Inclusive Price</label>
+                                                <label for="inclusive">{{ __('Inclusive Price') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -395,7 +389,7 @@
                                                 <input id="percent" class="delete-checkbox-item multi-delete"
                                                     type="checkbox" name="show_profit_percent" value="1"
                                                     {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_profit_percent'] ?? false) ? 'checked' : '' }}>
-                                                <label for="percent">Profit Percent</label>
+                                                <label for="percent">{{ __('Profit Percent') }}</label>
                                             </div>
 
 
@@ -406,7 +400,7 @@
                                                 <input id="warehouse" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_warehouse" value="1"
                                                     {{ optional($product_setting?->modules)['show_warehouse'] === "1" ? 'checked' : '' }}>
-                                                <label for="warehouse">Warehouse</label>
+                                                <label for="warehouse">{{ __('Warehouse') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -414,7 +408,7 @@
                                                 <input id="rack" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_rack" value="1"
                                                     {{ optional($product_setting?->modules)['show_rack'] === "1" ? 'checked' : '' }}>
-                                                <label for="rack">Rack</label>
+                                                <label for="rack">{{ __('Rack') }}</label>
                                             </div>
 
 
@@ -423,7 +417,7 @@
                                                 <input id="shelf" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_shelf" value="1"
                                                     {{ optional($product_setting?->modules)['show_shelf'] === "1" ? 'checked' : '' }}>
-                                                <label for="shelf">Shelf</label>
+                                                <label for="shelf">{{ __('Shelf') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -431,7 +425,7 @@
                                                 <input id="show_action" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_action" value="1"
                                                     {{ optional($product_setting?->modules)['show_action'] === "1" ? 'checked' : '' }}>
-                                                <label for="show_action">Action</label>
+                                                <label for="show_action">{{ __('Action') }}</label>
                                             </div>
 
                                             <div class="d-flex align-items-center mb-3">
@@ -439,7 +433,7 @@
                                                 <input id="show_weight" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_weight" value="1"
                                                     {{ optional($product_setting?->modules)['show_weight'] === "1" ? 'checked' : '' }}>
-                                                <label for="show_weight">Weight</label>
+                                                <label for="show_weight">{{ __('Weight') }}</label>
                                             </div>
 
                                         </div>
@@ -468,7 +462,7 @@
                                                         class="delete-checkbox-item multi-delete"
                                                         name="show_product_sale_price" value="1"
                                                         {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_product_sale_price'] ?? false) ? 'checked' : '' }}>
-                                                    <label for="mrp">MRP</label>
+                                                    <label for="mrp">{{ __('MRP') }}</label>
                                                 </div>
 
                                                 <input type="number" class="form-control additional-input-field"
@@ -486,7 +480,7 @@
                                                            class="delete-checkbox-item multi-delete"
                                                            name="show_product_wholesale_price" value="1"
                                                         {{ optional($product_setting?->modules)['show_product_wholesale_price'] === "1" ? 'checked' : '' }}>
-                                                    <label for="wholesale">Wholesale Price</label>
+                                                    <label for="wholesale">{{ __('Wholesale Price') }}</label>
                                                 </div>
 
                                                 <input type="number" class="form-control additional-input-field"
@@ -503,7 +497,7 @@
                                                            class="delete-checkbox-item multi-delete"
                                                            name="show_product_dealer_price" value="1"
                                                         {{ optional($product_setting?->modules)['show_product_dealer_price'] === "1" ? 'checked' : '' }}>
-                                                    <label for="dealer">Dealer Price</label>
+                                                    <label for="dealer">{{ __('Dealer Price') }}</label>
                                                 </div>
                                                 <input type="number" class="form-control additional-input-field"
                                                     name="default_dealer_price"
@@ -521,7 +515,7 @@
                                                            class="delete-checkbox-item multi-delete"
                                                            name="show_batch_no" value="1"
                                                         {{ optional($product_setting?->modules)['show_batch_no'] === "1" ? 'checked' : '' }}>
-                                                    <label for="batch">Batch No</label>
+                                                    <label for="batch">{{ __('Batch No') }}</label>
                                                 </div>
                                                 <input type="text" class="form-control additional-input-field"
                                                     name="default_batch_no"
@@ -537,19 +531,19 @@
                                                            class="delete-checkbox-item multi-delete"
                                                            name="show_expire_date" value="1"
                                                         {{ optional($product_setting?->modules)['show_expire_date'] === "1" ? 'checked' : '' }}>
-                                                    <label for="expiry">Expiry Date</label>
+                                                    <label for="expiry">{{ __('Expiry Date') }}</label>
                                                 </div>
 
                                                 <div>
                                                     <select class="form-select date-type-selector" data-target="expired"
                                                         name="expire_date_type">
-                                                        <option value="">Select</option>
+                                                        <option value="">{{ __('Select') }}</option>
                                                         <option value="dmy"
                                                             {{ optional($product_setting->modules ?? null)['expire_date_type'] == 'dmy' ? 'selected' : '' }}>
-                                                            Day / Month / Year</option>
+                                                            {{ __('Day / Month / Year') }}</option>
                                                         <option value="my"
                                                             {{ optional($product_setting->modules ?? null)['expire_date_type'] == 'my' ? 'selected' : '' }}>
-                                                            Month / Year
+                                                            {{ __('Month / Year') }}
                                                         </option>
                                                     </select>
                                                 </div>
@@ -577,20 +571,20 @@
                                                            class="delete-checkbox-item multi-delete"
                                                            name="show_mfg_date" value="1"
                                                         {{ optional($product_setting?->modules)['show_mfg_date'] === "1" ? 'checked' : '' }}>
-                                                    <label for="mfg">Mfg Date</label>
+                                                    <label for="mfg">{{ __('Mfg Date') }}</label>
                                                 </div>
 
                                                 <div>
                                                     <select class="form-select date-type-selector" data-target="mfg"
                                                         name="mfg_date_type">
-                                                        <option value="">Select</option>
+                                                        <option value="">{{ __('Select') }}</option>
                                                         <option value="dmy"
                                                             {{ optional($product_setting->modules ?? null)['mfg_date_type'] == 'dmy' ? 'selected' : '' }}>
-                                                            Day / Month / Year
+                                                            {{ __('Day / Month / Year') }}
                                                         </option>
                                                         <option value="my"
                                                             {{ optional($product_setting->modules ?? null)['mfg_date_type'] == 'my' ? 'selected' : '' }}>
-                                                            Month / Year
+                                                            {{ __('Month / Year') }}
                                                         </option>
                                                     </select>
                                                 </div>
@@ -618,7 +612,7 @@
                                                     type="checkbox" name="show_product_type_single" value="1"
                                                     {{ is_null($product_setting) || is_null($product_setting->modules) || (optional($product_setting->modules)['show_product_type_single'] ?? false) ? 'checked' : '' }}>
                                                 <label for="single">
-                                                    Single
+                                                    {{ __('Single') }}
                                                 </label>
                                             </div>
 
@@ -627,7 +621,7 @@
                                                 <input id="variant" class="delete-checkbox-item multi-delete"
                                                        type="checkbox" name="show_product_type_variant" value="1"
                                                     {{ optional($product_setting?->modules)['show_product_type_variant'] === "1" ? 'checked' : '' }}>
-                                                <label for="variant">Batch</label>
+                                                <label for="variant">{{ __('Batch') }}</label>
                                             </div>
 
                                         </div>
@@ -738,9 +732,8 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <h6>User Role</h6>
-                                                    <small class="text-muted d-block">Add new users, Provide role and
-                                                        Permission</small>
+                                                    <h6>{{ __('User Role') }}</h6>
+                                                    <small class="text-muted d-block">{{ __('Add new users, Provide role and Permission') }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -767,9 +760,8 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <h6>Currencies</h6>
-                                                    <small class="text-muted d-block">View and update currency
-                                                        settings</small>
+                                                    <h6>{{ __('Currencies') }}</h6>
+                                                    <small class="text-muted d-block">{{ __('View and update currency settings') }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -802,9 +794,8 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <h6>Payment Type</h6>
-                                                    <small class="text-muted d-block">Manage payment method for
-                                                        purchase.</small>
+                                                    <h6>{{ __('Payment Type') }}</h6>
+                                                    <small class="text-muted d-block">{{ __('Manage payment method for purchase.') }}</small>
                                                 </div>
                                             </div>
                                         </div>

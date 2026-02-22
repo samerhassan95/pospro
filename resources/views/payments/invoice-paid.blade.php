@@ -34,6 +34,12 @@
             margin-bottom: 1rem;
             animation: bounce 2s infinite;
         }
+        .success-icon i.fa-check-circle {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+        .success-icon i.fa-times-circle {
+            font-family: "Font Awesome 6 Free" !important;
+        }
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {
                 transform: translateY(0);

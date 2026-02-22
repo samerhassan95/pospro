@@ -18,6 +18,7 @@
         .status-badge { padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.875rem; font-weight: 600; }
         .status-paid { background: #d1e7dd; color: #0f5132; }
         .status-unpaid { background: #f8d7da; color: #842029; }
+        .fa-check-circle, .fa-times-circle { font-family: "Font Awesome 6 Free" !important; }
         @media print { .no-print { display: none; } .invoice-card { margin: 0; box-shadow: none; } }
     </style>
 </head>

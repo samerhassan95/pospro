@@ -63,7 +63,7 @@ class AcnooPartyReportController extends Controller
 
         $purchases = Purchase::where('business_id', auth()->user()->business_id)
             ->where('party_id', $id)
-            ->with('purchaseDetails')
+            ->with('details')
             ->orderBy('created_at', 'desc')
             ->get();
 

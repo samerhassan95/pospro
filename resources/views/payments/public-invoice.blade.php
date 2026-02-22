@@ -16,6 +16,7 @@
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        .fa-check-circle, .fa-times-circle { font-family: "Font Awesome 6 Free" !important; }
         .invoice-container {
             max-width: 800px;
             margin: 2rem auto;
