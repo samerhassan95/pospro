@@ -13,7 +13,7 @@
     </div>
 
     <!-- Table Icon -->
-    <button type="button" class="pos-nav-btn pos-view-btn" data-view="tables" title="{{ __('Tables') }}">
+    <button type="button" class="pos-nav-btn pos-view-btn d-none" data-view="tables" title="{{ __('Tables') }}">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_281_3618)">
                 <path d="M18.7595 5.99997L20.7595 9.99997H3.23951L5.23951 5.99997H18.7595ZM19.9995 3.99997H3.99951L0.999512 9.99997V12H2.99951V19H4.99951V16H18.9995V19H20.9995V12H22.9995V9.99997L19.9995 3.99997ZM4.99951 14V12H18.9995V14H4.99951Z" fill="black"/>

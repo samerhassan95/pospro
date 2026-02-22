@@ -365,13 +365,17 @@ function calTotalAmount() {
 
     $("#sub_total").text(currencyFormat(subtotal));
 
-    // VAT
+    // Fixed VAT 15%
+    let vat_amount = subtotal * 0.15;
+    $("#vat_amount").text(currencyFormat(vat_amount));
+
+    // VAT (existing dynamic VAT - keep for compatibility)
     let vat_rate =
         parseFloat($(".vat_select option:selected").data("rate")) || 0;
-    let vat_amount = (subtotal * vat_rate) / 100;
-    $("#vat_amount").val(vat_amount.toFixed(2));
+    let dynamic_vat_amount = (subtotal * vat_rate) / 100;
+    $("#vat_amount").val(dynamic_vat_amount.toFixed(2));
 
-    // Subtotal with VAT
+    // Subtotal with VAT (use fixed 15% VAT)
     let subtotal_with_vat = subtotal + vat_amount;
 
     // Discount
@@ -420,6 +424,9 @@ function calTotalAmount() {
     let due_amount =
         total_amount > receive_amount ? total_amount - receive_amount : 0;
     $("#due_amount").val(due_amount.toFixed(2));
+
+    // Update VAT amount display in sidebar
+    $("#vat_amount").text(currencyFormat(vat_amount));
 }
 calTotalAmount();
 

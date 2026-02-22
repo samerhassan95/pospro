@@ -89,6 +89,14 @@
 
     <!-- Order Summary -->
     <div class="order-summary-section">
+        <div class="summary-row">
+            <span class="summary-label">{{ __('Items') }}</span>
+            <span class="summary-value" id="items_count">{{ $purchase->details->count() }}</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">{{ __('Subtotal') }}</span>
+            <span class="summary-value" id="sub_total">{{ currency_format($purchase->subTotal ?? 0, currency: business_currency()) }}</span>
+        </div>
         <div class="summary-row discount-row">
             <span class="summary-label">{{ __('Discount') }}</span>
             <div class="discount-controls">
@@ -130,12 +138,8 @@
             </div>
         </div>
         <div class="summary-row">
-            <span class="summary-label">{{ __('Items') }}</span>
-            <span class="summary-value" id="items_count">{{ $purchase->details->count() }}</span>
-        </div>
-        <div class="summary-row">
-            <span class="summary-label">{{ __('Subtotal') }}</span>
-            <span class="summary-value" id="sub_total">{{ currency_format($purchase->subTotal ?? 0, currency: business_currency()) }}</span>
+            <span class="summary-label">{{ __('VAT 15%') }}</span>
+            <span class="summary-value" id="vat_amount">{{ currency_format(($purchase->subTotal ?? 0) * 0.15, currency: business_currency()) }}</span>
         </div>
         <div class="summary-row summary-total">
             <span class="summary-label ">{{ __('Total') }}</span>
@@ -350,4 +354,11 @@
     border-right: 1px solid #e5e7eb;
     padding-right: 12px;
 }
+
+/* Cancel order button styling */
+.cancel-order-btn.cancel-sale-btn {
+    color: #E53030 !important;
+}
+
+
 </style>

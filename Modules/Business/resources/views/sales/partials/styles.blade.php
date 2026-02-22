@@ -339,7 +339,6 @@
             flex: 1; 
             overflow-y: auto; 
             min-height: 0;
-            padding-bottom:20px;
             max-height: calc(100vh - 0px);
         }
         

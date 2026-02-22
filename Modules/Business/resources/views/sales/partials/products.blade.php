@@ -1,5 +1,97 @@
 <!-- Products Section -->
 <div class="products-section">
+    <style>
+        /* Full height table styles for scan view */
+        .scan-view-full-height {
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        
+        .scan-view-full-height .pos-search-section {
+            flex-shrink: 0;
+        }
+        
+        .scan-table-container {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 0;
+            overflow: hidden;
+        }
+        
+        .scan-table-wrapper {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+        
+        .scan-table {
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        
+        .scan-table thead {
+            flex-shrink: 0;
+        }
+        
+        .scan-table tbody {
+            flex: 1 !important;
+            overflow-y: auto !important;
+            display: block !important;
+        }
+        
+        .scan-table thead tr,
+        .scan-table tbody tr {
+            display: table !important;
+            width: 100% !important;
+            table-layout: fixed !important;
+        }
+        
+        /* Apply full height to products section when scan view is active */
+        .products-section.scan-active {
+            height: 100% !important;
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to toggle full height for scan view
+            function toggleScanViewHeight() {
+                const productsSection = document.querySelector('.products-section');
+                const scanView = document.getElementById('search-view');
+                
+                if (productsSection && scanView) {
+                    if (scanView.style.display !== 'none' && !scanView.style.display.includes('none')) {
+                        productsSection.classList.add('scan-active');
+                    } else {
+                        productsSection.classList.remove('scan-active');
+                    }
+                }
+            }
+            
+            // Watch for view changes
+            const viewBtns = document.querySelectorAll('.pos-view-btn, .pos-nav-btn');
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    setTimeout(toggleScanViewHeight, 100); // Small delay to ensure view has switched
+                });
+            });
+            
+            // Also watch for scan button specifically
+            const scanBtn = document.getElementById('scan-barcode-btn');
+            if (scanBtn) {
+                scanBtn.addEventListener('click', function() {
+                    setTimeout(toggleScanViewHeight, 100);
+                });
+            }
+            
+            // Initial check
+            toggleScanViewHeight();
+        });
+    </script>
     <!-- Brand View (hidden by default) -->
     <div id="brand-view" class="view-section" style="display: none;">
         <div class="pos-category-section">
@@ -84,7 +176,7 @@
     </div>
 
     <!-- Search View (hidden by default) -->
-    <div id="search-view" class="view-section" style="display: none; margin-top:10px">
+    <div id="search-view" class="view-section scan-view-full-height" style="display: none; margin-top:10px">
         <div class="pos-search-section" style="margin-bottom: 16px;">
             <div class="pos-search-wrapper" style="display: flex; gap: 12px; align-items: center; width: 100%;">
                 <div style="position: relative; flex: 1;">
@@ -125,9 +217,9 @@
             </div>
         </div>
         
-        <div class="pos-products-section">
-            <div class="responsive-table" style="background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                <table class="table" style="width: 100%; margin: 0;">
+        <div class="pos-products-section scan-table-container">
+            <div class="responsive-table scan-table-wrapper" style="background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <table class="table scan-table" style="width: 100%; margin: 0;">
                     <thead style="background: #f9fafb; border-bottom: 2px solid #e5e7eb;">
                         <tr>
                             <th style="padding: 16px; text-align: left; font-size: 14px; font-weight: 600; color: #374151;">{{ __('Image') }}</th>
