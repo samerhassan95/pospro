@@ -54,6 +54,44 @@
     <script src="{{ asset('assets/js/custom/barcode-scanner.js') . '?v=' . time() }}"></script>
     <script src="{{ asset('assets/js/custom/table-backend.js') . '?v=' . time() }}"></script>
     
+    <script>
+        // Scan view height management
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to toggle full height for scan view
+            function toggleScanViewHeight() {
+                const productsSection = document.querySelector('.products-section');
+                const scanView = document.getElementById('search-view');
+                
+                if (productsSection && scanView) {
+                    if (scanView.style.display !== 'none' && !scanView.style.display.includes('none')) {
+                        productsSection.classList.add('scan-active');
+                    } else {
+                        productsSection.classList.remove('scan-active');
+                    }
+                }
+            }
+            
+            // Watch for view changes
+            const viewBtns = document.querySelectorAll('.pos-view-btn, .pos-nav-btn');
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    setTimeout(toggleScanViewHeight, 100); // Small delay to ensure view has switched
+                });
+            });
+            
+            // Also watch for scan button specifically
+            const scanBtn = document.getElementById('scan-barcode-btn');
+            if (scanBtn) {
+                scanBtn.addEventListener('click', function() {
+                    setTimeout(toggleScanViewHeight, 100);
+                });
+            }
+            
+            // Initial check
+            toggleScanViewHeight();
+        });
+    </script>
+    
     {{-- JavaScript functionality --}}
     @include('business::sales.partials.scripts-placeholder') {{-- Original file with all functionality --}}
     @include('business::sales.partials.product-filter-scripts')

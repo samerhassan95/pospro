@@ -803,4 +803,77 @@
                 min-width: 800px;
             }
         }
+
+        /* Full height table styles for scan view */
+        .scan-view-full-height {
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        
+        .scan-view-full-height .pos-search-section {
+            flex-shrink: 0;
+        }
+        
+        .scan-table-container {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 0;
+            overflow: hidden;
+        }
+        
+        .scan-table-wrapper {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+        
+        .scan-table {
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        
+        .scan-table thead {
+            flex-shrink: 0;
+        }
+        
+        .scan-table tbody {
+            flex: 1 !important;
+            overflow-y: auto !important;
+            display: block !important;
+        }
+        
+        .scan-table thead tr,
+        .scan-table tbody tr {
+            display: table !important;
+            width: 100% !important;
+            table-layout: fixed !important;
+        }
+        
+        /* Apply full height to products section when scan view is active */
+        .products-section.scan-active {
+            height: 100% !important;
+        }
+
+        /* Ensure only one view is visible at a time - SIMPLIFIED */
+        .view-section {
+            display: none;
+        }
+        
+        /* Default category view visible */
+        #category-view {
+            display: block;
+        }
+        
+        /* Force show when explicitly set */
+        .view-section[style*="display: block"] {
+            display: block !important;
+        }
+        
+        .view-section[style*="display: none"] {
+            display: none !important;
+        }
     </style>

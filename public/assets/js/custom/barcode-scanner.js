@@ -12,16 +12,107 @@
 
     // Initialize barcode scanner functionality
     function initBarcodeScanner() {
-        // Switch to search view when scan button is clicked (no modal)
-        $('#scan-barcode-btn').on('click', function() {
-            // Hide all views
+        console.log('🔧 Initializing barcode scanner...');
+        
+        // Check if elements exist
+        const scanBtn = $('#scan-barcode-btn');
+        const searchView = $('#search-view');
+        const categoryView = $('#category-view');
+        
+        console.log('🔧 Scan button found:', scanBtn.length);
+        console.log('🔧 Search view found:', searchView.length);
+        console.log('🔧 Category view found:', categoryView.length);
+        
+        if (scanBtn.length === 0) {
+            console.error('❌ Scan button not found!');
+            return;
+        }
+        
+        if (searchView.length === 0) {
+            console.error('❌ Search view not found!');
+            return;
+        }
+        
+        // Ensure proper initial state
+        $('#search-view').hide().css('display', 'none');
+        $('#category-view').show().css('display', 'block');
+        $('#brand-view').hide().css('display', 'none');
+        $('#tables-view').hide().css('display', 'none');
+        
+        // Set initial class
+        $('.products-section').removeClass('view-active-category view-active-brand view-active-search view-active-tables');
+        $('.products-section').addClass('view-active-category');
+        
+        console.log('🔧 Initial view states set');
+        
+        // Add direct click handler (not using override)
+        scanBtn.off('click.barcode').on('click.barcode', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('🔍 DIRECT: Scan button clicked');
+            console.log('🔍 DIRECT: Before - Search view display:', $('#search-view').css('display'));
+            console.log('🔍 DIRECT: Before - Category view display:', $('#category-view').css('display'));
+            
+            // Simple direct approach
             $('.view-section').hide();
-            // Show search view
             $('#search-view').show();
+            
+            console.log('🔍 DIRECT: After - Search view display:', $('#search-view').css('display'));
+            console.log('🔍 DIRECT: After - Category view display:', $('#category-view').css('display'));
+            
+            // Verify the element is actually visible
+            const searchViewElement = document.getElementById('search-view');
+            if (searchViewElement) {
+                console.log('🔍 DIRECT: Search view element style:', searchViewElement.style.display);
+                console.log('🔍 DIRECT: Search view computed style:', window.getComputedStyle(searchViewElement).display);
+            }
+            
+            // Update button states
+            $('.pos-view-btn, .pos-toggle-btn').removeClass('pos-toggle-btn-active active');
+            $(this).addClass('pos-toggle-btn-active active');
+            
+            // Focus on search input
+            setTimeout(() => {
+                $('#product-search-input').focus();
+            }, 100);
+            
+            return false;
+        });
+        
+        console.log('🔧 Direct scan button handler attached');
+        
+        // Switch to search view when scan button is clicked (no modal)
+        $('#scan-barcode-btn').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('🔍 Scan button clicked - switching to search view');
+            
+            // Hide ALL views explicitly
+            $('#category-view').hide();
+            $('#brand-view').hide();
+            $('#tables-view').hide();
+            $('#search-view').hide();
+            
+            // Force hide with CSS
+            $('#category-view').css('display', 'none');
+            $('#brand-view').css('display', 'none');
+            $('#tables-view').css('display', 'none');
+            
+            // Show search view
+            $('#search-view').show().css('display', 'block');
+            
+            console.log('🔍 Search view should now be visible');
+            console.log('Category view display:', $('#category-view').css('display'));
+            console.log('Search view display:', $('#search-view').css('display'));
+            
             // Remove active class from all view buttons
-            $('.pos-view-btn').removeClass('pos-toggle-btn-active');
+            $('.pos-view-btn, .pos-toggle-btn').removeClass('pos-toggle-btn-active active');
+            
             // Add active class to scan button
-            $(this).addClass('pos-toggle-btn-active');
+            $(this).addClass('pos-toggle-btn-active active');
+            
             // Focus on search input
             setTimeout(() => {
                 $('#product-search-input').focus();
@@ -76,10 +167,33 @@
         // Cleanup when switching away from search view
         $('.pos-view-btn').on('click', function() {
             const view = $(this).data('view');
-            if (view !== 'search') {
+            console.log('🔄 View button clicked:', view);
+            
+            if (view !== 'search' && this.id !== 'scan-barcode-btn') {
+                console.log('🔄 Switching away from search view to:', view);
+                
                 stopCameraScanning();
                 clearResults();
                 $('#product-search-input').val('');
+                
+                // Hide search view explicitly
+                $('#search-view').hide().css('display', 'none');
+                
+                // Show appropriate view
+                if (view === 'category') {
+                    $('#category-view').show().css('display', 'block');
+                    $('#brand-view').hide().css('display', 'none');
+                } else if (view === 'brand') {
+                    $('#brand-view').show().css('display', 'block');
+                    $('#category-view').hide().css('display', 'none');
+                } else if (view === 'tables') {
+                    $('#tables-view').show().css('display', 'block');
+                    $('#category-view').hide().css('display', 'none');
+                    $('#brand-view').hide().css('display', 'none');
+                }
+                
+                console.log('🔄 After switch - Category view:', $('#category-view').css('display'));
+                console.log('🔄 After switch - Search view:', $('#search-view').css('display'));
             }
         });
     }
@@ -679,6 +793,87 @@
     $(document).ready(function() {
         initBarcodeScanner();
         initGlobalBarcodeListener(); // Listen for external scanner on all views
+        
+        // Add additional view switching handler to override any conflicts
+        setTimeout(function() {
+            console.log('🔧 Setting up view switching override...');
+            
+            // Force proper view switching for scan button
+            $(document).off('click', '#scan-barcode-btn').on('click', '#scan-barcode-btn', function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                
+                console.log('🔍 OVERRIDE: Scan button clicked');
+                
+                // Remove all view-active classes from products section
+                $('.products-section').removeClass('view-active-category view-active-brand view-active-search view-active-tables');
+                
+                // Force hide all other views
+                $('.view-section').each(function() {
+                    if (this.id !== 'search-view') {
+                        $(this).hide().css('display', 'none');
+                    }
+                });
+                
+                // Force show search view
+                $('#search-view').show().css('display', 'block');
+                
+                // Add search view class
+                $('.products-section').addClass('view-active-search');
+                
+                // Update button states
+                $('.pos-view-btn, .pos-toggle-btn').removeClass('pos-toggle-btn-active active');
+                $(this).addClass('pos-toggle-btn-active active');
+                
+                console.log('🔍 OVERRIDE: Views switched');
+                
+                return false;
+            });
+            
+            // Force proper view switching for other buttons
+            $(document).off('click', '.pos-view-btn:not(#scan-barcode-btn)').on('click', '.pos-view-btn:not(#scan-barcode-btn)', function(e) {
+                const view = $(this).data('view');
+                
+                if (view && view !== 'search') {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    
+                    console.log('🔄 OVERRIDE: Switching to view:', view);
+                    
+                    // Remove all view-active classes from products section
+                    $('.products-section').removeClass('view-active-category view-active-brand view-active-search view-active-tables');
+                    
+                    // Hide ALL views first
+                    $('.view-section').each(function() {
+                        $(this).hide().css('display', 'none');
+                    });
+                    
+                    // Show only the target view
+                    const targetView = $('#' + view + '-view');
+                    if (targetView.length) {
+                        targetView.show().css('display', 'block');
+                        console.log('🔄 OVERRIDE: Showing view:', view + '-view');
+                        
+                        // Add corresponding class to products section
+                        $('.products-section').addClass('view-active-' + view);
+                    }
+                    
+                    // Update button states
+                    $('.pos-view-btn, .pos-toggle-btn').removeClass('pos-toggle-btn-active active');
+                    $(this).addClass('pos-toggle-btn-active active');
+                    
+                    // Special handling for toggle buttons (brand/category)
+                    if ($(this).hasClass('pos-toggle-btn')) {
+                        $('.pos-toggle-btn').removeClass('pos-toggle-btn-active');
+                        $(this).addClass('pos-toggle-btn-active');
+                    }
+                    
+                    console.log('🔄 OVERRIDE: View switch complete for:', view);
+                    return false;
+                }
+            });
+            
+        }, 500); // Delay to ensure all other handlers are loaded
     });
 
 })(jQuery);

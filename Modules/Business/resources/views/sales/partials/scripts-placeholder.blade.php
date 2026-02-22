@@ -137,10 +137,17 @@
                 button.addEventListener('click', function() {
                     const tab = this.getAttribute('data-tab') || this.getAttribute('data-view');
 
-                    // Remove active from ALL buttons (both toggle and icon buttons)
+                    // Skip if this is the scan button - let barcode-scanner.js handle it
+                    if (this.id === 'scan-barcode-btn' || tab === 'search') {
+                        return;
+                    }
+
+                    // Remove active from ALL buttons (both toggle and icon buttons) except scan button
                     tabButtons.forEach(btn => {
-                        btn.classList.remove('pos-toggle-btn-active');
-                        btn.classList.remove('active');
+                        if (btn.id !== 'scan-barcode-btn') {
+                            btn.classList.remove('pos-toggle-btn-active');
+                            btn.classList.remove('active');
+                        }
                     });
                     
                     // Add active to clicked button only
@@ -156,13 +163,11 @@
                         if (productsSection) productsSection.style.display = 'none';
                         if (productsGridSection) productsGridSection.style.display = 'none';
                         
-                        // Hide other views
+                        // Hide other views (except search view - let barcode scanner handle that)
                         const brandView = document.getElementById('brand-view');
                         const categoryView = document.getElementById('category-view');
-                        const searchView = document.getElementById('search-view');
                         if (brandView) brandView.style.display = 'none';
                         if (categoryView) categoryView.style.display = 'none';
-                        if (searchView) searchView.style.display = 'none';
                     } else {
                         if (tablesSection) tablesSection.style.display = 'none';
                         if (productsSection) productsSection.style.display = 'block';
@@ -171,20 +176,13 @@
                         // Show appropriate view
                         const brandView = document.getElementById('brand-view');
                         const categoryView = document.getElementById('category-view');
-                        const searchView = document.getElementById('search-view');
                         
                         if (tab === 'brand' && brandView) {
                             brandView.style.display = 'block';
                             if (categoryView) categoryView.style.display = 'none';
-                            if (searchView) searchView.style.display = 'none';
-                        } else if (tab === 'search' && searchView) {
-                            searchView.style.display = 'block';
-                            if (brandView) brandView.style.display = 'none';
-                            if (categoryView) categoryView.style.display = 'none';
                         } else if (categoryView) {
                             categoryView.style.display = 'block';
                             if (brandView) brandView.style.display = 'none';
-                            if (searchView) searchView.style.display = 'none';
                         }
                     }
                 });

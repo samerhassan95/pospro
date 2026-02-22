@@ -72,9 +72,51 @@
     <script src="{{ asset('assets/js/custom/pos-purchase-payment-modal.js') . '?v=' . time() }}"></script>
     
     <script>
+        // Scan view height management
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to toggle full height for scan view
+            function toggleScanViewHeight() {
+                const productsSection = document.querySelector('.products-section');
+                const scanView = document.getElementById('search-view');
+                
+                if (productsSection && scanView) {
+                    if (scanView.style.display !== 'none' && !scanView.style.display.includes('none')) {
+                        productsSection.classList.add('scan-active');
+                    } else {
+                        productsSection.classList.remove('scan-active');
+                    }
+                }
+            }
+            
+            // Watch for view changes
+            const viewBtns = document.querySelectorAll('.pos-view-btn, .pos-nav-btn');
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    setTimeout(toggleScanViewHeight, 100); // Small delay to ensure view has switched
+                });
+            });
+            
+            // Also watch for scan button specifically
+            const scanBtn = document.getElementById('scan-barcode-btn');
+            if (scanBtn) {
+                scanBtn.addEventListener('click', function() {
+                    setTimeout(toggleScanViewHeight, 100);
+                });
+            }
+            
+            // Initial check
+            toggleScanViewHeight();
+        });
+    </script>
+    
+    <script>
         // POS Purchase JavaScript functionality
         document.addEventListener('DOMContentLoaded', function() {
             console.log('POS Purchase interface initialized');
+            
+            // View switching functionality
+            const viewBtns = document.querySelectorAll('.pos-view-btn');
+            const viewSections = document.querySelectorAll('.view-section');
             
             // View switching functionality
             const viewBtns = document.querySelectorAll('.pos-view-btn');
@@ -85,19 +127,43 @@
                     const view = this.getAttribute('data-view');
                     console.log('Switching to view:', view);
                     
-                    // Remove active state from ALL view buttons (including scan button)
-                    viewBtns.forEach(vBtn => {
-                        vBtn.classList.remove('active', 'pos-nav-btn-active');
-                    });
-                    
-                    // Also specifically remove from scan button by ID
-                    const scanBtn = document.getElementById('scan-barcode-btn');
-                    if (scanBtn) {
-                        scanBtn.classList.remove('active', 'pos-nav-btn-active');
+                    // Skip if this is the scan button - let barcode-scanner.js handle it
+                    if (this.id === 'scan-barcode-btn' || view === 'search') {
+                        return;
                     }
+                    
+                    // Remove active state from ALL view buttons (except scan button)
+                    viewBtns.forEach(vBtn => {
+                        if (vBtn.id !== 'scan-barcode-btn') {
+                            vBtn.classList.remove('active', 'pos-nav-btn-active');
+                        }
+                    });
                     
                     // Add active state to clicked button
                     this.classList.add('active', 'pos-nav-btn-active');
+                    
+                    // Hide all views except search view (let barcode scanner handle that)
+                    viewSections.forEach(section => {
+                        if (section.id !== 'search-view') {
+                            section.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show selected view
+                    const targetView = document.getElementById(view + '-view');
+                    if (targetView && targetView.id !== 'search-view') {
+                        targetView.style.display = 'block';
+                    }
+                    
+                    // Update toggle buttons for brand/category
+                    if (view === 'brand' || view === 'category') {
+                        document.querySelectorAll('.pos-toggle-btn').forEach(toggleBtn => {
+                            toggleBtn.classList.remove('pos-toggle-btn-active');
+                        });
+                        this.classList.add('pos-toggle-btn-active');
+                    }
+                });
+            });
                     
                     // Hide all views
                     viewSections.forEach(section => {
