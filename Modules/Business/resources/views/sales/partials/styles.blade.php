@@ -339,7 +339,7 @@
             flex: 1; 
             overflow-y: auto; 
             min-height: 0;
-            max-height: calc(100vh - 0px);
+            max-height: calc(100vh - 200px);
         }
         
         /* Free-flowing products on small screens */

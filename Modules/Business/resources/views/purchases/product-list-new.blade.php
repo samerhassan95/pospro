@@ -8,6 +8,8 @@
     @endphp
     <div class="pos-product-card single-product {{ $product->id }}" id="single-product"
          data-product_id="{{ $product->id }}"
+         data-category_id="{{ $product->category_id ?? '' }}"
+         data-brand_id="{{ $product->brand_id ?? '' }}"
          data-product_code="{{ $product->productCode }}"
          data-product_unit_id="{{ $product->unit->id ?? null }}"
          data-product_unit_name="{{ $product->unit->unitName ?? null }}"

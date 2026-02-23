@@ -170,9 +170,32 @@
                     
                     const categoryId = this.getAttribute('data-category');
                     console.log('Category selected:', categoryId);
-                    // Add category filtering logic here
+                    filterProductsByCategory(categoryId);
                 });
             });
+            
+            // Category filtering function
+            function filterProductsByCategory(categoryId) {
+                const categoryProductsList = document.getElementById('products-list');
+                if (!categoryProductsList) return;
+                
+                const products = categoryProductsList.querySelectorAll('.pos-product-card');
+                let visibleCount = 0;
+                
+                products.forEach(product => {
+                    const productCategoryId = product.getAttribute('data-category_id');
+                    
+                    if (categoryId === 'all' || productCategoryId === categoryId) {
+                        product.style.display = '';
+                        visibleCount++;
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+                
+                console.log('Category filter:', categoryId, 'Visible products:', visibleCount);
+                showNoProductsMessage(categoryProductsList, visibleCount, '{{ __("No products found for this category") }}');
+            }
             
             brandBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -181,9 +204,126 @@
                     
                     const brandId = this.getAttribute('data-brand');
                     console.log('Brand selected:', brandId);
-                    // Add brand filtering logic here
+                    filterProductsByBrand(brandId);
                 });
             });
+            
+            // Brand filtering function
+            function filterProductsByBrand(brandId) {
+                const brandProductsList = document.getElementById('brand-products-list');
+                if (!brandProductsList) return;
+                
+                const products = brandProductsList.querySelectorAll('.pos-product-card');
+                let visibleCount = 0;
+                
+                products.forEach(product => {
+                    const productBrandId = product.getAttribute('data-brand_id');
+                    
+                    // Convert both to strings for comparison
+                    const brandIdStr = String(brandId);
+                    const productBrandIdStr = String(productBrandId);
+                    
+                    // Show if: "all" selected, OR brand matches, OR product has no brand and "all" is selected
+                    if (brandId === 'all' || brandIdStr === productBrandIdStr) {
+                        product.style.display = '';
+                        visibleCount++;
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+                
+                console.log('Brand filter:', brandId, 'Visible products:', visibleCount);
+                showNoProductsMessage(brandProductsList, visibleCount, '{{ __("No products found for this brand") }}');
+            }
+            
+            // Clone all products to brand view when page loads
+            function initializeBrandView() {
+                console.log('🔄 Initializing brand view...');
+                
+                const brandProductsList = document.getElementById('brand-products-list');
+                const categoryProductsList = document.getElementById('products-list');
+                
+                console.log('Brand products list element:', brandProductsList);
+                console.log('Category products list element:', categoryProductsList);
+                
+                if (brandProductsList) {
+                    // First, add a test message to see if the brand view is working
+                    brandProductsList.innerHTML = '<div style="padding: 20px; text-align: center; color: red; font-weight: bold;">BRAND VIEW TEST - If you see this, the brand view is working!</div>';
+                    
+                    if (categoryProductsList) {
+                        const allProducts = categoryProductsList.querySelectorAll('.pos-product-card');
+                        console.log('Found products in category view:', allProducts.length);
+                        
+                        if (allProducts.length > 0) {
+                            // Clear test message and add products
+                            brandProductsList.innerHTML = '';
+                            
+                            allProducts.forEach((product, index) => {
+                                const brandId = product.getAttribute('data-brand_id');
+                                const productName = product.getAttribute('data-product_name');
+                                console.log(`Product ${index + 1}: brand_id=${brandId}, name=${productName}`);
+                                
+                                const clone = product.cloneNode(true);
+                                brandProductsList.appendChild(clone);
+                            });
+                            
+                            console.log('✅ Successfully cloned', allProducts.length, 'products to brand view');
+                        } else {
+                            brandProductsList.innerHTML = '<div style="padding: 20px; text-align: center; color: orange;">No products found in category view to clone</div>';
+                        }
+                    } else {
+                        brandProductsList.innerHTML = '<div style="padding: 20px; text-align: center; color: red;">Category products list not found</div>';
+                    }
+                } else {
+                    console.log('❌ Brand products list element not found');
+                }
+            }
+            
+            // Initialize brand view after DOM is ready with multiple attempts
+            setTimeout(initializeBrandView, 100);
+            setTimeout(initializeBrandView, 500);
+            setTimeout(initializeBrandView, 1000);
+            
+            // Also initialize when brand view becomes visible
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('[data-view="brand"]') || e.target.closest('[data-tab="brand"]')) {
+                    console.log('🎯 Brand button clicked, initializing brand view...');
+                    setTimeout(initializeBrandView, 100);
+                }
+            });
+            
+            // Listen for barcode scanner view changes
+            document.addEventListener('DOMContentLoaded', function() {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                            const brandView = document.getElementById('brand-view');
+                            if (brandView && brandView.style.display === 'block') {
+                                console.log('🎯 Brand view became visible, initializing...');
+                                setTimeout(initializeBrandView, 100);
+                            }
+                        }
+                    });
+                });
+                
+                const brandView = document.getElementById('brand-view');
+                if (brandView) {
+                    observer.observe(brandView, { attributes: true, attributeFilter: ['style'] });
+                }
+            });
+            
+            function showNoProductsMessage(container, visibleCount, message) {
+                const existingMsg = container.querySelector('.no-products-message');
+                if (existingMsg) existingMsg.remove();
+                
+                if (visibleCount === 0) {
+                    const noProductsMsg = document.createElement('div');
+                    noProductsMsg.className = 'no-products-message';
+                    noProductsMsg.style.cssText = 'text-align: center; padding: 40px; color: #999; grid-column: 1 / -1;';
+                    noProductsMsg.textContent = message;
+                    container.appendChild(noProductsMsg);
+                }
+            }
             
             // Supplier selection functionality
             const supplierSelect = document.getElementById('party_id');
