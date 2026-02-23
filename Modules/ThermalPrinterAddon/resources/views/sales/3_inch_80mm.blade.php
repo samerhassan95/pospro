@@ -343,16 +343,36 @@
         {{-- B2B Totals - Matching ZATCA Sample --}}
         <div style="margin-top: 8px; text-align: right; font-size: 9px;">
             <div style="display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #ddd;">
-                <span><strong>{{__('Total')}} / المجموع:</strong></span>
+                <span><strong>{{__('Subtotal')}} / الإجمالي الفرعي:</strong></span>
                 <span><strong>{{ currency_format($subtotal, currency: business_currency()) }}</strong></span>
             </div>
+            @if($sale->discountAmount > 0)
             <div style="display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #ddd;">
-                <span><strong>{{__('VAT')}} ({{ $sale->vat_percent ?? 15 }}%) / ضريبة القيمة المضافة ({{ $sale->vat_percent ?? 15 }}%):</strong></span>
+                <span><strong>{{__('Discount')}} / الخصم:</strong></span>
+                <span><strong>-{{ currency_format($sale->discountAmount, currency: business_currency()) }}</strong></span>
+            </div>
+            @endif
+            @if($sale->shipping_charge > 0)
+            <div style="display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #ddd;">
+                <span><strong>{{__('Shipping')}} / الشحن:</strong></span>
+                <span><strong>{{ currency_format($sale->shipping_charge, currency: business_currency()) }}</strong></span>
+            </div>
+            @endif
+            @php
+                $taxableAmount = $subtotal - ($sale->discountAmount ?? 0) + ($sale->shipping_charge ?? 0);
+                $vatPercent = $sale->vat ? $sale->vat->rate : 15;
+            @endphp
+            <div style="display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #ddd;">
+                <span><strong>{{__('Taxable Amount')}} / المبلغ الخاضع للضريبة:</strong></span>
+                <span><strong>{{ currency_format($taxableAmount, currency: business_currency()) }}</strong></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #ddd;">
+                <span><strong>{{__('VAT')}} ({{ $vatPercent }}%) / الضريبة:</strong></span>
                 <span><strong>{{ currency_format($sale->vat_amount, currency: business_currency()) }}</strong></span>
             </div>
             <div style="display: flex; justify-content: space-between; padding: 5px 0; background: #1565C0; color: white; font-weight: bold; margin-top: 3px;">
-                <span>{{__('Total with Tax')}} ({{ $sale->vat_percent ?? 15 }}%) / المجموع مع الضريبة ({{ $sale->vat_percent ?? 15 }}%):</span>
-                <span>{{ currency_format($subtotal + $sale->vat_amount, currency: business_currency()) }}</span>
+                <span>{{__('Total with Tax')}} / المجموع شامل الضريبة:</span>
+                <span>{{ currency_format($sale->totalAmount, currency: business_currency()) }}</span>
             </div>
         </div>
         @else
@@ -393,16 +413,14 @@
         {{-- B2C Totals - Compact Format --}}
         <div style="margin: 5px 0; padding: 5px 0; border-top: 2px dashed #000; font-size: 9px;">
             @php
-                // حساب الضريبة الصحيح
                 $totalItems = $sale->details->sum('quantities');
-                if (!empty($sale->vat_amount) && $sale->vat_amount > 0) {
-                    $subtotalBeforeVat = $sale->totalAmount - $sale->vat_amount;
-                    $vatAmount = $sale->vat_amount;
-                } else {
-                    $subtotalBeforeVat = $subtotal;
-                    $vatAmount = $subtotalBeforeVat * 0.15;
-                }
-                $totalWithVat = $subtotalBeforeVat + $vatAmount;
+                $discountAmount = $sale->discountAmount ?? 0;
+                $shippingCharge = $sale->shipping_charge ?? 0;
+                $vatPercent = $sale->vat ? $sale->vat->rate : 15;
+                // Taxable base: Items Subtotal - Discount + Shipping
+                $taxableAmount = $subtotal - $discountAmount + $shippingCharge;
+                $vatAmount = $sale->vat_amount ?? 0;
+                $totalWithVat = $sale->totalAmount;
             @endphp
             
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
@@ -410,19 +428,29 @@
                 <span><strong>{{ $totalItems }}</strong></span>
             </div>
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
-                <span>الإجمالي قبل الضريبة:</span>
-                <span><strong>{{ currency_format($subtotalBeforeVat, currency: business_currency()) }}</strong></span>
+                <span>الإجمالي الفرعي:</span>
+                <span><strong>{{ currency_format($subtotal, currency: business_currency()) }}</strong></span>
             </div>
-            <div style="display: flex; justify-content: space-between; padding: 1px 0;">
-                <span>ضريبة القيمة المضافة (15%):</span>
-                <span><strong>{{ currency_format($vatAmount, currency: business_currency()) }}</strong></span>
-            </div>
-            @if($sale->discountAmount > 0)
+            @if($discountAmount > 0)
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
                 <span>الخصم:</span>
-                <span><strong>-{{ currency_format($sale->discountAmount, currency: business_currency()) }}</strong></span>
+                <span><strong>-{{ currency_format($discountAmount, currency: business_currency()) }}</strong></span>
             </div>
             @endif
+            @if($shippingCharge > 0)
+            <div style="display: flex; justify-content: space-between; padding: 1px 0;">
+                <span>الشحن:</span>
+                <span><strong>{{ currency_format($shippingCharge, currency: business_currency()) }}</strong></span>
+            </div>
+            @endif
+            <div style="display: flex; justify-content: space-between; padding: 1px 0;">
+                <span>الإجمالي الخاضع للضريبة:</span>
+                <span><strong>{{ currency_format($taxableAmount, currency: business_currency()) }}</strong></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 1px 0;">
+                <span>ضريبة القيمة المضافة ({{ $vatPercent }}%):</span>
+                <span><strong>{{ currency_format($vatAmount, currency: business_currency()) }}</strong></span>
+            </div>
             <div style="display: flex; justify-content: space-between; padding: 4px 0; margin-top: 2px; border-top: 2px solid #000; font-size: 11px;">
                 <span><strong>الإجمالي / Total:</strong></span>
                 <span><strong>{{ currency_format($totalWithVat, currency: business_currency()) }}</strong></span>

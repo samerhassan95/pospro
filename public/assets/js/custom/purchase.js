@@ -365,17 +365,16 @@ function calTotalAmount() {
 
     $("#sub_total").text(currencyFormat(subtotal));
 
-    // Fixed VAT 15%
-    let vat_amount = subtotal * 0.15;
+    // Get VAT rate from selected VAT option (dynamic from database)
+    let vat_rate = parseFloat($(".vat_select option:selected").data("rate")) || 15;
+    let vat_amount = (subtotal * vat_rate) / 100;
+    
+    // Update VAT display with dynamic rate
+    $(".vat-rate-display").text(vat_rate);
     $("#vat_amount").text(currencyFormat(vat_amount));
+    $("#vat_amount").val(vat_amount.toFixed(2));
 
-    // VAT (existing dynamic VAT - keep for compatibility)
-    let vat_rate =
-        parseFloat($(".vat_select option:selected").data("rate")) || 0;
-    let dynamic_vat_amount = (subtotal * vat_rate) / 100;
-    $("#vat_amount").val(dynamic_vat_amount.toFixed(2));
-
-    // Subtotal with VAT (use fixed 15% VAT)
+    // Subtotal with VAT
     let subtotal_with_vat = subtotal + vat_amount;
 
     // Discount
@@ -621,3 +620,26 @@ function updateCart(data, updateRoute) {
         },
     });
 }
+
+// Auto-select first VAT option on page load
+$(document).ready(function() {
+    // Select first VAT option if none selected
+    if ($(".vat_select option:selected").val() == "") {
+        let firstVatOption = $(".vat_select option:not([value=''])").first();
+        if (firstVatOption.length) {
+            $(".vat_select").val(firstVatOption.val());
+            
+            // Update VAT display
+            let vatRate = parseFloat(firstVatOption.data("rate")) || 15;
+            $(".vat-rate-display").text(vatRate);
+            
+            // Trigger calculation
+            calTotalAmount();
+        }
+    } else {
+        // Update display with currently selected VAT
+        let vatRate = parseFloat($(".vat_select option:selected").data("rate")) || 15;
+        $(".vat-rate-display").text(vatRate);
+        calTotalAmount();
+    }
+});

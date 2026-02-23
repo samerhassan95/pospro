@@ -145,7 +145,67 @@
                                         <tr>
                                             <td>16</td>
                                             <td class="text-start">Expire Date</td>
-                                            <td class="text-start">The expiry date for the product, useful especially for perishable goods.</td>
+                                            <td class="text-start">The expiry date for the product (e.g., YYYY-MM-DD).</td>
+                                        </tr>
+                                        <tr>
+                                            <td>17</td>
+                                            <td class="text-start">Batch No</td>
+                                            <td class="text-start">The batch number associated with the current stock.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>18</td>
+                                            <td class="text-start">Model</td>
+                                            <td class="text-start">The specific model name of the product.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>19</td>
+                                            <td class="text-start">Manufacturing Date</td>
+                                            <td class="text-start">The date when the product was produced.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>20</td>
+                                            <td class="text-start">Product Type (single / variant)</td>
+                                            <td class="text-start">Whether the product is a standard single item or part of a variation group.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>21</td>
+                                            <td class="text-start">Variations Text</td>
+                                            <td class="text-start">For 'variant' products, specify details like: "Color:Black|Size:M".</td>
+                                        </tr>
+                                        <tr>
+                                            <td>22</td>
+                                            <td class="text-start">Picture URL</td>
+                                            <td class="text-start">A full URL to an image (e.g., https://example.com/image.jpg). The system will download it.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>23</td>
+                                            <td class="text-start">Size</td>
+                                            <td class="text-start">The physical dimensions or size of the product.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>24</td>
+                                            <td class="text-start">Color</td>
+                                            <td class="text-start">The color of the product.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>25</td>
+                                            <td class="text-start">Weight</td>
+                                            <td class="text-start">The weight of the product (e.g., 500g, 1kg).</td>
+                                        </tr>
+                                        <tr>
+                                            <td>26</td>
+                                            <td class="text-start">Capacity</td>
+                                            <td class="text-start">The capacity or volume (e.g., 256GB, 1.5L).</td>
+                                        </tr>
+                                        <tr>
+                                            <td>27</td>
+                                            <td class="text-start">Rack Name</td>
+                                            <td class="text-start">The warehouse rack where the product is stored.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>28</td>
+                                            <td class="text-start">Shelf Name</td>
+                                            <td class="text-start">The specific shelf number or ID within the rack.</td>
                                         </tr>
                                     </tbody>
                                 </table>

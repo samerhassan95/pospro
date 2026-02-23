@@ -237,7 +237,7 @@
                                         <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
                                             @if (is_module_enabled($modules, 'show_vat_id'))
                                             <div class="dual-dropdown">
-                                                <select id="vat_id" name="vat_id">
+                                                <select class="vat_id" name="vat_id">
                                                     <option value="">{{ __('Select one') }}</option>
                                                     @foreach ($vats as $vat)
                                                         <option value="{{ $vat->id }}" data-vat_rate="{{ $vat->rate }}">
@@ -245,7 +245,7 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                <select id="vat_type" name="vat_type">
+                                                <select class="vat_type" name="vat_type">
                                                     <option value="exclusive">{{ __('Exclusive') }}</option>
                                                     <option value="inclusive">{{ __('Inclusive') }}</option>
                                                 </select>
@@ -395,7 +395,7 @@
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Tax Type') }}</label>
                                         <div class="gpt-up-down-arrow position-relative">
-                                            <select id="vat_type" name="vat_type" class="form-control table-select w-100">
+                                            <select name="vat_type" class="form-control w-100 vat_type">
                                                 <option value="exclusive">{{ __('Exclusive') }}</option>
                                                 <option value="inclusive">{{ __('Inclusive') }}</option>
                                             </select>
@@ -408,7 +408,7 @@
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Select Tax') }}</label>
                                         <div class="gpt-up-down-arrow position-relative">
-                                            <select id="vat_id" name="vat_id" class="form-control table-select w-100">
+                                            <select name="vat_id" class="form-control w-100 vat_id">
                                                 <option value="">{{ __('Select one') }}</option>
                                                 @foreach ($vats as $vat)
                                                     <option value="{{ $vat->id }}" data-vat_rate="{{ $vat->rate }}">
@@ -431,14 +431,14 @@
                                     @if (is_module_enabled($modules, 'show_exclusive_price'))
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Cost exc. tax') }}</label>
-                                        <input type="number" class="form-control exclusive_price" name="stocks[0][exclusive_price]" placeholder="{{ __('Enter Purchase Price') }}">
+                                        <input type="number" step="0.01" class="form-control exclusive_price" name="stocks[0][exclusive_price]" placeholder="{{ __('Enter Purchase Price') }}">
                                     </div>
                                     @endif
 
                                     @if (is_module_enabled($modules, 'show_inclusive_price'))
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Cost inc. tax') }}</label>
-                                        <input type="number" class="form-control inclusive_price" name="stocks[0][inclusive_price]" placeholder="{{ __('Enter Purchase Price') }}">
+                                        <input type="number" step="0.01" class="form-control inclusive_price" name="stocks[0][inclusive_price]" placeholder="{{ __('Enter Purchase Price') }}" readonly>
                                     </div>
                                     @endif
 

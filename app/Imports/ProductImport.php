@@ -4,8 +4,10 @@ namespace App\Imports;
 
 use Carbon\Carbon;
 use App\Models\Vat;
+use App\Models\Rack;
 use App\Models\Unit;
 use App\Models\Brand;
+use App\Models\Shelf;
 use App\Models\Stock;
 use App\Models\Product;
 use App\Models\Category;
@@ -13,23 +15,28 @@ use App\Models\ProductModel;
 use App\Models\Variation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class ProductImport implements ToCollection
 {
     protected $businessId;
+    protected $branchId;
     protected $categories = [];
     protected $brands = [];
     protected $units = [];
     protected $vats = [];
     protected $models = [];
+    protected $racks = [];
+    protected $shelves = [];
     protected $existingProductCodes = [];
     protected $excelProductCodes = [];
 
-    public function __construct($businessId)
+    public function __construct($businessId, $branchId = null)
     {
         $this->businessId = $businessId;
+        $this->branchId = $branchId;
         $this->existingProductCodes = Product::where('business_id', $businessId)
             ->pluck('productCode')
             ->toArray();
@@ -63,18 +70,28 @@ class ProductImport implements ToCollection
                 $manufacturingDate = $row[18] ?? null;
                 $productType       = strtolower(trim($row[19] ?? 'single'));
                 $variationsText    = trim($row[20] ?? ''); // Example: "Color:Black|Size:M"
+                $pictureUrl        = trim($row[21] ?? '');
+                $size              = trim($row[22] ?? '');
+                $color             = trim($row[23] ?? '');
+                $weight            = trim($row[24] ?? '');
+                $capacity          = trim($row[25] ?? '');
+                $rackName          = trim($row[26] ?? '');
+                $shelfName         = trim($row[27] ?? '');
 
                 if (!$productName || !$productCode || !$categoryName) continue;
                 if (in_array($productCode, $this->existingProductCodes)) continue;
                 if (in_array($productCode, $this->excelProductCodes)) continue;
 
                 // --- VAT and profit ---
-                $vatAmount = ($purchasePrice * $vatPercent) / 100;
-                $grandPurchasePrice = $vatType === 'inclusive'
-                    ? $purchasePrice + $vatAmount
+                $vatAmount = ($purchasePrice * $vatPercent) / (100 + $vatPercent); // Extract VAT calculation for inclusive
+                $grandPurchasePrice = $purchasePrice; // In our POS, we store the full price as entered
+                
+                $exclusivePurchasePrice = $vatType === 'inclusive' 
+                    ? $purchasePrice / (1 + ($vatPercent / 100))
                     : $purchasePrice;
-                $profitPercent = $purchasePrice > 0
-                    ? round((($salePrice - $purchasePrice) / $purchasePrice) * 100, 3)
+
+                $profitPercent = $exclusivePurchasePrice > 0
+                    ? round((($salePrice - $exclusivePurchasePrice) / $exclusivePurchasePrice) * 100, 3)
                     : 0.0;
                 $this->excelProductCodes[] = $productCode;
 
@@ -130,6 +147,40 @@ class ProductImport implements ToCollection
                     }
                 }
 
+                // --- Handle Image ---
+                $productPicture = null;
+                if ($pictureUrl && filter_var($pictureUrl, FILTER_VALIDATE_URL)) {
+                    try {
+                        $contents = file_get_contents($pictureUrl);
+                        if ($contents !== false) {
+                            $ext = pathinfo(parse_url($pictureUrl, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
+                            $filename = now()->timestamp . '-' . rand(1, 1000) . '.' . $ext;
+                            $path = 'uploads/' . date('y') . '/' . date('m') . '/' . $filename;
+                            Storage::disk(config('filesystems.default'))->put($path, $contents);
+                            $productPicture = $path;
+                        }
+                    } catch (\Exception $e) {
+                        // Silent fail for image
+                    }
+                }
+
+                // --- Rack and Shelf ---
+                $rackId = null;
+                if ($rackName) {
+                    $rackId = $this->racks[$rackName] ??= Rack::firstOrCreate(
+                        ['name' => $rackName, 'business_id' => $this->businessId],
+                        ['name' => $rackName]
+                    )->id;
+                }
+
+                $shelfId = null;
+                if ($shelfName) {
+                    $shelfId = $this->shelves[$shelfName] ??= Shelf::firstOrCreate(
+                        ['name' => $shelfName, 'business_id' => $this->businessId],
+                        ['name' => $shelfName, 'rack_id' => $rackId]
+                    )->id;
+                }
+
                 $variantName = implode(' - ', $variantNameParts);
 
                 // --- Create Product ---
@@ -140,6 +191,8 @@ class ProductImport implements ToCollection
                     'brand_id'      => $brandId,
                     'category_id'   => $categoryId,
                     'model_id'      => $modelId,
+                    'rack_id'       => $rackId,
+                    'shelf_id'      => $shelfId,
                     'productCode'   => $productCode,
                     'vat_id'        => $vatId,
                     'vat_type'      => $vatType,
@@ -148,7 +201,12 @@ class ProductImport implements ToCollection
                     'expire_date'   => $expireDate,
                     'manufacturer'  => $manufacturer,
                     'product_type'  => $productType,
-                    'variation_ids'    => $variationIds
+                    'variation_ids' => $variationIds,
+                    'productPicture' => $productPicture,
+                    'size'          => $size,
+                    'color'         => $color,
+                    'weight'        => $weight,
+                    'capacity'      => $capacity,
                 ]);
 
                 // --- Create Stock ---
@@ -162,6 +220,7 @@ class ProductImport implements ToCollection
                         'expire_date'            => $expireDate,
                         'productStock'           => $stockQty,
                         'productPurchasePrice'   => $grandPurchasePrice,
+                        'branch_id'              => $this->branchId,
                         'profit_percent'         => $profitPercent,
                         'productSalePrice'       => $salePrice,
                         'productWholeSalePrice'  => $wholesalePrice,

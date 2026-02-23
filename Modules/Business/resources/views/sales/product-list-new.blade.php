@@ -1,5 +1,20 @@
 @forelse ($products as $product)
     @php
+        $vatRate = ($product->vat_type == 'inclusive' && $product->vat) ? ($product->vat->rate ?? 0) : 0;
+        
+        // Adjust all stock prices to be exclusive if product is set to inclusive VAT
+        if ($vatRate > 0) {
+            foreach ($product->stocks as $stock) {
+                $stock->productSalePrice = $stock->productSalePrice / (1 + ($vatRate / 100));
+                if (isset($stock->productDealerPrice)) {
+                    $stock->productDealerPrice = $stock->productDealerPrice / (1 + ($vatRate / 100));
+                }
+                if (isset($stock->productWholeSalePrice)) {
+                    $stock->productWholeSalePrice = $stock->productWholeSalePrice / (1 + ($vatRate / 100));
+                }
+            }
+        }
+
         $firstStock = $product->stocks->first();
         $purchasePrice = $firstStock->productPurchasePrice ?? 0;
         $salePrice = $firstStock->productSalePrice ?? 0;

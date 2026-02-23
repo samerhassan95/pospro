@@ -51,10 +51,13 @@ $(document).ready(function () {
 
         // Append to container
         $container.append($(templateHtml));
-        if (!$("#previous-stocks").length || $("#previous-stocks").val() === "[]") {
-            $('.batch_no').each(function (index) {
+        if (
+            !$("#previous-stocks").length ||
+            $("#previous-stocks").val() === "[]"
+        ) {
+            $(".batch_no").each(function (index) {
                 if (!$(this).val()) {
-                    $(this).val($('#productCode').val() + '-' + (index + 1));
+                    $(this).val($("#productCode").val() + "-" + (index + 1));
                 }
             });
         }
@@ -72,7 +75,7 @@ $(document).ready(function () {
         const selectedVariationIds = $(".variation_ids").val() || [];
         const variationsData = JSON.parse($("#variations-data").val() || "[]");
         const selectedValuesMap = JSON.parse(
-            $("#selected-variation-values").val() || "{}"
+            $("#selected-variation-values").val() || "{}",
         );
         const $variationContainer = $(".variation-values-container");
 
@@ -100,7 +103,7 @@ $(document).ready(function () {
                                             selectedValues.includes(v)
                                                 ? "selected"
                                                 : ""
-                                        }>${v}</option>`
+                                        }>${v}</option>`,
                                 )
                                 .join("")}
                         </select>
@@ -146,15 +149,19 @@ $(document).ready(function () {
         });
 
         if (variationSets.length === 0) {
-            $tbody.html(`<tr><td class="text-danger" colspan="100%">Please select a variation.</td></tr>`);
+            $tbody.html(
+                `<tr><td class="text-danger" colspan="100%">Please select a variation.</td></tr>`,
+            );
             return;
         }
 
         // Generate all combinations
-        const allCombinations = getCombinations(variationSets.map((v) => v.values));
+        const allCombinations = getCombinations(
+            variationSets.map((v) => v.values),
+        );
 
         const vatType = $("#vat_type").val();
-        const vatRate = $("#vatRate").val();
+        const vatRate = getVatRate(); // Fixed: use getVatRate() function
         const productCode = $("#productCode").val();
         const hasSerials = $("#has-serial-code-addon").val();
 
@@ -164,10 +171,15 @@ $(document).ready(function () {
             const variantName = combo.join(" - ");
             const batch_no = productCode ? productCode + "-" + (index + 1) : "";
 
-            const existingStockRows = previousStocks.filter(stock => stock.variant_name == variantName);
-            const rowsToGenerate = existingStockRows.length > 0 ? existingStockRows : [null];
+            const existingStockRows = previousStocks.filter(
+                (stock) => stock.variant_name == variantName,
+            );
+            const rowsToGenerate =
+                existingStockRows.length > 0 ? existingStockRows : [null];
 
-            const variationJson = variationSets.map((set, i) => ({ [set.name]: combo[i] || "" }));
+            const variationJson = variationSets.map((set, i) => ({
+                [set.name]: combo[i] || "",
+            }));
 
             rowsToGenerate.forEach((stockItem) => {
                 const rowId = generateRowId();
@@ -182,7 +194,7 @@ $(document).ready(function () {
                     permissions,
                     canSeePrice,
                     vatType,
-                    vatRate
+                    vatRate,
                 });
 
                 index++;
@@ -203,16 +215,15 @@ $(document).ready(function () {
         permissions = {},
         canSeePrice = false,
         vatType = "exclusive",
-        vatRate = 0
+        vatRate = 0,
     }) {
-
         let newRow = `<tr data-row-id="${rowId}">
                         <input type="hidden" name="stocks[${rowId}][variant_name]" value="${variantName}">
                         <input type="hidden" name="stocks[${rowId}][variation_data]" value='${JSON.stringify(variationJson)}'>`;
 
-        newRow += `<td class="${ prevVariantName === variantName ? '' : 'add-row-icon' }">${ prevVariantName === variantName ? '' : '+' }</td>`;
+        newRow += `<td class="${prevVariantName === variantName ? "" : "add-row-icon"}">${prevVariantName === variantName ? "" : "+"}</td>`;
 
-        newRow += `<td class="variant-name">${ prevVariantName === variantName ? arrowSVG : variantName}</td>`;
+        newRow += `<td class="variant-name">${prevVariantName === variantName ? arrowSVG : variantName}</td>`;
 
         if (permissions.show_batch_no) {
             newRow += `<td><input type="text" name="stocks[${rowId}][batch_no]" class="form-control form-control-sm custom-table-input batch_no" placeholder="25632" value="${stockItem?.batch_no ?? batch_no}"></td>`;
@@ -239,7 +250,7 @@ $(document).ready(function () {
         if (canSeePrice) {
             if (permissions.show_exclusive_price) {
                 const price = stockItem?.productPurchasePrice ?? 0;
-                newRow += `<td><input type="number" step="any" min="0" name="stocks[${rowId}][exclusive_price]" class="form-control form-control-sm custom-table-input exclusive_price" placeholder="Ex: 50" value="${vatType == 'exclusive' ? price : price - ((price * (vatRate ?? 0)) / (100 + (vatRate ?? 0)))}"></td>`;
+                newRow += `<td><input type="number" step="any" min="0" name="stocks[${rowId}][exclusive_price]" class="form-control form-control-sm custom-table-input exclusive_price" placeholder="Ex: 50" value="${vatType == "exclusive" ? price : price - (price * (vatRate ?? 0)) / (100 + (vatRate ?? 0))}"></td>`;
             }
 
             if (permissions.show_inclusive_price) {
@@ -296,7 +307,7 @@ $(document).ready(function () {
         $clonedRow.find(".add-row-icon").text("");
         $clonedRow.find(".add-row-icon").removeClass("add-row-icon");
         $clonedRow.find(".variant-name").html(arrowSVG);
-        $clonedRow.find(".batch_no").val('');
+        $clonedRow.find(".batch_no").val("");
 
         // Add delete button
         $clonedRow.append(`<td class="delete-row">${deleteSVG}</td>`);
@@ -407,11 +418,11 @@ const arrowSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" 
 const deleteSVG = `<svg style="width:20px;height:20px;cursor:pointer;" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.625 4.125L14.1602 11.6438C14.0414 13.5648 13.9821 14.5253 13.5006 15.2159C13.2625 15.5573 12.956 15.8455 12.6005 16.062C11.8816 16.5 10.9192 16.5 8.99452 16.5C7.06734 16.5 6.10372 16.5 5.38429 16.0612C5.0286 15.8443 4.722 15.5556 4.48401 15.2136C4.00266 14.5219 3.94459 13.5601 3.82846 11.6364L3.375 4.125" stroke="#C62828" stroke-width="1.2" stroke-linecap="round"/><path d="M6.75 8.80078H11.25" stroke="#C62828" stroke-width="1.2" stroke-linecap="round"/><path d="M7.875 11.7422H10.125" stroke="#C62828" stroke-width="1.2" stroke-linecap="round"/><path d="M2.25 4.125H15.75M12.0416 4.125L11.5297 3.0688C11.1896 2.3672 11.0195 2.01639 10.7261 1.79761C10.6611 1.74908 10.5922 1.7059 10.5201 1.66852C10.1953 1.5 9.80542 1.5 9.02572 1.5C8.22645 1.5 7.82685 1.5 7.49662 1.67559C7.42343 1.71451 7.35359 1.75943 7.28783 1.80988C6.99109 2.03753 6.82533 2.40116 6.49381 3.12844L6.03955 4.125" stroke="#C62828" stroke-width="1.2" stroke-linecap="round"/></svg>`;
 
 function generateRowId() {
-    return 'row-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    return "row-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
 }
 
 function serialIconHtml(needSerial) {
-    return `<td class="serial-cell ${ needSerial ? "" : "d-none" } serial-option">
+    return `<td class="serial-cell ${needSerial ? "" : "d-none"} serial-option">
                 <button type="button" class="serial-cell-button" data-bs-toggle="modal" data-bs-target="#serialModal">
                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M4 7H18" stroke="#C52127" stroke-width="2" stroke-linecap="round"/>
@@ -422,7 +433,7 @@ function serialIconHtml(needSerial) {
                         <path d="M4 21H18" stroke="#C52127" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                 </button>
-            </td>`
+            </td>`;
 }
 
 $(document).on("click", ".add-variant-btn", function (e) {
@@ -431,14 +442,14 @@ $(document).on("click", ".add-variant-btn", function (e) {
     var canSeePrice = $("#canSeePrice").val() == "1";
     const permissions = JSON.parse($("#permissions-data").val());
     const warehouses = JSON.parse(
-        document.getElementById("warehouses-data").value
+        document.getElementById("warehouses-data").value,
     );
 
     let rowId = generateRowId();
     let newRow = "<tr data-row-id='" + rowId + "'>";
 
     if (permissions.show_batch_no) {
-        newRow += `<td><input type="text" name="stocks[${rowId}][batch_no]" class="form-control form-control-sm custom-table-input" placeholder="25632" value="${$('#productCode').val() + "-" + ($(".single-product-table tbody tr").length + 1)}"></td>`;
+        newRow += `<td><input type="text" name="stocks[${rowId}][batch_no]" class="form-control form-control-sm custom-table-input" placeholder="25632" value="${$("#productCode").val() + "-" + ($(".single-product-table tbody tr").length + 1)}"></td>`;
     }
 
     if (permissions.show_warehouse) {
@@ -517,10 +528,29 @@ $(document).on("click", ".add-variant-btn", function (e) {
 });
 
 // Get VAT rate
-function getVatRate() {
-    return (
-        parseFloat($("#vat_id").find("option:selected").data("vat_rate")) || 0
-    );
+// Get VAT rate
+function getVatRate($container) {
+    // If no container provided, try to find the active one based on visibility
+    const $targetContainer =
+        $container ||
+        $(".single-container:visible, .variant-container:visible");
+    const $vatSelect = $targetContainer.find(".vat_id");
+
+    if ($vatSelect.length === 0) {
+        console.log("getVatRate: vat_id element not found in container");
+        return 0;
+    }
+
+    const vatSelect = $vatSelect[0];
+    const selectedOption = vatSelect.options[vatSelect.selectedIndex];
+    if (!selectedOption || !selectedOption.value) {
+        console.log("getVatRate: No option selected");
+        return 0;
+    }
+
+    const rate = parseFloat(selectedOption.getAttribute("data-vat_rate")) || 0;
+    console.log("getVatRate:", rate, "from option:", selectedOption.text);
+    return rate;
 }
 
 // Get profit calculation type (markup/margin)
@@ -530,19 +560,23 @@ function getProfitOption() {
 
 // Update inclusive_price field based on VAT
 function updateInclusiveFromExclusive($row) {
-    const vatRate = getVatRate();
-    const vatType = $("#vat_type").val();
+    console.log("updateInclusiveFromExclusive called");
+    const $container = $row.closest(".single-container, .variant-container");
+    const vatRate = getVatRate($container);
+    const vatType = $container.find(".vat_type").val();
+    console.log("VAT Type:", vatType, "VAT Rate:", vatRate);
 
     const exclusiveInput = $row.find(".exclusive_price");
     const inclusiveInput = $row.find(".inclusive_price");
 
     let exclusive = parseFloat(exclusiveInput.val()) || 0;
+    console.log("Exclusive value:", exclusive);
 
     // inclusive = exclusive + VAT%
     if (vatType && vatRate) {
-        inclusiveInput.val(
-            (exclusive + (exclusive * vatRate) / 100).toFixed(2)
-        );
+        const inclusive = (exclusive + (exclusive * vatRate) / 100).toFixed(2);
+        console.log("Calculated inclusive:", inclusive);
+        inclusiveInput.val(inclusive);
     } else {
         inclusiveInput.val(exclusive.toFixed(2));
     }
@@ -550,8 +584,9 @@ function updateInclusiveFromExclusive($row) {
 
 // Calculate MRP from cost and profit
 function calculateMrpRow($row) {
-    const vatRate = getVatRate();
-    const vatType = $("#vat_type").val();
+    const $container = $row.closest(".single-container, .variant-container");
+    const vatRate = getVatRate($container);
+    const vatType = $container.find(".vat_type").val();
     const profitOption = getProfitOption();
 
     const costInput = $row.find(".exclusive_price");
@@ -566,10 +601,6 @@ function calculateMrpRow($row) {
     if (cost > 0) {
         let basePrice = cost;
 
-        if (vatType === "inclusive") {
-            basePrice += (cost * vatRate) / 100;
-        }
-
         let mrp = 0;
         if (profitOption === "margin") {
             mrp = basePrice / (1 - profit / 100);
@@ -583,8 +614,9 @@ function calculateMrpRow($row) {
 
 // Calculate profit from MRP
 function calculateProfitFromMrp($row) {
-    const vatRate = getVatRate();
-    const vatType = $("#vat_type").val();
+    const $container = $row.closest(".single-container, .variant-container");
+    const vatRate = getVatRate($container);
+    const vatType = $container.find(".vat_type").val();
     const profitOption = getProfitOption();
 
     const costInput = $row.find(".exclusive_price");
@@ -599,10 +631,6 @@ function calculateProfitFromMrp($row) {
     if (cost > 0 && mrp > 0) {
         let basePrice = cost;
 
-        if (vatType === "inclusive") {
-            basePrice += (cost * vatRate) / 100;
-        }
-
         let profit = 0;
         if (profitOption === "margin") {
             profit = ((mrp - basePrice) / mrp) * 100;
@@ -615,7 +643,8 @@ function calculateProfitFromMrp($row) {
 }
 
 function updateExclusiveFromInclusive($row) {
-    const vatRate = getVatRate();
+    const $container = $row.closest(".single-container, .variant-container");
+    const vatRate = getVatRate($container);
 
     const inclusiveInput = $row.find(".inclusive_price");
     const exclusiveInput = $row.find(".exclusive_price");
@@ -632,43 +661,121 @@ function updateExclusiveFromInclusive($row) {
 
 // Bind events for real-time calculation
 function bindMrpCalculation() {
+    console.log("bindMrpCalculation: Binding events...");
+
     $(document).on(
         "input change",
         ".exclusive_price, .profit_percent",
         function () {
+            console.log("Event: exclusive_price or profit_percent changed");
             const $row = $(this).closest("tr").length
                 ? $(this).closest("tr")
                 : $(this).closest(".row");
+            console.log("Found row:", $row.length);
             calculateMrpRow($row);
-        }
+        },
     );
 
     $(document).on("input change", ".productSalePrice", function () {
+        console.log("Event: productSalePrice changed");
         const $row = $(this).closest("tr").length
             ? $(this).closest("tr")
             : $(this).closest(".row");
         calculateProfitFromMrp($row);
     });
 
-    $("#vat_id, #vat_type").on("change", function () {
-        $(".exclusive_price").each(function () {
-            const $row = $(this).closest("tr").length
-                ? $(this).closest("tr")
-                : $(this).closest(".row");
-            calculateMrpRow($row);
+    $(document).on("change", ".vat_id, .vat_type", function () {
+        console.log("Event: VAT dropdown changed");
+
+        const $container = $(this).closest(
+            ".single-container, .variant-container",
+        );
+        const vatRate = getVatRate($container);
+
+        // Trigger calculation for all price fields in this container when VAT changes
+        $container.find(".exclusive_price").each(function () {
+            const $input = $(this);
+            const value = $input.val();
+
+            console.log("Checking exclusive_price, value:", value);
+
+            // Calculate if there's a value
+            if (value && parseFloat(value) > 0) {
+                const $row = $input.closest("tr").length
+                    ? $input.closest("tr")
+                    : $input.closest(".row");
+
+                console.log(
+                    "Calculating for exclusive_price with VAT rate:",
+                    vatRate,
+                );
+                calculateMrpRow($row);
+            }
+        });
+
+        // Also trigger for inclusive_price fields
+        $container.find(".inclusive_price").each(function () {
+            const $input = $(this);
+            const value = $input.val();
+
+            console.log("Checking inclusive_price, value:", value);
+
+            // Calculate if there's a value
+            if (value && parseFloat(value) > 0) {
+                const $row = $input.closest("tr").length
+                    ? $input.closest("tr")
+                    : $input.closest(".row");
+
+                console.log(
+                    "Calculating for inclusive_price with VAT rate:",
+                    vatRate,
+                );
+                updateExclusiveFromInclusive($row);
+            }
         });
     });
 
     // On inclusive price change, update exclusive and MRP after edit
     $(document).on("blur", ".inclusive_price", function () {
+        console.log("Event: inclusive_price blur");
         const $row = $(this).closest("tr").length
             ? $(this).closest("tr")
             : $(this).closest(".row");
         updateExclusiveFromInclusive($row);
     });
+
+    console.log("bindMrpCalculation: All events bound successfully");
 }
 
 bindMrpCalculation();
+
+// Handle product type radio button changes (Single vs Variant/Batch)
+$(document).on("change", "input[name='product_type']", function () {
+    const selectedType = $(this).val();
+
+    if (selectedType === "single") {
+        // Show single container, hide variant container
+        $(".single-container").show();
+        $(".variant-container").hide();
+    } else if (selectedType === "variant") {
+        // Show variant container, hide single container
+        $(".single-container").hide();
+        $(".variant-container").show();
+    }
+});
+
+// Initialize on page load - check which radio is selected
+$(document).ready(function () {
+    const selectedType = $("input[name='product_type']:checked").val();
+
+    if (selectedType === "single") {
+        $(".single-container").show();
+        $(".variant-container").hide();
+    } else if (selectedType === "variant") {
+        $(".single-container").hide();
+        $(".variant-container").show();
+    }
+});
 
 /** INVENTORY SALE START **/
 
@@ -684,9 +791,11 @@ function populateProducts(products = []) {
     $dropdownList.empty();
 
     if (!Array.isArray(products) || products.length === 0) {
-        const noProductsMessage = window.translations?.no_products_available || 'No products available';
+        const noProductsMessage =
+            window.translations?.no_products_available ||
+            "No products available";
         $dropdownList.html(
-            `<div class="product-option-item">${noProductsMessage}</div>`
+            `<div class="product-option-item">${noProductsMessage}</div>`,
         );
         return;
     }
@@ -694,7 +803,7 @@ function populateProducts(products = []) {
     const html = products
         .map((product) => {
             const imageUrl = assetPath(
-                product.productPicture ?? "assets/images/products/box.svg"
+                product.productPicture ?? "assets/images/products/box.svg",
             );
 
             let batchesHtml = "";
@@ -774,8 +883,8 @@ function loadAllProducts() {
         .done(populateProducts)
         .fail(() =>
             $("#dropdownList").html(
-                '<div class="product-option-item text-danger">Failed to load products</div>'
-            )
+                '<div class="product-option-item text-danger">Failed to load products</div>',
+            ),
         );
 }
 
@@ -831,7 +940,7 @@ $(document).on("keyup", "#productSearch", function () {
             const name = ($this.data("product_name") || "").toLowerCase();
             const code = ($this.data("product_code") || "").toLowerCase();
             $this.toggle(
-                name.includes(searchTerm) || code.includes(searchTerm)
+                name.includes(searchTerm) || code.includes(searchTerm),
             );
         });
     }, 150);
@@ -850,7 +959,7 @@ function addItem(element) {
 
     // 🔍 Check if same product & same batch already exists
     let $existingRow = $tableBody.find(
-        `.combo-row[data-product-id="${product_id}"][data-batch-no="${batch_no}"]`
+        `.combo-row[data-product-id="${product_id}"][data-batch-no="${batch_no}"]`,
     );
 
     if ($existingRow.length) {
@@ -926,7 +1035,7 @@ function updateComboTotal() {
         <tr class="total-row">
             <td class="text-end" colspan="4"><h2 class="total-amount">Net Total Amount: </h2></td>
             <td colspan="2"><h2 class="total-amount">$${total.toFixed(
-                2
+                2,
             )}</h2></td>
         </tr>
     `);
@@ -942,7 +1051,7 @@ $(document).on(
         if ($("#product-type").val() == "combo") {
             updateComboTotal();
         }
-    }
+    },
 );
 
 // Remove row
@@ -978,8 +1087,6 @@ $("#serial").on("change", function () {
     }
 });
 
-
-
 /** INVENTORY SALE END **/
 
 // SERIAL CODES START FROM HERE
@@ -988,7 +1095,7 @@ let currentRowId = 0;
 // When clicking the serial icon on a row
 $(document).on("click", ".serial-cell-button", function () {
     $(".serial-input").val("");
-    $('#serialModal').modal("show");
+    $("#serialModal").modal("show");
     currentRowId = $(this).closest("tr").data("row-id");
     loadSerials();
 });
@@ -1007,7 +1114,9 @@ $(document).on("click", "#saveSerialBtn", function () {
         return;
     }
 
-    const input = $(`<input type="hidden" name="stocks[${currentRowId}][serial_numbers][]" value="${serial}">`);
+    const input = $(
+        `<input type="hidden" name="stocks[${currentRowId}][serial_numbers][]" value="${serial}">`,
+    );
     $("#serial-inputs").append(input);
 
     appendSerial(serial);
@@ -1019,9 +1128,11 @@ $(document).on("click", "#saveSerialBtn", function () {
 function getAllSerials() {
     let serials = [];
 
-    $(`input[name="stocks[${currentRowId}][serial_numbers][]"]`).each(function () {
-        serials.push($(this).val());
-    });
+    $(`input[name="stocks[${currentRowId}][serial_numbers][]"]`).each(
+        function () {
+            serials.push($(this).val());
+        },
+    );
 
     return serials;
 }
@@ -1043,7 +1154,7 @@ function loadSerials() {
     $("#serialList").html("");
     let serials = getAllSerials();
 
-    serials.forEach(serial => {
+    serials.forEach((serial) => {
         appendSerial(serial);
     });
 
@@ -1052,9 +1163,11 @@ function loadSerials() {
 
 // Update stock count in the row
 function updateSerialCount() {
-    const count = $(`input[name="stocks[${currentRowId}][serial_numbers][]"]`).length;
+    const count = $(
+        `input[name="stocks[${currentRowId}][serial_numbers][]"]`,
+    ).length;
     $(`#enteredCount`).text(count);
-    $(`tr[data-row-id="${currentRowId}"]`).find('.productStock').val(count);
+    $(`tr[data-row-id="${currentRowId}"]`).find(".productStock").val(count);
 }
 
 // Remove serial
@@ -1063,7 +1176,9 @@ $(document).on("click", ".serial-remove-btn", function () {
     const serial = $item.find("span").first().text();
     const rowId = $item.data("rowid");
 
-    $(`input[name="stocks[${rowId}][serial_numbers][]"][value="${serial}"]`).remove();
+    $(
+        `input[name="stocks[${rowId}][serial_numbers][]"][value="${serial}"]`,
+    ).remove();
     $item.remove();
 
     updateSerialCount();
@@ -1071,13 +1186,13 @@ $(document).on("click", ".serial-remove-btn", function () {
 
 $(document).on("click", ".remove-row", function (e) {
     e.preventDefault();
-    const rowId = $(this).closest("tr").data('row-id');
+    const rowId = $(this).closest("tr").data("row-id");
     $(`input[name="stocks[${rowId}][serial_numbers][]"]`).remove();
-    $('.' + rowId).remove();
+    $("." + rowId).remove();
     $(this).closest("tr").remove();
 });
 
-$(document).on('click', '.remove-all-serial', function() {
+$(document).on("click", ".remove-all-serial", function () {
     clearAllSerials(currentRowId);
 });
 
@@ -1087,11 +1202,11 @@ function clearAllSerials(clearRowId) {
     updateSerialCount();
 }
 
-$(document).on('keydown', function (e) {
+$(document).on("keydown", function (e) {
     if (e.key === "Enter") {
-        if ($('#serialModal').is(':visible')) {
+        if ($("#serialModal").is(":visible")) {
             e.preventDefault();
-            $('#serialModal').find('#saveSerialBtn').trigger('click');
+            $("#serialModal").find("#saveSerialBtn").trigger("click");
         }
     }
 });

@@ -89,12 +89,12 @@
         </div>
         <div class="summary-row">
             <span class="summary-label">{{ __('Subtotal') }}</span>
-            <span class="summary-value" id="sub_total">$35.00</span>
+            <span class="summary-value" id="sub_total">{{ currency_format(0, currency: business_currency()) }}</span>
         </div>
         <div class="summary-row discount-row">
             <span class="summary-label">{{ __('Discount') }}</span>
             <div class="discount-controls">
-                <span class="summary-value" id="discount_display">0</span>
+                <span class="summary-value" id="discount_display">{{ currency_format(0, currency: business_currency()) }}</span>
                 <button type="button" class="add-discount-btn" id="add-discount-btn">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -116,7 +116,7 @@
         <div class="summary-row shipping-row">
             <span class="summary-label">{{ __('Shipping') }}</span>
             <div class="shipping-controls">
-                <span class="summary-value" id="shipping_display">0</span>
+                <span class="summary-value" id="shipping_display">{{ currency_format(0, currency: business_currency()) }}</span>
                 <button type="button" class="add-shipping-btn" id="add-shipping-btn">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -132,12 +132,12 @@
             </div>
         </div>
         <div class="summary-row">
-            <span class="summary-label">{{ __('VAT 15%') }}</span>
-            <span class="summary-value" id="vat_amount">{{ currency_format(0, currency: business_currency()) }}</span>
+            <span class="summary-label vat-label">{{ __('Vat') }} <span class="vat-rate-display">15</span>%</span>
+            <span class="summary-value" id="vat_display">{{ currency_format(0, currency: business_currency()) }}</span>
         </div>
         <div class="summary-row summary-total">
             <span class="summary-label ">{{ __('Total') }}</span>
-            <span class="summary-value" id="total_amount">$38.50</span>
+            <span class="summary-value" id="total_amount">{{ currency_format(0, currency: business_currency()) }}</span>
         </div>
     </div>
 

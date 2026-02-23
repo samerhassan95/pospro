@@ -27,8 +27,9 @@ class BulkUploadController extends Controller
         ]);
 
         $businessId = auth()->user()->business_id;
+        $branchId = auth()->user()->branch_id ?? auth()->user()->active_branch_id;
 
-        Excel::import(new ProductImport($businessId), $request->file('file'));
+        Excel::import(new ProductImport($businessId, $branchId), $request->file('file'));
 
         return response()->json([
             'message' => __('Bulk upload successfully.'),

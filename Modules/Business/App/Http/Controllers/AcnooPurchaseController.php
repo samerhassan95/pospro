@@ -136,7 +136,7 @@ class AcnooPurchaseController extends Controller
     public function productFilter(Request $request)
     {
         $business_id = auth()->user()->business_id;
-        $products = Product::with(['stocks', 'unit:id,unitName'])
+        $products = Product::with(['stocks', 'unit:id,unitName', 'vat'])
             ->where('business_id', $business_id)
             ->when($request->search, function ($query) use ($request) {
                 $query->where(function ($q) use ($request) {
@@ -286,6 +286,7 @@ class AcnooPurchaseController extends Controller
             'category:id,categoryName',
             'unit:id,unitName',
             'brand:id,brandName',
+            'vat'
         ])
             ->withSum('stocks', 'productStock')
             ->where('business_id', $business_id)

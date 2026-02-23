@@ -138,7 +138,8 @@ $(document).on("click", ".minus-btn", function (e) {
 
         // Get the current price
         let currentPrice = parseFloat($row.find(".cart-price").val());
-        let currentDiscount = parseFloat($row.find(".cart-discount").val()) || 0;
+        let currentDiscount =
+            parseFloat($row.find(".cart-discount").val()) || 0;
 
         if (isNaN(currentPrice) || currentPrice < 0) {
             toastr.error("Price can not be negative.");
@@ -208,7 +209,7 @@ function updateCart(rowId, qty, updateRoute, price, discount = 0) {
             rowId: rowId,
             qty: qty,
             price: price,
-            discount: discount
+            discount: discount,
         },
         success: function (response) {
             if (response.success) {
@@ -281,35 +282,49 @@ $(".customer-select").on("change", function () {
                 // }
 
                 if (response.products.hasOwnProperty(productId)) {
-                    $(this).find(".product_price").text(response.products[productId]);
+                    $(this)
+                        .find(".product_price")
+                        .text(response.products[productId]);
                 }
             });
 
             // Update cart cart list if cart not empty
             if (cartRows.length) {
-                $("#cart-list tr, #cart-list .cart-item-card").each(function () {
-                    let $row = $(this);
-                    let stockId = $row.data("stock_id");
-                    let batchNo = $row.data("batch_no") || "default";
+                $("#cart-list tr, #cart-list .cart-item-card").each(
+                    function () {
+                        let $row = $(this);
+                        let stockId = $row.data("stock_id");
+                        let batchNo = $row.data("batch_no") || "default";
 
-                    if (stockId && response.stocks[stockId]) {
-                        // if (batchNo && response.stocks[stockId][batchNo]) {
-                        //     $row.find(".cart-price").val(response.stocks[stockId][batchNo]).trigger('change');
-                        // } else if (response.stocks[stockId]['default']) {
-                        //     $row.find(".cart-price").val(response.stocks[stockId]['default']).trigger('change');
-                        // }
+                        if (stockId && response.stocks[stockId]) {
+                            // if (batchNo && response.stocks[stockId][batchNo]) {
+                            //     $row.find(".cart-price").val(response.stocks[stockId][batchNo]).trigger('change');
+                            // } else if (response.stocks[stockId]['default']) {
+                            //     $row.find(".cart-price").val(response.stocks[stockId]['default']).trigger('change');
+                            // }
 
-                        if (response.stocks[stockId].hasOwnProperty(batchNo)) {
-                            $row.find(".cart-price").val(response.stocks[stockId][batchNo]).trigger('change');
-                        } else if (response.stocks[stockId].hasOwnProperty('default')) {
-                            $row.find(".cart-price").val(response.stocks[stockId]['default']).trigger('change');
+                            if (
+                                response.stocks[stockId].hasOwnProperty(batchNo)
+                            ) {
+                                $row.find(".cart-price")
+                                    .val(response.stocks[stockId][batchNo])
+                                    .trigger("change");
+                            } else if (
+                                response.stocks[stockId].hasOwnProperty(
+                                    "default",
+                                )
+                            ) {
+                                $row.find(".cart-price")
+                                    .val(response.stocks[stockId]["default"])
+                                    .trigger("change");
+                            }
                         }
-                    }
-                });
+                    },
+                );
                 // Recalculate totals after cart update
                 calTotalAmount();
             }
-        }
+        },
     });
 });
 
@@ -318,17 +333,16 @@ $("#discount_amount, #receive_amount, #shipping_charge").on(
     "input change",
     function () {
         calTotalAmount();
-    }
+    },
 );
 
 // vat calculation
 $(".vat_select").on("change", function () {
     let vatRate = parseFloat($(this).find(":selected").data("rate")) || 0;
-    let subtotal = getNumericValue($("#sub_total").text()) || 0;
 
-    let vatAmount = (subtotal * vatRate) / 100;
+    // Update VAT label with new rate
+    $(".vat-rate-display").text(vatRate);
 
-    $("#vat_amount").val(vatAmount.toFixed(2));
     calTotalAmount();
 });
 
@@ -344,10 +358,14 @@ function calTotalAmount() {
 
     // Calculate subtotal from cart list using qty * price (supports both tr and card layout)
     $("#cart-list tr, #cart-list .cart-item-card").each(function () {
-        let qty = getNumericValue($(this).find(".cart-qty, .cart-item-qty").val()) || 0;
+        let qty =
+            getNumericValue($(this).find(".cart-qty, .cart-item-qty").val()) ||
+            0;
         let price = getNumericValue($(this).find(".cart-price").val()) || 0;
         let discountField = $(this).find(".cart-discount");
-        let discount = discountField.length ? getNumericValue(discountField.val()) : 0;
+        let discount = discountField.length
+            ? getNumericValue(discountField.val())
+            : 0;
         let row_subtotal = qty * (price - discount);
         subtotal += row_subtotal;
         itemsCount += qty;
@@ -356,44 +374,47 @@ function calTotalAmount() {
     $("#sub_total").text(currencyFormat(subtotal));
     $("#items_count").text(itemsCount);
 
-    // Fixed VAT 15%
-    let vat_amount = subtotal * 0.15;
-    $("#vat_amount").text(currencyFormat(vat_amount));
-
-    // VAT (existing dynamic VAT - keep for compatibility)
-    let vat_rate =
-        parseFloat($(".vat_select option:selected").data("rate")) || 0;
-    let dynamic_vat_amount = (subtotal * vat_rate) / 100;
-    $("#vat_amount").val(dynamic_vat_amount.toFixed(2));
-
-    // Subtotal with VAT (use fixed 15% VAT)
-    let subtotal_with_vat = subtotal + vat_amount;
+    // Shipping Charge
+    let shipping_charge = getNumericValue($("#shipping_charge").val()) || 0;
 
     // Discount
-    let discount_amount = getNumericValue($("#discount_amount").val()) || 0;
+    let discount_amount_input =
+        getNumericValue($("#discount_amount").val()) || 0;
     let discount_type = $(".discount_type").val();
+    let discount_amount = 0;
 
     if (discount_type == "percent") {
-        discount_amount = (subtotal_with_vat * discount_amount) / 100;
+        discount_amount = (subtotal * discount_amount_input) / 100;
 
-        if (discount_amount > subtotal_with_vat) {
+        if (discount_amount > subtotal) {
             toastr.error("Discount cannot be more than 100% of the amount!");
-            discount_amount = subtotal_with_vat;
+            discount_amount = subtotal;
             $("#discount_amount").val(100);
         }
     } else {
-        if (discount_amount > subtotal_with_vat) {
+        discount_amount = discount_amount_input;
+        if (discount_amount > subtotal) {
             toastr.error("Discount cannot be more than the amount!");
-            discount_amount = subtotal_with_vat;
+            discount_amount = subtotal;
             $("#discount_amount").val(discount_amount);
         }
     }
 
-    // Shipping Charge
-    let shipping_charge = getNumericValue($("#shipping_charge").val()) || 0;
+    // New Taxable Base: Subtotal + Shipping - Discount
+    let taxable_amount = subtotal - discount_amount + shipping_charge;
+
+    // Get VAT rate from selected VAT option (dynamic from database)
+    let vat_rate =
+        parseFloat($(".vat_select option:selected").data("rate")) || 15;
+    let vat_amount = (taxable_amount * vat_rate) / 100;
+
+    // Update VAT display with dynamic rate
+    $(".vat-rate-display").text(vat_rate);
+    $("#vat_display").text(currencyFormat(vat_amount));
+    $("#vat_amount").val(vat_amount.toFixed(2));
 
     // Total Amount
-    let total_amount = subtotal_with_vat + shipping_charge - discount_amount;
+    let total_amount = taxable_amount + vat_amount;
     $("#total_amount").text(currencyFormat(total_amount));
 
     // Rounding total
@@ -426,13 +447,16 @@ function calTotalAmount() {
     $("#due_amount").val(formattedAmount(due_amount, 2));
 
     // Update display elements for new layout
-    let discount_display = discount_type == "percent" ? discount_amount : getNumericValue($("#discount_amount").val()) || 0;
+    let discount_display =
+        discount_type == "percent"
+            ? discount_amount
+            : getNumericValue($("#discount_amount").val()) || 0;
     $("#discount_display").text(currencyFormat(discount_display));
     $("#vat_display").text(currencyFormat(vat_amount));
     $("#shipping_display").text(currencyFormat(shipping_charge));
 
     // Update VAT amount display in sidebar
-    $("#vat_amount").text(currencyFormat(vat_amount));
+    $("#vat_display").text(currencyFormat(vat_amount));
 
     // Update payable amount hidden input if exists
     if ($("#payable_amount").is("input")) {
@@ -555,18 +579,22 @@ let scannerInputTimeout;
 const SCANNER_LOCK_TIME = 300; // Time to wait before allowing another scan
 
 // Handle scanner input when Enter key is pressed
-$(".product-filter").on("keydown", ".search-input, .product-search-input", function (e) {
-    if (e.key == "Enter") {
-        if (isScannerInput) {
-            e.preventDefault();
-            return; // Skip duplicate scanner calls
+$(".product-filter").on(
+    "keydown",
+    ".search-input, .product-search-input",
+    function (e) {
+        if (e.key == "Enter") {
+            if (isScannerInput) {
+                e.preventDefault();
+                return; // Skip duplicate scanner calls
+            }
+
+            e.preventDefault(); // Prevent form submission
+
+            handleScannerInput(this);
         }
-
-        e.preventDefault(); // Prevent form submission
-
-        handleScannerInput(this);
-    }
-});
+    },
+);
 
 $(".product-filter").on("submit", function (e) {
     e.preventDefault();
@@ -582,7 +610,7 @@ $(".product-filter").on(
         }
 
         handleUserInput();
-    }, 400)
+    }, 400),
 );
 
 // Function to handle scanner input
@@ -705,13 +733,13 @@ function prepareSingleBatchItem(item, batch, customerType) {
 }
 
 // Handle variant selection
-$(document).on('click', '.variant-item', function() {
-    const radio = $(this).find('.variant-radio');
-    const isActive = $(this).hasClass('cart-active');
+$(document).on("click", ".variant-item", function () {
+    const radio = $(this).find(".variant-radio");
+    const isActive = $(this).hasClass("cart-active");
 
     // Toggle active state and radio checked status
-    $(this).toggleClass('cart-active', !isActive);
-    radio.prop('checked', !isActive);
+    $(this).toggleClass("cart-active", !isActive);
+    radio.prop("checked", !isActive);
 });
 
 // show variant modal
@@ -722,10 +750,11 @@ function showBatchSelectionModal(element, availableStocks, customerType) {
     $modalBody.empty();
 
     // Build variant items
-    const variantHtml = availableStocks.map((batch, index) => {
-        const adjustedPrice = getAdjustedPrice(batch, customerType);
+    const variantHtml = availableStocks
+        .map((batch, index) => {
+            const adjustedPrice = getAdjustedPrice(batch, customerType);
 
-        return `
+            return `
             <div class="cart-variant-box variant-item ${index > 0 ? "mt-2" : ""}"
                 data-product_id="${element.data("product_id")}"
                 data-product_type="${element.data("product_type")}"
@@ -744,7 +773,7 @@ function showBatchSelectionModal(element, availableStocks, customerType) {
                 <input type="radio" class="form-check-input me-2 variant-radio">
                 <div class="cart-variant-info">
                     <div>
-                        ${batch.variant_name ? `<strong>${batch.variant_name.replace(/-/g, ', ')}</strong>,` : ''}
+                        ${batch.variant_name ? `<strong>${batch.variant_name.replace(/-/g, ", ")}</strong>,` : ""}
                         <span class="cart-stock">Stock: ${batch.productStock ?? 0}</span>
                     </div>
                     <small>Batch: ${batch.batch_no ?? "N/A"}</small>
@@ -752,7 +781,8 @@ function showBatchSelectionModal(element, availableStocks, customerType) {
                 <div class="cart-variant-price">${currencyFormat(adjustedPrice)}</div>
             </div>
         `;
-    }).join("");
+        })
+        .join("");
 
     // Append generated items + Add button
     $modalBody.append(variantHtml);
@@ -767,7 +797,9 @@ function showBatchSelectionModal(element, availableStocks, customerType) {
 // ------------------------
 function handleAddToCart(element) {
     const batchCount = parseInt(element.data("batch_count")) || 0;
-    const stocks = Array.isArray(element.data("stocks")) ? element.data("stocks") : [];
+    const stocks = Array.isArray(element.data("stocks"))
+        ? element.data("stocks")
+        : [];
     const customerType = getCustomerType();
     const availableStocks = getAvailableStocks(stocks);
 
@@ -796,22 +828,22 @@ function autoAddItemToCart(id) {
 // ------------------------
 $(document).on("click", ".single-product, .product-card-new", function (e) {
     // Prevent double triggering if clicking on add button
-    if ($(e.target).closest('.add-product-btn').length) {
+    if ($(e.target).closest(".add-product-btn").length) {
         return;
     }
-    
+
     // Prevent double clicks
-    if ($(this).data('adding')) {
+    if ($(this).data("adding")) {
         return;
     }
-    $(this).data('adding', true);
-    
+    $(this).data("adding", true);
+
     const customer_id = $(".customer-select").val();
     handleAddToCart($(this));
-    
+
     // Reset the flag after a short delay
     setTimeout(() => {
-        $(this).data('adding', false);
+        $(this).data("adding", false);
     }, 500);
 });
 
@@ -819,39 +851,39 @@ $(document).on("click", ".single-product, .product-card-new", function (e) {
 $(document).on("click", ".add-product-btn", function (e) {
     e.preventDefault();
     e.stopPropagation();
-    
+
     const $productCard = $(this).closest(".single-product, .product-card-new");
-    
+
     // Prevent double clicks
-    if ($productCard.data('adding')) {
+    if ($productCard.data("adding")) {
         return;
     }
-    $productCard.data('adding', true);
-    
+    $productCard.data("adding", true);
+
     handleAddToCart($productCard);
-    
+
     // Reset the flag after a short delay
     setTimeout(() => {
-        $productCard.data('adding', false);
+        $productCard.data("adding", false);
     }, 500);
 });
 
 // Handle Add to Cart button click for multiple selections
-$(document).on('click', '.cart-add-btn', function() {
+$(document).on("click", ".cart-add-btn", function () {
     const $modal = $("#stock-list-modal");
-    const selectedItems = $modal.find('.variant-item.cart-active');
+    const selectedItems = $modal.find(".variant-item.cart-active");
 
     if (selectedItems.length == 0) {
         toastr.warning("Please select at least one variant.");
         return;
     }
 
-    selectedItems.each(function() {
+    selectedItems.each(function () {
         addItemToCart($(this));
     });
 
     // Close modal after adding
-    $modal.modal('hide');
+    $modal.modal("hide");
 });
 
 // search filter in modal
@@ -869,7 +901,9 @@ function addItemToCart(element) {
     let product_type = element.data("product_type");
     let product_name = element.data("product_name");
     let extractedPrice = getNumericValue(element.find(".product_price").text());
-    let product_price = !isNaN(extractedPrice) && extractedPrice > 0 ? extractedPrice
+    let product_price =
+        !isNaN(extractedPrice) && extractedPrice > 0
+            ? extractedPrice
             : parseFloat(element.data("default_price")) || 0;
     let product_code = element.data("product_code");
     let product_unit_id = element.data("product_unit_id");
@@ -916,10 +950,10 @@ function addItemToCart(element) {
 // Update current time every second
 function updateCurrentTime() {
     const now = new Date();
-    const timeString = now.toLocaleTimeString('en-US', { 
-        hour: 'numeric', 
-        minute: '2-digit',
-        hour12: true 
+    const timeString = now.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
     });
     $("#current-time").text(timeString);
 }
@@ -930,117 +964,118 @@ setInterval(updateCurrentTime, 1000);
 updateCurrentTime();
 
 // Discount functionality
-$("#add-discount-btn").on("click", function() {
+$("#add-discount-btn").on("click", function () {
     $("#discount-input-section").removeClass("d-none");
     $(this).hide();
 });
 
-$("#apply-discount-btn").on("click", function() {
+$("#apply-discount-btn").on("click", function () {
     const discountAmount = parseFloat($("#discount_amount_input").val()) || 0;
     const discountType = $("#discount_type_select").val();
-    
+
     if (discountAmount < 0) {
         toastr.error("Discount amount cannot be negative.");
         return;
     }
-    
+
     // Update the hidden form fields
     $("#discount_amount").val(discountAmount);
     $(".discount_type").val(discountType);
-    
+
     // Recalculate totals
     calTotalAmount();
-    
+
     // Hide the input section and show the add button
     $("#discount-input-section").addClass("d-none");
     $("#add-discount-btn").show();
-    
+
     toastr.success("Discount applied successfully!");
 });
 
-$("#cancel-discount-btn").on("click", function() {
+$("#cancel-discount-btn").on("click", function () {
     // Clear the input
     $("#discount_amount_input").val("");
     $("#discount_type_select").val("flat");
-    
+
     // Hide the input section and show the add button
     $("#discount-input-section").addClass("d-none");
     $("#add-discount-btn").show();
 });
 
 // VAT functionality
-$("#add-vat-btn").on("click", function() {
+$("#add-vat-btn").on("click", function () {
     $("#vat-input-section").removeClass("d-none");
     $(this).hide();
 });
 
-$("#apply-vat-btn").on("click", function() {
+$("#apply-vat-btn").on("click", function () {
     const selectedVat = $("#vat_select_input").val();
-    const vatRate = parseFloat($("#vat_select_input option:selected").data("rate")) || 0;
-    
+    const vatRate =
+        parseFloat($("#vat_select_input option:selected").data("rate")) || 0;
+
     if (!selectedVat) {
         toastr.error("Please select a VAT option.");
         return;
     }
-    
+
     // Update the hidden form fields
     $(".vat_select").val(selectedVat);
-    
+
     // Calculate VAT amount
     let subtotal = getNumericValue($("#sub_total").text()) || 0;
     let vatAmount = (subtotal * vatRate) / 100;
     $("#vat_amount").val(vatAmount.toFixed(2));
-    
+
     // Recalculate totals
     calTotalAmount();
-    
+
     // Hide the input section and show the add button
     $("#vat-input-section").addClass("d-none");
     $("#add-vat-btn").show();
-    
+
     toastr.success("VAT applied successfully!");
 });
 
-$("#cancel-vat-btn").on("click", function() {
+$("#cancel-vat-btn").on("click", function () {
     // Clear the selection
     $("#vat_select_input").val("");
-    
+
     // Hide the input section and show the add button
     $("#vat-input-section").addClass("d-none");
     $("#add-vat-btn").show();
 });
 
 // Shipping functionality
-$("#add-shipping-btn").on("click", function() {
+$("#add-shipping-btn").on("click", function () {
     $("#shipping-input-section").removeClass("d-none");
     $(this).hide();
 });
 
-$("#apply-shipping-btn").on("click", function() {
+$("#apply-shipping-btn").on("click", function () {
     const shippingAmount = parseFloat($("#shipping_charge_input").val()) || 0;
-    
+
     if (shippingAmount < 0) {
         toastr.error("Shipping charge cannot be negative.");
         return;
     }
-    
+
     // Update the hidden form field
     $("#shipping_charge").val(shippingAmount);
-    
+
     // Recalculate totals
     calTotalAmount();
-    
+
     // Hide the input section and show the add button
     $("#shipping-input-section").addClass("d-none");
     $("#add-shipping-btn").show();
-    
+
     toastr.success("Shipping charge applied successfully!");
 });
 
-$("#cancel-shipping-btn").on("click", function() {
+$("#cancel-shipping-btn").on("click", function () {
     // Clear the input
     $("#shipping_charge_input").val("");
-    
+
     // Hide the input section and show the add button
     $("#shipping-input-section").addClass("d-none");
     $("#add-shipping-btn").show();
@@ -1110,9 +1145,11 @@ function populateProducts(products) {
     $dropdownList.empty();
 
     if (products.length == 0) {
-        const noProductsMessage = window.translations?.no_products_available || 'No products available';
+        const noProductsMessage =
+            window.translations?.no_products_available ||
+            "No products available";
         $dropdownList.append(
-            `<div class="product-option-item">${noProductsMessage}</div>`
+            `<div class="product-option-item">${noProductsMessage}</div>`,
         );
         return;
     }
@@ -1121,7 +1158,7 @@ function populateProducts(products) {
 
     $.each(products, function (index, product) {
         const imageUrl = assetPath(
-            product.productPicture ?? "assets/images/products/box.svg"
+            product.productPicture ?? "assets/images/products/box.svg",
         );
         let html = "";
 
@@ -1161,16 +1198,18 @@ function populateProducts(products) {
                         data-route="${cartRoute}">
                         <div class="product-des">
                             Batch: ${stock.batch_no ?? "N/A"}${
-                            product.color ? ", Color: " + product.color : ""
-                         }${
-                            stock.warehouse?.name
-                            ? ", Warehouse: " + stock.warehouse.name + ","
-                            : ""
+                                product.color ? ", Color: " + product.color : ""
+                            }${
+                                stock.warehouse?.name
+                                    ? ", Warehouse: " +
+                                      stock.warehouse.name +
+                                      ","
+                                    : ""
                             }
-                            <span class="product-in-stock"> In Stock: ${   stock.productStock ?? 0 } </span>
+                            <span class="product-in-stock"> In Stock: ${stock.productStock ?? 0} </span>
                         </div>
                         <div class="product-price product_price">${currencyFormat(
-                            stock.productSalePrice
+                            stock.productSalePrice,
                         )}</div>
                     </div>`;
             });
@@ -1212,7 +1251,8 @@ function populateProducts(products) {
                                  ${product.color ? ", Color: " + product.color : ""}
                                  ${
                                      singleStock.warehouse?.name
-                                         ? ", Warehouse: " + singleStock.warehouse.name
+                                         ? ", Warehouse: " +
+                                           singleStock.warehouse.name
                                          : ""
                                  }
                                  <span class="product-in-stock">
@@ -1220,7 +1260,7 @@ function populateProducts(products) {
                                  </span>
                             </div>
                             <div class="product-price product_price">${currencyFormat(
-                                singleStock.productSalePrice ?? 0
+                                singleStock.productSalePrice ?? 0,
                             )}</div>
                         </div>
                     </div>
@@ -1316,17 +1356,40 @@ $productSearch.on("keyup", function () {
 /** INVENTORY SALE END **/
 
 // Initialize Choices.js only if elements exist
-const choicesElements = document.querySelectorAll('.choices-select');
+const choicesElements = document.querySelectorAll(".choices-select");
 if (choicesElements.length > 0) {
-    const choice = new Choices('.choices-select', {
+    const choice = new Choices(".choices-select", {
         placeholder: false,
-        placeholderValue: '',
-        searchPlaceholderValue: 'Search...',
+        placeholderValue: "",
+        searchPlaceholderValue: "Search...",
         removeItemButton: false,
         allowHTML: true,
         shouldSort: false,
-        itemSelectText: '',
-        duplicateItemsAllowed: false
+        itemSelectText: "",
+        duplicateItemsAllowed: false,
     });
 }
 
+// Auto-select first VAT option on page load
+$(document).ready(function () {
+    // Select first VAT option if none selected
+    if ($(".vat_select option:selected").val() == "") {
+        let firstVatOption = $(".vat_select option:not([value=''])").first();
+        if (firstVatOption.length) {
+            $(".vat_select").val(firstVatOption.val());
+
+            // Update VAT display
+            let vatRate = parseFloat(firstVatOption.data("rate")) || 15;
+            $(".vat-rate-display").text(vatRate);
+
+            // Trigger calculation
+            calTotalAmount();
+        }
+    } else {
+        // Update display with currently selected VAT
+        let vatRate =
+            parseFloat($(".vat_select option:selected").data("rate")) || 15;
+        $(".vat-rate-display").text(vatRate);
+        calTotalAmount();
+    }
+});

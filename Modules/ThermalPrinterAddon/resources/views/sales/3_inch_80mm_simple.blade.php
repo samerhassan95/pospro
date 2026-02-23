@@ -52,24 +52,36 @@
             <thead>
                 <tr style="border-top: 2px solid #000; border-bottom: 1px solid #000;">
                     <th style="text-align: right; padding: 2px;">المنتج</th>
-                    <th style="text-align: center; padding: 2px; width: 15%;">الكمية</th>
-                    <th style="text-align: right; padding: 2px; width: 20%;">السعر</th>
-                    <th style="text-align: right; padding: 2px; width: 20%;">المجموع</th>
+                    <th style="text-align: center; padding: 2px; width: 12%;">الكمية</th>
+                    <th style="text-align: right; padding: 2px; width: 18%;">السعر</th>
+                    <th style="text-align: right; padding: 2px; width: 15%;">الضريبة</th>
+                    <th style="text-align: right; padding: 2px; width: 18%;">المجموع</th>
                 </tr>
             </thead>
             <tbody>
                 @php
+                // الحصول على نسبة الضريبة من قاعدة البيانات
+                $vatRate = $sale->vat ? ($sale->vat->rate / 100) : 0.15;
+                $vatPercent = $sale->vat ? $sale->vat->rate : 15;
                 $productsTotal = 0;
+                $totalTaxAmount = 0;
                 @endphp
                 @foreach ($sale->details as $detail)
                 @php
-                $itemTotal = ($detail->price ?? 0) * ($detail->quantities ?? 0);
-                $productsTotal += $itemTotal;
+                $itemPrice = $detail->price ?? 0;
+                $itemQty = $detail->quantities ?? 0;
+                $itemSubtotal = $itemPrice * $itemQty;
+                // حساب الضريبة باستخدام النسبة من قاعدة البيانات
+                $itemTax = $itemSubtotal * $vatRate;
+                $itemTotal = $itemSubtotal + $itemTax;
+                $productsTotal += $itemSubtotal;
+                $totalTaxAmount += $itemTax;
                 @endphp
                 <tr style="border-bottom: 1px dashed #ccc;">
                     <td style="text-align: right; padding: 2px;">{{ $detail->product->productName ?? '' }}</td>
-                    <td style="text-align: center; padding: 2px;">{{ $detail->quantities ?? 0 }}</td>
-                    <td style="text-align: right; padding: 2px;">{{ currency_format($detail->price ?? 0, currency: business_currency()) }}</td>
+                    <td style="text-align: center; padding: 2px;">{{ $itemQty }}</td>
+                    <td style="text-align: right; padding: 2px;">{{ currency_format($itemPrice, currency: business_currency()) }}</td>
+                    <td style="text-align: right; padding: 2px; font-size: 6px;">{{ currency_format($itemTax, currency: business_currency()) }}<br>({{ $vatPercent }}%)</td>
                     <td style="text-align: right; padding: 2px;">{{ currency_format($itemTotal, currency: business_currency()) }}</td>
                 </tr>
                 @endforeach
@@ -81,13 +93,16 @@
             @php
             $discountAmount = $sale->discountAmount ?? 0;
             $shippingCharge = $sale->shipping_charge ?? 0;
-            $vatAmount = $sale->vat_amount ?? 0;
+            // الإجمالي قبل الضريبة (المنتجات - الخصم + التوصيل)
             $subtotalBeforeVat = $productsTotal - $discountAmount + $shippingCharge;
+            // الضريبة على الإجمالي قبل الضريبة
+            $vatAmount = $subtotalBeforeVat * $vatRate;
+            // الإجمالي النهائي شامل الضريبة
             $totalWithVat = $subtotalBeforeVat + $vatAmount;
             @endphp
             
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
-                <span>إجمالي المنتجات:</span>
+                <span>الإجمالي الفرعي:</span>
                 <span>{{ currency_format($productsTotal, currency: business_currency()) }}</span>
             </div>
             
@@ -112,13 +127,13 @@
             
             @if($vatAmount > 0)
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
-                <span>ضريبة القيمة المضافة (15%):</span>
+                <span>ضريبة القيمة المضافة ({{ $vatPercent }}%):</span>
                 <span>{{ currency_format($vatAmount, currency: business_currency()) }}</span>
             </div>
             @endif
             
             <div style="display: flex; justify-content: space-between; padding: 5px 0; margin-top: 3px; border-top: 2px solid #000; font-size: 10px; font-weight: bold;">
-                <span>الإجمالي / Total:</span>
+                <span>الإجمالي شامل الضريبة / Total:</span>
                 <span>{{ currency_format($totalWithVat, currency: business_currency()) }}</span>
             </div>
         </div>

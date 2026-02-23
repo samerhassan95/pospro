@@ -69,10 +69,10 @@ $(".view-btn").each(function () {
     // User View Modal
     $("#user_view_" + id).on("click", function () {
         $("#user_view_business_category").text(
-            $("#user_view_" + id).data("business_category")
+            $("#user_view_" + id).data("business_category"),
         );
         $("#user_view_business_name").text(
-            $("#user_view_" + id).data("business_name")
+            $("#user_view_" + id).data("business_name"),
         );
 
         let imageSrc = $("#user_view_" + id).data("image");
@@ -83,10 +83,10 @@ $(".view-btn").each(function () {
         $("#user_view_phone").text($("#user_view_" + id).data("phone"));
         $("#user_view_address").text($("#user_view_" + id).data("address"));
         $("#user_view_country_id").text(
-            $("#user_view_" + id).data("country_id")
+            $("#user_view_" + id).data("country_id"),
         );
         $("#user_view_statfeatures-listus").text(
-            $("#user_view_" + id).data("status") == 1 ? "Active" : "Deactive"
+            $("#user_view_" + id).data("status") == 1 ? "Active" : "Deactive",
         );
     });
 
@@ -126,12 +126,12 @@ $(".view-btn").each(function () {
     $("#category_view_" + id).on("click", function () {
         $("#category_view_name").text($("#category_view_" + id).data("name"));
         $("#category_view_description").text(
-            $("#category_view_" + id).data("description")
+            $("#category_view_" + id).data("description"),
         );
         $("#category_view_status").text(
             $("#category_view_" + id).data("status") == 1
                 ? "Active"
-                : "Deactive"
+                : "Deactive",
         );
     });
     // Faqs view
@@ -139,7 +139,7 @@ $(".view-btn").each(function () {
         $("#faqs_view_question").text($("#faqs_view_" + id).data("question"));
         $("#faqs_view_answer").text($("#faqs_view_" + id).data("answer"));
         $("#faqs_view_status").text(
-            $("#faqs_view_" + id).data("status") == 1 ? "Active" : "Deactive"
+            $("#faqs_view_" + id).data("status") == 1 ? "Active" : "Deactive",
         );
     });
 });
@@ -207,12 +207,12 @@ $(".edit-btn").each(function () {
     $("#edit-banner-" + service).on("click", function () {
         $("#checkbox").prop(
             "checked",
-            $("#edit-banner-" + service).data("status") == 1
+            $("#edit-banner-" + service).data("status") == 1,
         );
         $(".dynamic-text").text(
             $("#edit-banner-" + service).data("status") == 1
                 ? "Active"
-                : "Deactive"
+                : "Deactive",
         );
 
         let edit_action_route = $(this).data("url");
@@ -307,7 +307,7 @@ $(".staff-view-btn").on("click", function () {
 // Staff view End
 
 var tooltipTriggerList = [].slice.call(
-    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    document.querySelectorAll('[data-bs-toggle="tooltip"]'),
 );
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
@@ -315,7 +315,7 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 
 // subscription-plan-edit-custom-input size
 const inputs = document.querySelectorAll(
-    ".subscription-plan-edit-custom-input"
+    ".subscription-plan-edit-custom-input",
 );
 
 function resizeInput() {
@@ -521,7 +521,7 @@ $(".product-view").on("click", function () {
         });
     } else {
         $tableBody.append(
-            `<tr><td colspan="4" class="text-center text-muted">No batch data available</td></tr>`
+            `<tr><td colspan="4" class="text-center text-muted">No batch data available</td></tr>`,
         );
     }
 });
@@ -586,7 +586,7 @@ $(".stock-view-data").on("click", function () {
         });
     } else {
         $tableBody.append(
-            `<tr><td colspan="10" class="text-center text-muted">No batch data available</td></tr>`
+            `<tr><td colspan="10" class="text-center text-muted">No batch data available</td></tr>`,
         );
     }
 
@@ -675,13 +675,13 @@ $(document).on("click", ".view-sale-payment-btn", function (e) {
                 tableBody.html(rows);
             } else {
                 tableBody.html(
-                    `<tr><td colspan="6" class="text-center text-muted">No payments found.</td></tr>`
+                    `<tr><td colspan="6" class="text-center text-muted">No payments found.</td></tr>`,
                 );
             }
         },
         error: function () {
             tableBody.html(
-                `<tr><td colspan="6" class="text-center text-danger">Failed to load data.</td></tr>`
+                `<tr><td colspan="6" class="text-center text-danger">Failed to load data.</td></tr>`,
             );
         },
     });
@@ -737,13 +737,13 @@ $(document).on("click", ".view-purchase-payment-btn", function (e) {
                 tableBody.html(rows);
             } else {
                 tableBody.html(
-                    `<tr><td colspan="6" class="text-center text-muted">No payments found.</td></tr>`
+                    `<tr><td colspan="6" class="text-center text-muted">No payments found.</td></tr>`,
                 );
             }
         },
         error: function () {
             tableBody.html(
-                `<tr><td colspan="6" class="text-center text-danger">Failed to load data.</td></tr>`
+                `<tr><td colspan="6" class="text-center text-danger">Failed to load data.</td></tr>`,
             );
         },
     });
@@ -984,7 +984,7 @@ function calculateDueChange() {
 
     const updatedDueAmount = totalAmount - payingAmount;
     $("#dueAmount").val(
-        updatedDueAmount >= 0 ? updatedDueAmount.toFixed(2) : 0
+        updatedDueAmount >= 0 ? updatedDueAmount.toFixed(2) : 0,
     );
 }
 // Collects Due End
@@ -1024,7 +1024,7 @@ $("#product-search").on("keyup click", function () {
                 data.forEach((product) => {
                     const imagePath = assetPath(
                         product.productPicture ||
-                            "assets/images/products/box.svg"
+                            "assets/images/products/box.svg",
                     );
                     const productColor = product.color
                         ? `, Color: ${product.color}`
@@ -1108,7 +1108,9 @@ $("#product-search").on("keyup click", function () {
                     }
                 });
             } else {
-                const noProductsMessage = window.translations?.no_products_found || 'No products found.';
+                const noProductsMessage =
+                    window.translations?.no_products_found ||
+                    "No products found.";
                 productList = `<li class="list-group-item text-danger">${noProductsMessage}</li>`;
             }
 
@@ -1164,7 +1166,7 @@ $(document).on("click", ".add-batch-item", function () {
         $("#product-list").append(newRow);
     } else {
         const qtyInput = $('#product-list tr[data-id="' + stockId + '"]').find(
-            ".pint-qty"
+            ".pint-qty",
         );
         let currentQty = parseInt(qtyInput.val(), 10) || 0;
         qtyInput.val(currentQty + 1);
@@ -1200,7 +1202,7 @@ let $savingLoader1 =
         '<div class="spinner-border spinner-border-sm custom-text-primary" role="status"><span class="visually-hidden">Loading...</span></div>',
     $barcodeForm = $(".barcodeForm");
 
-$barcodeForm.initFormValidation(),
+($barcodeForm.initFormValidation(),
     $(document).on("submit", ".barcodeForm", function (e) {
         e.preventDefault();
         let t = $(this).find("#barcode-preview-btn"),
@@ -1232,7 +1234,7 @@ $barcodeForm.initFormValidation(),
                     if (e.secondary_redirect_url) {
                         let printWindow = window.open(
                             e.secondary_redirect_url,
-                            "_blank"
+                            "_blank",
                         );
                         if (printWindow) {
                             printWindow.onload = function () {
@@ -1251,7 +1253,7 @@ $barcodeForm.initFormValidation(),
                 },
             });
         }
-    });
+    }));
 
 /** Barcode: end **/
 // Loss/Profit view
@@ -1267,7 +1269,7 @@ $(document).on("click", ".loss-profit-view", function () {
             tbody.empty();
 
             $("#loss-profit-view .modal-title").text(
-                `Invoice: ${data.invoiceNumber} - ${data.party?.name || "N/A"}`
+                `Invoice: ${data.invoiceNumber} - ${data.party?.name || "N/A"}`,
             );
 
             let sl = 1;
@@ -1301,14 +1303,14 @@ $(document).on("click", ".loss-profit-view", function () {
                         <td class="text-start">${batchNo}</td>
                         <td class="text-start">${quantity}</td>
                         <td class="text-start">${currencyFormat(
-                            purchasePrice
+                            purchasePrice,
                         )}</td>
                         <td class="text-start">${currencyFormat(salePrice)}</td>
                         <td class="text-start text-success">${currencyFormat(
-                            profit
+                            profit,
                         )}</td>
                         <td class="text-start text-danger">${currencyFormat(
-                            loss
+                            loss,
                         )}</td>
                     </tr>
                 `;
@@ -1325,25 +1327,25 @@ $(document).on("click", ".loss-profit-view", function () {
                     <td class="text-start">${currencyFormat(totalPurchase)}</td>
                     <td class="text-start">${currencyFormat(totalSale)}</td>
                     <td class="text-start text-success">${currencyFormat(
-                        totalProfit
+                        totalProfit,
                     )}</td>
                     <td class="text-start text-danger">${currencyFormat(
-                        totalLoss
+                        totalLoss,
                     )}</td>
                 </tr>
                 <tr>
                     <td colspan="8" class="border-0 pt-3"><strong class="text-success">Total Profit: ${currencyFormat(
-                        totalProfit
+                        totalProfit,
                     )}</strong></td>
                 </tr>
                 <tr>
                     <td colspan="8" class="border-0"><strong class="text-danger">Total Loss: ${currencyFormat(
-                        totalLoss
+                        totalLoss,
                     )}</strong></td>
                </tr>
                 <tr>
                     <td colspan="8" class="border-0"><strong class="text-primary">Net Profit: ${currencyFormat(
-                        income
+                        income,
                     )}</strong></td>
                 </tr>
             `;
@@ -1353,7 +1355,7 @@ $(document).on("click", ".loss-profit-view", function () {
             console.error(
                 "Failed to load sale data:",
                 xhr.status,
-                xhr.responseText
+                xhr.responseText,
             );
         },
     });
@@ -1401,18 +1403,17 @@ $(document).ready(function () {
 });
 
 // Vat Report Filter Start
-$(document).on('change', '.vat-report-filter-form :input', function () {
-
-    let form = $(this).closest('form');
-    let url = form.attr('action');
+$(document).on("change", ".vat-report-filter-form :input", function () {
+    let form = $(this).closest("form");
+    let url = form.attr("action");
 
     $.ajax({
         url: url,
         data: form.serialize(),
         success: function (res) {
-            $('#sale-vat-reports-data').html(res.sale_data);
-            $('#purchase-vat-reports-data').html(res.purchase_data);
-        }
+            $("#sale-vat-reports-data").html(res.sale_data);
+            $("#purchase-vat-reports-data").html(res.purchase_data);
+        },
     });
 });
 // Vat Report Filter Start
@@ -1430,12 +1431,12 @@ $(".report-filter-form").on("input change", function (e) {
         dataType: "json",
         success: function (res) {
             $(table).html(res.data);
-            
+
             // Update pagination if it exists in the response
             if (res.pagination !== undefined) {
-                $(table).closest('.card').find('.mt-3').html(res.pagination);
+                $(table).closest(".card").find(".mt-3").html(res.pagination);
             }
-            
+
             if (res.total_sale !== undefined) {
                 $("#total_sale").text(res.total_sale);
             }
@@ -1488,13 +1489,13 @@ $(".report-filter-form").on("input change", function (e) {
 
             if (res.opening_stock_by_purchase !== undefined) {
                 $("#opening_stock_by_purchase").text(
-                    res.opening_stock_by_purchase
+                    res.opening_stock_by_purchase,
                 );
             }
 
             if (res.closing_stock_by_purchase !== undefined) {
                 $("#closing_stock_by_purchase").text(
-                    res.closing_stock_by_purchase
+                    res.closing_stock_by_purchase,
                 );
             }
 
@@ -1504,7 +1505,7 @@ $(".report-filter-form").on("input change", function (e) {
 
             if (res.total_purchase_shipping_charge !== undefined) {
                 $("#total_purchase_shipping_charge").text(
-                    res.total_purchase_shipping_charge
+                    res.total_purchase_shipping_charge,
                 );
             }
 
@@ -1534,7 +1535,7 @@ $(".report-filter-form").on("input change", function (e) {
 
             if (res.total_sale_shipping_charge !== undefined) {
                 $("#total_sale_shipping_charge").text(
-                    res.total_sale_shipping_charge
+                    res.total_sale_shipping_charge,
                 );
             }
 
@@ -1761,7 +1762,7 @@ $(document).ready(function () {
                 } else {
                     $(".leave_duration_cal").val("");
                     toastr.error(
-                        "Start date must be before or equal to end date."
+                        "Start date must be before or equal to end date.",
                     );
                 }
             } else {
@@ -1802,7 +1803,7 @@ $(document).on(
     ".leave_edit_start_date, .leave_edit_end_date",
     function () {
         calculateLeaveDuration();
-    }
+    },
 );
 
 $(document).on("show.bs.modal", "#edit-leave", function () {
@@ -1984,7 +1985,7 @@ $(document).on("click", ".delete-bank-action", function (event) {
                             Notify(
                                 "error",
                                 xhr.responseJSON?.message ||
-                                    "Something went wrong!"
+                                    "Something went wrong!",
                             );
                         },
                     });
@@ -2013,17 +2014,17 @@ function loadEmployeeShift(employee_id, shiftSelect) {
 
                 if (shift) {
                     $(shiftSelect).html(
-                        `<option value="${shift.id}" selected>${shift.name}</option>`
+                        `<option value="${shift.id}" selected>${shift.name}</option>`,
                     );
                 } else {
                     $(shiftSelect).html(
-                        '<option value="">No shift found</option>'
+                        '<option value="">No shift found</option>',
                     );
                 }
             },
             error: function () {
                 $(shiftSelect).html(
-                    '<option value="">Please assign a shift to the employee</option>'
+                    '<option value="">Please assign a shift to the employee</option>',
                 );
             },
         });
@@ -2124,17 +2125,17 @@ function loadEmployeeDepartment(employee_id, departmentSelect) {
 
                 if (department) {
                     $(departmentSelect).html(
-                        `<option value="${department.id}" selected>${department.name}</option>`
+                        `<option value="${department.id}" selected>${department.name}</option>`,
                     );
                 } else {
                     $(departmentSelect).html(
-                        '<option value="">No Department found</option>'
+                        '<option value="">No Department found</option>',
                     );
                 }
             },
             error: function () {
                 $(departmentSelect).html(
-                    '<option value="">Please assign a department to the employee</option>'
+                    '<option value="">Please assign a department to the employee</option>',
                 );
             },
         });
@@ -2209,7 +2210,7 @@ $(document).ready(function () {
         $(".nav-link.settings-link, .tab-pane").removeClass("active show");
 
         $('.nav-link.settings-link[data-bs-target="' + hash + '"]').addClass(
-            "active"
+            "active",
         );
 
         $(hash).addClass("active show");
@@ -2222,7 +2223,7 @@ $(document).ready(function () {
 // Affiliate approve modal end
 document.addEventListener("DOMContentLoaded", function () {
     const customerDropdownElement = document.querySelector(
-        "#searchableCustomerDropdown"
+        "#searchableCustomerDropdown",
     );
 
     if (customerDropdownElement) {
@@ -2232,7 +2233,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 searchEnabled: true,
                 itemSelectText: "",
                 shouldSort: false,
-            }
+            },
         );
     }
 });
@@ -2266,7 +2267,7 @@ $(document).ready(function () {
             .not(".variationUpdateForm")
             .on("submit", function (e) {
                 const tagValues = tagifyCreateInstance.value.map(
-                    (item) => item.value
+                    (item) => item.value,
                 );
                 $(this)
                     .find("input[name='values']")
@@ -2412,7 +2413,7 @@ $(document).ready(function () {
                                 selected +
                                 ">" +
                                 shelf.name +
-                                "</option>"
+                                "</option>",
                         );
                     });
                     shelfSelect.prop("disabled", false);
@@ -2466,17 +2467,17 @@ function paymentGridTemplate(optionsHtml, index, transaction = null) {
         ? transaction.transaction_type === "cash_payment"
             ? "cash"
             : transaction.transaction_type === "cheque_payment"
-            ? "cheque"
-            : transaction.transaction_type === "wallet_payment"
-            ? "wallet"
-            : transaction.transaction_type === "bank_payment"
-            ? transaction.payment_type_id
-            : ""
+              ? "cheque"
+              : transaction.transaction_type === "wallet_payment"
+                ? "wallet"
+                : transaction.transaction_type === "bank_payment"
+                  ? transaction.payment_type_id
+                  : ""
         : "";
 
     const amount = transaction ? transaction.amount : 0;
     const chequeNumber = transaction
-        ? transaction.meta?.cheque_number ?? ""
+        ? (transaction.meta?.cheque_number ?? "")
         : "";
 
     return `
@@ -2497,8 +2498,8 @@ function paymentGridTemplate(optionsHtml, index, transaction = null) {
         </div>
         <div class="cheque-input mt-2 ${type === "cheque" ? "" : "d-none"}">
             <input type="text" name="payments[${index}][cheque_number]" class="form-control" placeholder="Enter Cheque Number" value="${chequeNumber}" ${
-        type === "cheque" ? "" : "disabled"
-    }>
+                type === "cheque" ? "" : "disabled"
+            }>
         </div>
     </div>
     `;
@@ -2533,22 +2534,22 @@ function loadExistingPayments(passedTransactions = null) {
             // added type
             options = options.replace(
                 /(<option\s+value="cheque")(>)([^<]*)/i,
-                `$1 selected$2Cheque${typeLabel}`
+                `$1 selected$2Cheque${typeLabel}`,
             );
         } else if (transaction.transaction_type === "wallet_payment") {
             options = options.replace(
                 'value="wallet"',
-                'value="wallet" selected'
+                'value="wallet" selected',
             );
         } else if (transaction.transaction_type === "bank_payment") {
             // For bank payment, match by id
             const regex = new RegExp(
                 `value="${transaction.payment_type_id}"`,
-                "g"
+                "g",
             );
             options = options.replace(
                 regex,
-                `value="${transaction.payment_type_id}" selected`
+                `value="${transaction.payment_type_id}" selected`,
             );
         }
 
@@ -2748,11 +2749,15 @@ function updateDueAmount($form = null) {
 
 // currency format
 function currencyFormat(amount, type = "icon", decimals = 2) {
-    let symbol = $("#currency_symbol").val();
-    let position = $("#currency_position").val();
-    let code = $("#currency_code").val();
+    let symbol = document.getElementById("currency_symbol")?.value || "";
+    let position =
+        document.getElementById("currency_position")?.value || "left";
+    let code = document.getElementById("currency_code")?.value || "";
 
-    let formatted_amount = formattedAmount(amount, decimals);
+    let formatted_amount = parseFloat(amount).toLocaleString(undefined, {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+    });
 
     // Apply currency format based on the position and type
     if (type === "icon" || type === "symbol") {
@@ -2886,7 +2891,7 @@ $(document).on("click", ".view-payment-btn", function (e) {
     let baseDeleteRoute = $("#payment-delete-route").data("url");
 
     tableBody.html(
-        `<tr><td colspan="6" class="text-center text-muted">Loading...</td></tr>`
+        `<tr><td colspan="6" class="text-center text-muted">Loading...</td></tr>`,
     );
 
     $.ajax({
@@ -2918,13 +2923,13 @@ $(document).on("click", ".view-payment-btn", function (e) {
                 tableBody.html(rows);
             } else {
                 tableBody.html(
-                    `<tr><td colspan="6" class="text-center text-muted">No payments found.</td></tr>`
+                    `<tr><td colspan="6" class="text-center text-muted">No payments found.</td></tr>`,
                 );
             }
         },
         error: function () {
             tableBody.html(
-                `<tr><td colspan="6" class="text-center text-danger">Failed to load data.</td></tr>`
+                `<tr><td colspan="6" class="text-center text-danger">Failed to load data.</td></tr>`,
             );
         },
     });
@@ -2956,11 +2961,11 @@ $(document).on("click", ".view-party-loss-profit-btn", function (e) {
                             }</td>
                             <td>${detail.quantities}</td>
                             <td>${currencyFormat(
-                                detail.productPurchasePrice
+                                detail.productPurchasePrice,
                             )}</td>
                             <td>${currencyFormat(detail.price)}</td>
                             <td class="text-success">${currencyFormat(
-                                profit
+                                profit,
                             )}</td>
                             <td class="text-danger">${currencyFormat(loss)}</td>
                         </tr>
@@ -2977,7 +2982,7 @@ $(document).on("click", ".view-party-loss-profit-btn", function (e) {
         },
         error: function (err) {
             $("#view-party-loss-profit-data").html(
-                '<tr><td colspan="7" class="text-center text-danger">Something went wrong!</td></tr>'
+                '<tr><td colspan="7" class="text-center text-danger">Something went wrong!</td></tr>',
             );
         },
     });

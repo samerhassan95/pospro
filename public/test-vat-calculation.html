@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار حساب الضريبة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .result {
+            background: #f0f0f0;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        #console {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+            font-family: monospace;
+            min-height: 100px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>اختبار حساب الضريبة التلقائي</h1>
+    
+    <div class="form-group">
+        <label>نوع الضريبة (Tax Type)</label>
+        <select id="vat_type">
+            <option value="exclusive">Exclusive</option>
+            <option value="inclusive">Inclusive</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>الضريبة (VAT)</label>
+        <select id="vat_id">
+            <option value="">اختر الضريبة</option>
+            <option value="1" data-vat_rate="15">VAT (15%)</option>
+            <option value="2" data-vat_rate="5">VAT (5%)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>السعر قبل الضريبة (Cost exc. tax)</label>
+        <input type="number" id="exclusive_price" class="exclusive_price" placeholder="100">
+    </div>
+
+    <div class="form-group">
+        <label>السعر شامل الضريبة (Cost inc. tax)</label>
+        <input type="number" id="inclusive_price" class="inclusive_price" placeholder="115">
+    </div>
+
+    <div class="result">
+        <h3>النتيجة:</h3>
+        <p id="result">قم بإدخال القيم أعلاه</p>
+    </div>
+
+    <div id="console"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Console logging
+        function log(message) {
+            const consoleDiv = document.getElementById('console');
+            const time = new Date().toLocaleTimeString();
+            consoleDiv.innerHTML += `[${time}] ${message}<br>`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            console.log(message);
+        }
+
+        log('Script loaded successfully');
+
+        // Get VAT rate
+        function getVatRate() {
+            const rate = parseFloat($("#vat_id").find("option:selected").data("vat_rate")) || 0;
+            log(`getVatRate() returned: ${rate}`);
+            return rate;
+        }
+
+        // Update inclusive_price field based on VAT
+        function updateInclusiveFromExclusive() {
+            log('updateInclusiveFromExclusive() called');
+            
+            const vatRate = getVatRate();
+            const vatType = $("#vat_type").val();
+            
+            log(`VAT Type: ${vatType}, VAT Rate: ${vatRate}`);
+
+            const exclusiveInput = $("#exclusive_price");
+            const inclusiveInput = $("#inclusive_price");
+
+            let exclusive = parseFloat(exclusiveInput.val()) || 0;
+            log(`Exclusive price: ${exclusive}`);
+
+            // inclusive = exclusive + VAT%
+            if (vatType && vatRate) {
+                const inclusive = (exclusive + (exclusive * vatRate) / 100).toFixed(2);
+                log(`Calculated inclusive: ${inclusive}`);
+                inclusiveInput.val(inclusive);
+                $("#result").html(`
+                    <strong>الحساب:</strong><br>
+                    السعر قبل الضريبة: ${exclusive}<br>
+                    نسبة الضريبة: ${vatRate}%<br>
+                    قيمة الضريبة: ${(exclusive * vatRate / 100).toFixed(2)}<br>
+                    السعر شامل الضريبة: ${inclusive}
+                `);
+            } else {
+                inclusiveInput.val(exclusive.toFixed(2));
+                log(`No VAT applied, inclusive = exclusive: ${exclusive}`);
+            }
+        }
+
+        function updateExclusiveFromInclusive() {
+            log('updateExclusiveFromInclusive() called');
+            
+            const vatRate = getVatRate();
+            log(`VAT Rate: ${vatRate}`);
+
+            const inclusiveInput = $("#inclusive_price");
+            const exclusiveInput = $("#exclusive_price");
+
+            let inclusive = parseFloat(inclusiveInput.val()) || 0;
+            log(`Inclusive price: ${inclusive}`);
+
+            // Reverse VAT: exclusive = inclusive / (1 + VAT%)
+            let exclusive = inclusive / (1 + vatRate / 100);
+            log(`Calculated exclusive: ${exclusive.toFixed(2)}`);
+            
+            exclusiveInput.val(exclusive.toFixed(2));
+            
+            $("#result").html(`
+                <strong>الحساب العكسي:</strong><br>
+                السعر شامل الضريبة: ${inclusive}<br>
+                نسبة الضريبة: ${vatRate}%<br>
+                السعر قبل الضريبة: ${exclusive.toFixed(2)}<br>
+                قيمة الضريبة: ${(inclusive - exclusive).toFixed(2)}
+            `);
+        }
+
+        // Bind events
+        $(document).ready(function() {
+            log('Document ready');
+
+            // When exclusive price changes
+            $(document).on("input change", ".exclusive_price", function () {
+                log('Exclusive price input detected');
+                updateInclusiveFromExclusive();
+            });
+
+            // When inclusive price changes (on blur)
+            $(document).on("blur", ".inclusive_price", function () {
+                log('Inclusive price blur detected');
+                updateExclusiveFromInclusive();
+            });
+
+            // When VAT dropdown changes
+            $("#vat_id, #vat_type").on("change", function () {
+                log('VAT dropdown changed');
+                
+                // If exclusive has value, calculate inclusive
+                if ($("#exclusive_price").val()) {
+                    log('Exclusive has value, calculating inclusive');
+                    updateInclusiveFromExclusive();
+                }
+                // If inclusive has value, calculate exclusive
+                else if ($("#inclusive_price").val()) {
+                    log('Inclusive has value, calculating exclusive');
+                    updateExclusiveFromInclusive();
+                }
+            });
+
+            log('Event handlers bound successfully');
+        });
+    </script>
+</body>
+</html>

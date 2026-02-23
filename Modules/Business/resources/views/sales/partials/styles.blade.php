@@ -173,9 +173,9 @@
         .summary-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0px; }
         .summary-label { font-size: 14px; color: #000000; }
         .summary-value { font-size: 14px; font-weight: 500; color: #1F2937; }
-        .summary-row.summary-total { font-size: 18px; font-weight: bold; color: #1F2937;  padding-top: 8px; border-top: 1px solid #E5E7EB; }
-        .summary-row.summary-total .summary-label { font-weight: bold; font-size:18px; color: #000000; }
-        .summary-row.summary-total .summary-value { font-weight: 700; color: #1F2937; }
+        .summary-row.summary-total { font-size: 20px; font-weight: bold; color: #1F2937;  padding-top: 8px; border-top: 1px solid #E5E7EB; margin-top: 4px; }
+        .summary-row.summary-total .summary-label { font-weight: bold; font-size:20px; color: #000000; }
+        .summary-row.summary-total .summary-value { font-weight: 800; color: #1F2937; font-size: 24px; }
 
         /* Action Buttons Section */
         .action-buttons-section { display: flex; gap: 12px; }

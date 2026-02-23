@@ -774,43 +774,48 @@
             
             <div class="summary-table">
                 @php
-                    // Calculate subtotal before VAT
-                    $subtotalBeforeVat = $sale->totalAmount - $sale->vat_amount;
-                    // Apply discount
-                    $subtotalAfterDiscount = $subtotalBeforeVat - ($sale->discountAmount ?? 0);
-                    // Add shipping
-                    $subtotalWithShipping = $subtotalAfterDiscount + ($sale->shipping_charge ?? 0);
-                    // Calculate VAT on final amount
+                    $vatRate = $sale->vat ? ($sale->vat->rate / 100) : 0.15;
+                    $vatPercent = $sale->vat ? $sale->vat->rate : 15;
+                    
+                    // Products Gross Subtotal
+                    $itemsSubtotal = $sale->details->sum(fn($d) => $d->price * $d->quantities);
+                    
+                    $discountAmount = $sale->discountAmount ?? 0;
+                    $shippingCharge = $sale->shipping_charge ?? 0;
+                    
+                    // Taxable Base (Subtotal - Discount + Shipping)
+                    $taxableAmount = $itemsSubtotal - $discountAmount + $shippingCharge;
+                    
                     $vatAmount = $sale->vat_amount ?? 0;
-                    // Final total
                     $finalTotal = $sale->totalAmount;
                 @endphp
                 
                 <div class="summary-row">
-                    <span class="summary-label">السعر / Price:</span>
-                    <span class="summary-value">{{ currency_format($subtotalBeforeVat, currency: business_currency()) }}</span>
+                    <span class="summary-label">الإجمالي الفرعي / Subtotal:</span>
+                    <span class="summary-value">{{ currency_format($itemsSubtotal, currency: business_currency()) }}</span>
                 </div>
                 
-                @if($sale->discountAmount > 0)
+                @if($discountAmount > 0)
                 <div class="summary-row">
                     <span class="summary-label">الخصم / Discount:</span>
-                    <span class="summary-value">-{{ currency_format($sale->discountAmount, currency: business_currency()) }}</span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">السعر بعد الخصم / After Discount:</span>
-                    <span class="summary-value">{{ currency_format($subtotalAfterDiscount, currency: business_currency()) }}</span>
+                    <span class="summary-value">-{{ currency_format($discountAmount, currency: business_currency()) }}</span>
                 </div>
                 @endif
-                
-                @if($sale->shipping_charge > 0)
+
+                @if($shippingCharge > 0)
                 <div class="summary-row">
                     <span class="summary-label">قيمة الشحن / Shipping:</span>
-                    <span class="summary-value">{{ currency_format($sale->shipping_charge, currency: business_currency()) }}</span>
+                    <span class="summary-value">{{ currency_format($shippingCharge, currency: business_currency()) }}</span>
                 </div>
                 @endif
                 
                 <div class="summary-row">
-                    <span class="summary-label">ضريبة القيمة المضافة (15%) / VAT:</span>
+                    <span class="summary-label">الإجمالي الخاضع للضريبة / Taxable Amount:</span>
+                    <span class="summary-value">{{ currency_format($taxableAmount, currency: business_currency()) }}</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">ضريبة القيمة المضافة ({{ $vatPercent }}%) / VAT ({{ $vatPercent }}%):</span>
                     <span class="summary-value">{{ currency_format($vatAmount, currency: business_currency()) }}</span>
                 </div>
                 

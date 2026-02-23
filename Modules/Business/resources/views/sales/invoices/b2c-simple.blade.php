@@ -351,6 +351,10 @@
         {{-- Summary --}}
         <div class="summary">
             @php
+                // Get VAT rate from database
+                $vatRate = $sale->vat ? ($sale->vat->rate / 100) : 0.15;
+                $vatPercent = $sale->vat ? $sale->vat->rate : 15;
+                
                 // حساب الضريبة الصحيح
                 if (!empty($sale->vat_amount) && $sale->vat_amount > 0) {
                     $subtotalBeforeVat = $sale->totalAmount - $sale->vat_amount;
@@ -358,7 +362,7 @@
                     $totalWithVat = $sale->totalAmount;
                 } else {
                     $subtotalBeforeVat = $sale->totalAmount;
-                    $vatAmount = $subtotalBeforeVat * 0.15;
+                    $vatAmount = $subtotalBeforeVat * $vatRate;
                     $totalWithVat = $subtotalBeforeVat + $vatAmount;
                 }
             @endphp
@@ -369,7 +373,7 @@
             </div>
             
             <div class="summary-line">
-                <span class="summary-label">ضريبة القيمة المضافة (15%):</span>
+                <span class="summary-label">ضريبة القيمة المضافة ({{ $vatPercent }}%):</span>
                 <span class="summary-value">{{ currency_format($vatAmount, currency: business_currency()) }}</span>
             </div>
             

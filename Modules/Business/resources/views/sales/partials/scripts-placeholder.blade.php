@@ -24,11 +24,21 @@
         };
 
         // Add missing currency format function
-        window.currencyFormat = function(amount) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            }).format(amount);
+        window.currencyFormat = function(amount, type = "icon", decimals = 2) {
+            let symbol = document.getElementById("currency_symbol")?.value || '';
+            let position = document.getElementById("currency_position")?.value || 'left';
+            let code = document.getElementById("currency_code")?.value || '';
+            
+            let formattedAmount = parseFloat(amount).toLocaleString(undefined, { 
+                minimumFractionDigits: decimals, 
+                maximumFractionDigits: decimals 
+            });
+            
+            if (type === "icon" || type === "symbol") {
+                return position === "right" ? formattedAmount + symbol : symbol + formattedAmount;
+            } else {
+                return position === "right" ? formattedAmount + " " + code : code + " " + formattedAmount;
+            }
         };
 
         // Add missing helper functions

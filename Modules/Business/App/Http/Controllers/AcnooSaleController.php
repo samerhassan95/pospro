@@ -153,6 +153,7 @@ class AcnooSaleController extends Controller
             ->when($request->brand_id, function ($query) use ($request) {
                 $query->where('brand_id', $request->brand_id);
             })
+            ->with(['stocks', 'vat'])
             ->latest()
             ->get();
 
@@ -228,7 +229,7 @@ class AcnooSaleController extends Controller
             ->latest()
             ->get();
 
-        $products = Product::with('category:id,categoryName', 'unit:id,unitName', 'stocks', 'stocks.warehouse')
+        $products = Product::with('category:id,categoryName', 'unit:id,unitName', 'stocks', 'stocks.warehouse', 'vat')
             ->where('business_id', $business_id)
             ->withSum('stocks as total_stock', 'productStock')
             ->having('total_stock', '>', 0)
@@ -252,7 +253,7 @@ class AcnooSaleController extends Controller
     {
         $type = $request->type;
 
-        $stocks = Stock::with('product')
+        $stocks = Stock::with(['product', 'product.vat'])
             ->whereHas('product', function ($query) {
                 $query->where('business_id', auth()->user()->business_id);
             })
@@ -263,14 +264,29 @@ class AcnooSaleController extends Controller
 
         foreach ($stocks as $stock) {
             $productId = $stock->product_id;
+            $product = $stock->product;
 
             if (!isset($prices[$productId])) {
+                $salePrice = $stock->productSalePrice;
+                $dealerPrice = $stock->productDealerPrice;
+                $wholesalePrice = $stock->productWholeSalePrice;
+
+                // Adjust to exclusive if needed
+                if ($product->vat_type == 'inclusive' && $product->vat) {
+                    $vatRate = $product->vat->rate ?? 0;
+                    if ($vatRate > 0) {
+                        $salePrice = $salePrice / (1 + ($vatRate / 100));
+                        $dealerPrice = $dealerPrice / (1 + ($vatRate / 100));
+                        $wholesalePrice = $wholesalePrice / (1 + ($vatRate / 100));
+                    }
+                }
+
                 if ($type === 'Dealer') {
-                    $prices[$productId] = currency_format($stock->productDealerPrice, currency: business_currency());
+                    $prices[$productId] = currency_format($dealerPrice, currency: business_currency());
                 } elseif ($type === 'Wholesaler') {
-                    $prices[$productId] = currency_format($stock->productWholeSalePrice, currency: business_currency());
+                    $prices[$productId] = currency_format($wholesalePrice, currency: business_currency());
                 } else {
-                    $prices[$productId] = currency_format($stock->productSalePrice, currency: business_currency());
+                    $prices[$productId] = currency_format($salePrice, currency: business_currency());
                 }
             }
         }
@@ -283,20 +299,36 @@ class AcnooSaleController extends Controller
     {
         $type = $request->type;
 
-        $stocks = Stock::where('business_id', auth()->user()->business_id)
+        $stocks = Stock::with(['product', 'product.vat'])
+            ->where('business_id', auth()->user()->business_id)
             ->where('productStock', '>', 0)
             ->get();
 
         $prices = [];
 
         foreach ($stocks as $stock) {
+            $product = $stock->product;
+            $salePrice = $stock->productSalePrice;
+            $dealerPrice = $stock->productDealerPrice;
+            $wholesalePrice = $stock->productWholeSalePrice;
+
+            // Adjust to exclusive if needed
+            if ($product && $product->vat_type == 'inclusive' && $product->vat) {
+                $vatRate = $product->vat->rate ?? 0;
+                if ($vatRate > 0) {
+                    $salePrice = $salePrice / (1 + ($vatRate / 100));
+                    $dealerPrice = $dealerPrice / (1 + ($vatRate / 100));
+                    $wholesalePrice = $wholesalePrice / (1 + ($vatRate / 100));
+                }
+            }
+
             if ($type === 'Dealer') {
-                $prices[$stock->id] = currency_format($stock->productDealerPrice, currency: business_currency());
+                $prices[$stock->id] = currency_format($dealerPrice, currency: business_currency());
             } elseif ($type === 'Wholesaler') {
-                $prices[$stock->id] = currency_format($stock->productWholeSalePrice, currency: business_currency());
+                $prices[$stock->id] = currency_format($wholesalePrice, currency: business_currency());
             } else {
                 // For Retailer or any other type
-                $prices[$stock->id] = currency_format($stock->productSalePrice, currency: business_currency());
+                $prices[$stock->id] = currency_format($salePrice, currency: business_currency());
             }
         }
         return response()->json($prices);
@@ -363,23 +395,30 @@ class AcnooSaleController extends Controller
         DB::beginTransaction();
         try {
 
-            // Calculation: subtotal, vat, discount, shipping, rounding
+            // Calculation: subtotal, discount, shipping, taxable base, vat, and total
             $subtotal = $carts->sum(fn($item) => (float) $item->subtotal);
-            $vat = Vat::find($request->vat_id);
-            $vatAmount = $vat ? ($subtotal * $vat->rate) / 100 : 0;
-
+            
+            // Discount calculation (on subtotal before tax)
             $discountAmount = $request->discountAmount ?? 0;
-            $subtotalWithVat = $subtotal + $vatAmount;
-
             if ($request->discount_type === 'percent') {
-                $discountAmount = ($subtotalWithVat * $discountAmount) / 100;
-            }
-            if ($discountAmount > $subtotalWithVat) {
-                return response()->json(['message' => __('Discount cannot be more than subtotal with VAT!')], 400);
+                $discountAmount = ($subtotal * $discountAmount) / 100;
             }
 
+            // Shipping Charge
             $shippingCharge = $request->shipping_charge ?? 0;
-            $actualTotalAmount = $subtotalWithVat - $discountAmount + $shippingCharge;
+
+            // Subtotal after Discount + Shipping = Taxable Base
+            $taxableAmount = $subtotal - $discountAmount + $shippingCharge;
+
+            // Calculate VAT on the taxable base
+            $vat = Vat::find($request->vat_id);
+            $vatAmount = $vat ? ($taxableAmount * $vat->rate) / 100 : 0;
+            
+            if ($discountAmount > $subtotal) {
+                return response()->json(['message' => __('Discount cannot be more than subtotal!')], 400);
+            }
+
+            $actualTotalAmount = $taxableAmount + $vatAmount;
             $roundingTotalAmount = sale_rounding($actualTotalAmount);
             $rounding_amount = $roundingTotalAmount - $actualTotalAmount;
             $rounding_option = sale_rounding();
@@ -686,20 +725,28 @@ class AcnooSaleController extends Controller
                 $subtotal += (float)$cartItem->subtotal;
             }
 
-            $vat = Vat::find($request->vat_id);
-            $vatAmount = $vat ? ($subtotal * $vat->rate) / 100 : 0;
-            $subtotalWithVat = $subtotal + $vatAmount;
-
+            // Calculation: subtotal, discount, shipping, taxable base, vat, and total
+            // Discount calculation (on subtotal before tax)
             $discountAmount = $request->discountAmount ?? 0;
             if ($request->discount_type == 'percent') {
-                $discountAmount = ($subtotalWithVat * $discountAmount) / 100;
-            }
-            if ($discountAmount > $subtotalWithVat) {
-                return response()->json(['message' => __('Discount cannot be more than subtotal with VAT!')], 400);
+                $discountAmount = ($subtotal * $discountAmount) / 100;
             }
 
+            // Shipping Charge
             $shippingCharge = $request->shipping_charge ?? 0;
-            $actualTotalAmount = $subtotalWithVat - $discountAmount + $shippingCharge;
+
+            // Subtotal after Discount + Shipping = Taxable Base
+            $taxableAmount = $subtotal - $discountAmount + $shippingCharge;
+
+            // Calculate VAT on the taxable base
+            $vat = Vat::find($request->vat_id);
+            $vatAmount = $vat ? ($taxableAmount * $vat->rate) / 100 : 0;
+
+            if ($discountAmount > $subtotal) {
+                return response()->json(['message' => __('Discount cannot be more than subtotal!')], 400);
+            }
+
+            $actualTotalAmount = $taxableAmount + $vatAmount;
             $roundingTotalAmount = sale_rounding($actualTotalAmount, $sale->rounding_option);
             $rounding_amount = $roundingTotalAmount - $actualTotalAmount;
 
@@ -1421,7 +1468,7 @@ class AcnooSaleController extends Controller
             $business_id = auth()->user()->business_id;
             
             // Search products by name and code (barcode, qr_code, description columns don't exist in products table)
-            $products = Product::with(['category:id,categoryName', 'stocks' => function($query) {
+            $products = Product::with(['vat', 'category:id,categoryName', 'stocks' => function($query) {
                     $query->where('productStock', '>', 0)->orderBy('created_at', 'desc');
                 }])
                 ->where('business_id', $business_id)
@@ -1440,7 +1487,7 @@ class AcnooSaleController extends Controller
             if ($products->isEmpty() && $this->looksLikeQRCodeContent($query)) {
                 $extractedInfo = $this->extractProductInfoFromQRCode($query);
                 if ($extractedInfo) {
-                    $products = Product::with(['category:id,categoryName', 'stocks' => function($query) {
+                    $products = Product::with(['vat', 'category:id,categoryName', 'stocks' => function($query) {
                             $query->where('productStock', '>', 0)->orderBy('created_at', 'desc');
                         }])
                         ->where('business_id', $business_id)
@@ -1470,6 +1517,18 @@ class AcnooSaleController extends Controller
                     ? asset($product->productPicture)
                     : asset('assets/images/products/box.svg');
                 
+                $price = $stock ? $stock->productSalePrice : $product->productSalePrice;
+                $purchasePrice = $stock ? $stock->productPurchasePrice : $product->productPurchasePrice;
+                
+                // Convert to exclusive if inclusive
+                if ($product->vat_type == 'inclusive' && $product->vat) {
+                    $vatRate = $product->vat->rate ?? 0;
+                    if ($vatRate > 0) {
+                        $price = $price / (1 + ($vatRate / 100));
+                        $purchasePrice = $purchasePrice / (1 + ($vatRate / 100));
+                    }
+                }
+                
                 return [
                     'id' => $product->id,
                     'productName' => $product->productName,
@@ -1477,8 +1536,9 @@ class AcnooSaleController extends Controller
                     'productCode' => $product->productCode,
                     'code' => $product->productCode, // Alias for compatibility
                     'image' => $imagePath,
-                    'sales_price' => $stock ? $stock->productSalePrice : $product->productSalePrice,
-                    'price' => $stock ? $stock->productSalePrice : $product->productSalePrice, // Alias for compatibility
+                    'sales_price' => $price,
+                    'purchase_price' => $purchasePrice, // Added purchase price
+                    'price' => $price, // Alias for compatibility
                     'stock_quantity' => $stockQuantity,
                     'stock_id' => $stock ? $stock->id : null,
                     'category' => $product->category ? [

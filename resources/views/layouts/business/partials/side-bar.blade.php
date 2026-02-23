@@ -869,6 +869,19 @@
             </li>
             @endusercan
 
+            @usercan('manage-settings.read')
+            <li class="{{ Request::routeIs('business.zatca.index') ? 'active' : '' }}">
+                <a href="{{ route('business.zatca.index') }}">
+                    <span class="sidebar-icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 2L3 6V10C3 14.55 6.84 18.74 10 19C13.16 18.74 17 14.55 17 10V6L10 2ZM10 10H15C14.76 13.36 12.24 16.43 10 17C7.76 16.43 5.24 13.36 5 10H10V4.3L15 7V10H10Z" fill="white"/>
+                        </svg>
+                    </span>
+                    {{ __('ZATCA Integration') }}
+                </a>
+            </li>
+            @endusercan
+
             @usercan('download-apk.read')
             <li>
                 <a href="{{ get_option('general')['app_link'] ?? '' }}" target="_blank" class="active">

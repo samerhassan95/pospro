@@ -147,8 +147,8 @@
             </div>
         </div>
         <div class="summary-row">
-            <span class="summary-label">{{ __('VAT 15%') }}</span>
-            <span class="summary-value" id="vat_amount">{{ currency_format($sale->subTotal * 0.15, currency: business_currency()) }}</span>
+            <span class="summary-label vat-label">{{ __('Vat') }} <span class="vat-rate-display">{{ $sale->vat ? $sale->vat->rate : 15 }}</span>%</span>
+            <span class="summary-value" id="vat_display">{{ currency_format($sale->subTotal * (($sale->vat ? $sale->vat->rate : 15) / 100), currency: business_currency()) }}</span>
         </div>
         <div class="summary-row summary-total">
             <span class="summary-label ">{{ __('Total') }}</span>

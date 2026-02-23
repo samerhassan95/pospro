@@ -421,5 +421,10 @@ Route::group(['as' => 'business.', 'prefix' => 'business', 'middleware' => ['use
     Route::post('table-orders/{order}/complete', [AcnooTableOrderController::class, 'complete'])->name('table-orders.complete');
     Route::get('table-orders/{order}', [AcnooTableOrderController::class, 'show'])->name('table-orders.show');
 
+    // ZATCA Integration Settings
+    Route::get('zatca-settings', [Business\ZatcaSettingController::class, 'index'])->name('zatca.index');
+    Route::post('zatca-settings', [Business\ZatcaSettingController::class, 'update'])->name('zatca.update');
+    Route::post('zatca-test-invoice/{id}', [Business\ZatcaSettingController::class, 'testInvoice'])->name('zatca.test-invoice');
+    Route::post('zatca-production-csid', [Business\ZatcaSettingController::class, 'getProductionCsid'])->name('zatca.production-csid');
 
 });
