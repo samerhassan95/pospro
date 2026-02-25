@@ -12,6 +12,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome Backup -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" crossorigin="anonymous">
     <!-- Cairo Font -->
     <link rel="stylesheet" href="{{ asset('fonts/cairo/cairo.css') }}">
     
@@ -300,6 +302,76 @@
             color: rgba(255, 255, 255, 0.6);
         }
         
+        /* Password field with toggle icon */
+        .password-wrapper {
+            position: relative;
+        }
+        
+        .password-wrapper .form-control {
+            padding-right: 45px;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            padding: 5px;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            z-index: 10;
+        }
+        
+        .password-toggle:hover {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Eye with line through it */
+        .password-toggle .eye-slash {
+            position: relative;
+        }
+        
+        .password-toggle .eye-slash::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 2px;
+            background: currentColor;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+        
+        /* Fallback for Font Awesome icons */
+        .password-toggle i::before {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", sans-serif !important;
+            font-weight: 900 !important;
+        }
+        
+        /* Ensure Font Awesome loads properly */
+        .fa-eye::before {
+            content: "\f06e" !important;
+        }
+        
+        .fa-eye-slash::before {
+            content: "\f070" !important;
+        }
+        
+        /* RTL positioning for Arabic */
+        html[dir="rtl"] .password-wrapper .form-control {
+            padding-right: 15px;
+            padding-left: 45px;
+        }
+        
+        html[dir="rtl"] .password-toggle {
+            right: auto;
+            left: 15px;
+        }
+        
         .checkbox-wrapper {
             display: flex;
             align-items: center;
@@ -558,7 +630,12 @@
                             
                             <div class="form-group">
                                 <label for="password">{{ __('Password') }}</label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="{{ __('Password') }}">
+                                <div class="password-wrapper">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="{{ __('Password') }}">
+                                    <button type="button" class="password-toggle" onclick="togglePassword()" title="Show/Hide Password">
+                                        <span id="password-icon">👁</span>
+                                    </button>
+                                </div>
                             </div>
                             
                             <div class="checkbox-wrapper">
@@ -600,6 +677,20 @@
             "positionClass": "toast-top-right",
             "timeOut": "3000"
         };
+        
+        // Password toggle functionality
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('password-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.innerHTML = '👁'; // Same eye icon
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.innerHTML = '👁'; // Same eye icon
+            }
+        }
         
         // Show Laravel validation errors
         @if ($errors->any())

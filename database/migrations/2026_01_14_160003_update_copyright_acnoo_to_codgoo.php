@@ -16,7 +16,7 @@ return new class extends Migration
         
         if ($option) {
             $value = $option->value;
-            $value['copy_right'] = '© 2026 codgoo, all rights reserved.';
+            $value['copy_right'] = '© 2026 Nomu, all rights reserved.';
             $option->value = $value;
             $option->save();
         }

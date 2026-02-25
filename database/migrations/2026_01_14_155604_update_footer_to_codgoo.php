@@ -16,7 +16,7 @@ return new class extends Migration
         
         if ($option) {
             $value = $option->value;
-            $value['admin_footer_link_text'] = 'codgoo';
+            $value['admin_footer_link_text'] = 'Nomu';
             $value['admin_footer_link'] = 'https://codgoo.com/';
             $option->value = $value;
             $option->save();
@@ -32,7 +32,7 @@ return new class extends Migration
         
         if ($option) {
             $value = $option->value;
-            $value['admin_footer_link_text'] = 'acnoo';
+            $value['admin_footer_link_text'] = 'Nomu';
             $value['admin_footer_link'] = 'https://acnoo.com/';
             $option->value = $value;
             $option->save();
