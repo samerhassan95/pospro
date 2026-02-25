@@ -440,19 +440,47 @@ $(document).on("click", ".add-variant-btn", function (e) {
     e.preventDefault();
 
     var canSeePrice = $("#canSeePrice").val() == "1";
-    const permissions = JSON.parse($("#permissions-data").val());
-    const warehouses = JSON.parse(
-        document.getElementById("warehouses-data").value,
-    );
+    
+    // Check if permissions-data exists
+    const permissionsElement = document.getElementById("permissions-data");
+    if (!permissionsElement) {
+        console.error("permissions-data element not found!");
+        alert("Error: Missing permissions data. Please refresh the page.");
+        return;
+    }
+    
+    const permissions = JSON.parse(permissionsElement.value);
+    
+    // Get warehouses data (may not exist if warehouse addon is disabled)
+    let warehouses = [];
+    const warehousesElement = document.getElementById("warehouses-data");
+    if (warehousesElement && warehousesElement.value) {
+        try {
+            warehouses = JSON.parse(warehousesElement.value);
+        } catch (e) {
+            console.warn("Could not parse warehouses data:", e);
+        }
+    }
+    
+    // Get vats data
+    let vats = [];
+    const vatsElement = document.getElementById("vats-data");
+    if (vatsElement && vatsElement.value) {
+        try {
+            vats = JSON.parse(vatsElement.value);
+        } catch (e) {
+            console.error("Could not parse vats data:", e);
+        }
+    }
 
     let rowId = generateRowId();
     let newRow = "<tr data-row-id='" + rowId + "'>";
 
     if (permissions.show_batch_no) {
-        newRow += `<td><input type="text" name="stocks[${rowId}][batch_no]" class="form-control form-control-sm custom-table-input" placeholder="25632" value="${$("#productCode").val() + "-" + ($(".single-product-table tbody tr").length + 1)}"></td>`;
+        newRow += `<td><input type="text" name="stocks[${rowId}][batch_no]" class="form-control form-control-sm custom-table-input" placeholder="25632" value="${$("#productCode").val() + "-" + ($("#product-data tr").length + 1)}"></td>`;
     }
 
-    if (permissions.show_warehouse) {
+    if (permissions.show_warehouse && warehouses.length > 0) {
         let warehouseOptions = '<option value="">Select</option>';
         warehouses.forEach(function (wh) {
             warehouseOptions += `<option value="${wh.id}">${wh.name}</option>`;
@@ -473,6 +501,20 @@ $(document).on("click", ".add-variant-btn", function (e) {
 
     if (permissions.show_product_stock) {
         newRow += `<td><input type="number" step="any" min="0" name="stocks[${rowId}][productStock]" class="form-control form-control-sm custom-table-input productStock" placeholder="0" ${needSerial ? "readonly" : ""}></td>`;
+    }
+
+    // Add VAT dropdown for each row
+    if (permissions.show_vat_id && vats.length > 0) {
+        let vatOptions = '<option value="">Select</option>';
+        vats.forEach(function (vat) {
+            vatOptions += `<option value="${vat.id}" data-vat_rate="${vat.rate}">${vat.name} (${vat.rate}%)</option>`;
+        });
+        
+        newRow += `<td>
+            <select name="stocks[${rowId}][vat_id]" class="form-control table-select w-100 row-vat-id">
+                ${vatOptions}
+            </select>
+        </td>`;
     }
 
     if (canSeePrice) {
@@ -524,32 +566,46 @@ $(document).on("click", ".add-variant-btn", function (e) {
 
     newRow += "</tr>";
 
+    console.log("Adding new row to #product-data");
     $("#product-data").append(newRow);
+    console.log("Row added successfully");
 });
 
-// Get VAT rate
-// Get VAT rate
+// Get VAT rate - now supports per-row VAT in batch mode
 function getVatRate($container) {
-    // If no container provided, try to find the active one based on visibility
-    const $targetContainer =
-        $container ||
-        $(".single-container:visible, .variant-container:visible");
-    const $vatSelect = $targetContainer.find(".vat_id");
+    // If we're in a table row (batch mode), check for row-level VAT first
+    const $row = $container && $container.closest ? $container.closest('tr') : null;
+    
+    if ($row && $row.length > 0) {
+        const $rowVatSelect = $row.find('.row-vat-id');
+        if ($rowVatSelect.length > 0) {
+            const selectedOption = $rowVatSelect.find('option:selected');
+            if (selectedOption && selectedOption.val()) {
+                const rate = parseFloat(selectedOption.attr('data-vat_rate')) || 0;
+                console.log('getVatRate (row-level):', rate);
+                return rate;
+            }
+        }
+    }
+    
+    // Fallback to container-level VAT (single mode)
+    const $targetContainer = $container || $('.single-container:visible, .variant-container:visible');
+    const $vatSelect = $targetContainer.find('.vat_id');
 
     if ($vatSelect.length === 0) {
-        console.log("getVatRate: vat_id element not found in container");
+        console.log('getVatRate: vat_id element not found in container');
         return 0;
     }
 
     const vatSelect = $vatSelect[0];
     const selectedOption = vatSelect.options[vatSelect.selectedIndex];
     if (!selectedOption || !selectedOption.value) {
-        console.log("getVatRate: No option selected");
+        console.log('getVatRate: No option selected');
         return 0;
     }
 
-    const rate = parseFloat(selectedOption.getAttribute("data-vat_rate")) || 0;
-    console.log("getVatRate:", rate, "from option:", selectedOption.text);
+    const rate = parseFloat(selectedOption.getAttribute('data-vat_rate')) || 0;
+    console.log('getVatRate (container-level):', rate);
     return rate;
 }
 
@@ -561,9 +617,14 @@ function getProfitOption() {
 // Update inclusive_price field based on VAT
 function updateInclusiveFromExclusive($row) {
     console.log("updateInclusiveFromExclusive called");
+    
+    // Get VAT rate from row (batch mode) or container (single mode)
+    const vatRate = getVatRate($row);
+    
+    // For single mode, also check vat_type
     const $container = $row.closest(".single-container, .variant-container");
-    const vatRate = getVatRate($container);
-    const vatType = $container.find(".vat_type").val();
+    const vatType = $container.find(".vat_type").val() || 'exclusive';
+    
     console.log("VAT Type:", vatType, "VAT Rate:", vatRate);
 
     const exclusiveInput = $row.find(".exclusive_price");
@@ -573,7 +634,7 @@ function updateInclusiveFromExclusive($row) {
     console.log("Exclusive value:", exclusive);
 
     // inclusive = exclusive + VAT%
-    if (vatType && vatRate) {
+    if (vatRate) {
         const inclusive = (exclusive + (exclusive * vatRate) / 100).toFixed(2);
         console.log("Calculated inclusive:", inclusive);
         inclusiveInput.val(inclusive);
@@ -584,9 +645,11 @@ function updateInclusiveFromExclusive($row) {
 
 // Calculate MRP from cost and profit
 function calculateMrpRow($row) {
+    // Get VAT rate from row (batch mode) or container (single mode)
+    const vatRate = getVatRate($row);
+    
     const $container = $row.closest(".single-container, .variant-container");
-    const vatRate = getVatRate($container);
-    const vatType = $container.find(".vat_type").val();
+    const vatType = $container.find(".vat_type").val() || 'exclusive';
     const profitOption = getProfitOption();
 
     const costInput = $row.find(".exclusive_price");
@@ -614,9 +677,11 @@ function calculateMrpRow($row) {
 
 // Calculate profit from MRP
 function calculateProfitFromMrp($row) {
+    // Get VAT rate from row (batch mode) or container (single mode)
+    const vatRate = getVatRate($row);
+    
     const $container = $row.closest(".single-container, .variant-container");
-    const vatRate = getVatRate($container);
-    const vatType = $container.find(".vat_type").val();
+    const vatType = $container.find(".vat_type").val() || 'exclusive';
     const profitOption = getProfitOption();
 
     const costInput = $row.find(".exclusive_price");
@@ -643,8 +708,8 @@ function calculateProfitFromMrp($row) {
 }
 
 function updateExclusiveFromInclusive($row) {
-    const $container = $row.closest(".single-container, .variant-container");
-    const vatRate = getVatRate($container);
+    // Get VAT rate from row (batch mode) or container (single mode)
+    const vatRate = getVatRate($row);
 
     const inclusiveInput = $row.find(".inclusive_price");
     const exclusiveInput = $row.find(".exclusive_price");
@@ -733,6 +798,19 @@ function bindMrpCalculation() {
                 updateExclusiveFromInclusive($row);
             }
         });
+    });
+    
+    // Handle per-row VAT changes in batch mode
+    $(document).on("change", ".row-vat-id", function () {
+        console.log("Event: Row-level VAT changed");
+        
+        const $row = $(this).closest("tr");
+        const $exclusiveInput = $row.find(".exclusive_price");
+        
+        // Recalculate if there's already a price entered
+        if ($exclusiveInput.val() && parseFloat($exclusiveInput.val()) > 0) {
+            calculateMrpRow($row);
+        }
     });
 
     // On inclusive price change, update exclusive and MRP after edit

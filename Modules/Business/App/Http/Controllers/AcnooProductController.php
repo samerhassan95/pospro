@@ -96,12 +96,13 @@ class AcnooProductController extends Controller
         $warehouses = Warehouse::where('business_id', $business_id)->latest()->get();
         $racks = Rack::where('business_id', $business_id)->latest()->get();
         $shelves = Shelf::where('business_id', $business_id)->latest()->get();
+        $variations = \App\Models\Variation::where('business_id', $business_id)->whereStatus(1)->latest()->get();
         $profit_option = Option::where('key', 'business-settings')
             ->whereJsonContains('value->business_id', $business_id)
             ->first()
             ->value['product_profit_option'] ?? '';
 
-        return view('business::products.create', compact('categories', 'brands', 'units', 'code', 'vats', 'product_models', 'warehouses', 'racks', 'shelves', 'profit_option'));
+        return view('business::products.create', compact('categories', 'brands', 'units', 'code', 'vats', 'product_models', 'warehouses', 'racks', 'shelves', 'variations', 'profit_option'));
     }
 
     public function store(Request $request)

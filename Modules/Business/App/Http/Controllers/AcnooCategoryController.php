@@ -24,7 +24,8 @@ class AcnooCategoryController extends Controller
     public function index(Request $request)
     {
         $categories = Category::where('business_id', auth()->user()->business_id)->latest()->paginate(5);
-        return view('business::categories.index', compact('categories'));
+        $variations = \App\Models\Variation::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
+        return view('business::categories.index', compact('categories', 'variations'));
     }
 
     public function acnooFilter(Request $request)
@@ -54,12 +55,25 @@ class AcnooCategoryController extends Controller
             'icon' => 'nullable|image|mimes:jpg,png,jpeg,gif',
         ]);
 
+        // Separate default and custom variations
+        $defaultVariations = ['variationCapacity', 'variationColor', 'variationSize', 'variationType', 'variationWeight'];
+        $customVariations = [];
+        
+        foreach ($request->all() as $key => $value) {
+            if (str_starts_with($key, 'variation') && !in_array($key, $defaultVariations) && $value == 'true') {
+                // Extract variation name from field name (e.g., variationFirst -> First)
+                $varName = substr($key, 9); // Remove 'variation' prefix
+                $customVariations[] = $varName;
+            }
+        }
+
         Category::create($request->except('variationCapacity', 'variationColor','variationSize', 'variationType', 'variationWeight', 'business_id','icon') + [
             'variationCapacity' => $request->variationCapacity == 'true' ? 1 : 0,
             'variationColor' => $request->variationColor == 'true' ? 1 : 0,
             'variationSize' => $request->variationSize == 'true' ? 1 : 0,
             'variationType' => $request->variationType == 'true' ? 1 : 0,
             'variationWeight' => $request->variationWeight == 'true' ? 1 : 0,
+            'custom_variations' => $customVariations,
             'business_id' => auth()->user()->business_id,
             'icon' => $request->icon ? $this->upload($request, 'icon') : NULL,
         ]);
@@ -81,6 +95,18 @@ class AcnooCategoryController extends Controller
             'icon' => 'nullable|image|mimes:jpg,png,jpeg,gif',
         ]);
 
+        // Separate default and custom variations
+        $defaultVariations = ['variationCapacity', 'variationColor', 'variationSize', 'variationType', 'variationWeight'];
+        $customVariations = [];
+        
+        foreach ($request->all() as $key => $value) {
+            if (str_starts_with($key, 'variation') && !in_array($key, $defaultVariations) && $value == 'true') {
+                // Extract variation name from field name (e.g., variationFirst -> First)
+                $varName = substr($key, 9); // Remove 'variation' prefix
+                $customVariations[] = $varName;
+            }
+        }
+
         $category->update([
             'categoryName' => $request->categoryName,
             'variationCapacity' => $request->variationCapacity == 'true' ? 1 : 0,
@@ -88,6 +114,7 @@ class AcnooCategoryController extends Controller
             'variationSize' => $request->variationSize == 'true' ? 1 : 0,
             'variationType' => $request->variationType == 'true' ? 1 : 0,
             'variationWeight' => $request->variationWeight == 'true' ? 1 : 0,
+            'custom_variations' => $customVariations,
             'icon' => $request->icon ? $this->upload($request, 'icon',$category->icon) : $category->icon,
             'business_id' => auth()->user()->business_id,
         ]);

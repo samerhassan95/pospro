@@ -231,31 +231,36 @@
                             <div class="variant-container">
                                 <div class="main-variant-content">
                                     <div class="variant-content mt-3">
-                                        @if (is_module_enabled($modules, 'show_vat_id'))
-                                        <h5>{{ __('Tax') }}</h5>
-                                        @endif
+                                        <h5>{{ __('Batch Mode') }}</h5>
                                         <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-                                            @if (is_module_enabled($modules, 'show_vat_id'))
-                                            <div class="dual-dropdown">
-                                                <select class="vat_id" name="vat_id">
-                                                    <option value="">{{ __('Select one') }}</option>
-                                                    @foreach ($vats as $vat)
-                                                        <option value="{{ $vat->id }}" data-vat_rate="{{ $vat->rate }}">
-                                                            {{ $vat->name }} ({{ $vat->rate }}%)
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <select class="vat_type" name="vat_type">
-                                                    <option value="exclusive">{{ __('Exclusive') }}</option>
-                                                    <option value="inclusive">{{ __('Inclusive') }}</option>
-                                                </select>
-                                            </div>
-                                            @endif
                                             @if ($hasVisibleColumn)
                                             <div class="d-flex align-items-center gap-2">
                                                 <a class="save-publish-btn add-variant-btn"> + {{ __('Add') }} </a>
                                             </div>
                                             @endif
+                                        </div>
+                                    </div>
+
+                                    {{-- Variations Selector Section --}}
+                                    <div class="variation-selector-section mt-3" id="variationSelectorSection" style="display: none;">
+                                        <h5>{{ __('Select Variations') }}</h5>
+                                        <div class="row">
+                                            <div class="col-lg-12 mb-3">
+                                                <label>{{ __('Choose which variations to use') }}</label>
+                                                <div id="availableVariations" class="d-flex flex-wrap gap-2">
+                                                    {{-- Will be populated by JavaScript based on selected category --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row variation-values-container" id="variationValuesContainer">
+                                            {{-- Variation value inputs will be added here dynamically --}}
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-lg-12">
+                                                <button type="button" class="btn btn-primary" id="generateVariationsBtn" style="display: none;">
+                                                    <i class="fas fa-magic me-1"></i>{{ __('Generate Variations') }}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -274,6 +279,9 @@
                                             @endif
                                             @if (is_module_enabled($modules, 'show_product_stock'))
                                             <th>{{ __('Qty') }}</th>
+                                            @endif
+                                            @if (is_module_enabled($modules, 'show_vat_id'))
+                                            <th>{{ __('Tax') }}</th>
                                             @endif
                                             @usercan('products.price')
                                             @if (is_module_enabled($modules, 'show_exclusive_price'))
@@ -328,6 +336,20 @@
                                             @if (is_module_enabled($modules, 'show_product_stock'))
                                             <td><input type="number" step="any" min="0" name="stocks[0][productStock]" class="form-control form-control-sm custom-table-input" placeholder="3"></td>
                                             @endif
+                                            
+                                            @if (is_module_enabled($modules, 'show_vat_id'))
+                                            <td>
+                                                <select name="stocks[0][vat_id]" class="form-control table-select w-100 row-vat-id">
+                                                    <option value="">{{ __('Select') }}</option>
+                                                    @foreach ($vats as $vat)
+                                                        <option value="{{ $vat->id }}" data-vat_rate="{{ $vat->rate }}">
+                                                            {{ $vat->name }} ({{ $vat->rate }}%)
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            @endif
+                                            
                                             @usercan('products.price')
                                             @if (is_module_enabled($modules, 'show_exclusive_price'))
                                             <td>
@@ -438,7 +460,7 @@
                                     @if (is_module_enabled($modules, 'show_inclusive_price'))
                                     <div class="col-lg-6 mb-2">
                                         <label>{{ __('Cost inc. tax') }}</label>
-                                        <input type="number" step="0.01" class="form-control inclusive_price" name="stocks[0][inclusive_price]" placeholder="{{ __('Enter Purchase Price') }}" readonly>
+                                        <input type="number" step="0.01" class="form-control inclusive_price" name="stocks[0][inclusive_price]" placeholder="{{ __('Enter Purchase Price') }}">
                                     </div>
                                     @endif
 
@@ -541,9 +563,17 @@
     </div>
 
     {{-- module permission as hidden--}}
+    @php
+        $permissionsArray = [];
+        foreach($defaultPermissions as $key) {
+            $value = isset($modules[$key]) ? ($modules[$key] ? 1 : 0) : 1;
+            $permissionsArray[$key] = $value == 1;
+        }
+    @endphp
+    <input type="hidden" id="permissions-data" value='@json($permissionsArray)'>
+    
     @foreach($defaultPermissions as $key)
         @php
-            // if $modules is not set, default to true (1)
             $value = isset($modules[$key]) ? ($modules[$key] ? 1 : 0) : 1;
         @endphp
         <input type="hidden" class="module-permission" data-key="{{ $key }}" value="{{ $value }}">
@@ -551,18 +581,267 @@
 
     @usercan('products.price')
     <input type="hidden" id="canSeePrice" value="1">
-    @endusercan
+    @else
     <input type="hidden" id="canSeePrice" value="0">
+    @endusercan
 
     <input type="hidden" id="getShelfRoute" value="{{ route('business.product.get.shelf') }}">
     @if (moduleCheck('WarehouseAddon') && is_module_enabled($modules, 'show_warehouse'))
         <input type="hidden" id="warehouses-data" value='@json($warehouses)'>
     @endif
 
+    {{-- VAT data for batch mode --}}
+    <input type="hidden" id="vats-data" value='@json($vats)'>
+
+    {{-- Category variations data --}}
+    <input type="hidden" id="categories-data" value='@json($categories)'>
+    <input type="hidden" id="variations-data" value='@json($variations)'>
+
 @endsection
 
 
 @push('js')
     <script src="{{ asset('assets/js/custom/product.js') }}"></script>
+    <script>
+        // Handle category selection to show variations
+        $(document).ready(function() {
+            const categoriesData = JSON.parse($('#categories-data').val() || '[]');
+            const variationsData = JSON.parse($('#variations-data').val() || '[]');
+            
+            console.log('Available variations in system:', variationsData);
+            
+            // Listen for category change
+            $('#category-select').on('change', function() {
+                const categoryId = $(this).val();
+                const selectedCategory = categoriesData.find(cat => cat.id == categoryId);
+                
+                // Only show variations section if Batch mode is selected
+                const isBatchMode = $('input[name="product_type"]:checked').val() === 'variant';
+                
+                if (selectedCategory && isBatchMode) {
+                    showVariationsForCategory(selectedCategory);
+                } else {
+                    $('#variationSelectorSection').hide();
+                }
+            });
+            
+            // Listen for product type change (Single/Batch)
+            $('input[name="product_type"]').on('change', function() {
+                const isBatchMode = $(this).val() === 'variant';
+                const categoryId = $('#category-select').val();
+                const selectedCategory = categoriesData.find(cat => cat.id == categoryId);
+                
+                if (isBatchMode && selectedCategory) {
+                    showVariationsForCategory(selectedCategory);
+                } else {
+                    $('#variationSelectorSection').hide();
+                }
+            });
+            
+            function showVariationsForCategory(category) {
+                const $variationsContainer = $('#availableVariations');
+                const $valuesContainer = $('#variationValuesContainer');
+                
+                $variationsContainer.empty();
+                $valuesContainer.empty();
+                
+                const availableVariations = [];
+                
+                console.log('Category data:', category);
+                console.log('Category custom_variations:', category.custom_variations);
+                console.log('All variations in system:', variationsData);
+                
+                // Only use custom variations from the variations table
+                if (category.custom_variations && Array.isArray(category.custom_variations)) {
+                    variationsData.forEach(variation => {
+                        // Check if this variation is enabled for the category
+                        if (category.custom_variations.includes(variation.name)) {
+                            const values = Array.isArray(variation.values) ? variation.values : [];
+                            
+                            console.log(`Variation "${variation.name}" is enabled! Values:`, values);
+                            
+                            if (values.length > 0) {
+                                availableVariations.push({
+                                    name: variation.name.toLowerCase(),
+                                    label: variation.name,
+                                    values: values
+                                });
+                            }
+                        }
+                    });
+                }
+                
+                console.log('Available variations for category:', availableVariations);
+                
+                if (availableVariations.length > 0) {
+                    $('#variationSelectorSection').show();
+                    
+                    // Add checkboxes for each variation
+                    availableVariations.forEach(variation => {
+                        const checkbox = `
+                            <div class="form-check">
+                                <input class="form-check-input variation-checkbox" type="checkbox" 
+                                       id="var_${variation.name}" value="${variation.name}" 
+                                       data-label="${variation.label}" data-values='${JSON.stringify(variation.values)}'>
+                                <label class="form-check-label" for="var_${variation.name}">
+                                    ${variation.label} (${variation.values.length} options)
+                                </label>
+                            </div>
+                        `;
+                        $variationsContainer.append(checkbox);
+                    });
+                    
+                    // Handle variation checkbox changes
+                    $('.variation-checkbox').on('change', function() {
+                        updateVariationInputs();
+                    });
+                } else {
+                    $('#variationSelectorSection').hide();
+                    Notify('warning', null, 'This category has no variations configured. Please go to Settings → Variations to add variation values (e.g., Color: white, black, red).');
+                }
+            }
+            
+            function updateVariationInputs() {
+                const $valuesContainer = $('#variationValuesContainer');
+                $valuesContainer.empty();
+                
+                $('.variation-checkbox:checked').each(function() {
+                    const varName = $(this).val();
+                    const varLabel = $(this).data('label');
+                    const varValues = $(this).data('values');
+                    
+                    const inputHtml = `
+                        <div class="col-lg-6 mb-3">
+                            <label>${varLabel} Values (comma-separated)</label>
+                            <input type="text" class="form-control variation-values-input" 
+                                   data-variation="${varName}" 
+                                   placeholder="e.g., ${varValues.slice(0, 3).join(', ')}"
+                                   value="${varValues.join(', ')}">
+                            <small class="text-muted">Enter values separated by commas</small>
+                        </div>
+                    `;
+                    $valuesContainer.append(inputHtml);
+                });
+                
+                // Show generate button if at least one variation is selected
+                if ($('.variation-checkbox:checked').length > 0) {
+                    $('#generateVariationsBtn').show();
+                } else {
+                    $('#generateVariationsBtn').hide();
+                }
+            }
+            
+            // Handle generate variations button
+            $('#generateVariationsBtn').on('click', function() {
+                generateVariationCombinations();
+            });
+            
+            function generateVariationCombinations() {
+                const selectedVariations = {};
+                
+                // Collect all selected variations and their values
+                $('.variation-values-input').each(function() {
+                    const varName = $(this).data('variation');
+                    const values = $(this).val().split(',').map(v => v.trim()).filter(v => v);
+                    if (values.length > 0) {
+                        selectedVariations[varName] = values;
+                    }
+                });
+                
+                if (Object.keys(selectedVariations).length === 0) {
+                    Notify('warning', null, 'Please select at least one variation and enter values.');
+                    return;
+                }
+                
+                // Generate all combinations
+                const combinations = generateCombinations(selectedVariations);
+                
+                console.log('Generated combinations:', combinations);
+                
+                // Display combinations in the batch table
+                displayVariationCombinations(combinations);
+                
+                Notify('success', null, `Generated ${combinations.length} product variations successfully!`);
+            }
+            
+            function generateCombinations(variations) {
+                const keys = Object.keys(variations);
+                const values = keys.map(key => variations[key]);
+                
+                function cartesianProduct(arrays) {
+                    if (arrays.length === 0) return [[]];
+                    const [first, ...rest] = arrays;
+                    const restProduct = cartesianProduct(rest);
+                    return first.flatMap(value => 
+                        restProduct.map(product => [value, ...product])
+                    );
+                }
+                
+                const products = cartesianProduct(values);
+                
+                return products.map(product => {
+                    const combination = {};
+                    keys.forEach((key, index) => {
+                        combination[key] = product[index];
+                    });
+                    return combination;
+                });
+            }
+            
+            function displayVariationCombinations(combinations) {
+                const $tbody = $('#batch-product-table tbody');
+                $tbody.empty();
+                
+                combinations.forEach((combo, index) => {
+                    // Create variation name (e.g., "Red - Large")
+                    const variationName = Object.values(combo).join(' - ');
+                    
+                    // Create variation attributes string for hidden input
+                    const attributes = Object.entries(combo).map(([key, value]) => 
+                        `${key}: ${value}`
+                    ).join(', ');
+                    
+                    const row = `
+                        <tr>
+                            <td>
+                                <input type="text" name="batch_products[${index}][name]" 
+                                       class="form-control" value="${variationName}" required>
+                                <input type="hidden" name="batch_products[${index}][attributes]" value="${attributes}">
+                            </td>
+                            <td>
+                                <input type="text" name="batch_products[${index}][code]" 
+                                       class="form-control" placeholder="Auto-generated">
+                            </td>
+                            <td>
+                                <input type="number" name="batch_products[${index}][purchase_price]" 
+                                       class="form-control" step="0.01" required>
+                            </td>
+                            <td>
+                                <input type="number" name="batch_products[${index}][sale_price]" 
+                                       class="form-control" step="0.01" required>
+                            </td>
+                            <td>
+                                <input type="number" name="batch_products[${index}][stock]" 
+                                       class="form-control" value="0" required>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-danger remove-batch-row">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    $tbody.append(row);
+                });
+                
+                // Show the batch table
+                $('#batch-product-section').show();
+                
+                // Add remove row functionality
+                $('.remove-batch-row').on('click', function() {
+                    $(this).closest('tr').remove();
+                });
+            }
+        });
+    </script>
 @endpush
-
