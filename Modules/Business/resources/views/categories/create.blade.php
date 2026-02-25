@@ -31,27 +31,8 @@
 
                             <div class="m-2">
                                 <h2 class='option-title'>{{ __('Select Variations') }}:</h2>
-                                <div class="select-variations-container">
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox" name="variationCapacity" value="true">
-                                        <label class="form-check-label variations-label">{{ __('Capacity') }}</label>
-                                    </div>
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox" name="variationColor" value="true">
-                                        <label class="form-check-label variations-label">{{ __('Color') }}</label>
-                                    </div>
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox" name="variationSize" value="true">
-                                        <label class="form-check-label variations-label">{{ __('Size') }}</label>
-                                    </div>
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox" name="variationType" value="true">
-                                        <label class="form-check-label variations-label">{{ __('Type') }}</label>
-                                    </div>
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox" name="variationWeight" value="true">
-                                        <label class="form-check-label variations-label">{{ __('Weight') }}</label>
-                                    </div>
+                                <div class="select-variations-container" id="variations-checkboxes-container-create">
+                                    <!-- Variations will be loaded dynamically here -->
                                 </div>
                             </div>
                         </div>

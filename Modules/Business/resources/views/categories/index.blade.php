@@ -69,3 +69,93 @@
     @include('business::categories.create')
     @include('business::categories.edit')
 @endpush
+
+@push('js')
+{{-- Pass variations data to JavaScript --}}
+<input type="hidden" id="all-variations-data" value='@json($variations ?? [])'>
+
+<script>
+$(document).ready(function() {
+    const variationsData = JSON.parse($('#all-variations-data').val() || '[]');
+    
+    console.log('All variations:', variationsData);
+    console.log('Variations count:', variationsData.length);
+    
+    // Function to render variation checkboxes
+    function renderVariationCheckboxes(containerId, categoryData = null) {
+        const $container = $(containerId);
+        
+        if ($container.length === 0) {
+            console.error('Container not found:', containerId);
+            return;
+        }
+        
+        $container.empty();
+        
+        console.log('Rendering variations in:', containerId);
+        console.log('Category data:', categoryData);
+        console.log('Variations from database:', variationsData);
+        
+        // Only show variations from the variations table
+        variationsData.forEach(variation => {
+            if (!variation.name) return;
+            
+            const isChecked = categoryData && categoryData.custom_variations && 
+                            Array.isArray(categoryData.custom_variations) && 
+                            categoryData.custom_variations.includes(variation.name) ? 'checked' : '';
+            
+            const valuesCount = variation.values ? variation.values.length : 0;
+            const valueInfo = ` (${valuesCount} values)`;
+            
+            const uniqueId = `${variation.name}Check_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            
+            const checkbox = `
+                <div class="select-variations-content">
+                    <input class="form-check-input variations-input" type="checkbox" 
+                           name="variation${variation.name}" value="true" 
+                           id="${uniqueId}" ${isChecked}>
+                    <label class="form-check-label variations-label" for="${uniqueId}">
+                        ${variation.name}${valueInfo}
+                    </label>
+                </div>
+            `;
+            $container.append(checkbox);
+        });
+        
+        console.log('Rendered', variationsData.length, 'variations');
+    }
+    
+    // Render when modals are shown
+    $('#category-create-modal').on('shown.bs.modal', function() {
+        console.log('Create modal shown - event triggered');
+        setTimeout(function() {
+            console.log('Attempting to render in create modal');
+            renderVariationCheckboxes('#variations-checkboxes-container-create');
+        }, 100);
+    });
+    
+    $('#category-edit-modal').on('shown.bs.modal', function() {
+        console.log('Edit modal shown - event triggered');
+        setTimeout(function() {
+            console.log('Attempting to render in edit modal');
+            renderVariationCheckboxes('#variations-checkboxes-container');
+        }, 100);
+    });
+    
+    // Also try with click events as backup
+    $(document).on('click', '[data-bs-target="#category-create-modal"]', function() {
+        console.log('Create button clicked');
+        setTimeout(function() {
+            renderVariationCheckboxes('#variations-checkboxes-container-create');
+        }, 500);
+    });
+    
+    $(document).on('click', '[data-bs-target="#category-edit-modal"]', function() {
+        console.log('Edit button clicked');
+        setTimeout(function() {
+            renderVariationCheckboxes('#variations-checkboxes-container');
+        }, 500);
+    });
+});
+</script>
+@endpush

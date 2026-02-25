@@ -21,7 +21,7 @@
                                 @usercan('bulk-uploads.create')
                                 <button type="submit" class="add-order-btn rounded-2 border-0 submit-btn mt-3">Submit</button>
                                 @endusercan
-                                <a href="{{ asset('assets/POSpro_bulk_product_upload.xlsx') }}" download="POSpro_bulk_product_upload.xlsx" class="download-file-btn mt-3"><i class="fas fa-download"></i>{{ __('Download File') }}</a>
+                                <a href="{{ asset('assets/bulk-products-upload.xlsx') }}" download="bulk-products-upload.xlsx" class="download-file-btn mt-3"><i class="fas fa-download"></i>{{ __('Download File') }}</a>
                             </div>
                         </div>
                         <div class="bulk-upload-container mt-3">

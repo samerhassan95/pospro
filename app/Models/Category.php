@@ -22,6 +22,7 @@ class Category extends Model
         'variationSize',
         'variationType',
         'variationWeight',
+        'custom_variations',
         'icon',
         'status',
     ];
@@ -38,6 +39,7 @@ class Category extends Model
         'variationCapacity' => 'boolean',
         'variationType' => 'boolean',
         'variationWeight' => 'boolean',
+        'custom_variations' => 'array',
         'status' => 'integer',
     ];
 }

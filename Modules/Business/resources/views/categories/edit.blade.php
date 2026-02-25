@@ -30,39 +30,8 @@
                             </div>
                             <div class="mt-3">
                                 <h2 class='option-title'>{{ __('Select Variations') }}:</h2>
-                                <div class="select-variations-container">
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox" name="variationCapacity" value="true" id="capacityCheck">
-                                        <label class="form-check-label variations-label" for="capacityCheck">
-                                            {{ __('Capacity') }}
-                                        </label>
-                                    </div>
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox" name="variationColor" value="true" id="colorCheck">
-                                        <label class="form-check-label variations-label" for="colorCheck">
-                                            {{ __('Color') }}
-                                        </label>
-                                    </div>
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox" name="variationSize" value="true" id="sizeCheck">
-                                        <label class="form-check-label variations-label" for="sizeCheck">
-                                            {{ __('Size') }}
-                                        </label>
-                                    </div>
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox"
-                                               name="variationType" value="true" id="typeCheck">
-                                        <label class="form-check-label variations-label" for="typeCheck">
-                                            {{ __('Type') }}
-                                        </label>
-                                    </div>
-                                    <div class="select-variations-content">
-                                        <input class="form-check-input variations-input" type="checkbox"
-                                               name="variationWeight" value="true" id="weightCheck">
-                                        <label class="form-check-label variations-label" for="weightCheck">
-                                            {{ __('Weight') }}
-                                        </label>
-                                    </div>
+                                <div class="select-variations-container" id="variations-checkboxes-container">
+                                    <!-- Variations will be loaded dynamically here -->
                                 </div>
                             </div>
 
