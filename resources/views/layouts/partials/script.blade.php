@@ -31,6 +31,9 @@
 <!-- Dropdown Fix for Mobile -->
 <script src="{{ asset('assets/js/dropdown-fix.js') }}?v={{ time() }}"></script>
 
+{{-- SAR Symbol Replacement --}}
+<script src="{{ asset('assets/js/custom/replace-sar-symbol.js') }}?v={{ time() }}"></script>
+
 @stack('js')
 
 @stack('modal-view')

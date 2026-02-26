@@ -245,6 +245,19 @@
             color: #FFFFFFCC;
         }
         
+        /* SAR Symbol SVG Styling */
+        .plan-price .sar-symbol-svg {
+            display: inline-block;
+            width: 22px;
+            height: 24px;
+            vertical-align: middle;
+            margin: 0 4px;
+        }
+        
+        .plan-price .sar-symbol-svg path {
+            fill: currentColor;
+        }
+        
         .plan-duration {
             font-size: 16px;
             color: #FFFFFFCC;
@@ -255,20 +268,45 @@
             list-style: none;
             padding: 0;
             margin: 30px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .plan-features::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .plan-features::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .plan-features::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        .plan-features::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
         
         .plan-features li {
-            padding: 12px 0;
+            padding: 10px 0;
             color: #FFFFFFCC;
-            font-size: 15px;
+            font-size: 14px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .plan-features li:last-child {
+            border-bottom: none;
         }
         
         .plan-features li i {
-            font-size: 18px;
-            min-width: 20px;
+            font-size: 16px;
+            min-width: 18px;
         }
         
         .plan-features li i.fa-check-circle {
@@ -465,13 +503,13 @@
                         <div class="plan-price">
                             @if (($plan['offerPrice'] && $plan['subscriptionPrice'] !== null) || $plan['offerPrice'] || $plan['subscriptionPrice'])
                                 @if ($plan['offerPrice'])
-                                    {{ currency_format($plan['offerPrice']) }}
+                                    {!! currency_format($plan['offerPrice']) !!}
                                 @else
-                                    {{ currency_format($plan['subscriptionPrice']) }}
+                                    {!! currency_format($plan['subscriptionPrice']) !!}
                                 @endif
                             @else
                                 @if ($plan['offerPrice'] || $plan['subscriptionPrice'])
-                                    {{ currency_format($plan['offerPrice'] ?? $plan['subscriptionPrice']) }}
+                                    {!! currency_format($plan['offerPrice'] ?? $plan['subscriptionPrice']) !!}
                                 @else
                                     {{ __('Free') }}
                                 @endif
@@ -480,30 +518,128 @@
                         <div class="plan-duration">/{{ $plan['duration'] . ' ' . __('Days') }}</div>
                         
                         <ul class="plan-features">
-                            @foreach ($plan['features'] ?? [] as $key => $item)
-                            <li>
-                                <i class="fas {{ isset($item[1]) ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                {{ $item[0] ?? '' }}
-                            </li>
-                            @endforeach
+                            @if ($plan->allow_sales)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Sales Management') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Sales Management') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_purchases)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Purchase Management') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Purchase Management') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_products)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Product Management') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Product Management') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_stock)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Stock Management') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Stock Management') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_customers)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Customer Management') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Customer Management') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_suppliers)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Supplier Management') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Supplier Management') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_vat_settings)
+                                <li><i class="fas fa-check-circle"></i> {{ __('VAT Settings') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('VAT Settings') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_due_list)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Due List Management') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Due List Management') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_finance)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Finance Management') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Finance Management') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_commission)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Commission System') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Commission System') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_hrm)
+                                <li><i class="fas fa-check-circle"></i> {{ __('HRM Module') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('HRM Module') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_reports)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Advanced Reports') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Advanced Reports') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_pos_app)
+                                <li><i class="fas fa-check-circle"></i> {{ __('POS Application') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('POS Application') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_store)
+                                <li><i class="fas fa-check-circle"></i> {{ __('Online Store') }}</li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Online Store') }}</li>
+                            @endif
+                            
+                            @if ($plan->allow_warehouses)
+                                <li>
+                                    <i class="fas fa-check-circle"></i>
+                                    {{ __('Warehouses') }}: {{ $plan->warehouse_limit ? $plan->warehouse_limit : __('Unlimited') }}
+                                </li>
+                            @else
+                                <li><i class="fas fa-times-circle"></i> {{ __('Warehouses') }}</li>
+                            @endif
                             
                             @if (moduleCheck('MultiBranchAddon'))
-                                <li>
-                                    <i class="fas {{ $plan->allow_multibranch == 1 ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                    {{ __('Multi-branch Allowed') }}
-                                </li>
+                                @if ($plan->allow_multibranch)
+                                    <li>
+                                        <i class="fas fa-check-circle"></i>
+                                        {{ __('Multi-branch') }}: {{ $plan->branch_limit ? $plan->branch_limit : __('Unlimited') }}
+                                    </li>
+                                @else
+                                    <li><i class="fas fa-times-circle"></i> {{ __('Multi-branch Allowed') }}</li>
+                                @endif
                             @endif
                             
                             @if (moduleCheck('CustomDomainAddon'))
-                                <li>
-                                    <i class="fas {{ $plan->addon_domain_limit > 0 ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                    {{ $plan->addon_domain_limit > 0 ? __('Addon Limit:') . ' ' . $plan->addon_domain_limit : __('Addon Domain Available?') }}
-                                </li>
+                                @if ($plan->addon_domain_limit > 0)
+                                    <li>
+                                        <i class="fas fa-check-circle"></i>
+                                        {{ __('Addon Domain') }}: {{ $plan->addon_domain_limit }}
+                                    </li>
+                                @else
+                                    <li><i class="fas fa-times-circle"></i> {{ __('Addon Domain Available?') }}</li>
+                                @endif
                                 
-                                <li>
-                                    <i class="fas {{ $plan->subdomain_limit > 0 ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                    {{ $plan->subdomain_limit > 0 ? __('Subdomain Limit:') . ' ' . $plan->subdomain_limit : __('Subdomain Available?') }}
-                                </li>
+                                @if ($plan->subdomain_limit > 0)
+                                    <li>
+                                        <i class="fas fa-check-circle"></i>
+                                        {{ __('Subdomain') }}: {{ $plan->subdomain_limit }}
+                                    </li>
+                                @else
+                                    <li><i class="fas fa-times-circle"></i> {{ __('Subdomain Available?') }}</li>
+                                @endif
                             @endif
                         </ul>
                         

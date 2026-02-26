@@ -789,58 +789,113 @@
             }
             
             function displayVariationCombinations(combinations) {
-                const $tbody = $('#batch-product-table tbody');
+                const $tbody = $('#product-data');
                 $tbody.empty();
                 
+                const canSeePrice = $('#canSeePrice').val() == '1';
+                const permissions = JSON.parse($('#permissions-data').val());
+                const warehouses = JSON.parse($('#warehouses-data').val() || '[]');
+                const vats = JSON.parse($('#vats-data').val() || '[]');
+                const productCode = $('#productCode').val() || '';
+                
                 combinations.forEach((combo, index) => {
-                    // Create variation name (e.g., "Red - Large")
+                    // Create variation name (e.g., "k - white", "l - white", etc.)
                     const variationName = Object.values(combo).join(' - ');
+                    const batchNo = productCode ? `${productCode}-${index + 1}` : `${index + 1}`;
                     
-                    // Create variation attributes string for hidden input
-                    const attributes = Object.entries(combo).map(([key, value]) => 
-                        `${key}: ${value}`
-                    ).join(', ');
+                    let rowId = 'row-' + Date.now() + '-' + index;
+                    let newRow = `<tr data-row-id="${rowId}">`;
                     
-                    const row = `
-                        <tr>
-                            <td>
-                                <input type="text" name="batch_products[${index}][name]" 
-                                       class="form-control" value="${variationName}" required>
-                                <input type="hidden" name="batch_products[${index}][attributes]" value="${attributes}">
-                            </td>
-                            <td>
-                                <input type="text" name="batch_products[${index}][code]" 
-                                       class="form-control" placeholder="Auto-generated">
-                            </td>
-                            <td>
-                                <input type="number" name="batch_products[${index}][purchase_price]" 
-                                       class="form-control" step="0.01" required>
-                            </td>
-                            <td>
-                                <input type="number" name="batch_products[${index}][sale_price]" 
-                                       class="form-control" step="0.01" required>
-                            </td>
-                            <td>
-                                <input type="number" name="batch_products[${index}][stock]" 
-                                       class="form-control" value="0" required>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-danger remove-batch-row">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                    $tbody.append(row);
+                    // Batch No
+                    if (permissions.show_batch_no) {
+                        newRow += `<td><input type="text" name="stocks[${rowId}][batch_no]" class="form-control form-control-sm custom-table-input" placeholder="Batch No" value="${batchNo}"></td>`;
+                    }
+                    
+                    // Warehouse
+                    if (permissions.show_warehouse && warehouses.length > 0) {
+                        let warehouseOptions = '<option value="">Select</option>';
+                        warehouses.forEach(function (wh) {
+                            warehouseOptions += `<option value="${wh.id}">${wh.name}</option>`;
+                        });
+                        newRow += `<td><select name="stocks[${rowId}][warehouse_id]" class="form-control table-select w-100 role">${warehouseOptions}</select></td>`;
+                    }
+                    
+                    // Qty
+                    if (permissions.show_product_stock) {
+                        newRow += `<td><input type="number" step="any" min="0" name="stocks[${rowId}][productStock]" class="form-control form-control-sm custom-table-input productStock" placeholder="0" value="0"></td>`;
+                    }
+                    
+                    // VAT dropdown
+                    if (permissions.show_vat_id && vats.length > 0) {
+                        let vatOptions = '<option value="">Select Tax</option>';
+                        vats.forEach(function (vat) {
+                            vatOptions += `<option value="${vat.id}" data-vat_rate="${vat.rate}">${vat.name} (${vat.rate}%)</option>`;
+                        });
+                        newRow += `<td><select name="stocks[${rowId}][vat_id]" class="form-control table-select w-100 row-vat-id">${vatOptions}</select></td>`;
+                    }
+                    
+                    // Prices (if user can see prices)
+                    if (canSeePrice) {
+                        if (permissions.show_exclusive_price) {
+                            newRow += `<td><input type="number" step="any" min="0" name="stocks[${rowId}][exclusive_price]" class="form-control form-control-sm custom-table-input exclusive_price" placeholder="Ex: 50"></td>`;
+                        }
+                        if (permissions.show_inclusive_price) {
+                            newRow += `<td><input type="number" step="any" min="0" name="stocks[${rowId}][inclusive_price]" class="form-control form-control-sm custom-table-input inclusive_price" placeholder="Ex: 50"></td>`;
+                        }
+                        if (permissions.show_profit_percent) {
+                            newRow += `<td><input type="number" step="any" name="stocks[${rowId}][profit_percent]" class="form-control form-control-sm custom-table-input profit_percent" placeholder="25%"></td>`;
+                        }
+                    }
+                    
+                    // Sale Price
+                    if (permissions.show_product_sale_price) {
+                        newRow += `<td><input type="number" step="any" min="0" name="stocks[${rowId}][productSalePrice]" class="form-control form-control-sm custom-table-input productSalePrice" placeholder="Ex: 200"></td>`;
+                    }
+                    
+                    // Wholesale Price
+                    if (permissions.show_product_wholesale_price) {
+                        newRow += `<td><input type="number" step="any" min="0" name="stocks[${rowId}][productWholeSalePrice]" class="form-control form-control-sm custom-table-input" placeholder="Ex: 200"></td>`;
+                    }
+                    
+                    // Dealer Price
+                    if (permissions.show_product_dealer_price) {
+                        newRow += `<td><input type="number" step="any" min="0" name="stocks[${rowId}][productDealerPrice]" class="form-control form-control-sm custom-table-input" placeholder="Ex: 200"></td>`;
+                    }
+                    
+                    // Manufacturing Date
+                    if (permissions.show_mfg_date) {
+                        newRow += `<td><input type="date" name="stocks[${rowId}][mfg_date]" class="form-control"></td>`;
+                    }
+                    
+                    // Expiry Date
+                    if (permissions.show_expire_date) {
+                        newRow += `<td><input type="date" name="stocks[${rowId}][expire_date]" class="form-control"></td>`;
+                    }
+                    
+                    // Action (Delete button)
+                    if (permissions.show_action) {
+                        newRow += `
+                        <td>
+                            <a href="#" class="text-danger remove-row">
+                                <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 5.5L19.3803 15.5251C19.2219 18.0864 19.1428 19.3671 18.5008 20.2879C18.1833 20.7431 17.7747 21.1273 17.3007 21.416C16.3421 22 15.059 22 12.4927 22C9.92312 22 8.6383 22 7.67905 21.4149C7.2048 21.1257 6.796 20.7408 6.47868 20.2848C5.83688 19.3626 5.75945 18.0801 5.60461 15.5152L5 5.5" stroke="#FF3B30" stroke-width="1.25" stroke-linecap="round"/>
+                                    <path d="M9.5 11.7344H15.5" stroke="#FF3B30" stroke-width="1.25" stroke-linecap="round"/>
+                                    <path d="M11 15.6543H14" stroke="#FF3B30" stroke-width="1.25" stroke-linecap="round"/>
+                                    <path d="M3.5 5.5H21.5M16.5555 5.5L15.8729 4.09173C15.4194 3.15626 15.1926 2.68852 14.8015 2.39681C14.7148 2.3321 14.6229 2.27454 14.5268 2.2247C14.0937 2 13.5739 2 12.5343 2C11.4686 2 10.9358 2 10.4955 2.23412C10.3979 2.28601 10.3048 2.3459 10.2171 2.41317C9.82145 2.7167 9.60044 3.20155 9.15842 4.17126L8.55273 5.5" stroke="#FF3B30" stroke-width="1.25" stroke-linecap="round"/>
+                                </svg>
+                            </a>
+                        </td>
+                        `;
+                    }
+                    
+                    // Hidden input for variation name
+                    newRow += `<input type="hidden" name="stocks[${rowId}][variation_name]" value="${variationName}">`;
+                    
+                    newRow += '</tr>';
+                    $tbody.append(newRow);
                 });
                 
-                // Show the batch table
-                $('#batch-product-section').show();
-                
-                // Add remove row functionality
-                $('.remove-batch-row').on('click', function() {
-                    $(this).closest('tr').remove();
-                });
+                console.log(`Generated ${combinations.length} rows in the table`);
             }
         });
     </script>

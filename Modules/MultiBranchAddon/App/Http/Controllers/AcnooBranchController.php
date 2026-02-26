@@ -51,6 +51,14 @@ class AcnooBranchController extends Controller
 
     public function store(Request $request)
     {
+        // Check branch limit
+        $business = auth()->user()->business;
+        if (!$business->canAddBranch()) {
+            return response()->json([
+                'message' => __('You have reached the maximum number of branches allowed in your plan. Please upgrade your plan to add more branches.'),
+            ], 403);
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',

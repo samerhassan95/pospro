@@ -78,6 +78,14 @@ class AcnooWarehouseController extends Controller
 
     public function store(Request $request)
     {
+        // Check warehouse limit
+        $business = auth()->user()->business;
+        if (!$business->canAddWarehouse()) {
+            return response()->json([
+                'message' => __('You have reached the maximum number of warehouses allowed in your plan. Please upgrade your plan to add more warehouses.'),
+            ], 403);
+        }
+
         $request->validate([
             'name'     => 'required|string|max:255',
             'phone'    => 'nullable|string|max:20',

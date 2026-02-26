@@ -43,15 +43,25 @@
                                 <div class="col-lg-6 mb-2">
                                     <label>{{__('Subscription Plan')}}</label>
                                     <div class="gpt-up-down-arrow position-relative">
-                                        <select name="plan_subscribe_id"
+                                        <select name="plan_subscribe_id" id="plan_select"
                                                 class="form-control table-select w-100 role">
                                             <option value=""> {{__('Select Plan')}}</option>
                                             @foreach ($plans as $plan)
-                                                <option value="{{ $plan->id }}"> {{ ucfirst($plan->subscriptionName) }} </option>
+                                                <option value="{{ $plan->id }}" 
+                                                    data-price="{{ $plan->subscriptionPrice }}"
+                                                    data-duration="{{ $plan->duration }}"
+                                                    data-warehouses="{{ $plan->warehouse_limit ?? 'Unlimited' }}"
+                                                    data-branches="{{ $plan->branch_limit ?? 'Unlimited' }}"
+                                                    data-finance="{{ $plan->allow_finance ? 'Yes' : 'No' }}"
+                                                    data-hrm="{{ $plan->allow_hrm ? 'Yes' : 'No' }}"
+                                                    data-commission="{{ $plan->allow_commission ? 'Yes' : 'No' }}">
+                                                    {{ ucfirst($plan->subscriptionName) }} - {{ currency($plan->subscriptionPrice) }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         <span></span>
                                     </div>
+                                    <small class="text-muted" id="plan_info"></small>
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
@@ -199,4 +209,32 @@
 
 @push('js')
     <script src="{{ asset('assets/js/custom/custom.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#plan_select').on('change', function() {
+                const selectedOption = $(this).find('option:selected');
+                const planInfo = $('#plan_info');
+                
+                if (selectedOption.val()) {
+                    const warehouses = selectedOption.data('warehouses');
+                    const branches = selectedOption.data('branches');
+                    const finance = selectedOption.data('finance');
+                    const hrm = selectedOption.data('hrm');
+                    const commission = selectedOption.data('commission');
+                    const duration = selectedOption.data('duration');
+                    
+                    let info = `Duration: ${duration} days | `;
+                    info += `Warehouses: ${warehouses} | `;
+                    info += `Branches: ${branches} | `;
+                    info += `Finance: ${finance} | `;
+                    info += `HRM: ${hrm} | `;
+                    info += `Commission: ${commission}`;
+                    
+                    planInfo.html(info).removeClass('text-muted').addClass('text-info');
+                } else {
+                    planInfo.html('').removeClass('text-info').addClass('text-muted');
+                }
+            });
+        });
+    </script>
 @endpush

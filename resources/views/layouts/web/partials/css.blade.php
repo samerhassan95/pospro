@@ -23,6 +23,9 @@
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
 
+<!-- Currency Rubik Light Font -->
+<link rel="stylesheet" href="{{ asset('assets/css/currency-rubik.css') }}?v={{ time() }}">
+
 @if (app()->getLocale() == 'ar')
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.rtl.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/web/css/arabic.css') }}?v={{ time() }}">

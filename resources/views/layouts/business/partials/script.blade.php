@@ -18,6 +18,11 @@
 {{-- Toaster --}}
 <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
 
+{{-- Currency SVG Symbol Handler --}}
+<script src="{{ asset('assets/js/custom/currency-svg.js') }}?v={{ time() }}"></script>
+{{-- Replace SAR Symbol (^) with SVG --}}
+<script src="{{ asset('assets/js/custom/replace-sar-symbol.js') }}?v={{ time() }}"></script>
+
 {{-- Translation variables for JavaScript --}}
 <script>
     window.translations = window.translations || {};

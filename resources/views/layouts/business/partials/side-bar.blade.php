@@ -176,7 +176,7 @@
                 </li>
             @endusercanany
 
-            @if (moduleCheck('WarehouseAddon'))
+            @if (moduleCheck('WarehouseAddon') && plan_allows('warehouses'))
              @usercan('warehouses.read')
                 <li class="dropdown {{ Request::routeIs('warehouse.warehouses.index','warehouse.warehouses.product') ? 'active' : '' }}">
                     <a class="position-relative" href="#">
@@ -334,6 +334,7 @@
             </li>
             @endusercan
 
+            @if(plan_allows('due_list'))
             @usercan('dues.read')
                 <li class="dropdown {{ Request::routeIs('business.dues.index','business.collect.dues', 'business.party.dues') ? 'active' : '' }}">
                     <a href="#">
@@ -378,7 +379,9 @@
                     </ul>
                 </li>
             @endusercan
+            @endif
 
+            @if(plan_allows('finance'))
             @usercan('banks.read')
             <li class="dropdown {{ Request::routeIs('business.banks.index', 'business.banks.create', 'business.cashes.index', 'business.cheques.index', 'business.bank-transactions.index', 'business.cash-flow-reports.index', 'business.balance-sheet-reports.index', 'business.bill-wise-profit-reports.index') ? 'active' : '' }}">
                 <a href="#">
@@ -412,6 +415,7 @@
                 </ul>
             </li>
             @endusercan
+            @endif
 
             @usercan('subscriptions.read')
             <li class="{{ Request::routeIs('business.subscriptions.index') ? 'active' : '' }}">
@@ -424,6 +428,7 @@
             </li>
             @endusercan
 
+            @if(plan_allows('commission'))
             @usercanany(['commissions.read', 'sale-commissions.read'])
             <li class="dropdown {{ Request::routeIs('business.commissions.index','business.sale-commissions.index') ? 'active' : '' }}">
                 <a href="#">
@@ -442,8 +447,9 @@
                 </ul>
             </li>
             @endusercanany
+            @endif
 
-            @if (moduleCheck('HrmAddon'))
+            @if (moduleCheck('HrmAddon') && plan_allows('hrm'))
               @usercanany(['department.read', 'designations.read', 'shifts.read', 'employees.read', 'leave-types.read', 'leaves.read', 'holidays.read', 'attendances.read', 'payrolls.read', 'attendance-reports.read', 'payroll-reports.read', 'leave-reports.read'])
                 <li class="dropdown {{ Request::routeIs('hrm.department.index', 'hrm.designations.index', 'hrm.shifts.index', 'hrm.employees.index', 'hrm.employees.create', 'hrm.employees.edit', 'hrm.leave-types.index', 'hrm.leaves.index', 'hrm.holidays.index', 'hrm.attendances.index', 'hrm.payrolls.index', 'hrm.attendance-reports.index','hrm.leave-reports.index','hrm.payroll-reports.index') ? 'active' : '' }}">
                     <a class="position-relative" href="#">
@@ -918,6 +924,18 @@
                                 <h5>
                                     {{ __('Expired') }}: {{ formatted_date(plan_data()['will_expire'] ?? '') }}
                                 </h5>
+                                
+                                {{-- Display plan limits --}}
+                                @if(branch_limit() !== null)
+                                <p class="text-muted small mb-0">
+                                    {{ __('Branches') }}: {{ branch_limit() }}
+                                </p>
+                                @endif
+                                @if(warehouse_limit() !== null)
+                                <p class="text-muted small mb-0">
+                                    {{ __('Warehouses') }}: {{ warehouse_limit() }}
+                                </p>
+                                @endif
                                 @else
                                 <h3>{{ __('No Active Plan') }}</h3>
                                 <h5>{{ __('Please subscribe to a plan') }}</h5>

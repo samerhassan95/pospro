@@ -43,11 +43,29 @@
             <div class="card-bodys">
                 <div class="table-header p-16">
                     <h4>{{ __('Branch List') }}</h4>
-                    <a type="button" href="#branches-create-modal" data-bs-toggle="modal"
-                        class="add-order-btn rounded-2 {{ Route::is('multibranch.branches.create') ? 'active' : '' }}"
+                    <div class="d-flex align-items-center gap-2">
+                        @php
+                            $business = auth()->user()->business;
+                            $branchLimit = branch_limit();
+                            $currentBranchCount = \App\Models\Branch::where('business_id', auth()->user()->business_id)->count();
+                            $canAddBranch = $business->canAddBranch();
+                        @endphp
+                        
+                        @if($branchLimit > 0)
+                            <span class="badge bg-info text-white">{{ $currentBranchCount }} / {{ $branchLimit }} {{ __('Branches') }}</span>
+                        @else
+                            <span class="badge bg-success text-white">{{ $currentBranchCount }} {{ __('Branches') }}</span>
+                        @endif
+                        
                         @usercan('branches.create')
-                        class="btn btn-primary"><i class="fas fa-plus-circle me-1"></i>{{ __('Add new Branch') }}</a>
-                    @endusercan
+                            @if($canAddBranch)
+                                <a type="button" href="#branches-create-modal" data-bs-toggle="modal"
+                                    class="add-order-btn rounded-2 {{ Route::is('multibranch.branches.create') ? 'active' : '' }}"><i class="fas fa-plus-circle me-1"></i>{{ __('Add new Branch') }}</a>
+                            @else
+                                <button type="button" class="add-order-btn rounded-2 opacity-50" disabled title="{{ __('Branch limit reached. Please upgrade your plan.') }}"><i class="fas fa-plus-circle me-1"></i>{{ __('Add new Branch') }}</button>
+                            @endif
+                        @endusercan
+                    </div>
                 </div>
 
                 <div class="table-top-form p-16-0">

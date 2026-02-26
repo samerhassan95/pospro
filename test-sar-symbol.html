@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار رمز الريال السعودي</title>
+    <style>
+        body {
+            font-family: 'Cairo', Arial, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #298000;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border-right: 4px solid #298000;
+        }
+        .test-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #298000;
+        }
+        .old-symbol {
+            color: #999;
+            text-decoration: line-through;
+        }
+        .new-symbol {
+            color: #298000;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎉 اختبار رمز الريال السعودي الجديد</h1>
+        
+        <div class="test-item">
+            <h3>1. الرمز القديم (نصي):</h3>
+            <div class="price old-symbol">1,234.56 ر.س</div>
+        </div>
+        
+        <div class="test-item">
+            <h3>2. الرمز الجديد (SVG) - يسار:</h3>
+            <div class="price new-symbol" id="price-left"></div>
+        </div>
+        
+        <div class="test-item">
+            <h3>3. الرمز الجديد (SVG) - يمين:</h3>
+            <div class="price new-symbol" id="price-right"></div>
+        </div>
+        
+        <div class="test-item">
+            <h3>4. في جدول:</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #298000; color: white;">
+                        <th style="padding: 10px; text-align: right;">المنتج</th>
+                        <th style="padding: 10px; text-align: right;">السعر</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd;">منتج 1</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd;" id="table-price-1"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd;">منتج 2</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd;" id="table-price-2"></td>
+                    </tr>
+                    <tr style="background: #f0f0f0; font-weight: bold;">
+                        <td style="padding: 10px;">الإجمالي</td>
+                        <td style="padding: 10px;" id="table-total"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="test-item">
+            <h3>5. في نص عادي:</h3>
+            <p>السعر الإجمالي للطلب هو <span id="inline-price"></span> شامل الضريبة.</p>
+        </div>
+    </div>
+
+    <script>
+        // SAR Symbol SVG
+        const sarSymbolSVG = '<svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-left: 3px;"><g clip-path="url(#clip0_price_5-1)"><path d="M6.68122 10.6309C6.48962 11.0558 6.36297 11.5168 6.31445 12.0003L10.369 11.1384C10.5606 10.7137 10.6872 10.2525 10.7358 9.76904L6.68122 10.6309Z" fill="currentColor"/><path d="M10.3691 8.55619C10.5607 8.13144 10.6873 7.67031 10.7359 7.18683L7.57749 7.85857V6.56725L10.369 5.97403C10.5606 5.54929 10.6873 5.08815 10.7358 4.60467L7.57739 5.27584V0.631863C7.09343 0.903594 6.66363 1.2653 6.31425 1.69195V5.54441L5.05111 5.8129V0.000244141C4.56715 0.27188 4.13735 0.633678 3.78797 1.06033V6.08129L0.961685 6.68186C0.770089 7.1066 0.643345 7.56773 0.594729 8.05122L3.78797 7.3726V8.99879L0.365788 9.72601C0.174192 10.1508 0.0475433 10.6119 -0.000976562 11.0954L3.58109 10.3341C3.87269 10.2735 4.12331 10.1011 4.28625 9.86384L4.94318 8.8899V8.88971C5.01138 8.78895 5.05111 8.66746 5.05111 8.53661V7.10412L6.31425 6.83564V9.41827L10.369 8.55599L10.3691 8.55619Z" fill="currentColor"/></g><defs><clipPath id="clip0_price_5-1"><rect width="10.7368" height="12" fill="white"/></clipPath></defs></svg>';
+
+        function formatCurrency(amount, position = 'left') {
+            const formatted = parseFloat(amount).toLocaleString('ar-SA', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            
+            if (position === 'left') {
+                return sarSymbolSVG + formatted;
+            } else {
+                return formatted + sarSymbolSVG;
+            }
+        }
+
+        // Test prices
+        document.getElementById('price-left').innerHTML = formatCurrency(1234.56, 'left');
+        document.getElementById('price-right').innerHTML = formatCurrency(1234.56, 'right');
+        document.getElementById('table-price-1').innerHTML = formatCurrency(500.00, 'right');
+        document.getElementById('table-price-2').innerHTML = formatCurrency(750.50, 'right');
+        document.getElementById('table-total').innerHTML = formatCurrency(1250.50, 'right');
+        document.getElementById('inline-price').innerHTML = formatCurrency(2500.00, 'right');
+    </script>
+</body>
+</html>

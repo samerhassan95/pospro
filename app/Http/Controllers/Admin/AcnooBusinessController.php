@@ -206,12 +206,18 @@ class AcnooBusinessController extends Controller
             'shopOpeningBalance' => 'nullable|numeric',
             'business_category_id' => 'required|exists:business_categories,id',
             'plan_subscribe_id' => 'nullable|exists:plans,id',
-            'vat_no' => 'nullable|string',
-            'building_number' => 'nullable|string',
-            'street_name' => 'nullable|string',
-            'district' => 'nullable|string',
-            'city' => 'nullable|string',
-            'postal_code' => 'nullable|string',
+            'vat_no' => 'nullable|string|max:15',
+            'commercial_registration' => 'nullable|string|max:10',
+            'additional_id' => 'nullable|string|max:50',
+            'building_number' => 'nullable|string|max:10',
+            'street_name' => 'nullable|string|max:100',
+            'district' => 'nullable|string|max:100',
+            'city' => 'nullable|string|max:100',
+            'postal_code' => 'nullable|string|max:5',
+            'country_code' => 'nullable|string|max:2',
+            'additional_address' => 'nullable|string|max:250',
+            'bank_name' => 'nullable|string|max:100',
+            'bank_account_number' => 'nullable|string|max:50',
         ]);
 
         DB::beginTransaction();
@@ -227,11 +233,17 @@ class AcnooBusinessController extends Controller
                 'business_category_id' => $request->business_category_id,
                 'pictureUrl' => $request->pictureUrl ? $this->upload($request, 'pictureUrl', $business->pictureUrl) : $business->pictureUrl,
                 'vat_no' => $request->vat_no,
+                'commercial_registration' => $request->commercial_registration,
+                'additional_id' => $request->additional_id,
                 'building_number' => $request->building_number,
                 'street_name' => $request->street_name,
                 'district' => $request->district,
                 'city' => $request->city,
                 'postal_code' => $request->postal_code,
+                'country_code' => $request->country_code,
+                'additional_address' => $request->additional_address,
+                'bank_name' => $request->bank_name,
+                'bank_account_number' => $request->bank_account_number,
             ]);
 
             $user->update([

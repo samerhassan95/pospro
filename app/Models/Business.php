@@ -45,6 +45,7 @@ class Business extends Model
         'city',
         'postal_code',
         'country_code',
+        'additional_address',
     ];
 
     public function enrolled_plan()
@@ -65,6 +66,77 @@ class Business extends Model
     public function affiliator(): BelongsTo
     {
         return $this->belongsTo(Affiliate::class, 'affiliator_id');
+    }
+
+    /**
+     * Get the plan associated with this business
+     */
+    public function plan()
+    {
+        return $this->enrolled_plan?->plan;
+    }
+
+    /**
+     * Check if business plan allows a specific permission
+     */
+    public function allows($permission)
+    {
+        $plan = $this->plan();
+        return $plan ? $plan->allows($permission) : false;
+    }
+
+    /**
+     * Check if business can add more warehouses
+     */
+    public function canAddWarehouse()
+    {
+        $plan = $this->plan();
+        if (!$plan) {
+            return false;
+        }
+
+        // Use DB::table to bypass any global scopes
+        $currentCount = \DB::table('warehouses')
+            ->where('business_id', $this->id)
+            ->count();
+
+        return $plan->canAddWarehouse($currentCount);
+    }
+
+    /**
+     * Check if business can add more branches
+     */
+    public function canAddBranch()
+    {
+        $plan = $this->plan();
+        if (!$plan) {
+            return false;
+        }
+
+        // Use DB::table to bypass any global scopes
+        $currentCount = \DB::table('branches')
+            ->where('business_id', $this->id)
+            ->count();
+
+        return $plan->canAddBranch($currentCount);
+    }
+
+    /**
+     * Get warehouse limit for this business
+     */
+    public function getWarehouseLimit()
+    {
+        $plan = $this->plan();
+        return $plan ? $plan->warehouse_limit : 0;
+    }
+
+    /**
+     * Get branch limit for this business
+     */
+    public function getBranchLimit()
+    {
+        $plan = $this->plan();
+        return $plan ? $plan->branch_limit : 0;
     }
 
     /**

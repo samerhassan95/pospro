@@ -156,11 +156,11 @@
         <input type="hidden" name="receive_amount" id="receive_amount" value="0">
         <input type="hidden" id="change_amount" value="0">
         <input type="hidden" id="due_amount" value="0">
-        <select name="payment_type_id" id="payment_type_id">
-            @foreach ($payment_types as $type)
-                <option value="{{ $type->id }}">{{ $type->name }}</option>
-            @endforeach
-        </select>
+        @if($payment_types && $payment_types->count() > 0)
+            <input type="hidden" name="payment_type_id" id="payment_type_id" value="{{ $payment_types->first()->id }}">
+        @else
+            <input type="hidden" name="payment_type_id" id="payment_type_id" value="">
+        @endif
         <input type="hidden" name="note" id="payment_note">
         <select name="vat_id" class="vat_select">
             <option value="">{{ __('Select') }}</option>

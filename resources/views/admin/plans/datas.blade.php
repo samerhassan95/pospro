@@ -40,9 +40,9 @@
                     <td>{{ $plans->perPage() * ($plans->currentPage() - 1) + $loop->iteration }}</td>
                     <td class="text-start">{{ $plan->subscriptionName }} </td>
                     <td>{{ $plan->duration }} </td>
-                    <td class="fw-bold text-dark">{{ $plan->offerPrice ? currency_format($plan->offerPrice) : '' }}
+                    <td class="fw-bold text-dark">{!! $plan->offerPrice ? currency_format($plan->offerPrice) : '' !!}
                     </td>
-                    <td class="fw-bold text-dark">{{ currency_format($plan->subscriptionPrice) }} </td>
+                    <td class="fw-bold text-dark">{!! currency_format($plan->subscriptionPrice) !!} </td>
 
                     @if (moduleCheck('MultiBranchAddon'))
                         <td>

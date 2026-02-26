@@ -246,7 +246,7 @@
                                             <select name="discount_type" class="form-select discount_type"
                                                 id='form-ware'>
                                                 <option value="flat">{{ __('Flat') }}
-                                                    ({{ business_currency()->symbol }})</option>
+                                                    ({!! currency_symbol_svg() !!})</option>
                                                 <option value="percent">{{ __('Percent (%)') }}</option>
                                             </select>
                                         </div>

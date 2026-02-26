@@ -1,10 +1,3 @@
-@extends('layouts.master')
-
-@section('title')
-    {{ __('Subscription Invoice') }}
-@endsection
-
-@section('main_content')
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -526,8 +519,12 @@
                     </div>
                 </div>
                 <div class="invoice-title-section">
-                    <h1 class="invoice-title">فاتورة اشتراك</h1>
-                    <p class="invoice-subtitle">SUBSCRIPTION INVOICE</p>
+                    <h1 class="invoice-title">فاتورة ضريبية</h1>
+                    <p class="invoice-subtitle">TAX INVOICE (B2B)</p>
+                    <p style="font-size: 10px; color: #6c757d; margin-top: 5px;">
+                        فاتورة اشتراك بين منشأتين<br>
+                        Subscription Invoice Between Businesses
+                    </p>
                 </div>
             </div>
             
@@ -554,52 +551,159 @@
         {{-- Business Information --}}
         <div class="business-info-section">
             <div class="business-info-grid">
-                {{-- System Owner Info --}}
+                {{-- System Owner Info (Seller - B2B) --}}
                 <div class="business-info-card">
-                    <h3 class="business-info-title">بيانات مالك النظام / System Owner</h3>
+                    <h3 class="business-info-title">بيانات البائع / Seller Information (B2B)</h3>
                     
                     <div class="business-info-row">
                         <span class="business-info-label">اسم الشركة / Company:</span>
-                        <span class="business-info-value">{{ config('app.name', 'POS System') }}</span>
+                        <span class="business-info-value">{{ $adminBusiness->companyName ?? config('app.name', 'POS System') }}</span>
                     </div>
                     
-                    @if($adminBusiness && $adminBusiness->vat_no)
                     <div class="business-info-row">
                         <span class="business-info-label">رقم ض.ق.م / VAT Number:</span>
-                        <span class="business-info-value">{{ $adminBusiness->vat_no }}</span>
+                        <span class="business-info-value">
+                            @if($adminBusiness && $adminBusiness->vat_no)
+                                {{ $adminBusiness->vat_no }}
+                            @else
+                                <span style="color: #dc3545; font-weight: 700;">⚠️ مطلوب / Required</span>
+                            @endif
+                        </span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">السجل التجاري / CR Number:</span>
+                        <span class="business-info-value">
+                            @if($adminBusiness && $adminBusiness->commercial_registration)
+                                {{ $adminBusiness->commercial_registration }}
+                            @else
+                                <span style="color: #dc3545; font-weight: 700;">⚠️ مطلوب / Required</span>
+                            @endif
+                        </span>
+                    </div>
+                    
+                    @if($adminBusiness && $adminBusiness->additional_id)
+                    <div class="business-info-row">
+                        <span class="business-info-label">معرف إضافي للمورد / Additional ID:</span>
+                        <span class="business-info-value">{{ $adminBusiness->additional_id }}</span>
                     </div>
                     @endif
                     
-                    @if($adminBusiness && $adminBusiness->commercial_registration)
+                    {{-- Address (Required for B2B) --}}
+                    @if($adminBusiness)
                     <div class="business-info-row">
-                        <span class="business-info-label">السجل التجاري / CR:</span>
-                        <span class="business-info-value">{{ $adminBusiness->commercial_registration }}</span>
+                        <span class="business-info-label">العنوان / Address:</span>
+                        <span class="business-info-value">
+                            @if($adminBusiness->building_number)
+                                {{ __('Building') }} {{ $adminBusiness->building_number }},
+                            @endif
+                            @if($adminBusiness->street_name)
+                                {{ $adminBusiness->street_name }},
+                            @endif
+                            @if($adminBusiness->district)
+                                {{ $adminBusiness->district }},
+                            @endif
+                            @if($adminBusiness->city)
+                                {{ $adminBusiness->city }}
+                            @endif
+                            @if($adminBusiness->postal_code)
+                                {{ $adminBusiness->postal_code }}
+                            @endif
+                            @if($adminBusiness->country_code)
+                                - {{ $adminBusiness->country_code }}
+                            @endif
+                        </span>
+                    </div>
+                    @endif
+                    
+                    @if($adminBusiness && $adminBusiness->phoneNumber)
+                    <div class="business-info-row">
+                        <span class="business-info-label">الهاتف / Phone:</span>
+                        <span class="business-info-value">{{ $adminBusiness->phoneNumber }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($adminBusiness && $adminBusiness->bank_name)
+                    <div class="business-info-row">
+                        <span class="business-info-label">البنك / Bank:</span>
+                        <span class="business-info-value">{{ $adminBusiness->bank_name }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($adminBusiness && $adminBusiness->bank_account_number)
+                    <div class="business-info-row">
+                        <span class="business-info-label">رقم الحساب / Account:</span>
+                        <span class="business-info-value">{{ $adminBusiness->bank_account_number }}</span>
                     </div>
                     @endif
                 </div>
 
-                {{-- Subscriber Info --}}
+                {{-- Subscriber Info (Buyer - B2B) --}}
                 <div class="business-info-card">
-                    <h3 class="business-info-title">بيانات المشترك / Subscriber Information</h3>
+                    <h3 class="business-info-title">بيانات المشتري / Buyer Information (B2B)</h3>
                     
                     <div class="business-info-row">
                         <span class="business-info-label">اسم التاجر / Business:</span>
                         <span class="business-info-value">{{ $subscriber->business->companyName ?? 'N/A' }}</span>
                     </div>
                     
-                    @if($subscriber->business->vat_no)
                     <div class="business-info-row">
                         <span class="business-info-label">رقم ض.ق.م / VAT Number:</span>
-                        <span class="business-info-value">{{ $subscriber->business->vat_no }}</span>
+                        <span class="business-info-value">
+                            @if($subscriber->business->vat_no)
+                                {{ $subscriber->business->vat_no }}
+                            @else
+                                <span style="color: #dc3545; font-weight: 700;">⚠️ مطلوب للـ B2B / Required for B2B</span>
+                            @endif
+                        </span>
+                    </div>
+                    
+                    <div class="business-info-row">
+                        <span class="business-info-label">السجل التجاري / CR Number:</span>
+                        <span class="business-info-value">
+                            @if($subscriber->business->commercial_registration)
+                                {{ $subscriber->business->commercial_registration }}
+                            @else
+                                <span style="color: #dc3545; font-weight: 700;">⚠️ مطلوب للـ B2B / Required for B2B</span>
+                            @endif
+                        </span>
+                    </div>
+                    
+                    @if($subscriber->business->additional_id)
+                    <div class="business-info-row">
+                        <span class="business-info-label">معرف إضافي / Additional ID:</span>
+                        <span class="business-info-value">{{ $subscriber->business->additional_id }}</span>
                     </div>
                     @endif
                     
-                    @if($subscriber->business->commercial_registration)
+                    {{-- Address (Required for B2B) --}}
                     <div class="business-info-row">
-                        <span class="business-info-label">السجل التجاري / CR:</span>
-                        <span class="business-info-value">{{ $subscriber->business->commercial_registration }}</span>
+                        <span class="business-info-label">العنوان / Address:</span>
+                        <span class="business-info-value">
+                            @if($subscriber->business->building_number)
+                                {{ __('Building') }} {{ $subscriber->business->building_number }},
+                            @endif
+                            @if($subscriber->business->street_name)
+                                {{ $subscriber->business->street_name }},
+                            @endif
+                            @if($subscriber->business->district)
+                                {{ $subscriber->business->district }},
+                            @endif
+                            @if($subscriber->business->city)
+                                {{ $subscriber->business->city }}
+                            @endif
+                            @if($subscriber->business->postal_code)
+                                {{ $subscriber->business->postal_code }}
+                            @endif
+                            @if($subscriber->business->country_code)
+                                - {{ $subscriber->business->country_code }}
+                            @endif
+                            
+                            @if(!$subscriber->business->building_number || !$subscriber->business->street_name || !$subscriber->business->city)
+                                <span style="color: #dc3545;">⚠️ عنوان غير مكتمل / Incomplete Address</span>
+                            @endif
+                        </span>
                     </div>
-                    @endif
                     
                     @if($subscriber->business->phoneNumber)
                     <div class="business-info-row">
@@ -608,10 +712,26 @@
                     </div>
                     @endif
                     
+                    @if($subscriber->business->address)
                     <div class="business-info-row">
-                        <span class="business-info-label">العنوان / Address:</span>
-                        <span class="business-info-value">{{ $subscriber->business->address ?? 'N/A' }}</span>
+                        <span class="business-info-label">العنوان الإضافي / Additional Address:</span>
+                        <span class="business-info-value">{{ $subscriber->business->address }}</span>
                     </div>
+                    @endif
+                    
+                    @if($subscriber->business->bank_name)
+                    <div class="business-info-row">
+                        <span class="business-info-label">البنك / Bank:</span>
+                        <span class="business-info-value">{{ $subscriber->business->bank_name }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($subscriber->business->bank_account_number)
+                    <div class="business-info-row">
+                        <span class="business-info-label">رقم الحساب / Account:</span>
+                        <span class="business-info-value">{{ $subscriber->business->bank_account_number }}</span>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -622,21 +742,33 @@
                 <thead>
                     <tr>
                         <th style="width: 5%;">#</th>
-                        <th style="width: 30%;" class="text-right">الخدمة / Service</th>
-                        <th style="width: 15%;">المدة / Duration</th>
-                        <th style="width: 15%;">تاريخ البدء / Start</th>
-                        <th style="width: 15%;">تاريخ الانتهاء / End</th>
-                        <th style="width: 20%;">السعر / Price</th>
+                        <th style="width: 25%;" class="text-right">الخدمة / Service</th>
+                        <th style="width: 12%;">المدة / Duration</th>
+                        <th style="width: 12%;">تاريخ البدء / Start</th>
+                        <th style="width: 12%;">تاريخ الانتهاء / End</th>
+                        <th style="width: 10%;">السعر / Price</th>
+                        <th style="width: 8%;">الضريبة / VAT %</th>
+                        <th style="width: 10%;">قيمة الضريبة / VAT Amount</th>
+                        <th style="width: 12%;">الإجمالي / Total</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $subtotal = $subscriber->price;
+                        $vatRate = 15;
+                        $vatAmount = ($subtotal * $vatRate) / 100;
+                        $total = $subtotal + $vatAmount;
+                    @endphp
                     <tr>
                         <td>1</td>
                         <td class="text-right">{{ $subscriber->plan->subscriptionName ?? 'N/A' }}</td>
                         <td>{{ $subscriber->duration }} {{ __('days') }}</td>
                         <td>{{ \Carbon\Carbon::parse($subscriber->created_at)->format('d/m/Y') }}</td>
                         <td>{{ \Carbon\Carbon::parse($subscriber->created_at)->addDays($subscriber->duration)->format('d/m/Y') }}</td>
-                        <td>{{ currency_format($subscriber->price, currency: business_currency()) }}</td>
+                        <td>{!! currency_format($subtotal, currency: business_currency()) !!}</td>
+                        <td>{{ $vatRate }}%</td>
+                        <td>{!! currency_format($vatAmount, currency: business_currency()) !!}</td>
+                        <td>{!! currency_format($total, currency: business_currency()) !!}</td>
                     </tr>
                 </tbody>
             </table>
@@ -654,29 +786,37 @@
                     <p style="margin-top: 5px; font-size: 12px; color: #6c757d;">{{ $subscriber->transaction_id }}</p>
                 </div>
                 @endif
+                
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e9ecef;">
+                    <strong style="font-size: 13px; color: #2c3e50;">ملاحظات / Notes:</strong>
+                    <p style="margin-top: 10px; font-size: 12px; color: #6c757d;">
+                        فاتورة اشتراك في النظام<br>
+                        Subscription to POS System
+                    </p>
+                </div>
             </div>
             
             <div class="summary-table">
                 @php
                     $subtotal = $subscriber->price;
-                    $vatRate = 15; // VAT rate
+                    $vatRate = 15;
                     $vatAmount = ($subtotal * $vatRate) / 100;
                     $total = $subtotal + $vatAmount;
                 @endphp
                 
                 <div class="summary-row">
-                    <span class="summary-label">المجموع الفرعي / Subtotal:</span>
-                    <span class="summary-value">{{ currency_format($subtotal, currency: business_currency()) }}</span>
+                    <span class="summary-label">المجموع (غير شامل ض.ق.م) / Subtotal (Excl. VAT):</span>
+                    <span class="summary-value">{!! currency_format($subtotal, currency: business_currency()) !!}</span>
                 </div>
                 
                 <div class="summary-row">
-                    <span class="summary-label">ضريبة القيمة المضافة ({{ $vatRate }}%) / VAT:</span>
-                    <span class="summary-value">{{ currency_format($vatAmount, currency: business_currency()) }}</span>
+                    <span class="summary-label">ضريبة القيمة المضافة ({{ $vatRate }}%) / VAT ({{ $vatRate }}%):</span>
+                    <span class="summary-value">{!! currency_format($vatAmount, currency: business_currency()) !!}</span>
                 </div>
                 
                 <div class="summary-row summary-total">
-                    <span class="summary-label">الإجمالي شامل الضريبة / Total Including VAT:</span>
-                    <span class="summary-value">{{ currency_format($total, currency: business_currency()) }}</span>
+                    <span class="summary-label">المجموع مع الضريبة المضافة / Total Including VAT:</span>
+                    <span class="summary-value">{!! currency_format($total, currency: business_currency()) !!}</span>
                 </div>
             </div>
         </div>
@@ -720,4 +860,3 @@
     </div>
 </body>
 </html>
-@endsection

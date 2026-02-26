@@ -24,6 +24,10 @@
 <link rel="stylesheet" href="{{ asset('assets/css/dropdown-fix.css') }}?v={{ time() }}">
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
+
+<!-- Currency Rubik Light Font -->
+<link rel="stylesheet" href="{{ asset('assets/css/currency-rubik.css') }}?v={{ time() }}">
+
 @stack('css')
 
 <link rel="stylesheet" href="{{ asset('assets/css/choices.css') }}">

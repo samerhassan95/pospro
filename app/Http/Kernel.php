@@ -79,6 +79,7 @@ class Kernel extends HttpKernel
         'expired' => \App\Http\Middleware\ExpiredMiddleware::class,
         'affiliator' =>  \App\Http\Middleware\AffiliatorMiddleware::class,
         'check.permission' => \App\Http\Middleware\CheckPermission::class,
-        'domain.mapping' => \App\Http\Middleware\CustomDomainMapping::class
+        'domain.mapping' => \App\Http\Middleware\CustomDomainMapping::class,
+        'plan.permission' => \App\Http\Middleware\CheckPlanPermission::class,
     ];
 }

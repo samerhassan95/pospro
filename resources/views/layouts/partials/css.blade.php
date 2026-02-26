@@ -25,6 +25,8 @@
 <link rel="stylesheet" href="{{ asset('resources/css/banner.css') }}?v={{ time() }}">
 <!-- Toaster -->
 <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
+<!-- SAR Symbol -->
+<link rel="stylesheet" href="{{ asset('assets/css/sar-symbol.css') }}?v={{ time() }}">
 @stack('css')
 
 @if (app()->getLocale() == 'ar')

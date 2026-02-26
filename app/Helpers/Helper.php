@@ -136,11 +136,17 @@ function currency_format($amount, $type = "icon", $decimals = 2, $currency = nul
         $amount = $has_fraction ? number_format($amount, $decimals) : number_format($amount, 0);
     }
 
+    // Fix SAR symbol - use SVG
+    $symbol = $currency->symbol;
+    if ($symbol === '^' || $symbol === 'ر.س') {
+        $symbol = '<svg class="sar-symbol-svg" width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_price_5-1)"><path d="M6.68122 10.6309C6.48962 11.0558 6.36297 11.5168 6.31445 12.0003L10.369 11.1384C10.5606 10.7137 10.6872 10.2525 10.7358 9.76904L6.68122 10.6309Z" fill="#298000"></path><path d="M10.3691 8.55619C10.5607 8.13144 10.6873 7.67031 10.7359 7.18683L7.57749 7.85857V6.56725L10.369 5.97403C10.5606 5.54929 10.6873 5.08815 10.7358 4.60467L7.57739 5.27584V0.631863C7.09343 0.903594 6.66363 1.2653 6.31425 1.69195V5.54441L5.05111 5.8129V0.000244141C4.56715 0.27188 4.13735 0.633678 3.78797 1.06033V6.08129L0.961685 6.68186C0.770089 7.1066 0.643345 7.56773 0.594729 8.05122L3.78797 7.3726V8.99879L0.365788 9.72601C0.174192 10.1508 0.0475433 10.6119 -0.000976562 11.0954L3.58109 10.3341C3.87269 10.2735 4.12331 10.1011 4.28625 9.86384L4.94318 8.8899V8.88971C5.01138 8.78895 5.05111 8.66746 5.05111 8.53661V7.10412L6.31425 6.83564V9.41827L10.369 8.55599L10.3691 8.55619Z" fill="#298000"></path></g><defs><clipPath id="clip0_price_5-1"><rect width="10.7368" height="12" fill="white"></rect></clipPath></defs></svg>';
+    }
+
     if ($type == "icon" || $type == "symbol") {
         if ($currency->position == "right") {
-            return $amount . $currency->symbol;
+            return $amount . $symbol;
         } else {
-            return $currency->symbol . $amount;
+            return $symbol . $amount;
         }
     } else {
         if ($currency->position == "right") {
@@ -1083,5 +1089,159 @@ if (!function_exists('hex_to_filter')) {
         
         // Simple approximation - works for most colors
         return sprintf('brightness(0) saturate(100%) brightness(%.2f)', $brightness);
+    }
+}
+
+
+/**
+ * Get currency symbol with SVG support for SAR
+ * Replaces ^ symbol with official Saudi Riyal SVG icon
+ */
+if (!function_exists('currency_symbol_svg')) {
+    function currency_symbol_svg($symbol = null, $code = null): string
+    {
+        // Get currency if not provided
+        if ($symbol === null || $code === null) {
+            $currency = business_currency();
+            $symbol = $currency->symbol ?? '';
+            $code = $currency->code ?? '';
+        }
+        
+        // Check if currency is SAR
+        $isSAR = $code === 'SAR' || $symbol === '^';
+        
+        if ($isSAR) {
+            // Return SVG icon for SAR
+            return '<svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin: 0 3px;"><g clip-path="url(#clip0_price_5-1)"><path d="M6.68122 10.6309C6.48962 11.0558 6.36297 11.5168 6.31445 12.0003L10.369 11.1384C10.5606 10.7137 10.6872 10.2525 10.7358 9.76904L6.68122 10.6309Z" fill="currentColor"/><path d="M10.3691 8.55619C10.5607 8.13144 10.6873 7.67031 10.7359 7.18683L7.57749 7.85857V6.56725L10.369 5.97403C10.5606 5.54929 10.6873 5.08815 10.7358 4.60467L7.57739 5.27584V0.631863C7.09343 0.903594 6.66363 1.2653 6.31425 1.69195V5.54441L5.05111 5.8129V0.000244141C4.56715 0.27188 4.13735 0.633678 3.78797 1.06033V6.08129L0.961685 6.68186C0.770089 7.1066 0.643345 7.56773 0.594729 8.05122L3.78797 7.3726V8.99879L0.365788 9.72601C0.174192 10.1508 0.0475433 10.6119 -0.000976562 11.0954L3.58109 10.3341C3.87269 10.2735 4.12331 10.1011 4.28625 9.86384L4.94318 8.8899V8.88971C5.01138 8.78895 5.05111 8.66746 5.05111 8.53661V7.10412L6.31425 6.83564V9.41827L10.369 8.55599L10.3691 8.55619Z" fill="currentColor"/></g><defs><clipPath id="clip0_price_5-1"><rect width="10.7368" height="12" fill="white"/></clipPath></defs></svg>';
+        }
+        
+        // Return regular symbol for other currencies
+        return $symbol;
+    }
+}
+
+
+/**
+ * Check if current business plan allows a specific permission
+ */
+if (!function_exists('plan_allows')) {
+    function plan_allows(string $permission): bool
+    {
+        $user = auth()->user();
+        
+        if (!$user || !$user->business) {
+            return false;
+        }
+
+        return $user->business->allows($permission);
+    }
+}
+
+/**
+ * Check if current business can add more warehouses
+ */
+if (!function_exists('can_add_warehouse')) {
+    function can_add_warehouse(): bool
+    {
+        $user = auth()->user();
+        
+        if (!$user || !$user->business) {
+            return false;
+        }
+
+        return $user->business->canAddWarehouse();
+    }
+}
+
+/**
+ * Check if current business can add more branches
+ */
+if (!function_exists('can_add_branch')) {
+    function can_add_branch(): bool
+    {
+        $user = auth()->user();
+        
+        if (!$user || !$user->business) {
+            return false;
+        }
+
+        return $user->business->canAddBranch();
+    }
+}
+
+/**
+ * Get warehouse limit for current business
+ */
+if (!function_exists('warehouse_limit')) {
+    function warehouse_limit()
+    {
+        $user = auth()->user();
+        
+        if (!$user || !$user->business) {
+            return 0;
+        }
+
+        return $user->business->getWarehouseLimit();
+    }
+}
+
+/**
+ * Get branch limit for current business
+ */
+if (!function_exists('branch_limit')) {
+    function branch_limit()
+    {
+        $user = auth()->user();
+        
+        if (!$user || !$user->business) {
+            return 0;
+        }
+
+        return $user->business->getBranchLimit();
+    }
+}
+
+/**
+ * Get current business plan name
+ */
+if (!function_exists('current_plan_name')) {
+    function current_plan_name(): string
+    {
+        $user = auth()->user();
+        
+        if (!$user || !$user->business) {
+            return 'N/A';
+        }
+
+        $plan = $user->business->plan();
+        return $plan ? $plan->subscriptionName : 'N/A';
+    }
+}
+
+
+/**
+ * Format currency with symbol
+ */
+if (!function_exists('currency')) {
+    function currency($amount, $symbol = null): string
+    {
+        if ($symbol === null) {
+            // Try to get business currency first
+            if (auth()->check() && auth()->user()->business_id) {
+                $currency = business_currency();
+                $symbol = $currency->symbol ?? '';
+            } else {
+                // For admin/super-admin, use default currency
+                $currency = default_currency();
+                $symbol = $currency->symbol ?? '';
+            }
+        }
+        
+        // Fix SAR symbol - use SVG directly
+        if ($symbol === '^' || $symbol === 'ر.س') {
+            $symbol = '<svg class="sar-symbol-svg" width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_price_5-1)"><path d="M6.68122 10.6309C6.48962 11.0558 6.36297 11.5168 6.31445 12.0003L10.369 11.1384C10.5606 10.7137 10.6872 10.2525 10.7358 9.76904L6.68122 10.6309Z" fill="#298000"></path><path d="M10.3691 8.55619C10.5607 8.13144 10.6873 7.67031 10.7359 7.18683L7.57749 7.85857V6.56725L10.369 5.97403C10.5606 5.54929 10.6873 5.08815 10.7358 4.60467L7.57739 5.27584V0.631863C7.09343 0.903594 6.66363 1.2653 6.31425 1.69195V5.54441L5.05111 5.8129V0.000244141C4.56715 0.27188 4.13735 0.633678 3.78797 1.06033V6.08129L0.961685 6.68186C0.770089 7.1066 0.643345 7.56773 0.594729 8.05122L3.78797 7.3726V8.99879L0.365788 9.72601C0.174192 10.1508 0.0475433 10.6119 -0.000976562 11.0954L3.58109 10.3341C3.87269 10.2735 4.12331 10.1011 4.28625 9.86384L4.94318 8.8899V8.88971C5.01138 8.78895 5.05111 8.66746 5.05111 8.53661V7.10412L6.31425 6.83564V9.41827L10.369 8.55599L10.3691 8.55619Z" fill="#298000"></path></g><defs><clipPath id="clip0_price_5-1"><rect width="10.7368" height="12" fill="white"></rect></clipPath></defs></svg>';
+        }
+        
+        return $symbol . ' ' . number_format($amount, 2);
     }
 }

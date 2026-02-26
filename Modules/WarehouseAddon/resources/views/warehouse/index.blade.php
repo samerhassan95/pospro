@@ -12,9 +12,28 @@
 
                     <div class="table-header p-16">
                         <h4>{{ __('Warehouses List') }}</h4>
-                        @usercan('warehouses.create')
-                           <a type="button" href="#warehouses-create-modal" data-bs-toggle="modal" class="add-order-btn rounded-2"><i class="fas fa-plus-circle me-1"></i>{{ __('Add new') }}</a>
-                        @endusercan
+                        <div class="d-flex align-items-center gap-2">
+                            @php
+                                $business = auth()->user()->business;
+                                $warehouseLimit = warehouse_limit();
+                                $currentWarehouseCount = \App\Models\Warehouse::where('business_id', auth()->user()->business_id)->count();
+                                $canAddWarehouse = $business->canAddWarehouse();
+                            @endphp
+                            
+                            @if($warehouseLimit > 0)
+                                <span class="badge bg-info text-white">{{ $currentWarehouseCount }} / {{ $warehouseLimit }} {{ __('Warehouses') }}</span>
+                            @else
+                                <span class="badge bg-success text-white">{{ $currentWarehouseCount }} {{ __('Warehouses') }}</span>
+                            @endif
+                            
+                            @usercan('warehouses.create')
+                                @if($canAddWarehouse)
+                                    <a type="button" href="#warehouses-create-modal" data-bs-toggle="modal" class="add-order-btn rounded-2"><i class="fas fa-plus-circle me-1"></i>{{ __('Add new') }}</a>
+                                @else
+                                    <button type="button" class="add-order-btn rounded-2 opacity-50" disabled title="{{ __('Warehouse limit reached. Please upgrade your plan.') }}"><i class="fas fa-plus-circle me-1"></i>{{ __('Add new') }}</button>
+                                @endif
+                            @endusercan
+                        </div>
                      </div>
 
                     <div class="table-top-form p-16-0">

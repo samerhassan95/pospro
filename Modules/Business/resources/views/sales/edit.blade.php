@@ -393,7 +393,7 @@
                                                 <select name="discount_type" class="form-select discount_type"
                                                         id='form-ware'>
                                                     <option value="flat" @selected($sale->discount_type == 'flat')>{{ __('Flat') }}
-                                                        ({{ business_currency()->symbol }})
+                                                        ({!! currency_symbol_svg() !!})
                                                     </option>
                                                     <option value="percent" @selected($sale->discount_type == 'percent')>{{ __('Percent (%)') }}</option>
                                                 </select>
