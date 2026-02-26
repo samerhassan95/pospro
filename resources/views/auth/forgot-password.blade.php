@@ -363,11 +363,16 @@
             
             .info-section {
                 text-align: center;
+                margin-top:24px;
             }
             
-            .info-section h1 {
-                font-size: 42px;
+                .info-section h1 {
+                line-height: 0.8;
             }
+                    .info-section h1 .highlight, .info-section h1  .normal{
+
+ font-size:32px;
+        }
         }
         
         @media (max-width: 768px) {
