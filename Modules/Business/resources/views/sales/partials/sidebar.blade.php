@@ -37,8 +37,8 @@
     <!-- Order Details Section -->
     <div class="order-details-section">
         <div class="customer-info-flex">
-            <div class="customer-name" id="selected-customer-name">{{ __('Johnson Mitchell') }}</div>
-            <div class="customer-phone" id="selected-customer-phone">+1(415)123-4547</div>
+            <div class="customer-name" id="selected-customer-name">{{ __('Select Customer') }}</div>
+            <div class="customer-phone" id="selected-customer-phone">-</div>
         </div>
         <div class="order-info-line">
             <span class="order-date">{{ now()->format('D, M\TH\LY Y') }}</span>

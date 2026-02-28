@@ -299,9 +299,8 @@ class AcnooPurchaseController extends Controller
         $vats = Vat::where('business_id', $business_id)->whereStatus(1)->latest()->get();
         $payment_types = PaymentType::where('business_id', $business_id)->whereStatus(1)->latest()->get();
 
-        // Generate a unique invoice number
-        $purchase_id = (Purchase::max('id') ?? 0) + 1;
-        $invoice_no = 'P-' . str_pad($purchase_id, 5, '0', STR_PAD_LEFT);
+        // Generate a unique invoice number for this business
+        $invoice_no = generate_invoice_number('purchase', $business_id);
 
         return view('business::purchases.create-pos', compact('suppliers', 'products', 'cart_contents', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
     }

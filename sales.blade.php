@@ -848,7 +848,7 @@
                     <h4 class="sidebar-section-title">{{ __('Order Details') }}</h4>
                     <div class="order-details-content">
                         <div class="order-detail-row">
-                            <span class="detail-value" id="selected-customer-name">{{ __('Johnson Mitchell') }}</span>
+                            <span class="detail-value" id="selected-customer-name">{{ __('Select Customer') }}</span>
                         </div>
                         <div class="order-detail-row">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
@@ -858,7 +858,7 @@
                             <span class="detail-value">{{ now()->format('D, M\TH\LY Y') }} {{ now()->format('h:i A') }}</span>
                         </div>
                         <div class="order-detail-row">
-                            <span class="detail-value" id="selected-customer-phone">+1(415)123-4547</span>
+                            <span class="detail-value" id="selected-customer-phone">-</span>
                         </div>
                     </div>
                     <input type="hidden" name="invoiceNumber" value="{{ $invoice_no }}">

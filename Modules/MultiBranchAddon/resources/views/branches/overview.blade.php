@@ -25,11 +25,11 @@
                     <div class="d-flex align-items-center justify-content-center gap-3 pb-2">
                         <div class="d-flex align-items-center gap-1">
                             <div class="income-bulet2"></div>
-                            <p>{{__('Income')}}: <strong class="profit-value">0</strong></p>
+                            <p>{{__('Income')}}: <strong class="profit-value">{!! currency_format(0, currency: business_currency()) !!}</strong></p>
                         </div>
                         <div class="d-flex align-items-center gap-1">
                             <div class="expense-bulet2"></div>
-                            <p>{{__('Expense')}}: <strong class="loss-value">0</strong></p>
+                            <p>{{__('Expense')}}: <strong class="loss-value">{!! currency_format(0, currency: business_currency()) !!}</strong></p>
                         </div>
                     </div>
                     <div class="content">
@@ -59,11 +59,11 @@
                     <div class="d-flex align-items-center justify-content-center gap-3 pb-2 mt-4">
                         <div class="d-flex align-items-center gap-1">
                             <div class="income-bulet"></div>
-                            <p>{{__('Profit')}}: <strong class="profit">0</strong></p>
+                            <p>{{__('Profit')}}: <strong class="profit">{!! currency_format(0, currency: business_currency()) !!}</strong></p>
                         </div>
                         <div class="d-flex align-items-center gap-1">
                             <div class="expense-bulet"></div>
-                            <p>{{__('Loss')}}: <strong class="loss">0</strong></p>
+                            <p>{{__('Loss')}}: <strong class="loss">{!! currency_format(0, currency: business_currency()) !!}</strong></p>
                         </div>
                     </div>
                 </div>

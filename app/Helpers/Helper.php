@@ -46,6 +46,21 @@ function invoice_language()
     return get_option('invoice_language_' . auth()->user()->business_id);
 }
 
+function generate_invoice_number($type = 'sale', $business_id = null)
+{
+    $business_id = $business_id ?? auth()->user()->business_id;
+    
+    if ($type === 'sale') {
+        $count = \App\Models\Sale::where('business_id', $business_id)->count();
+        return 'S-' . str_pad($count + 1, 5, '0', STR_PAD_LEFT);
+    } elseif ($type === 'purchase') {
+        $count = \App\Models\Purchase::where('business_id', $business_id)->count();
+        return 'P-' . str_pad($count + 1, 5, '0', STR_PAD_LEFT);
+    }
+    
+    return null;
+}
+
 function product_setting()
 {
     $businessId = auth()->user()->business_id;

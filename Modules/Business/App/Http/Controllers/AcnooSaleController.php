@@ -241,9 +241,8 @@ class AcnooSaleController extends Controller
         $vats = Vat::where('business_id', $business_id)->whereStatus(1)->latest()->get();
         $payment_types = PaymentType::where('business_id', $business_id)->whereStatus(1)->latest()->get();
 
-        // Generate a unique invoice number
-        $sale_id = (Sale::max('id') ?? 0) + 1;
-        $invoice_no = 'S-' . str_pad($sale_id, 5, '0', STR_PAD_LEFT);
+        // Generate a unique invoice number for this business
+        $invoice_no = generate_invoice_number('sale', $business_id);
 
         return view('business::sales.create', compact('customers', 'products', 'invoice_no', 'categories', 'brands', 'vats', 'payment_types'));
     }
@@ -1230,9 +1229,9 @@ class AcnooSaleController extends Controller
         $vats = Vat::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
         $payment_types = PaymentType::where('business_id', auth()->user()->business_id)->whereStatus(1)->latest()->get();
 
-        // Generate a unique invoice number
-        $sale_id = (Sale::max('id') ?? 0) + 1;
-        $invoice_no = 'S-' . str_pad($sale_id, 5, '0', STR_PAD_LEFT);
+        // Generate a unique invoice number for this business
+        $business_id = auth()->user()->business_id;
+        $invoice_no = generate_invoice_number('sale', $business_id);
 
         return view('business::sales.inventory', compact('customers', 'products', 'invoice_no', 'categories', 'vats', 'payment_types'));
     }

@@ -24,6 +24,11 @@
                 if (customerPhoneDisplay) customerPhoneDisplay.textContent = customerPhone;
             }
         });
+
+        // Initialize customer display on page load
+        if (customerSelect.value) {
+            customerSelect.dispatchEvent(new Event('change'));
+        }
     }
 
     // Delivery tab functionality
