@@ -15,7 +15,7 @@
             </div>
             <div class="cart-item-content">
             @usercan('sales.price')
-                <div class="cart-item-price">{{ currency_format($cart->price, currency: business_currency()) }}</div>
+                <div class="cart-item-price">{!! currency_format($cart->price, currency: business_currency()) !!}</div>
                 @endusercan    
             </div>
             <div class="cart-item-controls">

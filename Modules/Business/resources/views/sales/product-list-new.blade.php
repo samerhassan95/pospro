@@ -43,7 +43,7 @@
                     <h6 class="pos-product-name product_name">{{ $product->productName }}</h6>
                     <p class="pos-product-desc">{{ Str::limit($product->productDescription ?? $product->productDetails ?? 'Caramel syrup with coffee, milk, and whipped cream', 60) }}</p>
                 </div>
-                <span class="pos-product-price product_price">{{ currency_format($salePrice, currency: business_currency()) }}</span>
+                <span class="pos-product-price product_price">{!! currency_format($salePrice, currency: business_currency()) !!}</span>
             </div>
         </div>
         

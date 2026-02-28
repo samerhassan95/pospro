@@ -85,7 +85,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame1.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Sales') }}</p>
-                        <h4 class="bus-stat-count" id="total_sales">{{ $dashboardData['total_sales'] ?? '0' }}</h4>
+                        <h4 class="bus-stat-count" id="total_sales">{!! $dashboardData['total_sales'] ?? '0' !!}</h4>
                     </div>
 
                     <div class="business-content">
@@ -93,7 +93,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame2.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Purchase') }}</p>
-                        <h4 class="bus-stat-count" id="total_purchase">{{ $dashboardData['total_purchase'] ?? '0' }}</h4>
+                        <h4 class="bus-stat-count" id="total_purchase">{!! $dashboardData['total_purchase'] ?? '0' !!}</h4>
                     </div>
 
                     <div class="business-content">
@@ -101,7 +101,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame3.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Income') }}</p>
-                        <h4 class="bus-stat-count" id="total_income">{{ $dashboardData['total_income'] ?? '0' }}</h4>
+                        <h4 class="bus-stat-count" id="total_income">{!! $dashboardData['total_income'] ?? '0' !!}</h4>
                     </div>
 
                     <div class="business-content">
@@ -109,7 +109,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame4.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Total Expense') }}</p>
-                        <h4 class="bus-stat-count" id="total_expense">{{ $dashboardData['total_expense'] ?? '0' }}</h4>
+                        <h4 class="bus-stat-count" id="total_expense">{!! $dashboardData['total_expense'] ?? '0' !!}</h4>
                     </div>
 
                     <div class="business-content">
@@ -133,7 +133,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame7.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Sales Returns') }}</p>
-                        <h4 class="bus-stat-count" id="total_sales_return">{{ $dashboardData['total_sales_return'] ?? '0' }}</h4>
+                        <h4 class="bus-stat-count" id="total_sales_return">{!! $dashboardData['total_sales_return'] ?? '0' !!}</h4>
                     </div>
 
                     <div class="business-content">
@@ -141,7 +141,7 @@
                             <img src="{{ asset('assets/images/dashboard/Frame8.svg') }}" alt="">
                         </div>
                         <p class="bus-stat-title">{{ __('Purchase Returns') }}</p>
-                        <h4 class="bus-stat-count" id="total_purchase_return">{{ $dashboardData['total_purchase_return'] ?? '0' }}</h4>
+                        <h4 class="bus-stat-count" id="total_purchase_return">{!! $dashboardData['total_purchase_return'] ?? '0' !!}</h4>
                     </div>
                 </div>
             </div>
@@ -283,9 +283,9 @@
                                     <td class="text-start">{{ formatted_date($sale->created_at) }}</td>
                                     <td class="text-center">{{ $sale->invoiceNumber }}</td>
                                     <td class="text-center">{{ $sale->party->name ?? '' }}</td>
-                                    <td class="text-center">{{ currency_format($sale->totalAmount, currency: business_currency()) }}</td>
-                                    <td class="text-center">{{ currency_format($sale->paidAmount, currency: business_currency()) }}</td>
-                                    <td class="text-center pr-3">{{ currency_format($sale->dueAmount, currency: business_currency()) }}</td>
+                                    <td class="text-center">{!! currency_format($sale->totalAmount, currency: business_currency()) !!}</td>
+                                    <td class="text-center">{!! currency_format($sale->paidAmount, currency: business_currency()) !!}</td>
+                                    <td class="text-center pr-3">{!! currency_format($sale->dueAmount, currency: business_currency()) !!}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -311,9 +311,9 @@
                                     <td class="text-start">{{ formatted_date($purchase->created_at) }}</td>
                                     <td class="text-center">{{ $purchase->invoiceNumber }}</td>
                                     <td class="text-center">{{ $purchase->party->name ?? '' }}</td>
-                                    <td class="text-center">{{ currency_format($purchase->totalAmount, currency: business_currency()) }}</td>
-                                    <td class="text-center">{{ currency_format($purchase->paidAmount, currency: business_currency()) }}</td>
-                                    <td class="text-center pr-3">{{ currency_format($purchase->dueAmount, currency: business_currency()) }}</td>
+                                    <td class="text-center">{!! currency_format($purchase->totalAmount, currency: business_currency()) !!}</td>
+                                    <td class="text-center">{!! currency_format($purchase->paidAmount, currency: business_currency()) !!}</td>
+                                    <td class="text-center pr-3">{!! currency_format($purchase->dueAmount, currency: business_currency()) !!}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -123,7 +123,7 @@ $(document).ready(function () {
                         callbacks: {
                             label: function (context) {
                                 const value = parseFloat(context.raw);
-                                return `${context.dataset.label} : ${(value)}`;
+                                return `${context.dataset.label} : ${value.toFixed(2)}`;
                             },
                         },
                     },
@@ -272,8 +272,8 @@ function updateProfitLossChart(year) {
             profitLossChart.update();
 
             // ✅ Use your currencyFormat for displayed values too
-            document.querySelector(".profit").innerHTML = currencyFormat(profit);
-            document.querySelector(".loss").innerHTML = currencyFormat(loss);
+            $(".profit").html(currencyFormat(profit));
+            $(".loss").html(currencyFormat(loss));
         })
         .catch(err => {
             console.error("Error fetching profit/loss data:", err);

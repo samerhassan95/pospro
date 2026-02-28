@@ -24,7 +24,7 @@
             <h6 class="pro-title product_name">{{ $product->productName }}</h6>
             <p class="pro-category">{{ $product->category->name ?? '' }}</p>
             <div class="price">
-                <h6 class="pro-price product_price">{{ currency_format($salePrice, currency: business_currency()) }}</h6>
+                <h6 class="pro-price product_price">{!! currency_format($salePrice, currency: business_currency()) !!}</h6>
             </div>
         </div>
     </div>

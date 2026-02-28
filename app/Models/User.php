@@ -37,6 +37,9 @@ class User extends Authenticatable
         'is_verified',
         'remember_token',
         'email_verified_at',
+        'external_id',
+        'sso_provider',
+        'last_sso_login',
     ];
 
     /**
@@ -63,6 +66,7 @@ class User extends Authenticatable
         'is_verified' => 'integer',
         'branch_id' => 'integer',
         'active_branch_id' => 'integer',
+        'last_sso_login' => 'datetime',
     ];
 
     public function business(): BelongsTo

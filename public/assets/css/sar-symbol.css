@@ -18,9 +18,18 @@
 
 /* Alternative: Use actual SVG element */
 .sar-symbol-svg {
-    display: inline-block;
-    width: 11px;
-    height: 12px;
-    vertical-align: middle;
-    margin-right: 2px;
+    display: inline-block !important;
+    width: 11px !important;
+    height: 12px !important;
+    vertical-align: middle !important;
+    margin: 0 2px !important;
+}
+
+.sar-symbol-svg path {
+    fill: currentColor;
+}
+
+/* Hide SVG text that appears as code */
+*:not(svg):not(code):not(pre) {
+    /* This will be handled by JavaScript */
 }

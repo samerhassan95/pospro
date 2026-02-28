@@ -40,7 +40,7 @@
                 </button>
             </div>
         </td>
-        <td class="cart-subtotal">{{ currency_format($cart->subtotal, currency: business_currency()) }}</td>
+        <td class="cart-subtotal">{!! currency_format($cart->subtotal, currency: business_currency()) !!}</td>
         <td>
             <button class='x-btn remove-btn'>
                 <img src="{{ asset('assets/images/icons/x.svg') }}" alt="">

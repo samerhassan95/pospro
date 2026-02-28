@@ -18,7 +18,7 @@
                 <button type="button" class="incre-decre plus-btn"><i class="fas fa-plus icon"></i></button>
             </div>
         </td>
-        <td class="cart-subtotal">{{ currency_format($cart->subtotal, currency: business_currency()) }}</td>
+        <td class="cart-subtotal">{!! currency_format($cart->subtotal, currency: business_currency()) !!}</td>
         <td>
             <button type="button" class="btn btn-sm btn-danger remove-btn"><i class="fas fa-trash-alt"></i></button>
         </td>

@@ -33,6 +33,8 @@
 
 {{-- SAR Symbol Replacement --}}
 <script src="{{ asset('assets/js/custom/replace-sar-symbol.js') }}?v={{ time() }}"></script>
+{{-- Clean SAR SVG Display --}}
+<script src="{{ asset('assets/js/custom/clean-sar-svg.js') }}?v={{ time() }}"></script>
 
 @stack('js')
 

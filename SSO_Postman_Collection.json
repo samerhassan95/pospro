@@ -1,0 +1,103 @@
+{
+	"info": {
+		"_postman_id": "sso-testing-collection",
+		"name": "SSO Testing - Super Admin",
+		"description": "Collection for testing SSO login with business and subscription creation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. SSO Login - GET (Browser Style)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/sso/login?token={{sso_token}}",
+					"host": ["{{base_url}}"],
+					"path": ["sso", "login"],
+					"query": [
+						{
+							"key": "token",
+							"value": "{{sso_token}}",
+							"description": "SSO encrypted token"
+						}
+					]
+				},
+				"description": "Login via SSO using GET request (like browser redirect)"
+			},
+			"response": []
+		},
+		{
+			"name": "2. SSO Login - POST (API Style)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"{{sso_token}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/sso/login",
+					"host": ["{{base_url}}"],
+					"path": ["sso", "login"]
+				},
+				"description": "Login via SSO using POST request with JSON body"
+			},
+			"response": []
+		},
+		{
+			"name": "3. SSO Logout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/sso/logout",
+					"host": ["{{base_url}}"],
+					"path": ["sso", "logout"]
+				},
+				"description": "Logout from SSO session"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Check User Created",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/business/dashboard",
+					"host": ["{{base_url}}"],
+					"path": ["business", "dashboard"]
+				},
+				"description": "Check if user is logged in and can access dashboard"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		},
+		{
+			"key": "sso_token",
+			"value": "PASTE_YOUR_GENERATED_TOKEN_HERE",
+			"type": "string"
+		}
+	]
+}
