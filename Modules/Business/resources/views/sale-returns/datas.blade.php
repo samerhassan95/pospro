@@ -32,10 +32,10 @@
                     @endif
                     <td>{{ formatted_date($sale->saleDate) }}</td>
                     <td>{{ $sale->party->name ?? 'Guest' }}</td>
-                    <td>{{ currency_format($sale->totalAmount, currency: business_currency()) }}</td>
-                    <td>{{ currency_format($sale->paidAmount, currency: business_currency()) }}</td>
-                    <td>{{ currency_format($sale->dueAmount, currency: business_currency()) }}</td>
-                    <td>{{ currency_format($total_return_amount ?? 0, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($sale->totalAmount, currency: business_currency()) !!}</td>
+                    <td>{!! currency_format($sale->paidAmount, currency: business_currency()) !!}</td>
+                    <td>{!! currency_format($sale->dueAmount, currency: business_currency()) !!}</td>
+                    <td>{!! currency_format($total_return_amount ?? 0, currency: business_currency()) !!}</td>
                 </tr>
             @endforeach
         </tbody>

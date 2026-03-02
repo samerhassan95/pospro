@@ -29,7 +29,13 @@
     fill: currentColor;
 }
 
-/* Hide SVG text that appears as code */
-*:not(svg):not(code):not(pre) {
-    /* This will be handled by JavaScript */
+/* Ensure SVG renders smoothly without flickering */
+.summary-value svg,
+.amount-display svg,
+.product-price svg,
+.cart-variant-price svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }

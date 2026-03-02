@@ -80,11 +80,11 @@
                                             </span>
                                         </td>
                                         <td>{{ $party->phone }}</td>
-                                        <td class="text-success fw-bold">{{ currency_format($party->total_sales ?? 0) }}</td>
-                                        <td class="text-primary fw-bold">{{ currency_format($party->total_purchases ?? 0) }}</td>
+                                        <td class="text-success fw-bold">{!! currency_format($party->total_sales ?? 0) !!}</td>
+                                        <td class="text-primary fw-bold">{!! currency_format($party->total_purchases ?? 0) !!}</td>
                                         <td class="{{ ($party->profit_loss ?? 0) >= 0 ? 'text-success' : 'text-danger' }} fw-bold">
                                             <i class="fas fa-{{ ($party->profit_loss ?? 0) >= 0 ? 'arrow-up' : 'arrow-down' }} me-1"></i>
-                                            {{ currency_format($party->profit_loss ?? 0) }}
+                                            {!! currency_format($party->profit_loss ?? 0) !!}
                                         </td>
                                         <td class="d-print-none">
                                             <div class="dropdown table-action">

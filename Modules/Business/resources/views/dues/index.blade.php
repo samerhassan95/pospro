@@ -12,12 +12,12 @@
             <div class="d-flex align-items-center justify-content-center gap-3">
                 <div class="profit-card p-3 text-white">
                     <p class="stat-title">{{ __('Supplier Due') }}</p>
-                    <p class="stat-value">{{ currency_format($total_supplier_due, currency: business_currency()) }}</p>
+                    <p class="stat-value">{!! currency_format($total_supplier_due, currency: business_currency()) !!}</p>
                 </div>
 
                 <div class="loss-card p-3 text-white">
                     <p class="stat-title">{{ __('Customer Due') }}</p>
-                    <p class="stat-value">{{ currency_format($total_customer_due, currency: business_currency()) }}</p>
+                    <p class="stat-value">{!! currency_format($total_customer_due, currency: business_currency()) !!}</p>
                 </div>
             </div>
         </div>

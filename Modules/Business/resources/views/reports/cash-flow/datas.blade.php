@@ -37,6 +37,6 @@
         <td class="text-start">{{ $transaction->paymentType->name ?? __('N/A') }}</td>
         <td class="text-end">{{ $cash_in > 0 ? currency_format($cash_in, currency: business_currency()) : '-' }}</td>
         <td class="text-end">{{ $cash_out > 0 ? currency_format($cash_out, currency: business_currency()) : '-' }}</td>
-        <td class="text-end">{{ currency_format($running_balance, currency: business_currency()) }}</td>
+        <td class="text-end">{!! currency_format($running_balance, currency: business_currency()) !!}</td>
     </tr>
 @endforeach

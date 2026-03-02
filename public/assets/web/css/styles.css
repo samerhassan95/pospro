@@ -518,7 +518,7 @@ html {
 }
 
 .header-section .accordion-body li:hover {
-    background: #fef0f1 !important;
+    background: var(--clr-secondary) !important;
     /* padding: 5px 10px; */
     border-radius: 8px;
     color: #fff !important;
@@ -1722,7 +1722,7 @@ section:hover .swiper-btn {
     line-height: 1;
 }
 
-.gpt-up-down-arrow span {
+/* .gpt-up-down-arrow span {
     border-bottom: 2px solid #999;
     border-right: 2px solid #999;
     pointer-events: none;
@@ -1740,7 +1740,7 @@ section:hover .swiper-btn {
     transform: rotate(45deg);
     -webkit-transition: all 0.15s ease-in-out;
     transition: all 0.15s ease-in-out;
-}
+} */
 
 .font-size-update p {
     font-size: 22px;

@@ -93,8 +93,8 @@
                                             </div>
                                             <a href="{{ route('business.products.create') }}" class="btn btn-danger square-btn trasfer-square-btn d-flex justify-content-center align-items-center">
                                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10 4.16797V15.8346" stroke="#C52127" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M4.16602 10H15.8327" stroke="#C52127" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M10 4.16797V15.8346" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M4.16602 10H15.8327" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
                                             </a>
                                         </div>
@@ -143,17 +143,17 @@
                                             class="payment-container mb-3 amount-info-container inventory-amount-info-container transfer-amount-info">
                                             <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                                 <h6>{{ __('Sub Total') }}</h6>
-                                                <h6 class="fw-bold" id="total_amount">{{ currency_format(0, currency: business_currency()) }}</h6>
+                                                <h6 class="fw-bold" id="total_amount">{!! currency_format(0, currency: business_currency()) !!}</h6>
                                             </div>
 
                                             <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                                 <h6>{{ __('Discount') }}</h6>
-                                                <h6 class="fw-bold" id="discount_amount">{{ currency_format(0, currency: business_currency()) }}</h6>
+                                                <h6 class="fw-bold" id="discount_amount">{!! currency_format(0, currency: business_currency()) !!}</h6>
                                             </div>
 
                                             <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                                 <h6>{{ __('Tax') }}</h6>
-                                                <h6 class="fw-bold" id="tax_amount">{{ currency_format(0, currency: business_currency()) }}</h6>
+                                                <h6 class="fw-bold" id="tax_amount">{!! currency_format(0, currency: business_currency()) !!}</h6>
                                             </div>
 
                                             <div class="row ">
@@ -166,7 +166,7 @@
                                             </div>
                                             <div class=" d-flex flex-wrap align-items-center justify-content-between fw-bold">
                                                 <div class="fw-bold">{{ __('Total Amount') }}</div>
-                                                <h6 class='fw-bold' id="grand_total_amount">{{ currency_format(0, currency: business_currency()) }}</h6>
+                                                <h6 class='fw-bold' id="grand_total_amount">{!! currency_format(0, currency: business_currency()) !!}</h6>
                                             </div>
                                         </div>
                                     </div>

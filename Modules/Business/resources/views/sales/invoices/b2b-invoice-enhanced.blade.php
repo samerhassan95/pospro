@@ -525,12 +525,12 @@
                 @endphp
                 <tr>
                     <td>{{ $detail->product->productName ?? '' }}</td>
-                    <td class="text-right">{{ currency_format($unitPrice, currency: business_currency()) }}</td>
+                    <td class="text-right">{!! currency_format($unitPrice, currency: business_currency()) !!}</td>
                     <td class="text-center">{{ $quantity }}</td>
-                    <td class="text-right">{{ currency_format($lineSubtotal, currency: business_currency()) }}</td>
+                    <td class="text-right">{!! currency_format($lineSubtotal, currency: business_currency()) !!}</td>
                     <td class="text-center">{{ number_format($vatRate, 0) }}%</td>
-                    <td class="text-right">{{ currency_format($taxValue, currency: business_currency()) }}</td>
-                    <td class="text-right">{{ currency_format($lineTotalWithTax, currency: business_currency()) }}</td>
+                    <td class="text-right">{!! currency_format($taxValue, currency: business_currency()) !!}</td>
+                    <td class="text-right">{!! currency_format($lineTotalWithTax, currency: business_currency()) !!}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -547,15 +547,15 @@
         <table style="width: 100%; max-width: 400px; margin-left: auto; border-collapse: collapse;">
             <tr>
                 <td style="padding: 5px; text-align: right; font-size: 8px; border-bottom: 1px solid #E0E0E0;">{{ __('Total') }} / المجموع:</td>
-                <td style="padding: 5px; text-align: right; font-size: 8px; font-weight: 600; border-bottom: 1px solid #E0E0E0;">{{ currency_format($subtotal, currency: business_currency()) }}</td>
+                <td style="padding: 5px; text-align: right; font-size: 8px; font-weight: 600; border-bottom: 1px solid #E0E0E0;">{!! currency_format($subtotal, currency: business_currency()) !!}</td>
             </tr>
             <tr>
                 <td style="padding: 5px; text-align: right; font-size: 8px; border-bottom: 1px solid #E0E0E0;">{{ __('VAT') }} ({{ number_format($displayVatRate, 0) }}%) / ضريبة القيمة المضافة ({{ number_format($displayVatRate, 0) }}%):</td>
-                <td style="padding: 5px; text-align: right; font-size: 8px; font-weight: 600; border-bottom: 1px solid #E0E0E0;">{{ currency_format($finalVatAmount, currency: business_currency()) }}</td>
+                <td style="padding: 5px; text-align: right; font-size: 8px; font-weight: 600; border-bottom: 1px solid #E0E0E0;">{!! currency_format($finalVatAmount, currency: business_currency()) !!}</td>
             </tr>
             <tr class="total-row">
                 <td style="padding: 8px; text-align: right; font-size: 10px; font-weight: bold; background: linear-gradient(135deg, #1565C0 0%, #1976D2 100%); color: white;">{{ __('Total with Tax') }} ({{ number_format($displayVatRate, 0) }}%) / المجموع مع الضريبة ({{ number_format($displayVatRate, 0) }}%):</td>
-                <td style="padding: 8px; text-align: right; font-size: 10px; font-weight: bold; background: linear-gradient(135deg, #1565C0 0%, #1976D2 100%); color: white;">{{ currency_format($subtotal + $finalVatAmount, currency: business_currency()) }}</td>
+                <td style="padding: 8px; text-align: right; font-size: 10px; font-weight: bold; background: linear-gradient(135deg, #1565C0 0%, #1976D2 100%); color: white;">{!! currency_format($subtotal + $finalVatAmount, currency: business_currency()) !!}</td>
             </tr>
         </table>
     </div>

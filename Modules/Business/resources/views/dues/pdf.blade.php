@@ -98,11 +98,11 @@
                             <tr class="in-table-body">
                                 <td class="text-start">{{ $loop->iteration }}</td>
                                 <td class="text-start">
-                                    {{ currency_format($collect->totalDue ?? 0, currency: business_currency()) }}</td>
+                                    {!! currency_format($collect->totalDue ?? 0, currency: business_currency()) !!}</td>
                                 <td class="text-start">
-                                    {{ currency_format($collect->payDueAmount ?? 0, currency: business_currency()) }}</td>
+                                    {!! currency_format($collect->payDueAmount ?? 0, currency: business_currency()) !!}</td>
                                 <td class="text-start">
-                                    {{ currency_format($collect->dueAmountAfterPay ?? 0, currency: business_currency()) }}
+                                    {!! currency_format($collect->dueAmountAfterPay ?? 0, currency: business_currency()) !!}
                                 </td>
                             </tr>
                         @endforeach

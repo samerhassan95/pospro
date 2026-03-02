@@ -163,46 +163,46 @@
                                 <tr>
                                     <td>{{ $detail->product->productName ?? __('Product') }}</td>
                                     <td class="text-center">{{ $detail->quantities }}</td>
-                                    <td class="text-end">{{ currency_format($detail->price / $detail->quantities, currency: 'SAR') }}</td>
-                                    <td class="text-end">{{ currency_format($detail->price, currency: 'SAR') }}</td>
+                                    <td class="text-end">{!! currency_format($detail->price / $detail->quantities, currency: 'SAR') !!}</td>
+                                    <td class="text-end">{!! currency_format($detail->price, currency: 'SAR') !!}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th colspan="3" class="text-end">{{ __('Subtotal:') }}</th>
-                                <th class="text-end">{{ currency_format($sale->totalAmount - $sale->vat_amount - $sale->shipping_charge + $sale->discountAmount, currency: 'SAR') }}</th>
+                                <th class="text-end">{!! currency_format($sale->totalAmount - $sale->vat_amount - $sale->shipping_charge + $sale->discountAmount, currency: 'SAR') !!}</th>
                             </tr>
                             @if($sale->vat_amount > 0)
                                 <tr>
                                     <th colspan="3" class="text-end">{{ __('VAT:') }}</th>
-                                    <th class="text-end">{{ currency_format($sale->vat_amount, currency: 'SAR') }}</th>
+                                    <th class="text-end">{!! currency_format($sale->vat_amount, currency: 'SAR') !!}</th>
                                 </tr>
                             @endif
                             @if($sale->discountAmount > 0)
                                 <tr>
                                     <th colspan="3" class="text-end">{{ __('Discount:') }}</th>
-                                    <th class="text-end text-danger">-{{ currency_format($sale->discountAmount, currency: 'SAR') }}</th>
+                                    <th class="text-end text-danger">-{!! currency_format($sale->discountAmount, currency: 'SAR') !!}</th>
                                 </tr>
                             @endif
                             @if($sale->shipping_charge > 0)
                                 <tr>
                                     <th colspan="3" class="text-end">{{ __('Shipping:') }}</th>
-                                    <th class="text-end">{{ currency_format($sale->shipping_charge, currency: 'SAR') }}</th>
+                                    <th class="text-end">{!! currency_format($sale->shipping_charge, currency: 'SAR') !!}</th>
                                 </tr>
                             @endif
                             <tr class="table-success">
                                 <th colspan="3" class="text-end">{{ __('Total Amount:') }}</th>
-                                <th class="text-end amount-display">{{ currency_format($sale->totalAmount, currency: 'SAR') }}</th>
+                                <th class="text-end amount-display">{!! currency_format($sale->totalAmount, currency: 'SAR') !!}</th>
                             </tr>
                             <tr>
                                 <th colspan="3" class="text-end">{{ __('Paid Amount:') }}</th>
-                                <th class="text-end">{{ currency_format($sale->paidAmount, currency: 'SAR') }}</th>
+                                <th class="text-end">{!! currency_format($sale->paidAmount, currency: 'SAR') !!}</th>
                             </tr>
                             @if($sale->dueAmount > 0)
                                 <tr class="table-warning">
                                     <th colspan="3" class="text-end">{{ __('Due Amount:') }}</th>
-                                    <th class="text-end amount-display text-warning">{{ currency_format($sale->dueAmount, currency: 'SAR') }}</th>
+                                    <th class="text-end amount-display text-warning">{!! currency_format($sale->dueAmount, currency: 'SAR') !!}</th>
                                 </tr>
                             @endif
                         </tfoot>

@@ -71,7 +71,7 @@
                                             <td class='text-center'>{{ $detail->product->productCode ?? '' }}</td>
                                             <td class='text-center'>{{ $detail->quantities ?? 0 }}</td>
                                             @usercan('purchases.price')
-                                            <td class='text-center price'>{{ currency_format($discounted_price_per_unit, currency: business_currency()) }}
+                                            <td class='text-center price'>{!! currency_format($discounted_price_per_unit, currency: business_currency()) !!}
                                             @endusercan
                                             </td>
                                             <td class='text-center large-td'>
@@ -87,7 +87,7 @@
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td class="subtotal text-end">{{ currency_format(0)  }}</td>
+                                            <td class="subtotal text-end">{!! currency_format(0) !!}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

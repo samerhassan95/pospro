@@ -8,7 +8,7 @@
         <td>{{ ($cashes->currentPage() - 1) * $cashes->perPage() + $loop->iteration }}</td>
 
         <td class="text-start">{{ $cash->name }}</td>
-        <td>{{ currency_format($cash->balance, currency: business_currency()) }}</td>
+        <td>{!! currency_format($cash->balance, currency: business_currency()) !!}</td>
         <td>
             <label class="switch">
                 <input type="checkbox" {{ $cash->status == 1 ? 'checked' : '' }} class="status" data-url="{{ route('business.cashes.status', $cash->id) }}">

@@ -18,13 +18,13 @@
                             <div class="col-lg-2 col-md-12 ">
                                 <div class="loss-card p-3 m-2 text-white">
                                     <p class="stat-title">{{ __('Loss') }}</p>
-                                    <p class="stat-value" id="total_loss">{{ currency_format($loss, currency: business_currency()) }}</p>
+                                    <p class="stat-value" id="total_loss">{!! currency_format($loss, currency: business_currency()) !!}</p>
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-6 ">
                                 <div class="profit-card p-3 m-2 text-white">
                                     <p class="stat-title">{{ __('Profit') }}</p>
-                                    <p class="stat-value" id="total_profit">{{ currency_format($profit, currency: business_currency()) }}</p>
+                                    <p class="stat-value" id="total_profit">{!! currency_format($profit, currency: business_currency()) !!}</p>
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-6 ">

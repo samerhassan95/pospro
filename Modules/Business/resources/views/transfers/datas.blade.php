@@ -62,7 +62,7 @@
                     <td>{{ $transfer->toWarehouse->name ?? '' }}</td>
                     @endif
                     <td>{{ $totalQty }}</td>
-                    <td>{{ currency_format($totalStockValue, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($totalStockValue, currency: business_currency()) !!}</td>
                     <td>
                         @if ($transfer->status === 'pending')
                             <span class="badge bg-warning">{{ ucfirst($transfer->status) }}</span>

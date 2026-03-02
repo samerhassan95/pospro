@@ -34,7 +34,7 @@
                     @if(auth()->user()->accessToMultiBranch())
                     <td class="text-start">{{ $expense->branch->name ?? '' }}</td>
                     @endif
-                    <td class="text-start">{{ currency_format($expense->amount, currency: business_currency()) }}</td>
+                    <td class="text-start">{!! currency_format($expense->amount, currency: business_currency()) !!}</td>
                     <td class="text-start">{{ $expense->category?->categoryName }}</td>
                     <td class="text-start">{{ $expense->expanseFor }}</td>
                     <td class="text-start">{{ $expense->payment_type_id != null ? $expense->payment_type->name ?? '' : $expense->paymentType }}</td>

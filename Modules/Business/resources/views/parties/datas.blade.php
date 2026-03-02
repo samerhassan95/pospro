@@ -37,7 +37,7 @@
                     <td>{{ $party->type }}</td>
                     <td>{{ $party->phone }}</td>
                     <td class="text-danger">
-                        {{ currency_format( $party->due, currency: business_currency()) }}
+                        {!! currency_format( $party->due, currency: business_currency()) !!}
                     </td>
                     <td class="d-print-none">
                         <div class="dropdown table-action">
@@ -50,7 +50,7 @@
                                     <a href="#parties-view" class="parties-view-btn" data-bs-toggle="modal"
                                        data-name="{{ $party->name }}" data-email="{{ $party->email }}"
                                        data-phone="{{ $party->phone }}" data-type="{{ $party->type }}"
-                                       data-due="{{ currency_format($party->due, currency: business_currency()) }}"
+                                       data-due="{!! currency_format($party->due, currency: business_currency()) !!}"
                                        data-address="{{ $party->address }}">
                                         <i class="fal fa-eye"></i>
                                         {{ __('View') }}

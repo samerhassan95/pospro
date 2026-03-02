@@ -101,12 +101,12 @@
                     <tr class="in-table-body">
                         <td class="text-start">1</td>
                         <td class="text-start">
-                            {{ currency_format($due_collect->totalDue ?? 0, currency: business_currency()) }}</td>
+                            {!! currency_format($due_collect->totalDue ?? 0, currency: business_currency()) !!}</td>
                         <td class="text-start">
-                            {{ currency_format($due_collect->payDueAmount ?? 0, currency: business_currency()) }}
+                            {!! currency_format($due_collect->payDueAmount ?? 0, currency: business_currency()) !!}
                         </td>
                         <td class="text-start">
-                            {{ currency_format($due_collect->dueAmountAfterPay ?? 0, currency: business_currency()) }}
+                            {!! currency_format($due_collect->dueAmountAfterPay ?? 0, currency: business_currency()) !!}
                         </td>
                     </tr>
                 </tbody>
@@ -132,7 +132,7 @@
                             <td class="text-end">{{ __('Payable Amount') }}</td>
                             <td class="text-end">:</td>
                             <td class="text-end">
-                                {{ currency_format($due_collect->totalDue ?? 0, currency: business_currency()) }}
+                                {!! currency_format($due_collect->totalDue ?? 0, currency: business_currency()) !!}
                             </td>
                             </td>
                         </tr>
@@ -141,7 +141,7 @@
                             <td class="text-end">{{ __('Received Amount') }}</td>
                             <td class="text-end">:</td>
                             <td class="text-end">
-                                {{ currency_format($due_collect->payDueAmount ?? 0, currency: business_currency()) }}
+                                {!! currency_format($due_collect->payDueAmount ?? 0, currency: business_currency()) !!}
                             </td>
                             </td>
                         </tr>
@@ -149,7 +149,7 @@
                             <td class="text-end">{{ __('Due Amount') }}</td>
                             <td class="text-end">:</td>
                             <td class="text-end">
-                                {{ currency_format($due_collect->dueAmountAfterPay ?? 0, currency: business_currency()) }}
+                                {!! currency_format($due_collect->dueAmountAfterPay ?? 0, currency: business_currency()) !!}
                             </td>
                         </tr>
                     </tbody>

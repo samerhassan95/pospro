@@ -23,7 +23,7 @@
             <p class="pro-category">{{ $product->category->categoryName ?? '' }}</p>
             @usercan('purchases.price')
             <div class="price">
-                <h6 class="pro-price product_price">{{ currency_format($firstStock->productPurchasePrice ?? 0, currency: business_currency()) }}</h6>
+                <h6 class="pro-price product_price">{!! currency_format($firstStock->productPurchasePrice ?? 0, currency: business_currency()) !!}</h6>
             </div>
             @endusercan
         </div>

@@ -7,7 +7,7 @@ html {
 }
 $mss: 'Cairo', sans-serif;
 $rss: 'Cairo', sans-serif;
-$acc: #C52127;
+$acc: var(--clr-primary);
 .bg-green-one{
     background: #04f204 !important;
 }
@@ -197,13 +197,13 @@ svg {
                     background: none;
                     &.active{
                         > a, .active{
-                            background: #C52127;
+                            background: var(--clr-primary);
                         }
                     }
                 }
             }
             .active{
-                background: #C52127;
+                background: var(--clr-primary);
             }
         }
     }
@@ -237,7 +237,7 @@ svg {
                 color: #fff;
             }
             >a{
-                background-color: #C52127;
+                background-color: var(--clr-primary);
                 color: #fff !important;
             }
         }
@@ -284,7 +284,7 @@ svg {
                             transform: rotate(90deg);
                         }
                         >a{
-                            background-color: #C52127;
+                            background-color: var(--clr-primary);
                             color: #fff !important;
                         }
                     }
@@ -387,7 +387,7 @@ svg {
                         margin-right: 10px;
                     }
                     &:hover{
-                        color: #C52127;
+                        color: var(--clr-primary);
                     }
                 }
             }
@@ -572,7 +572,7 @@ svg {
     }
 }
 .search-btn{
-    background: #C52127 !important;
+    background: var(--clr-primary) !important;
     color: #fff !important;
 }
 /* header  end css */
@@ -1103,7 +1103,7 @@ svg {
     border-radius: 3px;
     padding: 2px 8px;
     font-size: 10px;
-    color: #C52127;
+    color: var(--clr-primary);
     cursor: pointer;
     display: inline-block;
     line-height: 1.6;
@@ -1113,7 +1113,7 @@ input[type="date"]{
 }
 .theme-btn{
     min-width: 210px;
-    background: #C52127;
+    background: var(--clr-primary);
     border-radius: 6px;
     color: #fff;
     border: none;
@@ -1547,7 +1547,7 @@ th{
         top: -3px;
         height: 100%;
         width: 100%;
-        background: #C52127;
+        background: var(--clr-primary);
         border-radius: 32px;
         z-index: -1;
     }
@@ -1620,7 +1620,7 @@ th{
         display: block;
         font-size: 16px;
         color: #fff !important;
-        background: #C52127;
+        background: var(--clr-primary);
         border-radius: 12px;
         padding: 13px;
         width: 100%;
@@ -1648,7 +1648,7 @@ th{
         background: #03A9F4;
     }
     .button-group a:nth-child(3) {
-        background: #C52127;
+        background: var(--clr-primary);
     }
     .button-group a:nth-child(4) {
         background: #FF55B1;
@@ -1727,7 +1727,7 @@ th{
         }
         &:nth-child(3){
             a{
-                background: #C52127;
+                background: var(--clr-primary);
             }
         }
         &:nth-child(4){
@@ -2056,7 +2056,7 @@ select{
 
 }
 .form-switch .form-check-input:checked{
-    background-color: #C52127;
+    background-color: var(--clr-primary);
 }
 
 .commercial-invoice{

@@ -33,8 +33,8 @@
                 <td>{{ $product->brand->brandName ?? '' }}</td>
                 <td>{{ $product->category->categoryName ?? '' }}</td>
                 <td>{{ $product->unit->unitName ?? '' }}</td>
-                <td>{{ currency_format($latestPurchasePrice, currency: business_currency()) }}</td>
-                <td>{{ currency_format($latestSalePrice, currency: business_currency()) }}</td>
+                <td>{!! currency_format($latestPurchasePrice, currency: business_currency()) !!}</td>
+                <td>{!! currency_format($latestSalePrice, currency: business_currency()) !!}</td>
                 <td>{{ $product->stocks_sum_product_stock }}</td>
                 <td>
                     @if ($product->stocks->isNotEmpty() && $product->stocks->first()->expire_date)

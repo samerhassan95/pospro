@@ -20,13 +20,13 @@
                                                 <h4>
                                                     @if (($plan['offerPrice'] && $plan['subscriptionPrice'] !== null) || $plan['offerPrice'] || $plan['subscriptionPrice'])
                                                         @if ($plan['offerPrice'])
-                                                            {{ currency_format($plan['offerPrice']) }}
+                                                            {!! currency_format($plan['offerPrice']) !!}
                                                         @else
-                                                            {{ currency_format($plan['subscriptionPrice']) }}
+                                                            {!! currency_format($plan['subscriptionPrice']) !!}
                                                         @endif
                                                     @else
                                                         @if ($plan['offerPrice'] || $plan['subscriptionPrice'])
-                                                            {{ currency_format($plan['offerPrice'] ?? $plan['subscriptionPrice']) }}
+                                                            {!! currency_format($plan['offerPrice'] ?? $plan['subscriptionPrice']) !!}
                                                         @else
                                                             {{ __('Free') }}
                                                         @endif

@@ -16,7 +16,7 @@
 
                 <div class="loss-card p-3 text-white">
                     <p class="stat-title">{{ __('Total Stock Value') }}</p>
-                    <p class="stat-value">{{ currency_format($total_stock_value) }}</p>
+                    <p class="stat-value">{!! currency_format($total_stock_value) !!}</p>
                 </div>
             </div>
         </div>

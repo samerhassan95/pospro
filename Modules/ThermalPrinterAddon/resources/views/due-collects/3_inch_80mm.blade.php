@@ -42,11 +42,11 @@
             <tbody>
                 <tr>
                     <td class="text-start table-sl">1</td>
-                    <td>{{ currency_format($due_collect->totalDue ?? 0, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($due_collect->totalDue ?? 0, currency: business_currency()) !!}</td>
                     <td class="text-center">
-                        {{ currency_format($due_collect->payDueAmount ?? 0, currency: business_currency()) }}</td>
+                        {!! currency_format($due_collect->payDueAmount ?? 0, currency: business_currency()) !!}</td>
                     <td class="text-center">
-                        {{ currency_format($due_collect->dueAmountAfterPay ?? 0, currency: business_currency()) }}
+                        {!! currency_format($due_collect->dueAmountAfterPay ?? 0, currency: business_currency()) !!}
                     </td>
                 </tr>
                 <tr>
@@ -63,19 +63,19 @@
 
                             <div class="d-flex justify-content-between">
                                 <p>Payable Amount:</p>
-                                <p>{{ currency_format($due_collect->totalDue ?? 0, currency: business_currency()) }}
+                                <p>{!! currency_format($due_collect->totalDue ?? 0, currency: business_currency()) !!}
                                 </p>
                             </div>
 
                             <div class="d-flex justify-content-between">
                                 <p>Received Amount:</p>
-                                <p>{{ currency_format($due_collect->payDueAmount ?? 0, currency: business_currency()) }}
+                                <p>{!! currency_format($due_collect->payDueAmount ?? 0, currency: business_currency()) !!}
                                 </p>
                             </div>
 
                             <div class="d-flex justify-content-between">
                                 <p>Change Amt/Due:</p>
-                                <p>{{ currency_format($due_collect->dueAmountAfterPay ?? 0, currency: business_currency()) }}
+                                <p>{!! currency_format($due_collect->dueAmountAfterPay ?? 0, currency: business_currency()) !!}
                                 </p>
                             </div>
                         </div>

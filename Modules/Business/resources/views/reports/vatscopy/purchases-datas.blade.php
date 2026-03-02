@@ -20,10 +20,10 @@
                     <td class="text-center">{{ $purchase->invoiceNumber }}</td>
                     <td class="text-center">{{ $purchase->party->name ?? '' }}</td>
                     <td class="text-center">
-                        {{ currency_format($purchase->totalAmount, currency: business_currency()) }}</td>
+                        {!! currency_format($purchase->totalAmount, currency: business_currency()) !!}</td>
                     <td class="text-center">{{ $purchase->payment_type->name ?? '' }}</td>
                     <td class="text-center">
-                        {{ currency_format($purchase->discountAmount, currency: business_currency()) }}</td>
+                        {!! currency_format($purchase->discountAmount, currency: business_currency()) !!}</td>
                     @foreach ($vats as $vat)
                         <td class="text-center">
                             {{ $purchase->vat_id == $vat->id ? currency_format($purchase->vat_amount, currency: business_currency()) : '0' }}

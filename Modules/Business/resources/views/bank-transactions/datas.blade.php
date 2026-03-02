@@ -13,7 +13,7 @@
                 <span class="badge bg-primary">{{ ucfirst($transaction->type) }}</span>
             @endif
         </td>
-        <td>{{ currency_format($transaction->amount, currency: business_currency()) }}</td>
+        <td>{!! currency_format($transaction->amount, currency: business_currency()) !!}</td>
         <td class="text-start">{{ $transaction->note }}</td>
         <td>
             @usercan('banks.delete')

@@ -29,7 +29,7 @@
             <td>{{ $purchase->party->name ?? '' }}</td>
             <td>{{ $purchase->totalAmount }}</td>
             <td>{{ $purchase->paidAmount }}</td>
-            <td>{{ currency_format($total_return_amount ?? 0, currency: business_currency()) }}</td>
+            <td>{!! currency_format($total_return_amount ?? 0, currency: business_currency()) !!}</td>
         </tr>
     @endforeach
     </tbody>

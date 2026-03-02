@@ -12,7 +12,7 @@
             <div class="d-flex align-items-center justify-content-center gap-3">
                 <div class="profit-card p-3 text-white">
                     <p class="stat-title">{{ __("Total Due") }}</p>
-                    <p class="stat-value">{{ currency_format($total_due, currency: business_currency()) }}</p>
+                    <p class="stat-value">{!! currency_format($total_due, currency: business_currency()) !!}</p>
                 </div>
             </div>
         </div>

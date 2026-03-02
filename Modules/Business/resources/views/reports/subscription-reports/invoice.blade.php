@@ -636,7 +636,7 @@
                         <td>{{ $subscriber->duration }} {{ __('days') }}</td>
                         <td>{{ \Carbon\Carbon::parse($subscriber->created_at)->format('d/m/Y') }}</td>
                         <td>{{ \Carbon\Carbon::parse($subscriber->created_at)->addDays($subscriber->duration)->format('d/m/Y') }}</td>
-                        <td>{{ currency_format($subscriber->price, currency: business_currency()) }}</td>
+                        <td>{!! currency_format($subscriber->price, currency: business_currency()) !!}</td>
                     </tr>
                 </tbody>
             </table>
@@ -666,17 +666,17 @@
                 
                 <div class="summary-row">
                     <span class="summary-label">المجموع الفرعي / Subtotal:</span>
-                    <span class="summary-value">{{ currency_format($subtotal, currency: business_currency()) }}</span>
+                    <span class="summary-value">{!! currency_format($subtotal, currency: business_currency()) !!}</span>
                 </div>
                 
                 <div class="summary-row">
                     <span class="summary-label">ضريبة القيمة المضافة ({{ $vatRate }}%) / VAT:</span>
-                    <span class="summary-value">{{ currency_format($vatAmount, currency: business_currency()) }}</span>
+                    <span class="summary-value">{!! currency_format($vatAmount, currency: business_currency()) !!}</span>
                 </div>
                 
                 <div class="summary-row summary-total">
                     <span class="summary-label">الإجمالي شامل الضريبة / Total Including VAT:</span>
-                    <span class="summary-value">{{ currency_format($total, currency: business_currency()) }}</span>
+                    <span class="summary-value">{!! currency_format($total, currency: business_currency()) !!}</span>
                 </div>
             </div>
         </div>

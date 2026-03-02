@@ -89,12 +89,12 @@
         </div>
         <div class="summary-row">
             <span class="summary-label">{{ __('Subtotal') }}</span>
-            <span class="summary-value" id="sub_total">{{ currency_format(0, currency: business_currency()) }}</span>
+            <span class="summary-value" id="sub_total">{!! currency_format(0, currency: business_currency()) !!}</span>
         </div>
         <div class="summary-row discount-row">
             <span class="summary-label">{{ __('Discount') }}</span>
             <div class="discount-controls">
-                <span class="summary-value" id="discount_display">{{ currency_format(0, currency: business_currency()) }}</span>
+                <span class="summary-value" id="discount_display">{!! currency_format(0, currency: business_currency()) !!}</span>
                 <button type="button" class="add-discount-btn" id="add-discount-btn">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -106,7 +106,7 @@
             <div class="discount-input-wrapper">
                 <input type="number" step="0.01" min="0" id="discount_amount_input" class="form-control discount-input" placeholder="0.00">
                 <select id="discount_type_select" class="form-select discount-type-select">
-                    <option value="flat">{{ __('Flat') }}</option>
+                    <option value="flat">{{ __('Flat') }} ({{ business_currency()->symbol }})</option>
                     <option value="percent">{{ __('Percent') }}</option>
                 </select>
                 <button type="button" class="apply-discount-btn" id="apply-discount-btn">{{ __('Apply') }}</button>
@@ -116,7 +116,7 @@
         <div class="summary-row shipping-row">
             <span class="summary-label">{{ __('Shipping') }}</span>
             <div class="shipping-controls">
-                <span class="summary-value" id="shipping_display">{{ currency_format(0, currency: business_currency()) }}</span>
+                <span class="summary-value" id="shipping_display">{!! currency_format(0, currency: business_currency()) !!}</span>
                 <button type="button" class="add-shipping-btn" id="add-shipping-btn">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -133,11 +133,11 @@
         </div>
         <div class="summary-row">
             <span class="summary-label vat-label">{{ __('Vat') }} <span class="vat-rate-display">15</span>%</span>
-            <span class="summary-value" id="vat_display">{{ currency_format(0, currency: business_currency()) }}</span>
+            <span class="summary-value" id="vat_display">{!! currency_format(0, currency: business_currency()) !!}</span>
         </div>
         <div class="summary-row summary-total">
             <span class="summary-label ">{{ __('Total') }}</span>
-            <span class="summary-value" id="total_amount">{{ currency_format(0, currency: business_currency()) }}</span>
+            <span class="summary-value" id="total_amount">{!! currency_format(0, currency: business_currency()) !!}</span>
         </div>
     </div>
 
@@ -187,7 +187,7 @@
             <h3 class="payment-modal-title">{{ __('Collect Payment') }}</h3>
             <div class="payment-modal-order-info">
                 <div class="payment-order-number">{{ __('Order') }} #<span id="modal-order-number">{{ $invoice_no }}</span></div>
-                <div class="payment-order-total" id="modal-order-total">{{ currency_format(0, currency: business_currency()) }}</div>
+                <div class="payment-order-total" id="modal-order-total">{!! currency_format(0, currency: business_currency()) !!}</div>
             </div>
         </div>
 
@@ -242,15 +242,15 @@
         <div class="payment-summary">
             <div class="payment-summary-row">
                 <span>{{ __('Total Bill') }}</span>
-                <span id="modal-total-bill">{{ currency_format(0, currency: business_currency()) }}</span>
+                <span id="modal-total-bill">{!! currency_format(0, currency: business_currency()) !!}</span>
             </div>
             <div class="payment-summary-row">
                 <span>{{ __('Amount Paid') }}</span>
-                <span id="modal-amount-paid">{{ currency_format(0, currency: business_currency()) }}</span>
+                <span id="modal-amount-paid">{!! currency_format(0, currency: business_currency()) !!}</span>
             </div>
             <div class="payment-summary-row">
                 <span>{{ __('Due Amount') }}</span>
-                <span id="modal-due-summary">{{ currency_format(0, currency: business_currency()) }}</span>
+                <span id="modal-due-summary">{!! currency_format(0, currency: business_currency()) !!}</span>
             </div>
         </div>
 

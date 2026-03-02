@@ -25,7 +25,7 @@
                                 <label class="form-label">{{ __('From Account') }} <span class="text-danger">*</span></label>
                                 <select name="from" class="form-control" required>
                                     @foreach($all_accounts as $account)
-                                        <option value="{{ $account->id }}">{{ $account->name }} ({{ currency_format($account->balance, currency: business_currency()) }})</option>
+                                        <option value="{{ $account->id }}">{{ $account->name }} ({!! currency_format($account->balance, currency: business_currency()) !!})</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -36,7 +36,7 @@
                                 <label class="form-label">{{ __('To Account') }} <span class="text-danger">*</span></label>
                                 <select name="to" class="form-control">
                                     @foreach($all_accounts as $account)
-                                        <option value="{{ $account->id }}">{{ $account->name }} ({{ currency_format($account->balance, currency: business_currency()) }})</option>
+                                        <option value="{{ $account->id }}">{{ $account->name }} ({!! currency_format($account->balance, currency: business_currency()) !!})</option>
                                     @endforeach
                                 </select>
                             </div>

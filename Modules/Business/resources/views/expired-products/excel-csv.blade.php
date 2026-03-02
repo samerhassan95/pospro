@@ -34,8 +34,8 @@
                 <td>{{ $product->brand->brandName ?? '' }}</td>
                 <td>{{ $product->category->categoryName ?? '' }}</td>
                 <td>{{ $product->unit->unitName ?? '' }}</td>
-                <td>{{ currency_format($latestPurchasePrice, currency: business_currency()) }}</td>
-                <td>{{ currency_format($latestSalePrice, currency: business_currency()) }}</td>
+                <td>{!! currency_format($latestPurchasePrice, currency: business_currency()) !!}</td>
+                <td>{!! currency_format($latestSalePrice, currency: business_currency()) !!}</td>
                 <td>{{ $product->total_stock }}</td>
                 @if ($product->stocks->isNotEmpty())
                     <td class="text-danger">

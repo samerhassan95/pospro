@@ -23,7 +23,7 @@
         <td>{{ $serial++ }}</td>
         <td class="text-start"><span class="badge bg-info">{{ __('Stock') }}</span></td>
         <td class="text-start">{{ $product->productName }}</td>
-        <td class="text-end">{{ currency_format($stock_value, currency: business_currency()) }}</td>
+        <td class="text-end">{!! currency_format($stock_value, currency: business_currency()) !!}</td>
     </tr>
 @endforeach
 
@@ -33,12 +33,12 @@
         <td>{{ $serial++ }}</td>
         <td class="text-start"><span class="badge bg-success">{{ __('Bank/Cash') }}</span></td>
         <td class="text-start">{{ $bank->name }}</td>
-        <td class="text-end">{{ currency_format($bank->balance, currency: business_currency()) }}</td>
+        <td class="text-end">{!! currency_format($bank->balance, currency: business_currency()) !!}</td>
     </tr>
 @endforeach
 
 {{-- Total Row --}}
 <tr class="table-active fw-bold">
     <td colspan="3" class="text-end">{{ __('Total Assets') }}</td>
-    <td class="text-end">{{ currency_format($total_asset ?? 0, currency: business_currency()) }}</td>
+    <td class="text-end">{!! currency_format($total_asset ?? 0, currency: business_currency()) !!}</td>
 </tr>

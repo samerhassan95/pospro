@@ -12,15 +12,15 @@
             <div class="d-flex align-items-center justify-content-center gap-3">
                 <div class="profit-card p-3 text-white bg-info">
                     <p class="stat-title">{{ __('Total Stock Value') }}</p>
-                    <p class="stat-value" id="total_stock_value">{{ currency_format($total_stock_value, currency: business_currency()) }}</p>
+                    <p class="stat-value" id="total_stock_value">{!! currency_format($total_stock_value, currency: business_currency()) !!}</p>
                 </div>
                 <div class="profit-card p-3 text-white bg-success">
                     <p class="stat-title">{{ __('Total Bank Balance') }}</p>
-                    <p class="stat-value" id="totalBankBalance">{{ currency_format($totalBankBalance, currency: business_currency()) }}</p>
+                    <p class="stat-value" id="totalBankBalance">{!! currency_format($totalBankBalance, currency: business_currency()) !!}</p>
                 </div>
                 <div class="profit-card p-3 text-white bg-primary">
                     <p class="stat-title">{{ __('Total Assets') }}</p>
-                    <p class="stat-value" id="total_asset">{{ currency_format($total_asset, currency: business_currency()) }}</p>
+                    <p class="stat-value" id="total_asset">{!! currency_format($total_asset, currency: business_currency()) !!}</p>
                 </div>
             </div>
         </div>

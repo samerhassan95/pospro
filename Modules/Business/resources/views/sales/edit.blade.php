@@ -363,7 +363,7 @@
                                     <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                         <h6>{{ __('Sub Total') }}</h6>
                                         <h6 class="fw-bold" id="sub_total">
-                                            {{ currency_format(0, currency: business_currency()) }}</h6>
+                                            {!! currency_format(0, currency: business_currency()) !!}</h6>
                                     </div>
                                     <div class="row save-amount-container  align-items-center mb-2">
                                         <h6 class="payment-title col-6">{{ __('Vat') }}</h6>
@@ -417,18 +417,18 @@
                                     <div class=" d-flex flex-wrap align-items-center justify-content-between fw-bold">
                                         <div class="fw-bold">{{ __('Total Amount') }}</div>
                                         <h6 class='fw-bold' id="total_amount">
-                                            {{ currency_format($sale->actual_total_amount, currency: business_currency()) }}</h6>
+                                            {!! currency_format($sale->actual_total_amount, currency: business_currency()) !!}</h6>
                                     </div>
 
                                     <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                         <h6>{{ __('Rounding(+/-)') }}</h6>
                                         <h6 id="rounding_amount">
-                                            {{ currency_format(abs($sale->rounding_amount), currency: business_currency()) }}</h6>
+                                            {!! currency_format(abs($sale->rounding_amount), currency: business_currency()) !!}</h6>
                                     </div>
                                     <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                         <h6 class="fw-bold">{{ __('Payable Amount') }}</h6>
                                         <h6 class="fw-bold" id="payable_amount">
-                                            {{ currency_format($sale->totalAmount, currency:  business_currency()) }}</h6>
+                                            {!! currency_format($sale->totalAmount, currency:  business_currency()) !!}</h6>
                                     </div>
 
                                 </div>

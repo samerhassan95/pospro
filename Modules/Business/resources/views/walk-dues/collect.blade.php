@@ -42,15 +42,15 @@
                                         </tr>
                                         <tr>
                                             <td><strong>{{ __('Total Amount') }}:</strong></td>
-                                            <td>{{ currency_format($sale->totalAmount, currency: business_currency()) }}</td>
+                                            <td>{!! currency_format($sale->totalAmount, currency: business_currency()) !!}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>{{ __('Paid Amount') }}:</strong></td>
-                                            <td class="text-success">{{ currency_format($sale->paidAmount, currency: business_currency()) }}</td>
+                                            <td class="text-success">{!! currency_format($sale->paidAmount, currency: business_currency()) !!}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>{{ __('Due Amount') }}:</strong></td>
-                                            <td class="text-danger fw-bold">{{ currency_format($sale->dueAmount, currency: business_currency()) }}</td>
+                                            <td class="text-danger fw-bold">{!! currency_format($sale->dueAmount, currency: business_currency()) !!}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -72,7 +72,7 @@
                                             <input type="number" class="form-control" id="amount" name="amount" 
                                                    step="0.01" min="0" max="{{ $sale->dueAmount }}" 
                                                    placeholder="{{ __('Enter amount to collect') }}" required>
-                                            <small class="text-muted">{{ __('Maximum amount') }}: {{ currency_format($sale->dueAmount, currency: business_currency()) }}</small>
+                                            <small class="text-muted">{{ __('Maximum amount') }}: {!! currency_format($sale->dueAmount, currency: business_currency()) !!}</small>
                                         </div>
 
                                         <div class="mb-3">

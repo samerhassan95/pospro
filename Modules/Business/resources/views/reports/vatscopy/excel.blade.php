@@ -20,9 +20,9 @@
                     <td>{{ formatted_date($sale->created_at) }}</td>
                     <td>{{ $sale->invoiceNumber }}</td>
                     <td>{{ $sale->party->name ?? '' }}</td>
-                    <td>{{ currency_format($sale->totalAmount, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($sale->totalAmount, currency: business_currency()) !!}</td>
                     <td>{{ $sale->payment_type->name ?? '' }}</td>
-                    <td>{{ currency_format($sale->discountAmount, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($sale->discountAmount, currency: business_currency()) !!}</td>
                     @foreach ($vats as $vat)
                         <td>{{ $sale->vat_id == $vat->id ? currency_format($sale->vat_amount, currency: business_currency()) : '0' }}</td>
                     @endforeach
@@ -37,9 +37,9 @@
                     <td>{{ formatted_date($purchase->created_at) }}</td>
                     <td>{{ $purchase->invoiceNumber }}</td>
                     <td>{{ $purchase->party->name ?? '' }}</td>
-                    <td>{{ currency_format($purchase->totalAmount, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($purchase->totalAmount, currency: business_currency()) !!}</td>
                     <td>{{ $purchase->payment_type->name ?? '' }}</td>
-                    <td>{{ currency_format($purchase->discountAmount, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($purchase->discountAmount, currency: business_currency()) !!}</td>
                     @foreach ($vats as $vat)
                         <td>{{ $purchase->vat_id == $vat->id ? currency_format($purchase->vat_amount, currency: business_currency()) : '0' }}</td>
                     @endforeach

@@ -48,13 +48,14 @@
         }
     };
     
-    // Replace ^ symbol with SVG in existing elements on page load
+    // Replace ^ symbol with SVG in existing elements
     function replaceCurrencySymbols() {
         // Find all elements that might contain currency symbols
         const selectors = [
             '#sub_total',
             '#total_amount',
             '#vat_display',
+            '#vat_amount',
             '#discount_display',
             '#shipping_display',
             '#rounding_amount',
@@ -65,32 +66,49 @@
             '#modal-due-summary',
             '.product-price',
             '.cart-variant-price',
-            '.amount-display',
-            '.summary-row span:last-child',
-            '.payment-summary-row span:last-child'
+            '.amount-display'
         ];
         
         selectors.forEach(selector => {
             $(selector).each(function() {
                 let html = $(this).html();
-                if (html && html.includes('^')) {
+                if (html && typeof html === 'string' && html.includes('^') && !html.includes('<svg')) {
                     $(this).html(html.replace(/\^/g, sarSymbolSVG));
                 }
             });
         });
     }
     
-    // Run on document ready
+    // Run immediately when script loads (before DOM ready)
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', replaceCurrencySymbols);
+    } else {
+        // DOM is already ready, run immediately
+        replaceCurrencySymbols();
+    }
+    
+    // Also run on jQuery ready for safety
     $(document).ready(function() {
         replaceCurrencySymbols();
         
-        // Watch for DOM changes and replace symbols
+        // Watch for DOM changes but with debouncing to prevent flickering
+        let debounceTimer;
         const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'childList' || mutation.type === 'characterData') {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function() {
+                let needsReplacement = false;
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                        // Check if the mutation actually contains ^ symbol
+                        if (mutation.target.textContent && mutation.target.textContent.includes('^')) {
+                            needsReplacement = true;
+                        }
+                    }
+                });
+                if (needsReplacement) {
                     replaceCurrencySymbols();
                 }
-            });
+            }, 10); // Reduced to 10ms for faster response
         });
         
         // Observe the document body for changes

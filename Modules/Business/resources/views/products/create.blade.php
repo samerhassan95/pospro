@@ -7,7 +7,7 @@
 @php
     $modules = product_setting()->modules ?? [];
     $showSingle  = !isset($modules['show_product_type_single']) || $modules['show_product_type_single'];
-    $showVariant = isset($modules['show_product_type_variant']) && $modules['show_product_type_variant'];
+    $showVariant = !isset($modules['show_product_type_variant']) || $modules['show_product_type_variant'];
     $hasVisibleColumn = is_module_enabled($modules, 'show_batch_no') || is_module_enabled($modules, 'show_product_stock') || is_module_enabled($modules, 'show_exclusive_price') ||is_module_enabled($modules, 'show_inclusive_price') ||is_module_enabled($modules, 'show_profit_percent') ||is_module_enabled($modules, 'show_product_sale_price') ||is_module_enabled($modules, 'show_product_wholesale_price') ||is_module_enabled($modules, 'show_product_dealer_price') ||is_module_enabled($modules, 'show_mfg_date') ||is_module_enabled($modules, 'show_expire_date') ||is_module_enabled($modules, 'show_action');
     $defaultPermissions = [
         'show_batch_no',
@@ -62,6 +62,11 @@
                                             <div class="col-lg-4 mb-2">
                                                 <label>{{ __('Product Name') }}</label>
                                                 <input type="text" name="productName" required class="form-control" placeholder="{{ __('Enter Product Name') }}">
+                                            </div>
+
+                                            <div class="col-lg-8 mb-2">
+                                                <label>{{ __('Product Description') }}</label>
+                                                <textarea name="productDescription" class="form-control" rows="1" placeholder="{{ __('Enter Product Description (Optional)') }}"></textarea>
                                             </div>
 
                                             @if (is_module_enabled($modules, 'show_product_category'))
@@ -221,6 +226,17 @@
                                     @elseif ($showVariant)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="product_type" id="variantOption" value="variant" checked>
+                                            <label class="form-check-label" for="variantOption">{{ __('Batch') }}</label>
+                                        </div>
+                                    @else
+                                        {{-- Default fallback if variables are not set --}}
+                                        <input type="hidden" name="product_type" value="single">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="product_type" id="singleOption" value="single" checked>
+                                            <label class="form-check-label" for="singleOption">{{ __('Single') }}</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="product_type" id="variantOption" value="variant">
                                             <label class="form-check-label" for="variantOption">{{ __('Batch') }}</label>
                                         </div>
                                     @endif

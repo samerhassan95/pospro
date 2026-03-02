@@ -31,9 +31,9 @@
                     @endif
                     <td>{{ formatted_date($purchase->purchaseDate) }}</td>
                     <td>{{ $purchase->party->name ?? '' }}</td>
-                    <td>{{ currency_format($purchase->totalAmount , currency: business_currency()) }}</td>
-                    <td>{{ currency_format($purchase->paidAmount, currency: business_currency()) }}</td>
-                    <td>{{ currency_format($total_return_amount ?? 0, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($purchase->totalAmount , currency: business_currency()) !!}</td>
+                    <td>{!! currency_format($purchase->paidAmount, currency: business_currency()) !!}</td>
+                    <td>{!! currency_format($total_return_amount ?? 0, currency: business_currency()) !!}</td>
                 </tr>
             @endforeach
         </tbody>

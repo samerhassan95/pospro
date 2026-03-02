@@ -29,11 +29,11 @@
 
                             <li class="list-group-item">
                                 <span>{{ $isBranch ? __('Branch Opening Balance') : __('Shop Opening Balance') }}: </span>
-                                {{ currency_format($isBranch ? $balanceSource?->branchOpeningBalance : $balanceSource?->shopOpeningBalance, currency: business_currency()) }}
+                                {!! currency_format($isBranch ? $balanceSource?->branchOpeningBalance : $balanceSource?->shopOpeningBalance, currency: business_currency()) !!}
                             </li>
                             <li class="list-group-item">
                                 <span>{{ $isBranch ? __('Branch Remaining Balance') : __('Shop Remaining Balance') }}: </span>
-                                {{ currency_format($isBranch ? $balanceSource?->branchRemainingBalance : $balanceSource?->remainingShopBalance, currency: business_currency()) }}
+                                {!! currency_format($isBranch ? $balanceSource?->branchRemainingBalance : $balanceSource?->remainingShopBalance, currency: business_currency()) !!}
                             </li>
                             <li class="list-group-item"><span>{{ __('Registration Date') }}:</span>{{ formatted_date($user->created_at) }}</li>
                             <li class="list-group-item"><span>{{ __('Plan Expire Date') }}:</span>{{ formatted_date(plan_data()['will_expire'] ?? '') }}</li>

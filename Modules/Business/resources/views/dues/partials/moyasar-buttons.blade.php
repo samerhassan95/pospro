@@ -28,7 +28,7 @@
                             @if($party->due > 0)
                                 <tr>
                                     <td>{{ $party->name }}</td>
-                                    <td>{{ currency_format($party->due, currency: business_currency()) }}</td>
+                                    <td>{!! currency_format($party->due, currency: business_currency()) !!}</td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-xs pay-due-collection-moyasar" 
                                                 data-party-id="{{ $party->id }}" 

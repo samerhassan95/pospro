@@ -41,7 +41,7 @@
                 @endif
                 <td>{{ $transfer->toWarehouse->name ?? '' }}</td>
                 <td>{{ $totalQty }}</td>
-                <td>{{ currency_format($totalStockValue, currency: business_currency()) }}</td>
+                <td>{!! currency_format($totalStockValue, currency: business_currency()) !!}</td>
                 <td>{{ ucfirst($transfer->status) }}</td>
             </tr>
         @endforeach

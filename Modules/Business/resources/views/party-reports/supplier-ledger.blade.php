@@ -64,8 +64,8 @@
                                     <td>{{ $party->name }}</td>
                                     <td>{{ $party->phone }}</td>
                                     <td>{{ $party->email ?? '-' }}</td>
-                                    <td>{{ currency_format($party->purchases->sum('totalAmount'), currency: business_currency()) }}</td>
-                                    <td class="text-danger fw-bold">{{ currency_format($party->purchases->sum('dueAmount'), currency: business_currency()) }}</td>
+                                    <td>{!! currency_format($party->purchases->sum('totalAmount'), currency: business_currency()) !!}</td>
+                                    <td class="text-danger fw-bold">{!! currency_format($party->purchases->sum('dueAmount'), currency: business_currency()) !!}</td>
                                     <td class="d-print-none">
                                         <div class="dropdown table-action">
                                             <button type="button" data-bs-toggle="dropdown">

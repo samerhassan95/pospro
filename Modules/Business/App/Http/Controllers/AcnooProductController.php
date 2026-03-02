@@ -102,7 +102,12 @@ class AcnooProductController extends Controller
             ->first()
             ->value['product_profit_option'] ?? '';
 
-        return view('business::products.create', compact('categories', 'brands', 'units', 'code', 'vats', 'product_models', 'warehouses', 'racks', 'shelves', 'variations', 'profit_option'));
+        // Get module settings for product type visibility
+        $modules = get_modules();
+        $showSingle = is_module_enabled($modules, 'show_product_single') ?? true;
+        $showVariant = is_module_enabled($modules, 'show_product_variant') ?? true;
+
+        return view('business::products.create', compact('categories', 'brands', 'units', 'code', 'vats', 'product_models', 'warehouses', 'racks', 'shelves', 'variations', 'profit_option', 'showSingle', 'showVariant'));
     }
 
     public function store(Request $request)

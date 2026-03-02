@@ -49,7 +49,7 @@
                                         <td>{{ $customer->name }}</td>
                                         <td>{{ $customer->phone }}</td>
                                         <td>{{ $customer->email }}</td>
-                                        <td class="fw-bold text-success">{{ currency_format($customer->sales_sum_total_amount ?? 0, currency: business_currency()) }}</td>
+                                        <td class="fw-bold text-success">{!! currency_format($customer->sales_sum_total_amount ?? 0, currency: business_currency()) !!}</td>
                                     </tr>
                                 @empty
                                     <tr>

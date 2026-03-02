@@ -80,7 +80,7 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-primary fs-6">
-                                                {{ currency_format($supplier->purchases_sum_total_amount ?? 0) }}
+                                                {!! currency_format($supplier->purchases_sum_total_amount ?? 0) !!}
                                             </span>
                                         </td>
                                         <td>
@@ -92,7 +92,7 @@
                                                     ? ($supplier->purchases_sum_total_amount ?? 0) / ($supplier->purchases_count ?? 1) 
                                                     : 0;
                                             @endphp
-                                            <span class="text-info fw-bold">{{ currency_format($avgOrderValue) }}</span>
+                                            <span class="text-info fw-bold">{!! currency_format($avgOrderValue) !!}</span>
                                         </td>
                                         <td>
                                             <div class="dropdown">

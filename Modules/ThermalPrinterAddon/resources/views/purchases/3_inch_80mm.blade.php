@@ -56,9 +56,9 @@
                             <td>{{ $detail->product->productName ?? '' }}</td>
                             <td class="text-center">{{ $detail->quantities ?? '' }}</td>
                             <td class="text-center">
-                                {{ currency_format($detail->productPurchasePrice ?? 0, currency: business_currency()) }}
+                                {!! currency_format($detail->productPurchasePrice ?? 0, currency: business_currency()) !!}
                             </td>
-                            <td class="text-end">{{ currency_format($productTotal, currency: business_currency()) }}</td>
+                            <td class="text-end">{!! currency_format($productTotal, currency: business_currency()) !!}</td>
                         </tr>
                     @endforeach
                     <tr>
@@ -73,37 +73,37 @@
                             <div class="calculate-amount">
                                 <div class="d-flex justify-content-between">
                                     <p> {{__('Sub-Total')}} :</p>
-                                    <p>{{ currency_format($subtotal, currency: business_currency()) }}</p>
+                                    <p>{!! currency_format($subtotal, currency: business_currency()) !!}</p>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <p> {{__('Vat')}} : </p>
-                                    <p>{{ currency_format($purchase->vat_amount, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->vat_amount, currency: business_currency()) !!}
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <p> {{__('Discount')}} :</p>
-                                    <p>{{ currency_format($purchase->discountAmount, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->discountAmount, currency: business_currency()) !!}
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between ">
                                     <p> {{__('Shipping Charge')}} :</p>
-                                    <p>{{ currency_format($purchase->shipping_charge, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->shipping_charge, currency: business_currency()) !!}
                                     </p>
                                 </div>
 
                                 <div class="d-flex justify-content-between total-amount">
                                     <p> {{__('Net Payable')}} :</p>
-                                    <p>{{ currency_format($subtotal + $purchase->vat_amount - ($purchase->discountAmount + $total_discount) + $purchase->shipping_charge, currency: business_currency()) }}
+                                    <p>{!! currency_format($subtotal + $purchase->vat_amount - ($purchase->discountAmount + $total_discount) + $purchase->shipping_charge, currency: business_currency()) !!}
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between paid">
                                     <p> {{__('Paid')}} :</p>
-                                    <p>{{ currency_format($purchase->paidAmount, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->paidAmount, currency: business_currency()) !!}
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <p> {{__('Due')}} : </p>
-                                    <p>{{ currency_format($purchase->dueAmount, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->dueAmount, currency: business_currency()) !!}
                                     </p>
                                 </div>
                             </div>
@@ -133,7 +133,7 @@
                         <td class="text-start">{{ formatted_date($return->return_date) }}</td>
                         <td>{{ $detail->purchaseDetail->product->productName ?? '' }}</td>
                         <td class="text-center">{{ $detail->return_qty ?? 0 }}</td>
-                        <td class="text-end"> {{ currency_format($detail->return_amount ?? 0, currency: business_currency()) }}</td>
+                        <td class="text-end"> {!! currency_format($detail->return_amount ?? 0, currency: business_currency()) !!}</td>
                     </tr>
                     @endforeach
                     @endforeach
@@ -148,21 +148,21 @@
                             <div class="calculate-amount">
                                 <div class="d-flex justify-content-between">
                                     <p>{{ __('Total Return') }}:</p>
-                                    <p>{{ currency_format($total_return_amount, currency: business_currency()) }}</p>
+                                    <p>{!! currency_format($total_return_amount, currency: business_currency()) !!}</p>
                                 </div>
                                 <div class="in-border"></div>
 
                                 <div class="d-flex justify-content-between total-amount">
                                     <p>{{ __('Payable') }}:</p>
-                                    <p>{{ currency_format($purchase->totalAmount, currency: business_currency()) }}</p>
+                                    <p>{!! currency_format($purchase->totalAmount, currency: business_currency()) !!}</p>
                                 </div>
                                 <div class="d-flex justify-content-between paid">
                                     <p>{{ __('Paid') }}:</p>
-                                    <p>{{ currency_format($purchase->paidAmount, currency: business_currency()) }}</p>
+                                    <p>{!! currency_format($purchase->paidAmount, currency: business_currency()) !!}</p>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <p>{{ __('Due') }}:</p>
-                                    <p>{{ currency_format($purchase->dueAmount, currency: business_currency()) }}</p>
+                                    <p>{!! currency_format($purchase->dueAmount, currency: business_currency()) !!}</p>
                                 </div>
                             </div>
                         </td>
@@ -195,9 +195,9 @@
                             <td>{{ $detail->product->productName ?? '' }}</td>
                             <td class="text-center">{{ $detail->quantities ?? '' }}</td>
                             <td class="text-center">
-                                {{ currency_format($detail->productPurchasePrice ?? 0, currency: business_currency()) }}
+                                {!! currency_format($detail->productPurchasePrice ?? 0, currency: business_currency()) !!}
                             </td>
-                            <td class="text-end">{{ currency_format($productTotal, currency: business_currency()) }}</td>
+                            <td class="text-end">{!! currency_format($productTotal, currency: business_currency()) !!}</td>
                         </tr>
                     @endforeach
                     <tr>
@@ -212,37 +212,37 @@
                             <div class="calculate-amount">
                                 <div class="d-flex justify-content-between">
                                     <p> {{__('Sub-Total')}} :</p>
-                                    <p>{{ currency_format($subtotal, currency: business_currency()) }}</p>
+                                    <p>{!! currency_format($subtotal, currency: business_currency()) !!}</p>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <p> {{__('Vat')}} : </p>
-                                    <p>{{ currency_format($purchase->vat_amount, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->vat_amount, currency: business_currency()) !!}
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <p> {{__('Discount')}} :</p>
-                                    <p>{{ currency_format($purchase->discountAmount, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->discountAmount, currency: business_currency()) !!}
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between ">
                                     <p> {{__('Shipping Charge')}} :</p>
-                                    <p>{{ currency_format($purchase->shipping_charge, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->shipping_charge, currency: business_currency()) !!}
                                     </p>
                                 </div>
 
                                 <div class="d-flex justify-content-between total-amount">
                                     <p> {{__('Net Payable')}} :</p>
-                                    <p>{{ currency_format($subtotal + $purchase->vat_amount - ($purchase->discountAmount + $total_discount) + $purchase->shipping_charge, currency: business_currency()) }}
+                                    <p>{!! currency_format($subtotal + $purchase->vat_amount - ($purchase->discountAmount + $total_discount) + $purchase->shipping_charge, currency: business_currency()) !!}
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between paid">
                                     <p> {{__('Paid')}} :</p>
-                                    <p>{{ currency_format($purchase->paidAmount, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->paidAmount, currency: business_currency()) !!}
                                     </p>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <p> {{__('Due')}} : </p>
-                                    <p>{{ currency_format($purchase->dueAmount, currency: business_currency()) }}
+                                    <p>{!! currency_format($purchase->dueAmount, currency: business_currency()) !!}
                                     </p>
                                 </div>
                             </div>

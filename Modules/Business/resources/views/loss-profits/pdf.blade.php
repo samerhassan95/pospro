@@ -26,11 +26,11 @@
                     <td class="text-start">{{ $loop->index + 1 }}</td>
                     <td class="text-start">{{ $loss_profit->invoiceNumber }}</td>
                     <td class="text-start">{{ $loss_profit->party?->name }}</td>
-                    <td class="text-start">{{ currency_format($loss_profit->totalAmount, 'icon', 2, business_currency()) }}</td>
+                    <td class="text-start">{!! currency_format($loss_profit->totalAmount, 'icon', 2, business_currency()) !!}</td>
                     <td>
                         <span
                             class="{{ $loss_profit->lossProfit < 0 ? 'bg-danger' : 'bg-success' }} text-white px-2 py-1 rounded d-inline-block">
-                            {{ currency_format($loss_profit->lossProfit, 'icon', 2, business_currency()) }}
+                            {!! currency_format($loss_profit->lossProfit, 'icon', 2, business_currency()) !!}
                         </span>
                     </td>
                     <td class="text-start">{{ formatted_date($loss_profit->created_at) }}</td>

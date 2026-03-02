@@ -108,10 +108,10 @@
                                 </td>
                                 <td class="text-center">{{ $detail->quantities ?? '' }}</td>
                                 <td class="text-end">
-                                    {{ currency_format($detail->productPurchasePrice ?? 0, currency: business_currency()) }}
+                                    {!! currency_format($detail->productPurchasePrice ?? 0, currency: business_currency()) !!}
                                 </td>
                                 <td class="text-end">
-                                    {{ currency_format($productTotal, currency: business_currency()) }}</td>
+                                    {!! currency_format($productTotal, currency: business_currency()) !!}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -136,20 +136,20 @@
                             <tr class="in-table-row-bottom">
                                 <td class="text-end">{{ __('Subtotal') }}</td>
                                 <td class="text-end">:</td>
-                                <td class="text-end">{{ currency_format($subtotal, currency: business_currency()) }}
+                                <td class="text-end">{!! currency_format($subtotal, currency: business_currency()) !!}
                                 </td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end">{{ __('Vat') }}</td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($purchase->vat_amount, currency: business_currency()) }}</td>
+                                    {!! currency_format($purchase->vat_amount, currency: business_currency()) !!}</td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end">{{ __('Shipping Charge') }}</td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($purchase->shipping_charge, currency: business_currency()) }}
+                                    {!! currency_format($purchase->shipping_charge, currency: business_currency()) !!}
                                 </td>
                             </tr>
                             <tr class="in-table-row-bottom">
@@ -160,14 +160,14 @@
                                 </td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($purchase->discountAmount + $total_discount, currency: business_currency()) }}
+                                    {!! currency_format($purchase->discountAmount + $total_discount, currency: business_currency()) !!}
                                 </td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end total-amound">{{ __('Total Amount') }}</td>
                                 <td class="text-end total-amound">:</td>
                                 <td class="text-end total-amound">
-                                    {{ currency_format($subtotal + $purchase->vat_amount - ($purchase->discountAmount + $total_discount) + $purchase->shipping_charge, currency: business_currency()) }}
+                                    {!! currency_format($subtotal + $purchase->vat_amount - ($purchase->discountAmount + $total_discount) + $purchase->shipping_charge, currency: business_currency()) !!}
                                 </td>
                             </tr>
                         </tbody>
@@ -203,7 +203,7 @@
                                     </td>
                                     <td class="text-center">{{ $detail->return_qty ?? 0 }}</td>
                                     <td class="text-end">
-                                        {{ currency_format($detail->return_amount ?? 0, currency: business_currency()) }}
+                                        {!! currency_format($detail->return_amount ?? 0, currency: business_currency()) !!}
                                     </td>
                                 </tr>
                             @endforeach
@@ -237,25 +237,25 @@
                                 <td class="text-end">{{ __('Total Return Amount') }}</td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($total_return_amount, currency: business_currency()) }}</td>
+                                    {!! currency_format($total_return_amount, currency: business_currency()) !!}</td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end total-amound">{{ __('Payable Amount') }}</td>
                                 <td class="text-end total-amound">:</td>
                                 <td class="text-end total-amound">
-                                    {{ currency_format($purchase->totalAmount, currency: business_currency()) }}</td>
+                                    {!! currency_format($purchase->totalAmount, currency: business_currency()) !!}</td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end">{{ __('Paid Amount') }}</td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($purchase->paidAmount, currency: business_currency()) }}</td>
+                                    {!! currency_format($purchase->paidAmount, currency: business_currency()) !!}</td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end">{{ __('Due') }}</td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($purchase->dueAmount, currency: business_currency()) }}</td>
+                                    {!! currency_format($purchase->dueAmount, currency: business_currency()) !!}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -288,10 +288,10 @@
                                 </td>
                                 <td class="text-center">{{ $detail->quantities ?? '' }}</td>
                                 <td class="text-end">
-                                    {{ currency_format($detail->productPurchasePrice ?? 0, currency: business_currency()) }}
+                                    {!! currency_format($detail->productPurchasePrice ?? 0, currency: business_currency()) !!}
                                 </td>
                                 <td class="text-end">
-                                    {{ currency_format($productTotal, currency: business_currency()) }}</td>
+                                    {!! currency_format($productTotal, currency: business_currency()) !!}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -322,21 +322,21 @@
                             <tr class="in-table-row-bottom">
                                 <td class="text-end">{{ __('Subtotal') }}</td>
                                 <td class="text-end">:</td>
-                                <td class="text-end">{{ currency_format($subtotal, currency: business_currency()) }}
+                                <td class="text-end">{!! currency_format($subtotal, currency: business_currency()) !!}
                                 </td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end">{{ __('Vat') }}</td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($purchase->vat_amount, currency: business_currency()) }}
+                                    {!! currency_format($purchase->vat_amount, currency: business_currency()) !!}
                                 </td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end">{{ __('Shipping Charge') }}</td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($purchase->shipping_charge, currency: business_currency()) }}
+                                    {!! currency_format($purchase->shipping_charge, currency: business_currency()) !!}
                                 </td>
                             </tr>
                             <tr class="in-table-row-bottom">
@@ -347,20 +347,20 @@
                                 </td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($purchase->discountAmount, currency: business_currency()) }}
+                                    {!! currency_format($purchase->discountAmount, currency: business_currency()) !!}
                                 </td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end total-amound">{{ __('Total Amount') }}</td>
                                 <td class="text-end total-amound">:</td>
                                 <td class="text-end total-amound">
-                                    {{ currency_format($purchase->totalAmount, currency: business_currency()) }}</td>
+                                    {!! currency_format($purchase->totalAmount, currency: business_currency()) !!}</td>
                             </tr>
                             <tr class="in-table-row-bottom">
                                 <td class="text-end">{{ __('Receive Amount') }}</td>
                                 <td class="text-end">:</td>
                                 <td class="text-end">
-                                    {{ currency_format($purchase->paidAmount + $purchase->change_amount, currency: business_currency()) }}
+                                    {!! currency_format($purchase->paidAmount + $purchase->change_amount, currency: business_currency()) !!}
                                 </td>
                             </tr>
                             @if($purchase->change_amount > 0)
@@ -368,7 +368,7 @@
                                     <td class="text-end">{{ __('Change Amount') }}</td>
                                     <td class="text-end">:</td>
                                     <td class="text-end">
-                                        {{ currency_format($purchase->change_amount, currency: business_currency()) }}
+                                        {!! currency_format($purchase->change_amount, currency: business_currency()) !!}
                                     </td>
                                 </tr>
                             @else
@@ -376,7 +376,7 @@
                                     <td class="text-end">{{ __('Due') }}</td>
                                     <td class="text-end">:</td>
                                     <td class="text-end">
-                                        {{ currency_format($purchase->dueAmount, currency: business_currency()) }}
+                                        {!! currency_format($purchase->dueAmount, currency: business_currency()) !!}
                                     </td>
                                 </tr>
                             @endif

@@ -58,15 +58,15 @@
                                     <table class="table table-borderless mb-0">
                                         <tr>
                                             <th width="50%">{{ __('Total Purchases') }}:</th>
-                                            <td class="text-primary fw-bold">{{ currency_format($purchases->sum('totalAmount')) }}</td>
+                                            <td class="text-primary fw-bold">{!! currency_format($purchases->sum('totalAmount')) !!}</td>
                                         </tr>
                                         <tr>
                                             <th>{{ __('Total Paid') }}:</th>
-                                            <td class="text-success fw-bold">{{ currency_format($purchases->sum('paidAmount')) }}</td>
+                                            <td class="text-success fw-bold">{!! currency_format($purchases->sum('paidAmount')) !!}</td>
                                         </tr>
                                         <tr>
                                             <th>{{ __('Total Due') }}:</th>
-                                            <td class="text-danger fw-bold">{{ currency_format($purchases->sum('dueAmount')) }}</td>
+                                            <td class="text-danger fw-bold">{!! currency_format($purchases->sum('dueAmount')) !!}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -94,9 +94,9 @@
                                         <td>
                                             <span class="fw-bold text-primary">{{ $purchase->invoiceNumber }}</span>
                                         </td>
-                                        <td>{{ currency_format($purchase->totalAmount) }}</td>
-                                        <td class="text-success fw-bold">{{ currency_format($purchase->paidAmount) }}</td>
-                                        <td class="text-danger fw-bold">{{ currency_format($purchase->dueAmount) }}</td>
+                                        <td>{!! currency_format($purchase->totalAmount) !!}</td>
+                                        <td class="text-success fw-bold">{!! currency_format($purchase->paidAmount) !!}</td>
+                                        <td class="text-danger fw-bold">{!! currency_format($purchase->dueAmount) !!}</td>
                                         <td>
                                             @if($purchase->dueAmount == 0)
                                                 <span class="badge bg-success">{{ __('Paid') }}</span>

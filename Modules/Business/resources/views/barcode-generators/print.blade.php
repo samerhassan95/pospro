@@ -29,7 +29,7 @@
                     @endif
                     @if ($barcode['show_product_price'])
                         <p style="font-size: {{ $barcode['product_price_size'] }}px;" class="product-price">
-                            Price: <span>{{ currency_format($barcode['product_price'], currency:business_currency()) }}</span>
+                            Price: <span>{!! currency_format($barcode['product_price'], currency:business_currency()) !!}</span>
                         </p>
                     @endif
                     @if ($barcode['show_pack_date'] && ($barcode['packing_date'] ?? false))

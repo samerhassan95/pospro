@@ -53,15 +53,15 @@
                                     <table class="table table-borderless mb-0">
                                         <tr>
                                             <th width="40%">{{ __('Total Sales') }}:</th>
-                                            <td class="text-primary fw-bold">{{ currency_format($sales->sum('totalAmount'), currency: business_currency()) }}</td>
+                                            <td class="text-primary fw-bold">{!! currency_format($sales->sum('totalAmount'), currency: business_currency()) !!}</td>
                                         </tr>
                                         <tr>
                                             <th>{{ __('Total Paid') }}:</th>
-                                            <td class="text-success fw-bold">{{ currency_format($sales->sum('paidAmount'), currency: business_currency()) }}</td>
+                                            <td class="text-success fw-bold">{!! currency_format($sales->sum('paidAmount'), currency: business_currency()) !!}</td>
                                         </tr>
                                         <tr>
                                             <th>{{ __('Total Due') }}:</th>
-                                            <td class="text-danger fw-bold">{{ currency_format($sales->sum('dueAmount'), currency: business_currency()) }}</td>
+                                            <td class="text-danger fw-bold">{!! currency_format($sales->sum('dueAmount'), currency: business_currency()) !!}</td>
                                         </tr>
                                         <tr>
                                             <th>{{ __('Total Transactions') }}:</th>
@@ -90,9 +90,9 @@
                                     <tr>
                                         <td>{{ $sale->created_at->format('Y-m-d') }}</td>
                                         <td>{{ $sale->invoiceNumber }}</td>
-                                        <td>{{ currency_format($sale->totalAmount, currency: business_currency()) }}</td>
-                                        <td class="text-success">{{ currency_format($sale->paidAmount, currency: business_currency()) }}</td>
-                                        <td class="text-danger">{{ currency_format($sale->dueAmount, currency: business_currency()) }}</td>
+                                        <td>{!! currency_format($sale->totalAmount, currency: business_currency()) !!}</td>
+                                        <td class="text-success">{!! currency_format($sale->paidAmount, currency: business_currency()) !!}</td>
+                                        <td class="text-danger">{!! currency_format($sale->dueAmount, currency: business_currency()) !!}</td>
                                         <td>
                                             @if($sale->dueAmount == 0)
                                                 <span class="badge bg-success">{{ __('Paid') }}</span>

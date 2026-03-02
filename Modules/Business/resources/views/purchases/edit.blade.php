@@ -73,7 +73,7 @@
                                         @foreach ($suppliers as $supplier)
                                             <option value="{{ $supplier->id }}" @selected($purchase->party_id == $supplier->id)>
                                                 {{ $supplier->name }} ({{ __('Due: ') }}
-                                                {{ currency_format($supplier->due, currency: business_currency()) }})
+                                                {!! currency_format($supplier->due, currency: business_currency()) !!})
                                             </option>
                                         @endforeach
                                     </select>
@@ -127,18 +127,18 @@
                                         <h6 class="payment-title">{{ __('Receive Amount') }}</h6>
                                         <input name="receive_amount" type="number" step="any" id="receive_amount"
                                             value="{{ $purchase->paidAmount + $purchase->change_amount }}" min="0" class="form-control"
-                                            placeholder="{{ currency_format(0, currency: business_currency()) }}">
+                                            placeholder="{!! currency_format(0, currency: business_currency()) !!}">
                                     </div>
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="payment-title">{{ __('Change Amount') }}</h6>
                                         <input type="number" step="any" id="change_amount" value="{{ $purchase->change_amount }}" class="form-control"
-                                            placeholder="{{ currency_format(0, currency: business_currency()) }}"
+                                            placeholder="{!! currency_format(0, currency: business_currency()) !!}"
                                             readonly>
                                     </div>
                                     <div class="row amount-container  align-items-center mb-2">
                                         <h6 class="payment-title">{{ __('Due Amount') }}</h6>
                                         <input type="number" step="any" id="due_amount" class="form-control"
-                                            placeholder="{{ currency_format(0, currency: business_currency()) }}"
+                                            placeholder="{!! currency_format(0, currency: business_currency()) !!}"
                                             readonly>
                                     </div>
                                     <div class="row amount-container  align-items-center mb-2">
@@ -162,7 +162,7 @@
                                 <div class="payment-container mb-3 amount-info-container">
                                     <div class="mb-2 d-flex flex-wrap align-items-center justify-content-between">
                                         <h6>{{ __('Sub Total') }}</h6>
-                                        <h6 class="fw-bold" id="sub_total">{{ currency_format(0) }}</h6>
+                                        <h6 class="fw-bold" id="sub_total">{!! currency_format(0) !!}</h6>
                                     </div>
                                     <div class="row save-amount-container  align-items-center mb-2">
                                         <h6 class="payment-title col-6">{{ __('Vat') }}</h6>
@@ -204,7 +204,7 @@
                                     <div class=" d-flex flex-wrap align-items-center justify-content-between fw-bold">
                                         <div class="fw-bold">{{ __('Total Amount') }}</div>
                                         <h6 class='fw-bold' id="total_amount">
-                                            {{ currency_format($purchase->totalAmount, currency: business_currency()) }}
+                                            {!! currency_format($purchase->totalAmount, currency: business_currency()) !!}
                                         </h6>
                                     </div>
 

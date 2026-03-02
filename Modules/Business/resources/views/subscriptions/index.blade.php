@@ -37,7 +37,7 @@
                                     <div class="discount-badge-content">
                                         <div class="discount-badge">
                                             <img src="{{ asset('assets/images/icons/discount.svg') }}" >
-                                            <span class="discount-text"><del>{{ currency_format($plan->subscriptionPrice) }}</del></span>
+                                            <span class="discount-text"><del>{!! currency_format($plan->subscriptionPrice) !!}</del></span>
                                             <img class="discount-arrow" src="{{ asset('assets/images/icons/discount-arrow.svg') }}" >
                                         </div>
                                     </div>
@@ -45,7 +45,7 @@
                                     <div class="d-flex align-items-center justify-content-center flex-column gap-3">
                                         <h3 class="pb-2">{{ $plan->subscriptionName }}</h3>
                                         <h6 class="pb-2">{{ $plan->duration }} {{ __('Days') }}</h6>
-                                        <h1 class="pb-2">{{ currency_format(convert_money($plan->offerPrice ?? $plan->subscriptionPrice, business_currency()), currency : business_currency()) }}</h1>
+                                        <h1 class="pb-2">{!! currency_format(convert_money($plan->offerPrice ?? $plan->subscriptionPrice, business_currency()), currency : business_currency()) !!}</h1>
 
                                         @if ($isFreePlan && $isPlanActivated || $notPurchaseAble)
                                             <button class="btn w-100 plan-buy-btn" disabled>

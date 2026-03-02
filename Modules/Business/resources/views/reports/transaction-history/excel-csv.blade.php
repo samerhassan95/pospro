@@ -16,8 +16,8 @@
             <td>{{ $loop->iteration }}</td>
             <td>{{ $transcation->invoiceNumber }}</td>
             <td>{{ $transcation->party?->name }}</td>
-            <td>{{ currency_format($transcation->totalDue, currency: business_currency()) }}</td>
-            <td>{{ currency_format($transcation->payDueAmount, currency: business_currency()) }}</td>
+            <td>{!! currency_format($transcation->totalDue, currency: business_currency()) !!}</td>
+            <td>{!! currency_format($transcation->payDueAmount, currency: business_currency()) !!}</td>
             <td>{{ $transcation->payment_type_id != null ? $transcation->payment_type->name ?? '' : $transcation->paymentType }}</td>
             <td>{{ formatted_date($transcation->paymentDate) }}</td>
         </tr>

@@ -631,7 +631,7 @@
 }
 
 .incre-decre:hover {
-    background-color: #fef0f1 !important;
+    background-color: var(--clr-secondary) !important;
     border-color: var(--clr-primary) !important;
     color: var(--clr-primary) !important;
 }
@@ -1342,7 +1342,7 @@
 }
 
 .inventory-remove-btn:hover {
-    background: #fef0f1;
+    background: var(--clr-secondary);
     color: var(--clr-primary);
 }
 

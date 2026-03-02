@@ -60,7 +60,7 @@
                                         <td class='text-start'>{{ $detail->product->productName ?? '' }}</td>
                                         <td class='text-center'>{{ $detail->product->productCode ?? '' }}</td>
                                         <td class='text-center'>{{ $detail->quantities ?? 0 }}</td>
-                                        <td class='text-center price'>{{ currency_format($discounted_price_per_unit, currency: business_currency()) }}</td>
+                                        <td class='text-center price'>{!! currency_format($discounted_price_per_unit, currency: business_currency()) !!}</td>
                                         <td class='text-center large-td'>
                                             <div class="d-flex align-items-center gap-3">
                                                 <button class="incre-decre sub-btn">
@@ -72,7 +72,7 @@
                                                 </button>
                                             </div>
                                         </td>
-                                        <td class="subtotal text-end">{{ currency_format(0) }}</td>
+                                        <td class="subtotal text-end">{!! currency_format(0) !!}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

@@ -750,11 +750,11 @@
                         <td>{{ $index + 1 }}</td>
                         <td class="text-right">{{ $detail->product->productName ?? 'N/A' }}</td>
                         <td>{{ $detail->quantities }}</td>
-                        <td>{{ currency_format($detail->price, currency: business_currency()) }}</td>
-                        <td>{{ currency_format($itemSubtotal, currency: business_currency()) }}</td>
+                        <td>{!! currency_format($detail->price, currency: business_currency()) !!}</td>
+                        <td>{!! currency_format($itemSubtotal, currency: business_currency()) !!}</td>
                         <td>{{ $vatRate }}%</td>
-                        <td>{{ currency_format($itemVat, currency: business_currency()) }}</td>
-                        <td>{{ currency_format($itemTotal, currency: business_currency()) }}</td>
+                        <td>{!! currency_format($itemVat, currency: business_currency()) !!}</td>
+                        <td>{!! currency_format($itemTotal, currency: business_currency()) !!}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -792,36 +792,36 @@
                 
                 <div class="summary-row">
                     <span class="summary-label">الإجمالي الفرعي / Subtotal:</span>
-                    <span class="summary-value">{{ currency_format($itemsSubtotal, currency: business_currency()) }}</span>
+                    <span class="summary-value">{!! currency_format($itemsSubtotal, currency: business_currency()) !!}</span>
                 </div>
                 
                 @if($discountAmount > 0)
                 <div class="summary-row">
                     <span class="summary-label">الخصم / Discount:</span>
-                    <span class="summary-value">-{{ currency_format($discountAmount, currency: business_currency()) }}</span>
+                    <span class="summary-value">-{!! currency_format($discountAmount, currency: business_currency()) !!}</span>
                 </div>
                 @endif
 
                 @if($shippingCharge > 0)
                 <div class="summary-row">
                     <span class="summary-label">قيمة الشحن / Shipping:</span>
-                    <span class="summary-value">{{ currency_format($shippingCharge, currency: business_currency()) }}</span>
+                    <span class="summary-value">{!! currency_format($shippingCharge, currency: business_currency()) !!}</span>
                 </div>
                 @endif
                 
                 <div class="summary-row">
                     <span class="summary-label">الإجمالي الخاضع للضريبة / Taxable Amount:</span>
-                    <span class="summary-value">{{ currency_format($taxableAmount, currency: business_currency()) }}</span>
+                    <span class="summary-value">{!! currency_format($taxableAmount, currency: business_currency()) !!}</span>
                 </div>
                 
                 <div class="summary-row">
                     <span class="summary-label">ضريبة القيمة المضافة ({{ $vatPercent }}%) / VAT ({{ $vatPercent }}%):</span>
-                    <span class="summary-value">{{ currency_format($vatAmount, currency: business_currency()) }}</span>
+                    <span class="summary-value">{!! currency_format($vatAmount, currency: business_currency()) !!}</span>
                 </div>
                 
                 <div class="summary-row summary-total">
                     <span class="summary-label">الإجمالي شامل الضريبة / Total Including VAT:</span>
-                    <span class="summary-value">{{ currency_format($finalTotal, currency: business_currency()) }}</span>
+                    <span class="summary-value">{!! currency_format($finalTotal, currency: business_currency()) !!}</span>
                 </div>
             </div>
         </div>

@@ -20,7 +20,7 @@
                     <td>{{ $party->phone }}</td>
                     <td>{{ $party->type }}</td>
                     <td class="text-danger text-end">
-                        {{ currency_format( $party->due, currency: business_currency()) }}
+                        {!! currency_format( $party->due, currency: business_currency()) !!}
                     </td>
                     <td class="d-print-none">
                         <div class="dropdown table-action">

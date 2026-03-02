@@ -104,7 +104,7 @@
                     <strong>{{ __('Amount:') }}</strong>
                 </div>
                 <div class="col-6 amount-display">
-                    {{ currency_format($sale->totalAmount, currency: 'SAR') }}
+                    {!! currency_format($sale->totalAmount, currency: 'SAR') !!}
                 </div>
             </div>
             <div class="row text-start">

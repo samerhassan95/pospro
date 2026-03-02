@@ -46,9 +46,9 @@
                     <td>{{ $product->category->categoryName ?? '' }}</td>
                     <td>{{ $product->unit->unitName ?? '' }}</td>
                     @usercan('expired-product-reports.price')
-                    <td>{{ currency_format($latestPurchasePrice, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($latestPurchasePrice, currency: business_currency()) !!}</td>
                     @endusercan
-                    <td>{{ currency_format($latestSalePrice, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($latestSalePrice, currency: business_currency()) !!}</td>
                     <td class="{{ $product->stocks_sum_product_stock <= $product->alert_qty ? 'text-danger' : 'text-success' }}">{{ $product->stocks_sum_product_stock }}</td>
                     <td class="text-danger">
                         @if ($product->stocks->isNotEmpty() && $product->stocks->first()->expire_date)
@@ -72,10 +72,10 @@
                                         data-brand="{{ $product->brand->brandName ?? '' }}"
                                         data-category="{{ $product->category->categoryName ?? '' }}"
                                         data-unit="{{ $product->unit->unitName ?? '' }}"
-                                        data-purchase-price="{{ currency_format($latestPurchasePrice, currency: business_currency()) }}"
-                                        data-sale-price="{{ currency_format($latestSalePrice, currency: business_currency()) }}"
-                                        data-wholesale-price="{{ currency_format($latestWholeSalePrice, currency: business_currency()) }}"
-                                        data-dealer-price="{{ currency_format($latestDealerPrice, currency: business_currency()) }}"
+                                        data-purchase-price="{!! currency_format($latestPurchasePrice, currency: business_currency()) !!}"
+                                        data-sale-price="{!! currency_format($latestSalePrice, currency: business_currency()) !!}"
+                                        data-wholesale-price="{!! currency_format($latestWholeSalePrice, currency: business_currency()) !!}"
+                                        data-dealer-price="{!! currency_format($latestDealerPrice, currency: business_currency()) !!}"
                                         data-stock="{{ $product->stocks_sum_product_stock }}"
                                         data-product-expire-date="{{ formatted_date($product->stocks->first()->expire_date) }}"
                                         data-manufacturer="{{ $product->productManufacturer }}">

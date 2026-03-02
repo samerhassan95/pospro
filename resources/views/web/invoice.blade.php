@@ -128,8 +128,8 @@
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $detail->quantities }}</td>
-                                    <td class="text-end">{{ currency_format($detail->price, currency: business_currency($business->id)) }}</td>
-                                    <td class="text-end pe-0">{{ currency_format($detail->price * $detail->quantities, currency: business_currency($business->id)) }}</td>
+                                    <td class="text-end">{!! currency_format($detail->price, currency: business_currency($business->id)) !!}</td>
+                                    <td class="text-end pe-0">{!! currency_format($detail->price * $detail->quantities, currency: business_currency($business->id)) !!}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -141,34 +141,34 @@
                         <div class="total-section shadow-sm">
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">{{ __('Subtotal') }}</span>
-                                <span class="fw-bold">{{ currency_format($sale->totalAmount - $sale->vat_amount + $sale->discountAmount - $sale->shipping_charge, currency: business_currency($business->id)) }}</span>
+                                <span class="fw-bold">{!! currency_format($sale->totalAmount - $sale->vat_amount + $sale->discountAmount - $sale->shipping_charge, currency: business_currency($business->id)) !!}</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">{{ __('VAT') }}</span>
-                                <span class="fw-bold">{{ currency_format($sale->vat_amount, currency: business_currency($business->id)) }}</span>
+                                <span class="fw-bold">{!! currency_format($sale->vat_amount, currency: business_currency($business->id)) !!}</span>
                             </div>
                             @if($sale->shipping_charge > 0)
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted">{{ __('Shipping') }}</span>
-                                    <span class="fw-bold">{{ currency_format($sale->shipping_charge, currency: business_currency($business->id)) }}</span>
+                                    <span class="fw-bold">{!! currency_format($sale->shipping_charge, currency: business_currency($business->id)) !!}</span>
                                 </div>
                             @endif
                             @if($sale->discountAmount > 0)
                                 <div class="d-flex justify-content-between mb-2 text-danger">
                                     <span>{{ __('Discount') }}</span>
-                                    <span class="fw-bold">-{{ currency_format($sale->discountAmount, currency: business_currency($business->id)) }}</span>
+                                    <span class="fw-bold">-{!! currency_format($sale->discountAmount, currency: business_currency($business->id)) !!}</span>
                                 </div>
                             @endif
                             <hr>
                             <div class="d-flex justify-content-between">
                                 <span class="h5 fw-bold mb-0">{{ __('Total Amount') }}</span>
-                                <span class="h5 fw-bold mb-0 text-primary">{{ currency_format($sale->totalAmount, currency: business_currency($business->id)) }}</span>
+                                <span class="h5 fw-bold mb-0 text-primary">{!! currency_format($sale->totalAmount, currency: business_currency($business->id)) !!}</span>
                             </div>
                             
                             @if(!$sale->isPaid && $sale->dueAmount > 0)
                                 <div class="d-flex justify-content-between mt-3 text-danger">
                                     <span class="fw-bold">{{ __('Amount Due') }}</span>
-                                    <span class="fw-bold h5 mb-0">{{ currency_format($sale->dueAmount, currency: business_currency($business->id)) }}</span>
+                                    <span class="fw-bold h5 mb-0">{!! currency_format($sale->dueAmount, currency: business_currency($business->id)) !!}</span>
                                 </div>
                             @endif
                         </div>

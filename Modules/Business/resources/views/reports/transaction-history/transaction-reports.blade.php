@@ -12,13 +12,13 @@
                 <div class="col-lg-2 col-md-12 ">
                     <div class="loss-card p-3 m-2 text-white">
                         <p class="stat-title">{{ __('Due') }}</p>
-                        <p class="stat-value" id="total_due">{{ currency_format($total_due, currency: business_currency()) }}</p>
+                        <p class="stat-value" id="total_due">{!! currency_format($total_due, currency: business_currency()) !!}</p>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6 ">
                     <div class="profit-card p-3 m-2 text-white">
                         <p class="stat-title">{{ __('Paid') }}</p>
-                        <p class="stat-value" id="total_paid">{{ currency_format($total_paid, currency: business_currency()) }}</p>
+                        <p class="stat-value" id="total_paid">{!! currency_format($total_paid, currency: business_currency()) !!}</p>
                     </div>
                 </div>
             </div>

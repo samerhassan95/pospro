@@ -34,6 +34,34 @@
     --ff: "Cairo", sans-serif;
 }
 
+/* Prevent SVG flash on page load - ensure proper rendering */
+svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Currency SVG icons - ensure proper inline display */
+svg[width="11"][height="12"] {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    width: 11px !important;
+    height: 12px !important;
+}
+
+/* Sidebar icons - prevent flash of unstyled content */
+.sidebar-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-icon img,
+.sidebar-icon svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
 /* SVG color control - applies primary color to SVGs using currentColor */
 /* img[src*=".svg"],
 svg {
@@ -2553,7 +2581,7 @@ gap: 10px;
 }
 
 .table-action .dropdown-menu a:hover {
-    background: #fef0f1;
+    background: var(--clr-secondary);
     color: var(--clr-primary);
 }
 
@@ -2874,6 +2902,7 @@ gap: 10px;
 .gpt-dashboard-chart .content {
     max-height: 250px;
     min-height: 250px;
+    position: relative;
 }
 
 .gpt-dashboard-chart .profit-loss-content {
@@ -2886,6 +2915,7 @@ gap: 10px;
 .gpt-dashboard-chart .content #revenueChart {
     max-height: 250px;
     min-height: 250px;
+    width: 100% !important;
 }
 
 .gpt-dashboard-chart .overallContent #Overallreports {
@@ -2900,10 +2930,47 @@ gap: 10px;
     justify-content: center;
 }
 
+/* Dashboard chart header improvements */
+.dashboard-chart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 10px 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dashboard-chart h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2e2e3e;
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* Profit and Loss labels styling */
+.gpt-dashboard-chart .card-body .d-flex.align-items-center.justify-content-center {
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.gpt-dashboard-chart .card-body .d-flex.align-items-center.justify-content-center p {
+    margin: 0;
+    font-size: 14px;
+    color: #585865;
+    white-space: nowrap;
+}
+
+.gpt-dashboard-chart .card-body .d-flex.align-items-center.justify-content-center strong {
+    color: #2e2e3e;
+    font-weight: 600;
+}
+
 @media (max-width: 991px) {
     .gpt-dashboard-chart .overallContent {
         max-height: 400px;
         min-height: 400px;
+        flex-direction: column;
     }
 
     .overall-level-container {
@@ -2913,12 +2980,33 @@ gap: 10px;
         justify-content: center;
         flex-wrap: wrap;
     }
+    
+    .dashboard-chart {
+        padding: 15px 15px 10px 15px;
+    }
+    
+    .dashboard-chart h4 {
+        font-size: 16px;
+    }
 }
 
 .overall-level-container {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    justify-content: center;
+}
+
+.overall-level-container p {
+    margin: 0;
+    font-size: 13px;
+    color: #585865;
+    white-space: nowrap;
+}
+
+.overall-level-container strong {
+    color: #2e2e3e;
+    font-weight: 600;
 }
 
 .income-bulet2 {
@@ -2939,7 +3027,7 @@ gap: 10px;
     height: 10px;
     width: 10px;
     border-radius: 3px;
-    background-color: #a507ff;
+    background-color: var(--clr-secondary);
 }
 
 .loss-bulet {
@@ -2960,7 +3048,7 @@ gap: 10px;
     height: 10px;
     width: 10px;
     border-radius: 50%;
-    background-color: #8554ff;
+    background-color: var(--clr-secondary);
 }
 
 .income-bulet {
@@ -3996,7 +4084,7 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
-.gpt-up-down-arrow span {
+/* .gpt-up-down-arrow span {
     border-bottom: 2px solid #999;
     border-right: 2px solid #999;
     pointer-events: none;
@@ -4014,7 +4102,7 @@ input:checked + .slider:before {
     transform: rotate(45deg);
     -webkit-transition: all 0.15s ease-in-out;
     transition: all 0.15s ease-in-out;
-}
+} */
 
 .gpt-up-down-arrow:hover span {
     transform: rotate(225deg);
@@ -4642,7 +4730,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 .custom-date-filter select option:hover {
     appearance: none !important;
     color: var(--clr-primary) !important;
-    background-color: #fef0f1 !important;
+    background-color: var(--clr-secondary) !important;
 } */
 
 /* Tablet View (Max 768px) */
@@ -6454,7 +6542,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 
 .disc-btn:hover {
-    background-color: #fef0f1;
+    background-color: var(--clr-secondary);
     border: 1px solid var(--clr-primary);
     color: var(--clr-primary);
 }
@@ -7236,7 +7324,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     grid-template-columns: 1fr 1fr;
     align-items: center;
     justify-content: center;
-    background-color: #fef0f1;
+    background-color: var(--clr-secondary);
     border: 1px solid var(--clr-primary) 29;
     border-radius: 8px;
 }
@@ -8549,7 +8637,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 
 .aff-stat-content .payout .down {
-    color: #c52127;
+    color: var(--clr-primary);
     font-weight: 500;
 }
 
@@ -8577,7 +8665,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 
 .dective-status {
-    color: #c52127;
+    color: var(--clr-primary);
     background-color: #c5212726;
     height: 34px;
     border-radius: 6px;
@@ -8646,7 +8734,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 
 .Withdrawal-header p span {
-    color: #c52127 !important;
+    color: var(--clr-primary) !important;
 }
 
 /*********************** invoice css code start ***********************/
@@ -8908,8 +8996,8 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 
 .save-publish-btn {
-    color: #c52127;
-    background-color: #fef0f1;
+    color: white;
+    background-color: var(--clr-primary);
     padding: 8px 12px;
     border-radius: 5px;
     font-weight: 500;
@@ -8918,9 +9006,8 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 
 .save-publish-btn:hover {
-    color: #c52127;
-    border: 1px solid #c52127;
-    background-color: transparent;
+    background-color:  var(--clr-secondary) ;
+    border: 1px solid var(--clr-primary);
 }
 
 .product-settings {
@@ -8932,11 +9019,11 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 
 .product-settings:hover {
-    background-color: #fef0f1;
+    background-color: var(--clr-secondary);
 }
 
 .product-settings:hover svg path {
-    stroke: #c52127;
+    stroke: var(--clr-primary);
 }
 
 .product-settings svg {
@@ -9097,8 +9184,8 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 
 .form-check-input[type="radio"]:checked {
-    background-color: #c52127;
-    border-color: #c52127;
+    background-color: var(--clr-primary);
+    border-color: var(--clr-primary);
 }
 
 .variant-container {
@@ -9204,7 +9291,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     transform: translateX(-50%);
     width: 100px;
     height: 2px;
-    background-color: #e3342f;
+    background-color: var(--clr-primary);
     border-radius: 1px;
 }
 
@@ -9225,7 +9312,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 
 .settings-box-container .setting-box:hover {
     border: 1px solid var(--clr-primary);
-    background-color: #fef0f1;
+    background-color: var(--clr-secondary);
 }
 
 .settings-box-container .setting-box:hover .settings-icon {
@@ -9240,7 +9327,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 .settings-box-container .setting-box .settings-icon {
     height: 44px;
     width: 44px;
-    background-color: #fef0f1;
+    background-color: var(--clr-primary);
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -9250,6 +9337,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 .settings-box-container .setting-box .settings-icon svg {
     height: 24px;
     width: 24px;
+    color:white !important;
 }
 
 .settings-box-container .setting-box h6 {
@@ -9801,7 +9889,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 .trasfer-square-btn {
     height: 50px !important;
     width: 45px !important;
-    background-color: #fef0f1 !important;
+    background-color: var(--clr-secondary) !important;
     border: 1px solid #fef0f1 !important;
 }
 
@@ -10450,7 +10538,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     padding-right: 40px;
 }
 .serial-cell-button {
-    background-color: #fef0f1;
+    background-color: var(--clr-secondary);
     height: 40px;
     width: 40px;
     display: flex;
@@ -10489,7 +10577,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 .modal-save-btn {
     width: 105px;
-    background-color: #fef0f1;
+    background-color: var(--clr-secondary);
     color: var(--clr-primary);
     border: none;
     outline: none;
@@ -10654,13 +10742,13 @@ grid-template-columns: 1fr; /* grid الحديث */
 }
 
 .expense-ammount {
-    color: #c52127 !important;
+    color: var(--clr-primary) !important;
 }
 .bottom-net-profit {
     padding: 14px !important;
     font-weight: 600 !important;
     border: none;
-    background-color: #fef0f1 !important;
+    background-color: var(--clr-secondary) !important;
 }
 
 .employee-select {

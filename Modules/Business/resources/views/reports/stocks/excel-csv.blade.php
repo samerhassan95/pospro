@@ -14,10 +14,10 @@
             <tr>
                 <td>{{ $loop->index + 1 }}</td>
                 <td class="text-start">{{ $stock->productName }}</td>
-                <td class="text-start">{{ currency_format($stock->productPurchasePrice, currency: business_currency()) }}</td>
+                <td class="text-start">{!! currency_format($stock->productPurchasePrice, currency: business_currency()) !!}</td>
                 <td class="text-start">{{ $stock->stocks_sum_product_stock }}</td>
-                <td class="text-start">{{ currency_format($stock->productSalePrice, currency: business_currency()) }}</td>
-                <td class="text-start">{{ currency_format($stock->productSalePrice * $stock->stocks_sum_product_stock, currency: business_currency()) }}</td>
+                <td class="text-start">{!! currency_format($stock->productSalePrice, currency: business_currency()) !!}</td>
+                <td class="text-start">{!! currency_format($stock->productSalePrice * $stock->stocks_sum_product_stock, currency: business_currency()) !!}</td>
             </tr>
         @endforeach
     </tbody>

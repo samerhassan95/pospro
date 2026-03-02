@@ -27,7 +27,7 @@
                     <td>{{ $due_list->email }}</td>
                     <td>{{ $due_list->phone }}</td>
                     <td>{{ $due_list->type }}</td>
-                    <td>{{ currency_format($due_list->due, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($due_list->due, currency: business_currency()) !!}</td>
                 </tr>
             @endforeach
         </tbody>

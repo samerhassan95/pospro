@@ -54,7 +54,7 @@
 
 
     .in-table-header .head-red {
-        background-color: #c52127 !important;
+        background-color: var(--clr-primary) !important;
         color: white;
         padding: 12px 14px;
         font-weight: 700;
@@ -253,7 +253,7 @@
 
 
     .in-table-row-bottom .total-amound {
-        background-color: #c52127;
+        background-color: var(--clr-primary);
         color: white;
         padding: 8px 6px;
     }

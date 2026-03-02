@@ -19,7 +19,7 @@
                     <td>{{ $sale->invoiceNumber }}</td>
                     <td>{{ $sale->created_at->format('Y-m-d') }}</td>
                     <td>{{ $sale->user->name ?? '-' }}</td>
-                    <td>{{ currency_format($sale->totalAmount, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($sale->totalAmount, currency: business_currency()) !!}</td>
                     <td>
                         @if($sale->user && $sale->user->commission_type)
                             <span class="badge bg-{{ $sale->user->commission_type == 'percentage' ? 'success' : 'info' }}">
@@ -36,7 +36,7 @@
                             -
                         @endif
                     </td>
-                    <td class="fw-bold text-success">{{ currency_format($sale->commission ?? 0, currency: business_currency()) }}</td>
+                    <td class="fw-bold text-success">{!! currency_format($sale->commission ?? 0, currency: business_currency()) !!}</td>
                 </tr>
             @empty
                 <tr>
@@ -54,7 +54,7 @@
             <tfoot>
                 <tr class="table-total">
                     <th colspan="7" class="text-end">{{ __('Total Commission') }}:</th>
-                    <th class="text-success">{{ currency_format($sales->sum('commission'), currency: business_currency()) }}</th>
+                    <th class="text-success">{!! currency_format($sales->sum('commission'), currency: business_currency()) !!}</th>
                 </tr>
             </tfoot>
         @endif

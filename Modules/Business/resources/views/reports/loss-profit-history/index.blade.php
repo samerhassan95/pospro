@@ -37,7 +37,7 @@
                     <div class="card bg-info text-white h-100">
                         <div class="card-body text-center">
                             <h5>{{ __('Total Sales') }}</h5>
-                            <h3>{{ currency_format($grossSaleProfit, currency: business_currency()) }}</h3>
+                            <h3>{!! currency_format($grossSaleProfit, currency: business_currency()) !!}</h3>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                         <div class="card-body text-center">
                             <h5>{{ __('Gross Income') }}</h5>
                              <small>{{ __('(Sales Profit + Incomes)') }}</small>
-                            <h3>{{ currency_format($grossIncomeProfit, currency: business_currency()) }}</h3>
+                            <h3>{!! currency_format($grossIncomeProfit, currency: business_currency()) !!}</h3>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                     <div class="card bg-danger text-white h-100">
                         <div class="card-body text-center">
                             <h5>{{ __('Total Expenses') }}</h5>
-                            <h3>{{ currency_format($totalExpenses, currency: business_currency()) }}</h3>
+                            <h3>{!! currency_format($totalExpenses, currency: business_currency()) !!}</h3>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                      <div class="card {{ $netProfit >= 0 ? 'bg-primary' : 'bg-warning' }} text-white h-100">
                         <div class="card-body text-center">
                             <h5>{{ __('Net Profit') }}</h5>
-                            <h3>{{ currency_format($netProfit, currency: business_currency()) }}</h3>
+                            <h3>{!! currency_format($netProfit, currency: business_currency()) !!}</h3>
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                                                 </span>
                                             </td>
                                             <td class="text-end">
-                                                {{ currency_format($item->total_incomes, currency: business_currency()) }}
+                                                {!! currency_format($item->total_incomes, currency: business_currency()) !!}
                                             </td>
                                         </tr>
                                     @empty
@@ -131,7 +131,7 @@
                                                 </span>
                                             </td>
                                             <td class="text-end">
-                                                {{ currency_format($item->total_expenses, currency: business_currency()) }}
+                                                {!! currency_format($item->total_expenses, currency: business_currency()) !!}
                                             </td>
                                         </tr>
                                     @empty

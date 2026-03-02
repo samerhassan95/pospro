@@ -401,9 +401,9 @@
                     <td style="text-align: center;">{{ $loop->iteration }}</td>
                     <td>{{ $detail->product->productName ?? '' }}</td>
                     <td style="text-align: center;">{{ $detail->quantities ?? '' }}</td>
-                    <td style="text-align: right;">{{ currency_format($detail->price ?? 0, currency: business_currency()) }}</td>
+                    <td style="text-align: right;">{!! currency_format($detail->price ?? 0, currency: business_currency()) !!}</td>
                     <td style="text-align: right;">{{ $sale->vat_percent ?? 15 }}%</td>
-                    <td style="text-align: right;">{{ currency_format($productTotal, currency: business_currency()) }}</td>
+                    <td style="text-align: right;">{!! currency_format($productTotal, currency: business_currency()) !!}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -414,27 +414,27 @@
         <table>
             <tr>
                 <td>{{ __('Subtotal') }} / المجموع الفرعي:</td>
-                <td style="text-align: right;"><strong>{{ currency_format($subtotal, currency: business_currency()) }}</strong></td>
+                <td style="text-align: right;"><strong>{!! currency_format($subtotal, currency: business_currency()) !!}</strong></td>
             </tr>
             <tr>
                 <td>{{ __('VAT') }} ({{ $sale->vat_percent ?? 15 }}%) / الضريبة:</td>
-                <td style="text-align: right;"><strong>{{ currency_format($sale->vat_amount, currency: business_currency()) }}</strong></td>
+                <td style="text-align: right;"><strong>{!! currency_format($sale->vat_amount, currency: business_currency()) !!}</strong></td>
             </tr>
             @if($sale->discountAmount > 0)
             <tr>
                 <td>{{ __('Discount') }} / الخصم:</td>
-                <td style="text-align: right;"><strong>-{{ currency_format($sale->discountAmount, currency: business_currency()) }}</strong></td>
+                <td style="text-align: right;"><strong>-{!! currency_format($sale->discountAmount, currency: business_currency()) !!}</strong></td>
             </tr>
             @endif
             @if($sale->shipping_charge > 0)
             <tr>
                 <td>{{ __('Shipping') }} / الشحن:</td>
-                <td style="text-align: right;"><strong>{{ currency_format($sale->shipping_charge, currency: business_currency()) }}</strong></td>
+                <td style="text-align: right;"><strong>{!! currency_format($sale->shipping_charge, currency: business_currency()) !!}</strong></td>
             </tr>
             @endif
             <tr class="total-row">
                 <td>{{ __('Total Amount') }} / الإجمالي الكلي:</td>
-                <td style="text-align: right;">{{ currency_format($sale->totalAmount, currency: business_currency()) }}</td>
+                <td style="text-align: right;">{!! currency_format($sale->totalAmount, currency: business_currency()) !!}</td>
             </tr>
         </table>
     </div>

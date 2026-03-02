@@ -40,7 +40,7 @@
                     <td>{{ $affiliate->user?->business?->enrolled_plan?->plan?->subscriptionName ?? '' }}</td>
                     <td>{{ remaining_days($affiliate->user?->business?->will_expire) }}</td>
                     <td>{{ formatted_date($affiliate->user?->business?->will_expire) }}</td>
-                    <td>{{ currency_format($affiliate->balance) }}</td>
+                    <td>{!! currency_format($affiliate->balance) !!}</td>
                     <td>
                         <label class="switch">
                             <input type="checkbox" class="status">
@@ -69,7 +69,7 @@
                                         data-plan="{{ $affiliate->user?->business?->enrolled_plan->plan->subscriptionName ?? '' }}"
                                         data-duration="{{ remaining_days($affiliate->user?->business?->will_expire) }}"
                                         data-expire-date="{{ formatted_date($affiliate->user?->business?->will_expire) }}"
-                                        data-total-earn="{{ currency_format($affiliate->balance) }}"
+                                        data-total-earn="{!! currency_format($affiliate->balance) !!}"
                                         >
                                         <i class="fal fa-eye"></i>
                                         {{ __('View') }}

@@ -21,9 +21,9 @@
                     <td>{{ $sale->created_at->format('Y-m-d') }}</td>
                     <td>{{ $sale->customer_name ?? __('Walk-in Customer') }}</td>
                     <td>{{ $sale->customer_phone ?? '-' }}</td>
-                    <td>{{ currency_format($sale->totalAmount, currency: business_currency()) }}</td>
-                    <td class="text-success">{{ currency_format($sale->paidAmount, currency: business_currency()) }}</td>
-                    <td class="text-danger fw-bold">{{ currency_format($sale->dueAmount, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($sale->totalAmount, currency: business_currency()) !!}</td>
+                    <td class="text-success">{!! currency_format($sale->paidAmount, currency: business_currency()) !!}</td>
+                    <td class="text-danger fw-bold">{!! currency_format($sale->dueAmount, currency: business_currency()) !!}</td>
                     <td class="d-print-none">
                         <div class="dropdown table-action">
                             <button type="button" data-bs-toggle="dropdown">
@@ -60,7 +60,7 @@
             <tfoot>
                 <tr class="table-total">
                     <th colspan="7" class="text-end">{{ __('Total Due') }}:</th>
-                    <th class="text-danger" colspan="2">{{ currency_format($sales->sum('dueAmount'), currency: business_currency()) }}</th>
+                    <th class="text-danger" colspan="2">{!! currency_format($sales->sum('dueAmount'), currency: business_currency()) !!}</th>
                 </tr>
             </tfoot>
         @endif

@@ -20,7 +20,7 @@
 
                 <div class="loss-card p-3 text-white">
                     <p class="stat-title">{{ __('Total Stock Value') }}</p>
-                    <p class="stat-value">{{ currency_format($total_stock_value, currency : business_currency()) }}</p>
+                    <p class="stat-value">{!! currency_format($total_stock_value, currency : business_currency()) !!}</p>
                 </div>
             </div>
         </div>
@@ -170,13 +170,13 @@
                                     <td class="{{ $total_stock <= $product->alert_qty ? 'text-danger' : 'text-success' }} text-start">
                                         {{ $total_stock }}
                                     </td>
-                                    <td class="text-start">{{ currency_format($first_stock_price, currency : business_currency()) }}
-                                    <td class="stock-list-amount">{{ currency_format($total_value, currency : business_currency()) }}</td>
+                                    <td class="text-start">{!! currency_format($first_stock_price, currency : business_currency()) !!}
+                                    <td class="stock-list-amount">{!! currency_format($total_value, currency : business_currency()) !!}</td>
                                 </tr>
                                 @endforeach
                                 <tr>
                                     <td colspan="4" class="stock-list-amount"><strong>{{ __('Total Stock Value:') }}</strong></td>
-                                    <td class="stock-list-amount"><strong>{{ currency_format($total_stock_value, currency : business_currency()) }}</strong></td>
+                                    <td class="stock-list-amount"><strong>{!! currency_format($total_stock_value, currency : business_currency()) !!}</strong></td>
                                 </tr>
                             </tbody>
                         </table>

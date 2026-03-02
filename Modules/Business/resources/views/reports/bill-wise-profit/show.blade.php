@@ -22,12 +22,12 @@
                         <p><strong>{{ __('Date') }}:</strong> {{ \Carbon\Carbon::parse($bill->saleDate)->format('d-m-Y') }}</p>
                     </div>
                     <div class="col-md-6 text-end">
-                        <p><strong>{{ __('Total Amount') }}:</strong> {{ currency_format($bill->totalAmount, currency: business_currency()) }}</p>
+                        <p><strong>{{ __('Total Amount') }}:</strong> {!! currency_format($bill->totalAmount, currency: business_currency()) !!}</p>
                         <p><strong>{{ __('Profit/Loss') }}:</strong> 
                             @if($bill->lossProfit >= 0)
-                                <span class="badge bg-success">{{ currency_format($bill->lossProfit, currency: business_currency()) }}</span>
+                                <span class="badge bg-success">{!! currency_format($bill->lossProfit, currency: business_currency()) !!}</span>
                             @else
-                                <span class="badge bg-danger">{{ currency_format(abs($bill->lossProfit), currency: business_currency()) }}</span>
+                                <span class="badge bg-danger">{!! currency_format(abs($bill->lossProfit), currency: business_currency()) !!}</span>
                             @endif
                         </p>
                     </div>
@@ -52,14 +52,14 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $detail->product->productName ?? __('N/A') }}</td>
                                     <td class="text-end">{{ $detail->quantities }}</td>
-                                    <td class="text-end">{{ currency_format($detail->price, currency: business_currency()) }}</td>
-                                    <td class="text-end">{{ currency_format($detail->productPurchasePrice, currency: business_currency()) }}</td>
-                                    <td class="text-end">{{ currency_format($detail->price * $detail->quantities, currency: business_currency()) }}</td>
+                                    <td class="text-end">{!! currency_format($detail->price, currency: business_currency()) !!}</td>
+                                    <td class="text-end">{!! currency_format($detail->productPurchasePrice, currency: business_currency()) !!}</td>
+                                    <td class="text-end">{!! currency_format($detail->price * $detail->quantities, currency: business_currency()) !!}</td>
                                     <td class="text-end">
                                         @if($detail->lossProfit >= 0)
-                                            <span class="text-success">{{ currency_format($detail->lossProfit, currency: business_currency()) }}</span>
+                                            <span class="text-success">{!! currency_format($detail->lossProfit, currency: business_currency()) !!}</span>
                                         @else
-                                            <span class="text-danger">{{ currency_format(abs($detail->lossProfit), currency: business_currency()) }}</span>
+                                            <span class="text-danger">{!! currency_format(abs($detail->lossProfit), currency: business_currency()) !!}</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -68,13 +68,13 @@
                         <tfoot class="table-light">
                             <tr>
                                 <td colspan="5" class="text-end"><strong>{{ __('Total') }}:</strong></td>
-                                <td class="text-end"><strong>{{ currency_format($bill->totalAmount, currency: business_currency()) }}</strong></td>
+                                <td class="text-end"><strong>{!! currency_format($bill->totalAmount, currency: business_currency()) !!}</strong></td>
                                 <td class="text-end">
                                     <strong>
                                         @if($bill->lossProfit >= 0)
-                                            <span class="text-success">{{ currency_format($bill->lossProfit, currency: business_currency()) }}</span>
+                                            <span class="text-success">{!! currency_format($bill->lossProfit, currency: business_currency()) !!}</span>
                                         @else
-                                            <span class="text-danger">{{ currency_format(abs($bill->lossProfit), currency: business_currency()) }}</span>
+                                            <span class="text-danger">{!! currency_format(abs($bill->lossProfit), currency: business_currency()) !!}</span>
                                         @endif
                                     </strong>
                                 </td>

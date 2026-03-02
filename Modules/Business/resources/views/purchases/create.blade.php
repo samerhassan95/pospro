@@ -790,7 +790,7 @@
                         <select required name="party_id" id="supplier_id" class="sidebar-customer-select choices-select">
                             <option value="">{{ __('Search Supplier') }}</option>
                             @foreach ($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}" data-phone="">{{ $supplier->name }} ({{ __('Due: ') }} {{ currency_format($supplier->due, currency: business_currency()) }})</option>
+                                <option value="{{ $supplier->id }}" data-phone="">{{ $supplier->name }} ({{ __('Due: ') }} {!! currency_format($supplier->due, currency: business_currency()) !!})</option>
                             @endforeach
                         </select>
                         <a href="#supplier-create-modal" data-bs-toggle="modal" class="sidebar-add-customer-btn">
@@ -835,11 +835,11 @@
                 <!-- Order Summary -->
                 <div class="sidebar-order-summary">
                     <div class="summary-row"><span>{{ __('Items') }}</span><span id="items_count">0</span></div>
-                    <div class="summary-row"><span>{{ __('Subtotal') }}</span><span id="sub_total">{{ currency_format(0, currency: business_currency()) }}</span></div>
+                    <div class="summary-row"><span>{{ __('Subtotal') }}</span><span id="sub_total">{!! currency_format(0, currency: business_currency()) !!}</span></div>
                     <div class="summary-row"><span>{{ __('Discount') }}</span><span id="discount_display">0</span></div>
                     <div class="summary-row"><span>{{ __('Taxes') }}</span><span id="vat_display">0</span></div>
                     <div class="summary-row"><span>{{ __('Shipping') }}</span><span id="shipping_display">0</span></div>
-                    <div class="summary-row summary-total"><span>{{ __('Total') }}</span><span id="total_amount">{{ currency_format(0, currency: business_currency()) }}</span></div>
+                    <div class="summary-row summary-total"><span>{{ __('Total') }}</span><span id="total_amount">{!! currency_format(0, currency: business_currency()) !!}</span></div>
                 </div>
 
                 <!-- Hidden Inputs -->
@@ -881,7 +881,7 @@
                 <h3 class="payment-modal-title">{{ __('Collect Payment') }}</h3>
                 <div class="payment-modal-order-info">
                     <div class="payment-order-number">{{ __('Purchase') }} #<span id="modal-purchase-number">{{ $invoice_no }}</span></div>
-                    <div class="payment-order-total" id="modal-purchase-total">{{ currency_format(0, currency: business_currency()) }}</div>
+                    <div class="payment-order-total" id="modal-purchase-total">{!! currency_format(0, currency: business_currency()) !!}</div>
                 </div>
             </div>
 
@@ -936,15 +936,15 @@
             <div class="payment-summary">
                 <div class="payment-summary-row">
                     <span>{{ __('Total Bill') }}</span>
-                    <span id="modal-purchase-total-bill">{{ currency_format(0, currency: business_currency()) }}</span>
+                    <span id="modal-purchase-total-bill">{!! currency_format(0, currency: business_currency()) !!}</span>
                 </div>
                 <div class="payment-summary-row">
                     <span>{{ __('Amount Paid') }}</span>
-                    <span id="modal-purchase-amount-paid">{{ currency_format(0, currency: business_currency()) }}</span>
+                    <span id="modal-purchase-amount-paid">{!! currency_format(0, currency: business_currency()) !!}</span>
                 </div>
                 <div class="payment-summary-row">
                     <span>{{ __('Due Amount') }}</span>
-                    <span id="modal-purchase-due-summary">{{ currency_format(0, currency: business_currency()) }}</span>
+                    <span id="modal-purchase-due-summary">{!! currency_format(0, currency: business_currency()) !!}</span>
                 </div>
             </div>
 

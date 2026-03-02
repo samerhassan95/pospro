@@ -18,7 +18,7 @@
                     <td>{{ formatted_date($withdraw->created_at) }}</td>
                     <td>{{ $withdraw->user?->name }}</td>
                     <td>Bank</td>
-                    <td>{{ currency_format($withdraw->amount) }}</td>
+                    <td>{!! currency_format($withdraw->amount) !!}</td>
                     <td class="text-center">
                         <div class="d-flex align-items-center justify-content-center">
                             <div class="paid-status">{{ ucfirst($withdraw->status) }}</div>
@@ -44,7 +44,7 @@
                                         data-url="{{ route('admin.affiliate-withdrawals.paid', $withdraw->id) }}"
                                         data-date="{{ formatted_date($withdraw->created_at) }}"
                                         data-name="{{ $withdraw->user?->name }}"
-                                        data-amount="{{ currency_format($withdraw->amount) }}"
+                                        data-amount="{!! currency_format($withdraw->amount) !!}"
                                         data-status="{{ ucfirst($withdraw->status) }}"
                                         >
                                         <i class="fas fa-paper-plane"></i> {{ __('Approved Payment') }}

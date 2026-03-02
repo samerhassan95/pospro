@@ -392,8 +392,8 @@ $(document).on("change", ".handle-image-Upload", function (e) {
             <span class="close-icon">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 4L4 12" stroke="#C52127" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M4 4L12 12" stroke="#C52127" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 4L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </span>
         </div>
@@ -425,12 +425,12 @@ function serialIconHtml(needSerial) {
     return `<td class="serial-cell ${needSerial ? "" : "d-none"} serial-option">
                 <button type="button" class="serial-cell-button" data-bs-toggle="modal" data-bs-target="#serialModal">
                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 7H18" stroke="#C52127" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M23 7H23.0105" stroke="#C52127" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M23 14H23.0105" stroke="#C52127" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M23 21H23.0105" stroke="#C52127" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M4 14H18" stroke="#C52127" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M4 21H18" stroke="#C52127" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M4 7H18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M23 7H23.0105" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23 14H23.0105" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23 21H23.0105" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4 14H18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M4 21H18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                 </button>
             </td>`;

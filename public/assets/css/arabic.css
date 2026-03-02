@@ -1623,3 +1623,108 @@ html[dir="rtl"] body .side-bar-manu li:hover > a .sidebar-icon svg[viewBox*="448
     fill: #fff !important;
     stroke: none !important;
 }
+
+/* RTL - Dashboard Chart Fixes */
+[dir="rtl"] .dashboard-chart {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .dashboard-chart h4 {
+    text-align: right;
+}
+
+[dir="rtl"] .gpt-dashboard-chart .card-body .d-flex.align-items-center.justify-content-center {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .overall-level-container {
+    align-items: flex-end;
+}
+
+[dir="rtl"] .overall-level-container .d-flex {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .overall-level-container p {
+    text-align: right;
+}
+
+/* RTL - Profit/Loss labels */
+[dir="rtl"] .profit-bulet,
+[dir="rtl"] .loss-bulet,
+[dir="rtl"] .purchase-bulet,
+[dir="rtl"] .sales-bulet,
+[dir="rtl"] .income-bulet,
+[dir="rtl"] .expense-bulet {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+/* RTL - Overview year select */
+[dir="rtl"] select.form-control.overview-year,
+[dir="rtl"] .form-control.overview-year,
+[dir="rtl"] select.overview-year {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: left 0.75rem center !important;
+    background-size: 16px 12px !important;
+    padding-left: 2.5rem !important;
+    padding-right: 0.75rem !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+
+/* RTL - Fix chart responsiveness */
+@media (max-width: 991px) {
+    [dir="rtl"] .overall-level-container {
+        align-items: center;
+        flex-direction: row !important;
+    }
+}
+
+
+/* RTL - All dashboard chart headers with dropdowns */
+[dir="rtl"] .dashboard-chart,
+[dir="rtl"] .dashboard-chart-header {
+    flex-direction: row-reverse !important;
+    justify-content: space-between;
+}
+
+[dir="rtl"] .dashboard-chart .gpt-up-down-arrow,
+[dir="rtl"] .dashboard-chart-header .gpt-up-down-arrow {
+    order: -1;
+}
+
+[dir="rtl"] .dashboard-chart h4,
+[dir="rtl"] .dashboard-chart-header h4 {
+    text-align: right;
+    order: 1;
+}
+
+/* RTL - Yearly statistics select */
+[dir="rtl"] select.form-control.yearly-statistics,
+[dir="rtl"] .form-control.yearly-statistics,
+[dir="rtl"] select.yearly-statistics {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: left 0.75rem center !important;
+    background-size: 16px 12px !important;
+    padding-left: 2.5rem !important;
+    padding-right: 0.75rem !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+
+/* RTL - Ensure all chart header selects follow the same pattern */
+[dir="rtl"] .gpt-dashboard-chart select.form-control,
+[dir="rtl"] .dashboard-chart select.form-control,
+[dir="rtl"] .dashboard-chart-header select.form-control {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: left 0.75rem center !important;
+    background-size: 16px 12px !important;
+    padding-left: 2.5rem !important;
+    padding-right: 0.75rem !important;
+}

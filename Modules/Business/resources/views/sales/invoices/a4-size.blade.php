@@ -679,9 +679,9 @@
                         <tr>
                             <td style="text-align: right;">{{ $detail->product->productName ?? '-' }}</td>
                             <td>{{ $itemQty }}</td>
-                            <td>{{ currency_format($itemPrice, currency: business_currency()) }}</td>
-                            <td>{{ currency_format($itemTax, currency: business_currency()) }}<br><small style="font-size: 9px;">({{ $vatPercent }}%)</small></td>
-                            <td>{{ currency_format($itemTotal, currency: business_currency()) }}</td>
+                            <td>{!! currency_format($itemPrice, currency: business_currency()) !!}</td>
+                            <td>{!! currency_format($itemTax, currency: business_currency()) !!}<br><small style="font-size: 9px;">({{ $vatPercent }}%)</small></td>
+                            <td>{!! currency_format($itemTotal, currency: business_currency()) !!}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -743,38 +743,38 @@
                 
                 <div class="total-row">
                     <span class="total-label">الإجمالي الفرعي / Subtotal:</span>
-                    <span class="total-value">{{ currency_format($productsSubtotal, currency: business_currency()) }}</span>
+                    <span class="total-value">{!! currency_format($productsSubtotal, currency: business_currency()) !!}</span>
                 </div>
                 
                 @if($discountAmount > 0)
                 <div class="total-row discount">
                     <span class="total-label">الخصم / Discount:</span>
-                    <span class="total-value">-{{ currency_format($discountAmount, currency: business_currency()) }}</span>
+                    <span class="total-value">-{!! currency_format($discountAmount, currency: business_currency()) !!}</span>
                 </div>
                 @endif
                 
                 @if($shippingCharge > 0)
                 <div class="total-row">
                     <span class="total-label">قيمة التوصيل / Shipping:</span>
-                    <span class="total-value">{{ currency_format($shippingCharge, currency: business_currency()) }}</span>
+                    <span class="total-value">{!! currency_format($shippingCharge, currency: business_currency()) !!}</span>
                 </div>
                 @endif
                 
                 <div class="total-row">
                     <span class="total-label">الإجمالي قبل الضريبة / Subtotal before VAT:</span>
-                    <span class="total-value">{{ currency_format($subtotalBeforeVat, currency: business_currency()) }}</span>
+                    <span class="total-value">{!! currency_format($subtotalBeforeVat, currency: business_currency()) !!}</span>
                 </div>
                 
                 @if($vatAmount > 0)
                 <div class="total-row">
                     <span class="total-label">ضريبة القيمة المضافة ({{ $vatPercent }}%) / VAT ({{ $vatPercent }}%):</span>
-                    <span class="total-value">{{ currency_format($vatAmount, currency: business_currency()) }}</span>
+                    <span class="total-value">{!! currency_format($vatAmount, currency: business_currency()) !!}</span>
                 </div>
                 @endif
                 
                 <div class="total-row grand-total">
                     <span class="total-label">الإجمالي شامل الضريبة / Total (incl. VAT):</span>
-                    <span class="total-value">{{ currency_format($totalWithVat, currency: business_currency()) }}</span>
+                    <span class="total-value">{!! currency_format($totalWithVat, currency: business_currency()) !!}</span>
                 </div>
             </div>
         </div>

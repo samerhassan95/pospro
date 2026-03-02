@@ -1,8 +1,22 @@
+// Get CSS variable colors
+function getCSSColor(variable) {
+    return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+}
+// Get CSS variable colors
+function getCSSColor(variable) {
+    return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+}
+
 // currency format
 function currencyFormat(amount, type = "icon", decimals = 2) {
     let symbol = $("#currency_symbol").val();
     let position = $("#currency_position").val();
     let code = $("#currency_code").val();
+
+    // Handle null, undefined, or non-numeric values
+    if (amount === null || amount === undefined || isNaN(amount)) {
+        amount = 0;
+    }
 
     // SAR Symbol SVG
     const sarSymbolSVG = '<svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-left: 3px;"><g clip-path="url(#clip0_price_5-1)"><path d="M6.68122 10.6309C6.48962 11.0558 6.36297 11.5168 6.31445 12.0003L10.369 11.1384C10.5606 10.7137 10.6872 10.2525 10.7358 9.76904L6.68122 10.6309Z" fill="currentColor"/><path d="M10.3691 8.55619C10.5607 8.13144 10.6873 7.67031 10.7359 7.18683L7.57749 7.85857V6.56725L10.369 5.97403C10.5606 5.54929 10.6873 5.08815 10.7358 4.60467L7.57739 5.27584V0.631863C7.09343 0.903594 6.66363 1.2653 6.31425 1.69195V5.54441L5.05111 5.8129V0.000244141C4.56715 0.27188 4.13735 0.633678 3.78797 1.06033V6.08129L0.961685 6.68186C0.770089 7.1066 0.643345 7.56773 0.594729 8.05122L3.78797 7.3726V8.99879L0.365788 9.72601C0.174192 10.1508 0.0475433 10.6119 -0.000976562 11.0954L3.58109 10.3341C3.87269 10.2735 4.12331 10.1011 4.28625 9.86384L4.94318 8.8899V8.88971C5.01138 8.78895 5.05111 8.66746 5.05111 8.53661V7.10412L6.31425 6.83564V9.41827L10.369 8.55599L10.3691 8.55619Z" fill="currentColor"/></g><defs><clipPath id="clip0_price_5-1"><rect width="10.7368" height="12" fill="white"/></clipPath></defs></svg>';
@@ -142,34 +156,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Initialize loading state and load dashboard data
 $(document).ready(function() {
-    showBusinessDashboardLoading();
+    // Check if we're on the dashboard page
+    if (!$('#get-dashboard').length) {
+        return;
+    }
     
     // Load all dashboard data
     Promise.all([
         getDashboardData(),
         getYearlyStatistics(),
         fetchTaskData()
-    ]).finally(() => {
-        // Hide loading overlay after all data is loaded
-        hideBusinessDashboardLoading();
+    ]).catch(error => {
+        console.error('Error loading dashboard data:', error);
     });
 });
 
-// Business Dashboard Loading functions - COMMENTED OUT
-/*
-function showBusinessDashboardLoading() {
-    $('#dashboard-loading-overlay').removeClass('hidden');
-}
-
-function hideBusinessDashboardLoading() {
-    setTimeout(() => {
-        $('#dashboard-loading-overlay').addClass('hidden');
-    }, 500); // Small delay for smooth transition
-}
-*/
-
 function getDashboardData() {
     var url = $("#get-dashboard").val();
+    
+    if (!url) {
+        return Promise.resolve();
+    }
+    
     return $.ajax({
         type: "GET",
         url: url,
@@ -213,6 +221,13 @@ function getDashboardData() {
 
 // Function to abbreviate numbers (K, M, B)
 function formatNumber(number, decimals = 2) {
+    // Handle null, undefined, or non-numeric values
+    if (number === null || number === undefined || isNaN(number)) {
+        return '0';
+    }
+    
+    number = parseFloat(number);
+    
     if (number >= 1e9) {
         return removeTrailingZeros((number / 1e9).toFixed(decimals)) + "B";
     } else if (number >= 1e6) {
@@ -230,13 +245,30 @@ function removeTrailingZeros(value) {
 
 // Revenue chart----------------->
 let revenueChart;
-const ctxRevenue = document.getElementById("revenueChart").getContext("2d");
+
 function totalEarningExpenseChart(total_loss, total_profit) {
+    const ctxRevenue = document.getElementById("revenueChart");
+    
+    // Check if canvas element exists
+    if (!ctxRevenue) {
+        console.warn('Revenue chart canvas not found');
+        return;
+    }
+    
+    const ctx = ctxRevenue.getContext("2d");
+    
     if (revenueChart) {
         revenueChart.destroy();
     }
 
-    revenueChart = new Chart(ctxRevenue, {
+    // Check if data is empty (all zeros)
+    const hasData = total_loss.some(val => val !== 0) || total_profit.some(val => val !== 0);
+    
+    // If no data, show empty chart with zeros
+    const displayLoss = hasData ? total_loss : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const displayProfit = hasData ? total_profit : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    revenueChart = new Chart(ctx, {
         type: "line",
         data: {
             labels: [
@@ -256,8 +288,8 @@ function totalEarningExpenseChart(total_loss, total_profit) {
             datasets: [
                 {
                     label: "Profit",
-                    data: total_profit,
-                    borderColor: "#A507FF",
+                    data: displayProfit,
+                    borderColor: getCSSColor("--clr-secondary"),
                     borderWidth: 4,
                     fill: false,
                     pointRadius: 1,
@@ -266,8 +298,8 @@ function totalEarningExpenseChart(total_loss, total_profit) {
                 },
                 {
                     label: "Loss",
-                    data: total_loss,
-                    borderColor: "#FF3B30",
+                    data: displayLoss,
+                    borderColor: getCSSColor("--clr-primary"),
                     borderWidth: 4,
                     fill: false,
                     pointRadius: 1,
@@ -282,7 +314,7 @@ function totalEarningExpenseChart(total_loss, total_profit) {
             maintainAspectRatio: false,
             plugins: {
                 tooltip: {
-                    enabled: true,
+                    enabled: hasData,
                     backgroundColor: "white",
                     borderColor: "#ddd",
                     borderWidth: 1,
@@ -348,15 +380,19 @@ function totalEarningExpenseChart(total_loss, total_profit) {
 
 // Function to get yearly statistics and update the chart
 function getYearlyStatistics(year = new Date().getFullYear()) {
-    const url = $("#revenue-statistic").val() + "?year=" + year;
-
+    const url = $("#revenue-statistic").val();
+    
+    if (!url) {
+        return Promise.resolve();
+    }
+    
     return $.ajax({
         type: "GET",
-        url: url,
+        url: url + "?year=" + year,
         dataType: "json",
         success: function (res) {
-            const loss = res.loss;
-            const profit = res.profit;
+            const loss = res.loss || [];
+            const profit = res.profit || [];
             const total_loss = [];
             const total_profit = [];
 
@@ -372,8 +408,7 @@ function getYearlyStatistics(year = new Date().getFullYear()) {
                     .reduce((sum, item) => sum + item.total, 0);
             }
 
-
-            // Update chart with the new data
+            // Update chart with the new data (will show empty chart if all zeros)
             totalEarningExpenseChart(total_loss, total_profit);
 
             const loss_value = total_loss.reduce(
@@ -385,16 +420,20 @@ function getYearlyStatistics(year = new Date().getFullYear()) {
                 0
             );
 
+            // Display values or 0 if no data
             document.querySelector(
                 ".loss-value"
-            ).textContent = `${currencyFormat(loss_value)}`;
+            ).innerHTML = `${currencyFormat(loss_value)}`;
             document.querySelector(
                 ".profit-value"
-            ).textContent = `${currencyFormat(profit_value)}`;
+            ).innerHTML = `${currencyFormat(profit_value)}`;
         },
         error: function (err) {
             console.error("Error fetching revenue data:", err);
-            $('.profit-value, .loss-value').text('--');
+            // Show empty chart with zeros on error
+            const emptyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            totalEarningExpenseChart(emptyData, emptyData);
+            $('.profit-value, .loss-value').html(currencyFormat(0));
         },
     });
 }
@@ -425,117 +464,157 @@ $(".revenue-year").on("change", function () {
 });
 
 // Overall Reports ----------------------->
-const canvas = document.getElementById("Overallreports");
-const ctxOverallReports = canvas.getContext("2d");
+function initOverallReportsChart() {
+    const canvas = document.getElementById("Overallreports");
+    
+    // Check if canvas element exists
+    if (!canvas) {
+        console.warn('Overall reports chart canvas not found');
+        return null;
+    }
+    
+    const ctxOverallReports = canvas.getContext("2d");
 
-const gradientSales = ctxOverallReports.createLinearGradient(
-    0,
-    0,
-    0,
-    canvas.height
-);
-gradientSales.addColorStop(0, "#8554FF");
-gradientSales.addColorStop(1, "#B8A1FF");
+    const gradientSales = ctxOverallReports.createLinearGradient(
+        0,
+        0,
+        0,
+        canvas.height
+    );
+    gradientSales.addColorStop(0, getCSSColor("--clr-secondary"));
+    gradientSales.addColorStop(1, getCSSColor("--clr-secondary") + "80");
 
-const gradientPurchase = ctxOverallReports.createLinearGradient(
-    0,
-    0,
-    0,
-    canvas.height
-);
-gradientPurchase.addColorStop(0, "#FD8D00");
-gradientPurchase.addColorStop(1, "#FFC694");
+    const gradientPurchase = ctxOverallReports.createLinearGradient(
+        0,
+        0,
+        0,
+        canvas.height
+    );
+    gradientPurchase.addColorStop(0, getCSSColor("--clr-primary"));
+    gradientPurchase.addColorStop(1, getCSSColor("--clr-primary") + "80");
 
-const gradientExpense = ctxOverallReports.createLinearGradient(
-    0,
-    0,
-    0,
-    canvas.height
-);
-gradientExpense.addColorStop(0, "#FF8983");
-gradientExpense.addColorStop(1, "#FF3B30");
+    const gradientExpense = ctxOverallReports.createLinearGradient(
+        0,
+        0,
+        0,
+        canvas.height
+    );
+    gradientExpense.addColorStop(0, getCSSColor("--clr-secondary"));
+    gradientExpense.addColorStop(1, getCSSColor("--clr-secondary") + "80");
 
-const gradientIncome = ctxOverallReports.createLinearGradient(
-    0,
-    0,
-    0,
-    canvas.height
-);
-gradientIncome.addColorStop(0, "#05C535");
-gradientIncome.addColorStop(1, "#36F165");
+    const gradientIncome = ctxOverallReports.createLinearGradient(
+        0,
+        0,
+        0,
+        canvas.height
+    );
+    gradientIncome.addColorStop(0, getCSSColor("--clr-primary"));
+    gradientIncome.addColorStop(1, getCSSColor("--clr-primary") + "60");
 
-// Data for the chart
-const data = {
-    labels: ["Purchase", "Sales", "Income", "Expense"],
-    datasets: [
-        {
-            backgroundColor: [
-                gradientPurchase,
-                gradientSales,
-                gradientIncome,
-                gradientExpense,
-            ],
-            hoverOffset: 5,
-        },
-    ],
-};
-
-const config = {
-    type: "pie",
-    data: data,
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false,
+    // Data for the chart
+    const data = {
+        labels: ["Purchase", "Sales", "Income", "Expense"],
+        datasets: [
+            {
+                data: [0.000001, 0.000001, 0.000001, 0.000001],
+                backgroundColor: [
+                    gradientPurchase,
+                    gradientSales,
+                    gradientIncome,
+                    gradientExpense,
+                ],
+                hoverOffset: 5,
             },
-            tooltip: {
-                enabled: true,
-                backgroundColor: "#FFFFFF",
-                titleColor: "#000000",
-                bodyColor: "#000000",
-                // borderColor: "#CCCCCC",
-                borderWidth: 1,
-                displayColors: false,
+        ],
+    };
+
+    const config = {
+        type: "pie",
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: "#FFFFFF",
+                    titleColor: "#000000",
+                    bodyColor: "#000000",
+                    borderWidth: 1,
+                    displayColors: false,
+                },
             },
         },
-    },
-};
+    };
 
-const Overallreports = new Chart(ctxOverallReports, config);
+    const chart = new Chart(ctxOverallReports, config);
 
-window.addEventListener("resize", function () {
-    Overallreports.resize();
-});
+    window.addEventListener("resize", function () {
+        chart.resize();
+    });
+    
+    return chart;
+}
+
+// Initialize the chart
+let Overallreports = null;
+if (document.getElementById("Overallreports")) {
+    Overallreports = initOverallReportsChart();
+}
 
 function fetchTaskData(year = new Date().getFullYear()) {
     const url = $("#get-overall-report").val() + "?year=" + year;
+    
+    // Check if chart exists
+    if (!Overallreports) {
+        console.warn('Overall reports chart not initialized');
+        return Promise.resolve();
+    }
     
     return $.ajax({
         url: url,
         method: "GET",
         success: function (response) {
-            Overallreports.data.datasets[0].data = [
-                response.overall_purchase || 0.000001,
-                response.overall_sale || 0.000001,
-                response.overall_income || 0.000001,
-                response.overall_expense || 0.000001,
+            // Get values or default to 0
+            const purchase = response.overall_purchase || 0;
+            const sale = response.overall_sale || 0;
+            const income = response.overall_income || 0;
+            const expense = response.overall_expense || 0;
+            
+            // Check if all values are zero
+            const hasData = purchase > 0 || sale > 0 || income > 0 || expense > 0;
+            
+            // If no data, use small values to show empty chart structure
+            Overallreports.data.datasets[0].data = hasData ? [
+                purchase,
+                sale,
+                income,
+                expense,
+            ] : [
+                0.000001,
+                0.000001,
+                0.000001,
+                0.000001,
             ];
             Overallreports.update();
 
-            $("#overall_purchase").text(
-                currencyFormat(response.overall_purchase)
-            );
-            $("#overall_sale").text(currencyFormat(response.overall_sale));
-            $("#overall_income").text(currencyFormat(response.overall_income));
-            $("#overall_expense").text(
-                currencyFormat(response.overall_expense)
-            );
+            // Display actual values (including 0)
+            $("#overall_purchase").html(currencyFormat(purchase));
+            $("#overall_sale").html(currencyFormat(sale));
+            $("#overall_income").html(currencyFormat(income));
+            $("#overall_expense").html(currencyFormat(expense));
         },
         error: function (error) {
             console.error("Error fetching overall report data:", error);
-            $('#overall_purchase, #overall_sale, #overall_income, #overall_expense').text('--');
+            // Show empty chart on error
+            if (Overallreports) {
+                Overallreports.data.datasets[0].data = [0.000001, 0.000001, 0.000001, 0.000001];
+                Overallreports.update();
+            }
+            $('#overall_purchase, #overall_sale, #overall_income, #overall_expense').html(currencyFormat(0));
         },
     });
 }

@@ -88,9 +88,9 @@
                     @endif
                     <td>{{ $product->unit->unitName ?? '' }}</td>
                     @usercan('products.price')
-                    <td>{{ currency_format($latestPurchasePrice, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($latestPurchasePrice, currency: business_currency()) !!}</td>
                     @endusercan
-                    <td>{{ currency_format($latestSalePrice, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($latestSalePrice, currency: business_currency()) !!}</td>
                     <td class="{{ $product->total_stock <= $product->alert_qty ? 'text-danger' : 'text-success' }}">
                         {{ $product->total_stock }}
                     </td>
@@ -122,10 +122,10 @@
                                         data-brand="{{ $product->brand->brandName ?? '' }}"
                                         data-category="{{ $product->category->categoryName ?? '' }}"
                                         data-unit="{{ $product->unit->unitName ?? '' }}"
-                                        data-purchase-price="{{ currency_format($latestPurchasePrice, currency: business_currency()) }}"
-                                        data-sale-price="{{ currency_format($latestSalePrice, currency: business_currency()) }}"
-                                        data-wholesale-price="{{ currency_format($latestWholeSalePrice, currency: business_currency()) }}"
-                                        data-dealer-price="{{ currency_format($latestDealerPrice, currency: business_currency()) }}"
+                                        data-purchase-price="{!! currency_format($latestPurchasePrice, currency: business_currency()) !!}"
+                                        data-sale-price="{!! currency_format($latestSalePrice, currency: business_currency()) !!}"
+                                        data-wholesale-price="{!! currency_format($latestWholeSalePrice, currency: business_currency()) !!}"
+                                        data-dealer-price="{!! currency_format($latestDealerPrice, currency: business_currency()) !!}"
                                         data-stock="{{ $product->total_stock }}" data-low-stock="{{ $product->alert_qty }}"
                                         data-manufacturer="{{ $product->productManufacturer }}"
                                         data-stocks='@json($stocks)'>

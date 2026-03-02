@@ -12,19 +12,19 @@
             <div class="d-flex align-items-center justify-content-center gap-3">
                 <div class="profit-card p-3 text-white bg-success">
                     <p class="stat-title">{{ __('Total Cash In') }}</p>
-                    <p class="stat-value" id="total_cash_in">{{ currency_format($total_cash_in, currency: business_currency()) }}</p>
+                    <p class="stat-value" id="total_cash_in">{!! currency_format($total_cash_in, currency: business_currency()) !!}</p>
                 </div>
                 <div class="profit-card p-3 text-white bg-danger">
                     <p class="stat-title">{{ __('Total Cash Out') }}</p>
-                    <p class="stat-value" id="total_cash_out">{{ currency_format($total_cash_out, currency: business_currency()) }}</p>
+                    <p class="stat-value" id="total_cash_out">{!! currency_format($total_cash_out, currency: business_currency()) !!}</p>
                 </div>
                 <div class="profit-card p-3 text-white bg-primary">
                     <p class="stat-title">{{ __('Running Cash') }}</p>
-                    <p class="stat-value" id="total_running_cash">{{ currency_format($total_running_cash, currency: business_currency()) }}</p>
+                    <p class="stat-value" id="total_running_cash">{!! currency_format($total_running_cash, currency: business_currency()) !!}</p>
                 </div>
                 <div class="profit-card p-3 text-white bg-info">
                     <p class="stat-title">{{ __('Opening Balance') }}</p>
-                    <p class="stat-value" id="opening_balance">{{ currency_format($opening_balance, currency: business_currency()) }}</p>
+                    <p class="stat-value" id="opening_balance">{!! currency_format($opening_balance, currency: business_currency()) !!}</p>
                 </div>
             </div>
         </div>

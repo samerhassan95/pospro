@@ -33,8 +33,8 @@
                     <td>{{ $product->brand->brandName ?? '' }}</td>
                     <td>{{ $product->category->categoryName ?? '' }}</td>
                     <td>{{ $product->unit->unitName ?? '' }}</td>
-                    <td>{{ currency_format($product->productPurchasePrice, currency: business_currency()) }}</td>
-                    <td>{{ currency_format($product->productSalePrice, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($product->productPurchasePrice, currency: business_currency()) !!}</td>
+                    <td>{!! currency_format($product->productSalePrice, currency: business_currency()) !!}</td>
                     <td>{{ $product->productStock }}</td>
                 </tr>
             @endforeach

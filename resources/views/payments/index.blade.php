@@ -53,7 +53,7 @@
                                             </tr>
                                             <tr>
                                                 <th class="text-start">{{ __('Gateway Rate') }}</th>
-                                                <td class="text-end">{{ currency_format($gateway->currency->rate, currency:$gateway->currency) }}</td>
+                                                <td class="text-end">{!! currency_format($gateway->currency->rate, currency:$gateway->currency) !!}</td>
                                             </tr>
                                             <tr>
                                                 <th class="text-start">{{ __('Subscription Name') }}</th>
@@ -61,15 +61,15 @@
                                             </tr>
                                             <tr>
                                                 <th class="text-start">{{ __('Subscription Price') }}</th>
-                                                <td class="text-end">{{ currency_format($amount, currency : $gateway->currency) }}</td>
+                                                <td class="text-end">{!! currency_format($amount, currency : $gateway->currency) !!}</td>
                                             </tr>
                                             <tr>
                                                 <th class="text-start">{{ __('Gateway Charge') }}</th>
-                                                <td class="text-end">{{ currency_format($gateway->charge, currency: $gateway->currency) }}</td>
+                                                <td class="text-end">{!! currency_format($gateway->charge, currency: $gateway->currency) !!}</td>
                                             </tr>
                                             <tr>
                                                 <th class="text-start">{{ __('Payable Amount') }}</th>
-                                                <td class="text-end">{{ currency_format($amount + $gateway->charge, currency: $gateway->currency) }}</td>
+                                                <td class="text-end">{!! currency_format($amount + $gateway->charge, currency: $gateway->currency) !!}</td>
                                             </tr>
                                             @if ($gateway->phone_required == 1)
                                             <tr>

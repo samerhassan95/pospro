@@ -80,9 +80,9 @@
                 <tr style="border-bottom: 1px dashed #ccc;">
                     <td style="text-align: right; padding: 2px;">{{ $detail->product->productName ?? '' }}</td>
                     <td style="text-align: center; padding: 2px;">{{ $itemQty }}</td>
-                    <td style="text-align: right; padding: 2px;">{{ currency_format($itemPrice, currency: business_currency()) }}</td>
-                    <td style="text-align: right; padding: 2px; font-size: 6px;">{{ currency_format($itemTax, currency: business_currency()) }}<br>({{ $vatPercent }}%)</td>
-                    <td style="text-align: right; padding: 2px;">{{ currency_format($itemTotal, currency: business_currency()) }}</td>
+                    <td style="text-align: right; padding: 2px;">{!! currency_format($itemPrice, currency: business_currency()) !!}</td>
+                    <td style="text-align: right; padding: 2px; font-size: 6px;">{!! currency_format($itemTax, currency: business_currency()) !!}<br>({{ $vatPercent }}%)</td>
+                    <td style="text-align: right; padding: 2px;">{!! currency_format($itemTotal, currency: business_currency()) !!}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -103,38 +103,38 @@
             
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
                 <span>الإجمالي الفرعي:</span>
-                <span>{{ currency_format($productsTotal, currency: business_currency()) }}</span>
+                <span>{!! currency_format($productsTotal, currency: business_currency()) !!}</span>
             </div>
             
             @if($discountAmount > 0)
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
                 <span>الخصم:</span>
-                <span>-{{ currency_format($discountAmount, currency: business_currency()) }}</span>
+                <span>-{!! currency_format($discountAmount, currency: business_currency()) !!}</span>
             </div>
             @endif
             
             @if($shippingCharge > 0)
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
                 <span>قيمة التوصيل:</span>
-                <span>{{ currency_format($shippingCharge, currency: business_currency()) }}</span>
+                <span>{!! currency_format($shippingCharge, currency: business_currency()) !!}</span>
             </div>
             @endif
             
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
                 <span>الإجمالي قبل الضريبة:</span>
-                <span>{{ currency_format($subtotalBeforeVat, currency: business_currency()) }}</span>
+                <span>{!! currency_format($subtotalBeforeVat, currency: business_currency()) !!}</span>
             </div>
             
             @if($vatAmount > 0)
             <div style="display: flex; justify-content: space-between; padding: 1px 0;">
                 <span>ضريبة القيمة المضافة ({{ $vatPercent }}%):</span>
-                <span>{{ currency_format($vatAmount, currency: business_currency()) }}</span>
+                <span>{!! currency_format($vatAmount, currency: business_currency()) !!}</span>
             </div>
             @endif
             
             <div style="display: flex; justify-content: space-between; padding: 5px 0; margin-top: 3px; border-top: 2px solid #000; font-size: 10px; font-weight: bold;">
                 <span>الإجمالي شامل الضريبة / Total:</span>
-                <span>{{ currency_format($totalWithVat, currency: business_currency()) }}</span>
+                <span>{!! currency_format($totalWithVat, currency: business_currency()) !!}</span>
             </div>
         </div>
         

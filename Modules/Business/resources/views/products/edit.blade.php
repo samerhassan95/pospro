@@ -7,7 +7,7 @@
 @php
     $modules = product_setting()->modules ?? [];
     $showSingle  = !isset($modules['show_product_type_single']) || $modules['show_product_type_single'];
-    $showVariant = isset($modules['show_product_type_variant']) && $modules['show_product_type_variant'];
+    $showVariant = !isset($modules['show_product_type_variant']) || $modules['show_product_type_variant'];
     $hasVisibleColumn = is_module_enabled($modules, 'show_batch_no') || is_module_enabled($modules, 'show_product_stock') || is_module_enabled($modules, 'show_exclusive_price') ||is_module_enabled($modules, 'show_inclusive_price') ||is_module_enabled($modules, 'show_profit_percent') ||is_module_enabled($modules, 'show_product_sale_price') ||is_module_enabled($modules, 'show_product_wholesale_price') ||is_module_enabled($modules, 'show_product_dealer_price') ||is_module_enabled($modules, 'show_mfg_date') ||is_module_enabled($modules, 'show_expire_date') ||is_module_enabled($modules, 'show_action');
     $defaultPermissions = [
         'show_batch_no',
@@ -66,6 +66,12 @@
                                                 <label>{{ __('Product Name') }}</label>
                                                 <input type="text" name="productName" value="{{ $product->productName }}" required class="form-control" placeholder="{{ __('Enter Product Name') }}">
                                             </div>
+                                            
+                                            <div class="col-lg-6 mb-2">
+                                                <label>{{ __('Product Description') }}</label>
+                                                <textarea name="productDescription" class="form-control" rows="1" placeholder="{{ __('Enter Product Description (Optional)') }}">{{ $product->productDescription }}</textarea>
+                                            </div>
+                                            
                                             @if (is_module_enabled($modules, 'show_product_category'))
                                             <div class="col-lg-6 mb-2">
                                                 <label>{{ __('Category') }}</label>
@@ -227,6 +233,17 @@
                                         <input class="form-check-input" type="radio" name="product_type" id="variantOption" value="variant" {{ $product->product_type == 'variant' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="variantOption">Batch</label>
                                     </div>
+                                    @else
+                                        {{-- Default fallback if variables are not set --}}
+                                        <input type="hidden" name="product_type" value="{{ $product->product_type }}">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="product_type" id="singleOption" value="single" {{ $product->product_type == 'single' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="singleOption">Single</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="product_type" id="variantOption" value="variant" {{ $product->product_type == 'variant' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="variantOption">Batch</label>
+                                        </div>
                                     @endif
                                 </div>
                             </div>
@@ -627,9 +644,9 @@
                                         <div class="preview-wrapper">
                                             <img class="preview-img" src="{{ asset($product->productPicture ?? 'assets/images/icons/upload.png') }}"><span class="close-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M12 4L4 12" stroke="#C52127" stroke-width="2" stroke-linecap="round"
+                                                    <path d="M12 4L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                           stroke-linejoin="round"></path>
-                                                    <path d="M4 4L12 12" stroke="#C52127" stroke-width="2" stroke-linecap="round"
+                                                    <path d="M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                           stroke-linejoin="round"></path>
                                                 </svg>
                                             </span>

@@ -341,8 +341,8 @@
                 <tr>
                     <td class="text-right">{{ $detail->product->productName ?? 'N/A' }}</td>
                     <td>{{ $detail->quantities }}</td>
-                    <td>{{ currency_format($detail->price, currency: business_currency()) }}</td>
-                    <td>{{ currency_format($detail->price * $detail->quantities, currency: business_currency()) }}</td>
+                    <td>{!! currency_format($detail->price, currency: business_currency()) !!}</td>
+                    <td>{!! currency_format($detail->price * $detail->quantities, currency: business_currency()) !!}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -369,24 +369,24 @@
             
             <div class="summary-line">
                 <span class="summary-label">الإجمالي قبل الضريبة / Subtotal:</span>
-                <span class="summary-value">{{ currency_format($subtotalBeforeVat, currency: business_currency()) }}</span>
+                <span class="summary-value">{!! currency_format($subtotalBeforeVat, currency: business_currency()) !!}</span>
             </div>
             
             <div class="summary-line">
                 <span class="summary-label">ضريبة القيمة المضافة ({{ $vatPercent }}%):</span>
-                <span class="summary-value">{{ currency_format($vatAmount, currency: business_currency()) }}</span>
+                <span class="summary-value">{!! currency_format($vatAmount, currency: business_currency()) !!}</span>
             </div>
             
             @if($sale->discountAmount > 0)
             <div class="summary-line">
                 <span class="summary-label">الخصم / Discount:</span>
-                <span class="summary-value">-{{ currency_format($sale->discountAmount, currency: business_currency()) }}</span>
+                <span class="summary-value">-{!! currency_format($sale->discountAmount, currency: business_currency()) !!}</span>
             </div>
             @endif
             
             <div class="summary-line summary-total">
                 <span class="summary-label">الإجمالي / Total:</span>
-                <span class="summary-value">{{ currency_format($totalWithVat, currency: business_currency()) }}</span>
+                <span class="summary-value">{!! currency_format($totalWithVat, currency: business_currency()) !!}</span>
             </div>
         </div>
 

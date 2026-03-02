@@ -48,13 +48,13 @@
                     <td class="text-start">{{ $product->productCode }}</td>
                     <td class="text-start">{{ $product->category->categoryName ?? ''}}</td>
                     @usercan('stocks.price')
-                    <td class="text-start">{{ currency_format(optional($firstStock)->productPurchasePrice, currency: business_currency()) }}</td>
+                    <td class="text-start">{!! currency_format(optional($firstStock)->productPurchasePrice, currency: business_currency()) !!}</td>
                     @endusercan
                     <td class="{{ $total_stock <= $product->alert_qty ? 'text-danger' : 'text-success' }} text-start">
                         {{ $total_stock }}
                     </td>
-                    <td class="text-center">{{ currency_format(optional($firstStock)->productSalePrice, currency: business_currency()) }}</td>
-                    <td class="text-end">{{ currency_format($total_value, currency : business_currency()) }}</td>
+                    <td class="text-center">{!! currency_format(optional($firstStock)->productSalePrice, currency: business_currency()) !!}</td>
+                    <td class="text-end">{!! currency_format($total_value, currency : business_currency()) !!}</td>
                 </tr>
             @endforeach
 
@@ -62,7 +62,7 @@
                 <td colspan="{{ auth()->user()->can('stocks.price') || !auth()->user()->visibility ? 7 : 6 }}" class="text-end">
                     <strong>{{ __('Total Stock Value:') }}</strong>
                 </td>
-                <td class="text-end"><strong>{{ currency_format($total_stock_value, currency : business_currency()) }}</strong></td>
+                <td class="text-end"><strong>{!! currency_format($total_stock_value, currency : business_currency()) !!}</strong></td>
             </tr>
         </tbody>
     </table>

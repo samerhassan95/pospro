@@ -1,6 +1,7 @@
 /**
  * Dynamically apply primary color to sidebar SVG images
  * This script converts the primary color to a CSS filter
+ * Optimized to prevent FOUC (Flash of Unstyled Content)
  */
 
 (function() {
@@ -72,7 +73,7 @@
         return primaryColor;
     }
 
-    // Apply filter to sidebar images
+    // Apply filter to sidebar images - IMMEDIATELY
     function applySidebarIconColors() {
         const primaryColor = getPrimaryColor();
         
@@ -88,7 +89,12 @@
         if (!styleEl) {
             styleEl = document.createElement('style');
             styleEl.id = 'sidebar-icon-dynamic-style';
-            document.head.appendChild(styleEl);
+            // Insert at the beginning of head to ensure it loads first
+            if (document.head.firstChild) {
+                document.head.insertBefore(styleEl, document.head.firstChild);
+            } else {
+                document.head.appendChild(styleEl);
+            }
         }
         
         // Apply the filter for all sidebar icons
@@ -117,15 +123,14 @@
                 filter: brightness(0) invert(1) !important;
             }
         `;
-        
-        console.log('Sidebar icons updated with color:', primaryColor);
     }
 
-    // Run on page load
+    // Run IMMEDIATELY - don't wait for DOMContentLoaded
+    applySidebarIconColors();
+    
+    // Also run on DOMContentLoaded as backup
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', applySidebarIconColors);
-    } else {
-        applySidebarIconColors();
     }
 
     // Re-apply when CSS variables change
@@ -137,9 +142,11 @@
         });
     });
 
-    observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['style']
-    });
+    if (document.documentElement) {
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['style']
+        });
+    }
 
 })();

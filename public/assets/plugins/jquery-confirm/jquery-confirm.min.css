@@ -430,14 +430,14 @@ body[class*="jconfirm-no-scroll-"] {
     color: #fff;
 }
 .jconfirm .jconfirm-box .jconfirm-buttons button.btn-red {
-    background-color: #c52127;
+    background-color: var(--clr-primary);
     color: #fff;
     text-shadow: none;
     -webkit-transition: background 0.2s;
     transition: background 0.2s;
 }
 .jconfirm .jconfirm-box .jconfirm-buttons button.btn-red:hover {
-    background-color: #c52127;
+    background-color: var(--clr-primary);
     color: #fff;
 }
 .jconfirm .jconfirm-box .jconfirm-buttons button.btn-orange {

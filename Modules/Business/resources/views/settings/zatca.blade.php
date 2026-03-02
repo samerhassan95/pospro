@@ -136,7 +136,7 @@
                                                     <tr>
                                                         <td>{{ $sale->invoiceNumber }}</td>
                                                         <td>{{ $sale->saleDate }}</td>
-                                                        <td>{{ currency_format($sale->totalAmount) }}</td>
+                                                        <td>{!! currency_format($sale->totalAmount) !!}</td>
                                                         <td>
                                                             @if($sale->zatca_status == 'REPORTED' || $sale->zatca_status == 'COMPLIANT')
                                                                 <span class="badge bg-success">{{ $sale->zatca_status }}</span>
