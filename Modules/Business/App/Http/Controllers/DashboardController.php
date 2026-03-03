@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PurchaseReturnDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -205,17 +206,17 @@ class DashboardController extends Controller
         $data['loss'] = Sale::where('business_id', auth()->user()->business_id)
             ->whereYear('created_at', request('year') ?? date('Y'))
             ->where('lossProfit', '<', 0)
-            ->selectRaw('MONTHNAME(created_at) as month, SUM(ABS(lossProfit)) as total')
-            ->orderBy('created_at')
-            ->groupBy('created_at')
+            ->selectRaw('MONTH(created_at) as month_num, MONTHNAME(created_at) as month, SUM(ABS(lossProfit)) as total')
+            ->orderBy('month_num')
+            ->groupBy(DB::raw('MONTH(created_at), MONTHNAME(created_at)'))
             ->get();
 
         $data['profit'] = Sale::where('business_id', auth()->user()->business_id)
             ->whereYear('created_at', request('year') ?? date('Y'))
             ->where('lossProfit', '>=', 0)
-            ->selectRaw('MONTHNAME(created_at) as month, SUM(ABS(lossProfit)) as total')
-            ->orderBy('created_at')
-            ->groupBy('created_at')
+            ->selectRaw('MONTH(created_at) as month_num, MONTHNAME(created_at) as month, SUM(ABS(lossProfit)) as total')
+            ->orderBy('month_num')
+            ->groupBy(DB::raw('MONTH(created_at), MONTHNAME(created_at)'))
             ->get();
 
         return response()->json($data);

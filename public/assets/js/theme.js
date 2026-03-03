@@ -1,7 +1,12 @@
 (function ($) {
     "use strict";
+    console.log('theme.js execution start', 'jQuery type=', typeof $, 'location=', window.location.href);
 
-    sideManu();
+
+    // initialize once DOM is ready
+    $(function() {
+        sideManu();
+    });
 
     function sideManu() {
         let manuStor = $(".side-bar").html();
@@ -10,14 +15,14 @@
         $(".sidebar-opner").on("click ", function () {
             $(".side-bar, .section-container").toggleClass("active");
         });
-        
+
         // Close button always closes sidebar
         $(".side-bar .close-btn").on("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
             $(".side-bar, .section-container").removeClass("active");
         });
-        
+
         // Overlay closes sidebar (responsive behavior)
         $(".side-bar .overlay").on("click", function (e) {
             e.preventDefault();
@@ -27,41 +32,48 @@
             }
         });
 
-        $("li>ul").toggleClass("dropdown-menu");
+        // guarantee every <ul> under an <li> is treated as dropdown
+        $("li>ul").addClass("dropdown-menu");
 
         let animationSpeed = 300;
 
         let subMenuSelector = ".dropdown-menu";
 
         // Simple dropdown toggle - same behavior for all screen sizes
-        $(".side-bar-manu > ul").on("click", ".dropdown > a", function (e) {
+        // bind at document level so it always fires even if the menu is rebuilt
+        $(document).on("click", ".side-bar-manu .dropdown > a", function (e) {
+            console.log('document capture dropdown click', this);
             e.preventDefault();
             e.stopPropagation();
-            
+
             let $this = $(this);
             let $parentLi = $this.parent("li");
-            let $submenu = $this.next(".dropdown-menu");
-            
+            // select next UL regardless of class to avoid first-click problems
+            let $submenu = $this.next("ul");
+            $submenu.addClass("dropdown-menu");
+
             // If this dropdown has a submenu
             if ($submenu.length > 0) {
                 // Toggle this dropdown
                 if ($parentLi.hasClass("active")) {
+                    console.log('closing dropdown', $this.text().trim());
                     // Close this dropdown
                     $parentLi.removeClass("active");
                     $submenu.removeClass("menu-open");
                     // Hide the submenu
                     $submenu.css('display', 'none');
                 } else {
+                    console.log('opening dropdown', $this.text().trim());
                     // Close all other dropdowns first
                     $(".side-bar-manu .dropdown.active").each(function() {
                         $(this).removeClass("active");
                         $(this).find(".dropdown-menu").removeClass("menu-open").css('display', 'none');
                     });
-                    
+
                     // Open this dropdown
                     $parentLi.addClass("active");
                     $submenu.addClass("menu-open");
-                    
+
                     // Force show the submenu by overriding inline styles
                     $submenu.css({
                         'display': 'block',
@@ -129,7 +141,7 @@
             $('.side-bar-manu .dropdown > a').on('touchstart', function() {
                 $(this).addClass('touch-active');
             });
-            
+
             $('.side-bar-manu .dropdown > a').on('touchend', function() {
                 $(this).removeClass('touch-active');
             });
@@ -140,7 +152,7 @@
             $('.side-bar-manu .dropdown.active .dropdown-menu, .side-bar-manu .dropdown-menu.menu-open').each(function() {
                 let $menu = $(this);
                 let currentDisplay = $menu.css('display');
-                
+
                 if (currentDisplay === 'none') {
                     // Remove all problematic inline styles and show the dropdown
                     $menu.removeAttr('style');
@@ -153,11 +165,8 @@
                 }
             });
         }
-        
-        // Run the force function every 50ms to override any other scripts
-        setInterval(forceDropdownVisibility, 50);
-        
-        // Watch for style attribute changes using MutationObserver
+
+        // Watch for style attribute changes using MutationObserver (more efficient than setInterval)
         if (window.MutationObserver) {
             const observer = new MutationObserver(function(mutations) {
                 mutations.forEach(function(mutation) {
@@ -169,19 +178,19 @@
                     }
                 });
             });
-            
+
             // Observe all dropdown menus for style changes
             $('.side-bar-manu .dropdown-menu').each(function() {
                 observer.observe(this, { attributes: true, attributeFilter: ['style'] });
             });
         }
-        
+
         // Ensure dropdowns stay open when clicking submenu items
         $('.side-bar-manu .dropdown-menu a').on('click', function(e) {
             // Don't close the dropdown when clicking submenu items
             e.stopPropagation();
         });
-        
+
         // Prevent dropdown from closing when clicking inside the dropdown menu
         $('.side-bar-manu .dropdown-menu').on('click', function(e) {
             e.stopPropagation();

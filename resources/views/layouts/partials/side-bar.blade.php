@@ -112,7 +112,7 @@
             @canany(['plans-read', 'plans-create'])
                 <li
                     class="dropdown {{ Route::is('admin.plans.index', 'admin.plans.create', 'admin.plans.edit') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <svg width="18" height="22" viewBox="0 0 18 22" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -139,7 +139,7 @@
             @canany(['users-read'])
                 <li
                     class="dropdown {{ Request::routeIs('admin.users.index', 'admin.users.create', 'admin.users.edit') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -161,7 +161,7 @@
 
             @if (moduleCheck('AffiliateAddon'))
                 <li class="dropdown {{ Request::routeIs('admin.affiliates.index','admin.affiliate-withdrawals.index','admin.affiliate-reports.index') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -206,7 +206,7 @@
 
             @canany(['subscription-reports-read'])
                 <li class="dropdown {{ Route::is('admin.subscription-reports.index') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -230,7 +230,7 @@
             @canany(['messages-read'])
                 <li
                     class="dropdown {{ Request::routeIs('admin.messages.index', 'admin.messages.create', 'admin.messages.edit') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -253,7 +253,7 @@
                 'blogs-read', 'newsletters-read', 'interfaces-read', 'designs-read', 'testimonials-read', 'terms-read'])
                 <li
                     class="dropdown {{ Request::routeIs('admin.website-settings.index', 'admin.faqs.create', 'admin.faqs.destroy', 'admin.faqs.edit', 'admin.faqs.index', 'admin.testimonials.index', 'admin.testimonials.create', 'admin.testimonials.edit', 'admin.features.index', 'admin.features.create', 'admin.features.edit', 'admin.blogs.index', 'admin.blogs.create', 'admin.blogs.edit', 'admin.blogs.filter.comment', 'admin.newsletters.index', 'admin.interfaces.index', 'admin.interfaces.create', 'admin.interfaces.edit', 'admin.designs.index', 'admin.designs.create', 'admin.designs.edit', 'admin.testimonials.index', 'admin.testimonials.create', 'admin.testimonials.edit', 'admin.term-conditions.index', 'admin.privacy-policy.index') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20"
                                 viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
@@ -326,7 +326,7 @@
             @canany(['roles-read', 'permissions-read'])
                 <li
                     class="dropdown {{ Request::routeIs('admin.roles.index', 'admin.roles.create', 'admin.roles.edit', 'admin.permissions.index') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <svg width="20" height="22" viewBox="0 0 20 22" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">

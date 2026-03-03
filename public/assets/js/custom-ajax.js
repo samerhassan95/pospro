@@ -160,7 +160,13 @@ $(".exit-branch-btn").on("click", function () {
 
 $(document).ready(function () {
     $(".logoutButton").on("click", function () {
-        document.getElementById("logoutForm").submit();
+        // try to submit a nearby form first (business/admin headers now use unique IDs)
+        var $form = $(this).siblings('form');
+        if ($form.length) {
+            $form.submit();
+        } else if (document.getElementById("logoutForm")) {
+            document.getElementById("logoutForm").submit();
+        }
     });
 
     $(document).on('change', '.custom-reports-checkbox', function() {

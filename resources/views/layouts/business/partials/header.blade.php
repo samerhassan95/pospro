@@ -2,8 +2,8 @@
     <div class="d-flex flex-column flex-md-row align-items-center justify-content-between" style="flex-wrap: nowrap;">
         <div class="bg-white d-flex align-items-center">
             <div class="sidebar-opner menu-opener"><i class="fal fa-bars" aria-hidden="true"></i></div>
-  
-      
+
+
               <a href="{{ route('admin.dashboard.index') }}" class="pos-logo">
             <img src="{{ asset(get_admin_logo()) }}" alt="Logo" class="sidebar-logo-img">
             <span class="sidebar-logo-text"><span class="bytes-text">{{ get_system_title() }}</span></span>
@@ -114,17 +114,17 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-scroll">
                         <li>
-                            <a class="dropdown-item" href="{{ route('business.profiles.index') }}"> 
+                            <a class="dropdown-item" href="{{ route('business.profiles.index') }}">
                                 <i class="fal fa-user"></i>
                                 {{ __('My Profile') }}
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item logoutButton" href="javascript:void(0)">
+                            <form id="logoutFormBusiness" action="{{ route('logout') }}" method="post" style="display:none">
+                                @csrf
+                            </form>
+                            <a class="dropdown-item logoutButton" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logoutFormBusiness').submit();">
                                 <i class="far fa-sign-out"></i> {{ __('Logout') }}
-                                <form action="{{ route('logout') }}" method="post" id="logoutForm">
-                                    @csrf
-                                </form>
                             </a>
                         </li>
                     </ul>
@@ -163,15 +163,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Language dropdown
         const languageToggle = document.querySelector('.language-change .dropdown-toggle');
         const languageMenu = document.querySelector('.language-change .dropdown-menu');
-        
+
         // Profile dropdown
         const profileToggle = document.querySelector('.profile-info .dropdown-toggle, .profile-info a[data-bs-toggle="dropdown"]');
         const profileMenu = document.querySelector('.profile-info .dropdown-menu');
-        
+
         // Notification dropdown
         const notificationToggle = document.querySelector('.notifications .dropdown-toggleer');
         const notificationMenu = document.querySelector('.notifications .dropdown-menu, .notifications .notification-container');
-        
+
         // Function to close all dropdowns
         function closeAllDropdowns() {
             if (languageMenu) languageMenu.classList.remove('show');
@@ -181,69 +181,69 @@ document.addEventListener('DOMContentLoaded', function() {
                 toggle.setAttribute('aria-expanded', 'false');
             });
         }
-        
+
         // Language dropdown functionality
         if (languageToggle && languageMenu) {
             languageToggle.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 const isOpen = languageMenu.classList.contains('show');
                 closeAllDropdowns();
-                
+
                 if (!isOpen) {
                     languageMenu.classList.add('show');
                     languageToggle.setAttribute('aria-expanded', 'true');
                 }
             });
         }
-        
+
         // Profile dropdown functionality
         if (profileToggle && profileMenu) {
             profileToggle.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 const isOpen = profileMenu.classList.contains('show');
                 closeAllDropdowns();
-                
+
                 if (!isOpen) {
                     profileMenu.classList.add('show');
                     profileToggle.setAttribute('aria-expanded', 'true');
                 }
             });
         }
-        
+
         // Notification dropdown functionality
         if (notificationToggle && notificationMenu) {
             notificationToggle.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 const isOpen = notificationMenu.classList.contains('show');
                 closeAllDropdowns();
-                
+
                 if (!isOpen) {
                     notificationMenu.classList.add('show');
                     notificationToggle.setAttribute('aria-expanded', 'true');
                 }
             });
         }
-        
+
         // Close dropdowns when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.dropdown')) {
                 closeAllDropdowns();
             }
         });
-        
+
         // Prevent dropdown from closing when clicking inside
         document.querySelectorAll('.dropdown-menu, .notification-container').forEach(menu => {
             menu.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
         });
-        
+
         // Close dropdown when clicking on dropdown items (except for notifications)
         document.querySelectorAll('.language-change .dropdown-item, .profile-info .dropdown-item').forEach(item => {
             item.addEventListener('click', function() {
@@ -254,10 +254,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
     // Initialize dropdowns
     initMobileDropdowns();
-    
+
     // Reinitialize on window resize
     let resizeTimer;
     window.addEventListener('resize', function() {

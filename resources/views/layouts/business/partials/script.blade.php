@@ -1,6 +1,9 @@
 <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('assets/js/theme.js') }}"></script>
+<script>
+    console.log('about to load theme.js path','{{ asset('assets/js/theme.js') }}?v={{ time() }}');
+</script>
+<script src="{{ asset('assets/js/theme.js') }}?v={{ time() }}"></script>
 <script src="{{ asset('assets/js/math.js') }}"></script>
 {{-- Sidebar Icon Color --}}
 <script src="{{ asset('assets/js/sidebar-icon-color.js') }}?v={{ time() }}"></script>
@@ -83,14 +86,14 @@
 <script>
     function copyPaymentLink(url) {
         if (!url) return;
-        
+
         const el = document.createElement('textarea');
         el.value = url;
         document.body.appendChild(el);
         el.select();
         document.execCommand('copy');
         document.body.removeChild(el);
-        
+
         if (typeof toastr !== 'undefined') {
             toastr.success("{{ __('Payment link copied to clipboard!') }}");
         } else {
