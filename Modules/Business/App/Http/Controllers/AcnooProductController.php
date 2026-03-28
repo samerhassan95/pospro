@@ -434,8 +434,9 @@ class AcnooProductController extends Controller
             'stocks.warehouse:id,name'
         ])
             ->where('business_id', auth()->user()->business_id)
-            ->withSum('stocks as total_stock', 'productStock')
-            ->having('total_stock', '>', 0)
+            ->whereHas('stocks', function ($query) {
+                $query->where('productStock', '>', 0);
+            })
             ->latest()
             ->get();
 
@@ -444,7 +445,21 @@ class AcnooProductController extends Controller
 
     public function getByCategory($category_id)
     {
-        $products = Product::where('business_id', auth()->user()->business_id)->where('category_id', $category_id)->get();
+        $products = Product::with([
+            'stocks' => function ($query) {
+                $query->where('productStock', '>', 0);
+            },
+            'unit:id,unitName',
+            'stocks.warehouse:id,name'
+        ])
+            ->where('business_id', auth()->user()->business_id)
+            ->where('category_id', $category_id)
+            ->whereHas('stocks', function ($query) {
+                $query->where('productStock', '>', 0);
+            })
+            ->latest()
+            ->get();
+
         return response()->json($products);
     }
 

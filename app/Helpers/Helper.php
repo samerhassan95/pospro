@@ -1269,3 +1269,13 @@ if (!function_exists('currency')) {
         return $symbol . ' ' . number_format($amount, 2);
     }
 }
+
+/**
+ * Get currency symbol SVG - wrapper for sar_custom_svg_icon_v4
+ */
+if (!function_exists('currency_symbol_svg')) {
+    function currency_symbol_svg(): string
+    {
+        return sar_custom_svg_icon_v4();
+    }
+}
