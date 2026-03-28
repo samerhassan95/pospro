@@ -330,4 +330,33 @@
     <script src="{{ asset('assets/js/custom/sale.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('assets/js/custom/math.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom/calculator.js') }}"></script>
+    <script>
+        // Re-bind sidebar dropdown after sale.js loads
+        $(document).ready(function () {
+            $(document).off('click.sidebarDropdown').on('click.sidebarDropdown', '.side-bar-manu > ul .dropdown > a', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $parentLi = $(this).parent('li');
+                var $submenu = $(this).next('.dropdown-menu');
+                if ($submenu.length > 0) {
+                    if ($parentLi.hasClass('active')) {
+                        $parentLi.removeClass('active');
+                        $submenu.removeClass('menu-open').css('display', 'none');
+                    } else {
+                        $('.side-bar-manu .dropdown.active').each(function () {
+                            $(this).removeClass('active');
+                            $(this).find('.dropdown-menu').removeClass('menu-open').css('display', 'none');
+                        });
+                        $parentLi.addClass('active');
+                        $submenu.addClass('menu-open').css({
+                            display: 'block', visibility: 'visible', opacity: '1',
+                            position: 'relative', inset: 'auto', transform: 'none',
+                            'z-index': 'auto', float: 'none', width: 'auto',
+                            'min-width': 'auto', 'max-width': 'none'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
 @endpush

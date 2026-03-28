@@ -10926,7 +10926,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     background: #fff;
     border-radius: 14px;
     padding: 20px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    /* box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); */
     height: 100%;
     width: 100%;
     display: flex;

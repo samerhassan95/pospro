@@ -1,4 +1,4 @@
-﻿<nav class="side-bar">
+<nav class="side-bar">
     <div class="side-bar-logo">
         <a href="{{ route('business.dashboard.index') }}">
             <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo" width="40" height="40">
@@ -938,4 +938,5 @@
         </ul>
     </div>
 </nav>
+
 

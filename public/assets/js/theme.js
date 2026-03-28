@@ -41,7 +41,7 @@
 
         // Simple dropdown toggle - same behavior for all screen sizes
         // bind at document level so it always fires even if the menu is rebuilt
-        $(document).on("click", ".side-bar-manu .dropdown > a", function (e) {
+        $(document).off("click.sidebarDropdown").on("click.sidebarDropdown", ".side-bar-manu .dropdown > a", function (e) {
             console.log('document capture dropdown click', this);
             e.preventDefault();
             e.stopPropagation();
@@ -89,6 +89,26 @@
                         'max-width': 'none'
                     });
                 }
+            }
+        });
+
+        // On page load, open any dropdown that is already active (e.g. current route)
+        $(".side-bar-manu .dropdown.active").each(function() {
+            var $submenu = $(this).find("> .dropdown-menu");
+            if ($submenu.length) {
+                $submenu.addClass("menu-open").css({
+                    'display': 'block',
+                    'visibility': 'visible',
+                    'opacity': '1',
+                    'position': 'relative',
+                    'inset': 'auto',
+                    'transform': 'none',
+                    'z-index': 'auto',
+                    'float': 'none',
+                    'width': 'auto',
+                    'min-width': 'auto',
+                    'max-width': 'none'
+                });
             }
         });
 

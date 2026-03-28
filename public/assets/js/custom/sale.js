@@ -3,8 +3,6 @@ $(document).ready(function () {
     var $subPlan = $(".sub-plan");
     var isActive = $(window).width() >= 1150;
 
-    $(".side-bar, .section-container").toggleClass("active", isActive);
-
     if (isActive) {
         $sidebarPlan.hide();
         $subPlan.show();
