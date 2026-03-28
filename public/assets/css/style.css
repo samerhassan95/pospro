@@ -518,6 +518,9 @@ svg {
     object-fit: contain;
 }
 
+/* Ensure server-rendered SVG currency symbols are hidden until JS reveals them */
+.currency-svg { opacity: 0; transition: opacity .2s; }
+
 .padding-tb {
     padding-top: 6px;
     padding-bottom: 6px;
@@ -1538,7 +1541,7 @@ body [dir="rtl"] .sidebar-search-icon {
 
 .main-header-section {
     padding: 11px 20px;
- 
+
 }
 
 .main-header-section .profile-info img {
@@ -2980,11 +2983,11 @@ gap: 10px;
         justify-content: center;
         flex-wrap: wrap;
     }
-    
+
     .dashboard-chart {
         padding: 15px 15px 10px 15px;
     }
-    
+
     .dashboard-chart h4 {
         font-size: 16px;
     }
@@ -4123,9 +4126,9 @@ input:checked + .slider:before {
 }
 
 .footer .footer-logo   {
-   
+
     height: 48px;
-   
+
 }
 
 .mybazar-login-section {
@@ -10841,7 +10844,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 .promo-content {
     position: relative;
     z-index: 2;
- 
+
 }
  [dir="rtl"] .promo-content h2{
      margin-bottom: 36px;
@@ -11099,11 +11102,11 @@ grid-template-columns: 1fr; /* grid الحديث */
     .promo-content {
         max-width: 100%;
     }
-    
+
     .promo-decoration {
         display: none;
     }
-    
+
     .dashboard-promo-banner {
         min-height: 160px;
     }
@@ -11113,7 +11116,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     .dashboard-promo-banner {
         padding: 20px;
     }
-    
+
     .promo-content h2 {
         font-size: 18px;
     }
@@ -11151,7 +11154,7 @@ grid-template-columns: 1fr; /* grid الحديث */
 .loading-content {
     text-align: center;
     padding: 40px;
-  
+
     border-radius: 12px;
     max-width: 400px;
     width: 90%;
@@ -11236,35 +11239,35 @@ grid-template-columns: 1fr; /* grid الحديث */
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE and Edge */
     }
-    
+
     .header-right::-webkit-scrollbar {
         display: none; /* Chrome, Safari and Opera */
     }
-    
+
     /* Ensure all elements maintain their original size and appearance */
     .view-website svg {
         width: 28px;
         height: 28px;
         flex-shrink: 0;
     }
-    
+
     .language-change .btn {
         white-space: nowrap;
         flex-shrink: 0;
         padding: 0.375rem 0.75rem;
     }
-    
+
     .language-change .flag-icon {
         width: 24px;
         height: 24px;
         border-radius: 50%;
         object-fit: cover;
     }
-    
+
     .notifications {
         flex-shrink: 0;
     }
-    
+
     .notifications .bg-red {
         position: absolute;
         top: -5px;
@@ -11281,7 +11284,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         justify-content: center;
         border: 2px solid white;
     }
-    
+
     .notifications .dropdown-toggleer {
         position: relative;
         text-decoration: none;
@@ -11294,11 +11297,11 @@ grid-template-columns: 1fr; /* grid الحديث */
         gap: 6px;
         padding: 4px 6px !important;
     }
-    
+
     /* .main-header-section .d-flex {
         flex-wrap: nowrap;
     } */
-    
+
     /* Keep original sizes but ensure they fit */
     .language-change .btn {
         font-size: 0.875rem;
@@ -11348,27 +11351,27 @@ grid-template-columns: 1fr; /* grid الحديث */
         min-width: auto !important;
         flex-shrink: 0 !important;
     }
-    
+
     .header-right > * {
         flex-shrink: 0 !important;
         min-width: auto !important;
     }
-    
+
     /* Ensure language dropdown is visible */
     .language-change {
         display: block !important;
     }
-    
+
     .language-change .btn {
         white-space: nowrap !important;
         min-width: auto !important;
     }
-    
+
     /* Ensure notifications are visible */
     .notifications {
         display: block !important;
     }
-    
+
     /* Ensure website link is visible */
     .view-website {
         display: inline-block !important;
@@ -11382,7 +11385,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         scrollbar-width: none !important;
         -ms-overflow-style: none !important;
     }
-    
+
     .header-right::-webkit-scrollbar {
         display: none !important;
     }
@@ -11406,7 +11409,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         background-color: #fff !important;
         margin-top: 2px !important;
     }
-    
+
     /* Notifications dropdown fixes */
     .notifications .dropdown-menu {
         position: absolute !important;
@@ -11425,13 +11428,13 @@ grid-template-columns: 1fr; /* grid الحديث */
         background-color: #fff !important;
         margin-top: 2px !important;
     }
-    
+
     /* Ensure dropdown containers have proper positioning */
     .language-change,
     .notifications {
         position: relative !important;
     }
-    
+
     /* Fix dropdown items */
     .language-change .dropdown-item,
     .notifications .dropdown-item {
@@ -11447,7 +11450,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         line-height: 1.5 !important;
         white-space: nowrap !important;
     }
-    
+
     .language-change .dropdown-item:hover,
     .language-change .dropdown-item:focus,
     .notifications .dropdown-item:hover,
@@ -11455,7 +11458,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         background-color: #f8f9fa !important;
         color: #1e2125 !important;
     }
-    
+
     /* Fix dropdown toggle buttons */
     .language-change .dropdown-toggle::after {
         display: inline-block !important;
@@ -11467,7 +11470,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         border-bottom: 0 !important;
         border-left: 0.3em solid transparent !important;
     }
-    
+
     /* Ensure dropdowns work with touch */
     .dropdown-toggle {
         cursor: pointer !important;
@@ -11476,7 +11479,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         -ms-user-select: none !important;
         user-select: none !important;
     }
-    
+
     /* Fix notification container specific styles */
     .notification-container {
         position: absolute !important;
@@ -11491,18 +11494,18 @@ grid-template-columns: 1fr; /* grid الحديث */
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
         margin-top: 2px !important;
     }
-    
+
     .notification-container .notification-header,
     .notification-container .notification-footer {
         padding: 0.75rem 1rem !important;
         border-bottom: 1px solid #dee2e6 !important;
     }
-    
+
     .notification-container .notification-footer {
         border-bottom: none !important;
         border-top: 1px solid #dee2e6 !important;
     }
-    
+
     .notification-container ul {
         max-height: 200px !important;
         overflow-y: auto !important;
@@ -11510,22 +11513,22 @@ grid-template-columns: 1fr; /* grid الحديث */
         padding: 0 !important;
         list-style: none !important;
     }
-    
+
     .notification-container ul li {
         border-bottom: 1px solid #f8f9fa !important;
     }
-    
+
     .notification-container ul li:last-child {
         border-bottom: none !important;
     }
-    
+
     .notification-container ul li a {
         display: block !important;
         padding: 0.75rem 1rem !important;
         color: #212529 !important;
         text-decoration: none !important;
     }
-    
+
     .notification-container ul li a:hover {
         background-color: #f8f9fa !important;
     }
@@ -11538,7 +11541,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: 50% !important;
         transform: translateX(-50%) !important;
     }
-    
+
     .notifications .dropdown-menu,
     .notification-container {
         min-width: 250px !important;
@@ -11546,7 +11549,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         right: 0 !important;
         left: auto !important;
     }
-    
+
     /* Force absolute positioning for all header dropdowns on small screens */
     .navbar-nav .dropdown-menu,
     .main-header-section .dropdown-menu,
@@ -11561,7 +11564,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         min-width: 160px !important;
         float: none !important;
     }
-    
+
     /* Show dropdown when active - complete styling with highest specificity */
     .navbar .navbar-nav .dropdown-menu.show,
     .navbar-nav .dropdown-menu.show,
@@ -11585,7 +11588,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         float: none !important;
         margin-top: 0 !important;
     }
-    
+
     /* Override Bootstrap navbar collapse behavior with highest specificity */
     .navbar-collapse .navbar-nav .dropdown-menu,
     .collapse .navbar-nav .dropdown-menu,
@@ -11602,7 +11605,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         border-radius: 0.375rem !important;
         box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175) !important;
     }
-    
+
     /* Force absolute positioning even when shown */
     .navbar-collapse .navbar-nav .dropdown-menu.show,
     .collapse .navbar-nav .dropdown-menu.show {
@@ -11611,7 +11614,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         top: 100% !important;
         left: 0 !important;
     }
-    
+
     /* Ensure header containers don't interfere */
     .main-header-section,
     .header-section,
@@ -11628,12 +11631,12 @@ grid-template-columns: 1fr; /* grid الحديث */
         -webkit-tap-highlight-color: transparent !important;
         touch-action: manipulation !important;
     }
-    
+
     /* Ensure dropdown containers are positioned correctly */
     .dropdown {
         position: relative !important;
     }
-    
+
     /* Additional notification container styling */
     .notification-container.show {
         display: block !important;
@@ -11645,7 +11648,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         top: 100% !important;
         left: 0 !important;
     }
-    
+
     /* Ensure all dropdown types work on medium screens too */
     .navbar-nav .dropdown-menu.show,
     .main-header-section .dropdown-menu.show,
@@ -11661,7 +11664,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         z-index: 9999 !important;
         display: block !important;
     }
-    
+
     /* Fix Bootstrap dropdown conflicts */
     .dropdown-menu[data-bs-popper] {
         position: absolute !important;
@@ -11669,19 +11672,19 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: 0 !important;
         margin-top: 2px !important;
     }
-    
+
     .notifications .dropdown-menu[data-bs-popper],
     .notifications .notification-container {
         left: auto !important;
         right: 0 !important;
     }
-    
+
     /* Smooth transitions */
     .dropdown-menu,
     .notification-container {
         transition: opacity 0.15s ease-in-out !important;
     }
-    
+
     /* Fix for iOS Safari */
     .dropdown-toggle:focus,
     .dropdown-toggleer:focus {
@@ -11706,7 +11709,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         min-width: 160px !important;
         z-index: 1050 !important;
     }
-    
+
     /* Force show state to be absolute */
     .navbar .navbar-collapse .navbar-nav .dropdown-menu.show,
     .navbar .navbar-nav .dropdown-menu.show,
@@ -11718,7 +11721,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: 0 !important;
         z-index: 1050 !important;
     }
-    
+
     /* Force all parent containers to allow overflow */
     .navbar,
     .navbar-collapse,
@@ -11730,13 +11733,13 @@ grid-template-columns: 1fr; /* grid الحديث */
         overflow: visible !important;
         position: relative !important;
     }
-    
+
     /* Additional fix for dropdown positioning */
     .dropdown {
         position: relative !important;
         overflow: visible !important;
     }
-    
+
     /* Force dropdown to break out of any container - ALL DROPDOWN TYPES */
     .navbar-nav .dropdown-menu.show,
     .navbar-nav .dropdown-menu-scroll.show,
@@ -11766,7 +11769,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         max-height: none !important;
         overflow: visible !important;
     }
-    
+
     /* Ensure dropdown appears outside parent bounds */
     .dropdown-menu-scroll.show,
     .dropdown-menu-scroll {
@@ -11777,7 +11780,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: 0 !important;
         z-index: 9999 !important;
     }
-    
+
     /* Override any static positioning from Bootstrap navbar */
     .navbar-nav .dropdown-menu-scroll,
     .navbar-collapse .dropdown-menu-scroll {
@@ -11786,7 +11789,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: 0 !important;
         display: none !important;
     }
-    
+
     .navbar-nav .dropdown-menu-scroll.show,
     .navbar-collapse .dropdown-menu-scroll.show {
         position: absolute !important;
@@ -11794,7 +11797,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         top: 100% !important;
         left: 0 !important;
     }
-    
+
     /* Fix for web header custom dropdowns */
     .header-section .menu-dropdown .dropdown-content {
         position: absolute !important;
@@ -11808,7 +11811,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
         min-width: 160px !important;
     }
-    
+
     /* Ensure all dropdown containers are positioned correctly */
     .language-change,
     .notifications,
@@ -11938,7 +11941,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         min-width: 180px;
         margin-top: 0.25rem;
     }
-    
+
     [dir="rtl"] .main-header-section .profile-info .dropdown-menu,
     [dir="rtl"] .business-profile .dropdown-menu {
         /* right: auto !important;
@@ -11952,7 +11955,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         min-width: 160px;
         font-size: 13px;
     }
-    
+
     .main-header-section .profile-info .dropdown-menu li a,
     .business-profile .dropdown-menu li a {
         padding: 0.6rem 0.8rem;
@@ -11978,7 +11981,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: -100px !important;
         transform: translateX(0) !important;
     }
-    
+
     /* English mode - profile dropdown margin adjustment with maximum specificity */
     html body [dir="ltr"] .main-header-section .header-right .profile-info .dropdown-menu[style],
     html body [dir="ltr"] .main-header-section .header-right .profile-info ul.dropdown-menu[style],
@@ -12000,7 +12003,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: -100px !important;
         transform: translateX(0) !important;
     }
-    
+
     /* Additional override for Popper.js positioned dropdowns */
     html body [dir="rtl"] ul.dropdown-menu[data-popper-placement][style],
     html body [dir="rtl"] .dropdown-menu[data-popper-placement][style] {
@@ -12008,21 +12011,21 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: -100px !important;
         transform: translateX(0) !important;
     }
-    
+
     html body [dir="ltr"] ul.dropdown-menu[data-popper-placement][style],
     html body [dir="ltr"] .dropdown-menu[data-popper-placement][style] {
         margin: 0 0 0 -100px !important;
         left: -100px !important;
         transform: translateX(0) !important;
     }
-    
+
     /* Nuclear option for Arabic (RTL) - LANGUAGE DROPDOWN ONLY */
     html body [dir="rtl"] .language-change ul.dropdown-menu.show[style*="position: absolute"],
     html body [dir="rtl"] .language-change .dropdown-menu.show[style*="position: absolute"] {
         margin-left: -200px !important;
         left: -200px !important;
     }
-    
+
     /* Nuclear option for English (LTR) - PROFILE DROPDOWN ONLY */
     html body [dir="ltr"] .profile-info ul.dropdown-menu.show[style*="position: absolute"],
     html body [dir="ltr"] .profile-info .dropdown-menu.show[style*="position: absolute"],
@@ -12031,7 +12034,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         margin-left: -300px !important;
         left: -300px !important;
     }
-    
+
     /* OVERRIDE THE GLOBAL SHOW STATE RULE - RESET MARGINS FOR SPECIFIC DROPDOWNS */
     /* Arabic mode - only language dropdown gets -100px margin */
     html body [dir="rtl"] .navbar .navbar-collapse .navbar-nav .dropdown-menu.show,
@@ -12048,11 +12051,11 @@ grid-template-columns: 1fr; /* grid الحديث */
     html body [dir="rtl"] .home-page-language-change .dropdown-menu.show {
         margin: 0 !important;
     }
-    
+
     html body [dir="rtl"] .language-change .dropdown-menu.show {
         margin: 0 0 0 -100px !important;
     }
-    
+
     /* English mode - only profile dropdown gets -100px margin */
     html body [dir="ltr"] .navbar .navbar-collapse .navbar-nav .dropdown-menu.show,
     html body [dir="ltr"] .navbar .navbar-nav .dropdown-menu.show,
@@ -12067,7 +12070,7 @@ grid-template-columns: 1fr; /* grid الحديث */
     html body [dir="ltr"] .home-page-language-change .dropdown-menu.show {
         margin: 0 !important;
     }
-    
+
     html body [dir="ltr"] .profile-info .dropdown-menu.show,
     html body [dir="ltr"] .business-profile .dropdown-menu.show {
         margin: 0 0 0 -100px !important;
@@ -12084,7 +12087,7 @@ grid-template-columns: 1fr; /* grid الحديث */
         left: 0 !important;
         right: auto !important;
     }
-    
+
     /* RTL positioning for large screens */
     html body [dir="rtl"] .language-change .dropdown-menu.show,
     html body [dir="rtl"] .profile-info .dropdown-menu.show,

@@ -363,7 +363,7 @@ function calTotalAmount() {
         $("#items_count").text(itemCount);
     }
 
-    $("#sub_total").text(currencyFormat(subtotal));
+    $("#sub_total").html(currencyFormat(subtotal));
 
     // Get VAT rate from selected VAT option (dynamic from database)
     let vat_rate = parseFloat($(".vat_select option:selected").data("rate")) || 15;
@@ -371,7 +371,7 @@ function calTotalAmount() {
     
     // Update VAT display with dynamic rate
     $(".vat-rate-display").text(vat_rate);
-    $("#vat_amount").text(currencyFormat(vat_amount));
+    $("#vat_display").html(currencyFormat(vat_amount));
     $("#vat_amount").val(vat_amount.toFixed(2));
 
     // Subtotal with VAT
@@ -404,7 +404,11 @@ function calTotalAmount() {
 
     // Total Amount (after VAT + shipping, then discount)
     let total_amount = subtotal_with_vat + shipping_charge - discount_amount;
-    $("#total_amount").text(currencyFormat(total_amount));
+    $("#total_amount").html(currencyFormat(total_amount));
+
+    // Update discount and shipping displays
+    $("#discount_display").html(currencyFormat(discount_amount));
+    $("#shipping_display").html(currencyFormat(shipping_charge));
 
     // Receive Amount
     let receive_amount = getNumericValue($("#receive_amount").val()) || 0;
@@ -425,7 +429,7 @@ function calTotalAmount() {
     $("#due_amount").val(due_amount.toFixed(2));
 
     // Update VAT amount display in sidebar
-    $("#vat_amount").text(currencyFormat(vat_amount));
+    $("#vat_display").html(currencyFormat(vat_amount));
 }
 calTotalAmount();
 

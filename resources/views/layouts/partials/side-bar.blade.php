@@ -1,7 +1,7 @@
 ﻿<nav class="side-bar relative">
     <div class="side-bar-logo">
         <a href="{{ route('admin.dashboard.index') }}" class="logo-link">
-            <img src="{{ asset(get_admin_logo()) }}" alt="Logo" class="sidebar-logo-img" >
+            <img src="{{ asset(get_admin_logo()) }}" alt="Logo" class="sidebar-logo-img" width="40" height="40" >
             <span class="sidebar-logo-text"><span class="bytes-text">{{ get_system_title() }}</span></span>
         </a>
         <button class="close-btn"><i class="fal fa-times"></i></button>
@@ -10,7 +10,7 @@
     <div class="sidebar-search-wrapper">
         <input type="text" class="sidebar-search-input" placeholder="{{ __('Search menu...') }}" id="sidebarSearch">
     </div>
-    
+
     <div class="side-bar-manu ">
         <ul>
             @can('dashboard-read')
@@ -395,7 +395,7 @@
             @endcan
 
         </ul>
-        
+
         <!-- Sidebar Search -->
         <!-- <div class="sidebar-search-wrapper">
             <input type="text" class="sidebar-search-input" placeholder="{{ __('Search menu...') }}" id="sidebarSearch">

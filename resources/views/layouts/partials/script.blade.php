@@ -31,10 +31,22 @@
 <!-- Dropdown Fix for Mobile -->
 <script src="{{ asset('assets/js/dropdown-fix.js') }}?v={{ time() }}"></script>
 
+{{-- currency SVG helpers (hidden until ready) --}}
+<style>
+    /* hide server-rendered currency SVGs until JS toggles them */
+    .currency-svg { opacity: 0 !important; }
+</style>
 {{-- SAR Symbol Replacement --}}
 <script src="{{ asset('assets/js/custom/replace-sar-symbol.js') }}?v={{ time() }}"></script>
 {{-- Clean SAR SVG Display --}}
 <script src="{{ asset('assets/js/custom/clean-sar-svg.js') }}?v={{ time() }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.currency-svg').forEach(function(el) {
+            el.style.opacity = '1';
+        });
+    });
+</script>
 
 @stack('js')
 

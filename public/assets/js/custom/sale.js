@@ -371,7 +371,7 @@ function calTotalAmount() {
         itemsCount += qty;
     });
 
-    $("#sub_total").text(currencyFormat(subtotal));
+    $("#sub_total").html(currencyFormat(subtotal));
     $("#items_count").text(itemsCount);
 
     // Shipping Charge
@@ -410,23 +410,23 @@ function calTotalAmount() {
 
     // Update VAT display with dynamic rate
     $(".vat-rate-display").text(vat_rate);
-    $("#vat_display").text(currencyFormat(vat_amount));
+    $("#vat_display").html(currencyFormat(vat_amount));
     $("#vat_amount").val(vat_amount.toFixed(2));
 
     // Total Amount
     let total_amount = taxable_amount + vat_amount;
-    $("#total_amount").text(currencyFormat(total_amount));
+    $("#total_amount").html(currencyFormat(total_amount));
 
     // Rounding total
     let rounding_total = RoundingTotal(total_amount);
 
     // Rounding off
     let rounding_amount = Math.abs(rounding_total - total_amount);
-    $("#rounding_amount").text(currencyFormat(rounding_amount));
+    $("#rounding_amount").html(currencyFormat(rounding_amount));
 
     // Payable Amount
     let payable_amount = rounding_total;
-    $("#payable_amount").text(currencyFormat(payable_amount));
+    $("#payable_amount").html(currencyFormat(payable_amount));
 
     // Receive Amount
     let receive_amount = getNumericValue($("#receive_amount").val()) || 0;
@@ -451,12 +451,12 @@ function calTotalAmount() {
         discount_type == "percent"
             ? discount_amount
             : getNumericValue($("#discount_amount").val()) || 0;
-    $("#discount_display").text(currencyFormat(discount_display));
+    $("#discount_display").html(currencyFormat(discount_display));
     $("#vat_display").text(currencyFormat(vat_amount));
-    $("#shipping_display").text(currencyFormat(shipping_charge));
+    $("#shipping_display").html(currencyFormat(shipping_charge));
 
     // Update VAT amount display in sidebar
-    $("#vat_display").text(currencyFormat(vat_amount));
+    $("#vat_display").html(currencyFormat(vat_amount));
 
     // Update payable amount hidden input if exists
     if ($("#payable_amount").is("input")) {

@@ -71,7 +71,7 @@ function updateSubTotal(row) {
     let quantity = getNumericValue(String(row.find(".return-qty").val() || "0"));
     let subTotal = price * quantity;
 
-    row.find(".subtotal").text(currencyFormat(subTotal));
+    row.find(".subtotal").html(currencyFormat(subTotal));
     updateTotalAmount();
 }
 
@@ -85,5 +85,5 @@ function updateTotalAmount() {
 
     var returnText = $('.return_amount').data('return-text');
 
-    $('.return_amount').text(returnText + ' ' + currencyFormat(totalReturn));
+    $('.return_amount').html(returnText + ' ' + currencyFormat(totalReturn));
 }

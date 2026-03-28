@@ -144,11 +144,11 @@
                 const totalAmount = document.getElementById('total_amount');
 
                 if (itemsCount) itemsCount.textContent = '0';
-                if (subTotal) subTotal.textContent = currencyFormat(0);
+                if (subTotal) subTotal.innerHTML = currencyFormat(0);
                 if (discountDisplay) discountDisplay.textContent = '0';
                 if (vatDisplay) vatDisplay.textContent = '0';
                 if (shippingDisplay) shippingDisplay.textContent = '0';
-                if (totalAmount) totalAmount.textContent = currencyFormat(0);
+                if (totalAmount) totalAmount.innerHTML = currencyFormat(0);
 
                 // Reset form inputs
                 const receiveAmount = document.getElementById('receive_amount');
@@ -214,10 +214,10 @@
             const modalDueSummary = document.getElementById('modal-due-summary');
             const modalReceiveAmount = document.getElementById('modal-receive-amount');
             
-            if (modalOrderTotal) modalOrderTotal.textContent = totalAmount;
-            if (modalTotalBill) modalTotalBill.textContent = totalAmount;
+            if (modalOrderTotal) modalOrderTotal.innerHTML = totalAmount;
+            if (modalTotalBill) modalTotalBill.innerHTML = totalAmount;
             if (modalDueAmount) modalDueAmount.value = totalAmountValue;
-            if (modalDueSummary) modalDueSummary.textContent = totalAmount;
+            if (modalDueSummary) modalDueSummary.innerHTML = totalAmount;
             
             // Reset receive amount
             if (modalReceiveAmount) {
@@ -250,11 +250,11 @@
         if (itemsCount && itemsCount.textContent === '3') {
             itemsCount.textContent = '0';
         }
-        if (subTotal && subTotal.textContent === '$35.00') {
-            subTotal.textContent = currencyFormat(0);
+        if (subTotal) {
+            subTotal.innerHTML = currencyFormat(0);
         }
-        if (totalAmount && totalAmount.textContent === '$38.50') {
-            totalAmount.textContent = currencyFormat(0);
+        if (totalAmount) {
+            totalAmount.innerHTML = currencyFormat(0);
         }
     }
 
@@ -269,10 +269,10 @@
         
         // Set up translations for JavaScript
         window.posTranslations = {
-            'No items in cart': '{{ __('No items in cart') }}',
-            'Cart cleared successfully': '{{ __('Cart cleared successfully') }}',
-            'Failed to clear cart': '{{ __('Failed to clear cart') }}',
-            'Guest': '{{ __('Guest') }}'
+            'No items in cart': 'No items in cart',
+            'Cart cleared successfully': 'Cart cleared successfully',
+            'Failed to clear cart': 'Failed to clear cart',
+            'Guest': 'Guest'
         };
     });
 

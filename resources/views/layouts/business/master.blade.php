@@ -11,6 +11,8 @@
     <meta name="viewport" content="{{__('width=device-width, initial-scale=1.0')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@hasSection('title') @yield('title') | @endif {{ get_option('general')['title'] ?? config('app.name') }}</title>
+    {{-- preload the admin logo image to avoid a big unstyled image flash on slow connections --}}
+    <link rel="preload" as="image" href="{{ asset(get_admin_logo()) }}">
     @include('layouts.business.partials.css')
 </head>
 

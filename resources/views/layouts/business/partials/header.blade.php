@@ -5,7 +5,7 @@
 
 
               <a href="{{ route('admin.dashboard.index') }}" class="pos-logo">
-            <img src="{{ asset(get_admin_logo()) }}" alt="Logo" class="sidebar-logo-img">
+            <img src="{{ asset(get_admin_logo()) }}" alt="Logo" class="sidebar-logo-img" width="40" height="40">
             <span class="sidebar-logo-text"><span class="bytes-text">{{ get_system_title() }}</span></span>
         </a>
         </div>

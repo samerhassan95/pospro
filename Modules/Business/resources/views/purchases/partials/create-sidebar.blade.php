@@ -129,7 +129,7 @@
         </div>
         <div class="summary-row">
             <span class="summary-label vat-label">{{ __('Vat') }} <span class="vat-rate-display">15</span>%</span>
-            <span class="summary-value" id="vat_amount">{!! currency_format(0, currency: business_currency()) !!}</span>
+            <span class="summary-value" id="vat_display">{!! currency_format(0, currency: business_currency()) !!}</span>
         </div>
         <div class="summary-row summary-total">
             <span class="summary-label ">{{ __('Total') }}</span>

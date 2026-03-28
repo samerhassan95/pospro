@@ -103,7 +103,7 @@ class AcnooProductController extends Controller
             ->value['product_profit_option'] ?? '';
 
         // Get module settings for product type visibility
-        $modules = get_modules();
+        $modules = product_setting()->modules ?? [];
         $showSingle = is_module_enabled($modules, 'show_product_single') ?? true;
         $showVariant = is_module_enabled($modules, 'show_product_variant') ?? true;
 
