@@ -1,4 +1,4 @@
-﻿<nav class="side-bar">
+<nav class="side-bar">
     <div class="side-bar-logo">
         <a href="{{ route('business.dashboard.index') }}">
             <img src="{{ asset(get_option('general')['admin_logo'] ?? 'assets/images/logo/backend_logo.png') }}" alt="Logo">
@@ -20,7 +20,7 @@
 
             @usercanany(['sales.read', 'sales.create'])
             <li class="dropdown {{ Request::routeIs('business.sales.index', 'business.sales.create', 'business.sales.edit', 'business.sale-returns.create', 'business.sale-returns.index','business.sales.inventory') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/sidebar/sales.svg') }}">
                     </span>
@@ -55,7 +55,7 @@
 
             @usercanany(['purchases.read', 'purchase-returns.read'])
                 <li class="dropdown {{ Request::routeIs('business.purchases.index', 'business.purchases.create', 'business.purchases.edit', 'business.purchase-returns.create', 'business.purchase-returns.index') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <img src="{{ asset('assets/images/sidebar/Purchase.svg') }}">
                         </span>
@@ -83,7 +83,7 @@
 
             @usercanany(['products.read', 'bulk-uploads.read', 'categories.read', 'brands.read', 'units.read', 'product-models.read'])
                 <li class="dropdown {{ Request::routeIs('business.products.index', 'business.products.create', 'business.products.edit', 'business.products.expired', 'business.categories.index', 'business.brands.index', 'business.units.index', 'business.barcodes.index', 'business.bulk-uploads.index', 'business.variations.index', 'business.product-models.index','business.racks.index', 'business.shelfs.index') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <img src="{{ asset('assets/images/sidebar/product.svg') }}">
 
@@ -179,7 +179,7 @@
             @if (moduleCheck('WarehouseAddon') && plan_allows('warehouses'))
              @usercan('warehouses.read')
                 <li class="dropdown {{ Request::routeIs('warehouse.warehouses.index','warehouse.warehouses.product') ? 'active' : '' }}">
-                    <a class="position-relative" href="#">
+                    <a class="position-relative" href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <img src="{{ asset('assets/images/sidebar/hrm.svg') }}">
                         </span>
@@ -225,7 +225,7 @@
             @if (moduleCheck('MultiBranchAddon') && (plan_data()['allow_multibranch'] ?? false))
             @usercan('branches.read')
             <li class="dropdown {{ Request::routeIs('multibranch.branches.index', 'multibranch.branches.overview', 'business.roles.index', 'business.roles.edit', 'business.roles.create') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/sidebar/branch.svg') }}">
                     </span>
@@ -251,7 +251,7 @@
 
             @usercanany(['stocks.read', 'expired-products.read'])
             <li class="dropdown {{ Request::routeIs('business.stocks.index','business.expired-products.index') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/sidebar/stocklist.svg') }}">
                     </span>
@@ -279,7 +279,7 @@
 
             @usercanany(['parties.read', 'parties.create'])
             <li class="dropdown {{ (Request::routeIs('business.parties.index') && request('type') == 'Customer') || (Request::routeIs('business.parties.create') && request('type') == 'Customer') || (Request::routeIs('business.parties.edit') && request('type') == 'Customer') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/sidebar/customer.svg') }}">
 
@@ -301,7 +301,7 @@
 
             @usercanany(['parties.read', 'parties.create'])
             <li class="dropdown {{ (Request::routeIs('business.parties.index') && request('type') == 'Supplier') || (Request::routeIs('business.parties.create') && request('type') == 'Supplier') || (Request::routeIs('business.parties.edit') && request('type') == 'Supplier') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/sidebar/supplier.svg') }}">
 
@@ -337,7 +337,7 @@
             @if(plan_allows('due_list'))
             @usercan('dues.read')
                 <li class="dropdown {{ Request::routeIs('business.dues.index','business.collect.dues', 'business.party.dues') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <img src="{{ asset('assets/images/sidebar/duelist.svg') }}">
                         </span>
@@ -384,7 +384,7 @@
             @if(plan_allows('finance'))
             @usercan('banks.read')
             <li class="dropdown {{ Request::routeIs('business.banks.index', 'business.banks.create', 'business.cashes.index', 'business.cheques.index', 'business.bank-transactions.index', 'business.cash-flow-reports.index', 'business.balance-sheet-reports.index', 'business.bill-wise-profit-reports.index') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/sidebar/cash_and_bank.svg') }}">
                     </span>
@@ -431,7 +431,7 @@
             @if(plan_allows('commission'))
             @usercanany(['commissions.read', 'sale-commissions.read'])
             <li class="dropdown {{ Request::routeIs('business.commissions.index','business.sale-commissions.index') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/sidebar/cash_and_bank.svg') }}">
                     </span>
@@ -452,7 +452,7 @@
             @if (moduleCheck('HrmAddon') && plan_allows('hrm'))
               @usercanany(['department.read', 'designations.read', 'shifts.read', 'employees.read', 'leave-types.read', 'leaves.read', 'holidays.read', 'attendances.read', 'payrolls.read', 'attendance-reports.read', 'payroll-reports.read', 'leave-reports.read'])
                 <li class="dropdown {{ Request::routeIs('hrm.department.index', 'hrm.designations.index', 'hrm.shifts.index', 'hrm.employees.index', 'hrm.employees.create', 'hrm.employees.edit', 'hrm.leave-types.index', 'hrm.leaves.index', 'hrm.holidays.index', 'hrm.attendances.index', 'hrm.payrolls.index', 'hrm.attendance-reports.index','hrm.leave-reports.index','hrm.payroll-reports.index') ? 'active' : '' }}">
-                    <a class="position-relative" href="#">
+                    <a class="position-relative" href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <img src="{{ asset('assets/images/sidebar/hrm.svg') }}">
                         </span>
@@ -572,7 +572,7 @@
 
             @usercanany(['sale-reports.read', 'sale-return-reports.read', 'purchase-reports.read', 'purchase-return-reports.read', 'vat-reports.read', 'income-reports.read', 'expense-reports.read', 'loss-profits-details.read', 'stock-reports.read', 'due-reports.read', 'supplier-due-reports.read', 'loss-profit-reports.read', 'transaction-history-reports.read', 'subscription-reports.read', 'expired-product-reports.read'])
                 <li class="dropdown {{ Request::routeIs('business.income-reports.index', 'business.expense-reports.index', 'business.stock-reports.index', 'business.sale-reports.index', 'business.purchase-reports.index', 'business.due-reports.index', 'business.sale-return-reports.index', 'business.purchase-return-reports.index', 'business.supplier-due-reports.index', 'business.transaction-history-reports.index', 'business.subscription-reports.index', 'business.expired-product-reports.index','business.vat-reports.index', 'business.loss-profit-reports.details', 'business.custom-reports.show', 'business.loss-profits.index', 'hrm.attendance-reports.index', 'hrm.payroll-reports.index', 'hrm.leave-reports.index') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="javascript:void(0)">
                         <span class="sidebar-icon">
                             <img src="{{ asset('assets/images/sidebar/Report.svg') }}">
                         </span>
@@ -752,7 +752,7 @@
 
             {{-- Party Reports --}}
             <li class="dropdown {{ Request::routeIs('business.customer-ledger.index', 'business.supplier-ledger.index', 'business.top-customers.index', 'business.top-suppliers.index', 'business.party-loss-profit.index', 'business.customer-ledger.show', 'business.supplier-ledger.show') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/icons/party-report.png') }}">
                     </span>
@@ -803,7 +803,7 @@
             {{-- @if (moduleCheck('CustomReportsAddon'))
                 @usercanany(['custom-reports.read', 'custom-reports.create'])
                     <li class="dropdown {{ Request::routeIs('business.custom-reports.index', 'business.custom-reports.create', 'business.custom-reports.edit') ? 'active' : '' }}">
-                        <a href="#">
+                        <a href="javascript:void(0)">
                             <span class="sidebar-icon">
                                 <img src="{{ asset('assets/images/sidebar/custom_report.svg') }}">
                             </span>
@@ -842,7 +842,7 @@
 
             @if (moduleCheck('MarketingAddon'))
             <li class="dropdown {{ Request::routeIs('business.sms-templates.index', 'business.sms-gateways.index', 'business.sms-gateways.create', 'business.sms-gateways.edit', 'business.devices.index', 'business.devices.create', 'business.devices.edit') ? 'active' : '' }}">
-                <a href="#">
+                <a href="javascript:void(0)">
                     <span class="sidebar-icon">
                         <img src="{{ asset('assets/images/sidebar/stocklist.svg') }}">
                     </span>
@@ -938,4 +938,5 @@
         </ul>
     </div>
 </nav>
+
 

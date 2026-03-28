@@ -34,7 +34,7 @@
         let subMenuSelector = ".dropdown-menu";
 
         // Simple dropdown toggle - same behavior for all screen sizes
-        $(".side-bar-manu > ul").on("click", ".dropdown > a", function (e) {
+        $(document).off("click.sidebarDropdown").on("click.sidebarDropdown", ".side-bar-manu > ul .dropdown > a", function (e) {
             e.preventDefault();
             e.stopPropagation();
             
@@ -77,6 +77,26 @@
                         'max-width': 'none'
                     });
                 }
+            }
+        });
+
+        // On page load, open any dropdown that is already active (e.g. current route)
+        $(".side-bar-manu .dropdown.active").each(function() {
+            var $submenu = $(this).find("> .dropdown-menu");
+            if ($submenu.length) {
+                $submenu.addClass("menu-open").css({
+                    'display': 'block',
+                    'visibility': 'visible',
+                    'opacity': '1',
+                    'position': 'relative',
+                    'inset': 'auto',
+                    'transform': 'none',
+                    'z-index': 'auto',
+                    'float': 'none',
+                    'width': 'auto',
+                    'min-width': 'auto',
+                    'max-width': 'none'
+                });
             }
         });
 
@@ -135,46 +155,7 @@
             });
         }
 
-        // Prevent other scripts from hiding dropdown menus with inline styles
-        function forceDropdownVisibility() {
-            $('.side-bar-manu .dropdown.active .dropdown-menu, .side-bar-manu .dropdown-menu.menu-open').each(function() {
-                let $menu = $(this);
-                let currentDisplay = $menu.css('display');
-                
-                if (currentDisplay === 'none') {
-                    // Remove all problematic inline styles and show the dropdown
-                    $menu.removeAttr('style');
-                    $menu.css({
-                        'display': 'block',
-                        'visibility': 'visible',
-                        'opacity': '1',
-                        'position': 'relative'
-                    });
-                }
-            });
-        }
-        
-        // Run the force function every 50ms to override any other scripts
-        setInterval(forceDropdownVisibility, 50);
-        
-        // Watch for style attribute changes using MutationObserver
-        if (window.MutationObserver) {
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                        const $target = $(mutation.target);
-                        if ($target.hasClass('dropdown-menu') && ($target.closest('.dropdown.active').length || $target.hasClass('menu-open'))) {
-                            forceDropdownVisibility();
-                        }
-                    }
-                });
-            });
-            
-            // Observe all dropdown menus for style changes
-            $('.side-bar-manu .dropdown-menu').each(function() {
-                observer.observe(this, { attributes: true, attributeFilter: ['style'] });
-            });
-        }
+
         
         // Ensure dropdowns stay open when clicking submenu items
         $('.side-bar-manu .dropdown-menu a').on('click', function(e) {
